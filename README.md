@@ -34,20 +34,20 @@ npm install
 
 ### 3) Configure o banco de dados 
 
-Crie um banco PostgreSQL no Railway
+Há um arquivo docker-compose.yaml para subir o banco postgres + pgadmin.
 
-Copie a URL de conexão do banco fornecida pelo Railway.
+Adicione a URL no arquivo .env (renomeie o arquivo .env-example para .env.)
 
-Adicione a URL no arquivo .env:
-
-Renomeie o arquivo .env-example para .env.
-
-Substitua o valor de DATABASE_URL pela URL do banco.
-
-Exemplo:
+Substitua o valor de DATABASE_URL pela URL do banco, algo como:
 
 ```bash
 DATABASE_URL="postgresql://usuario:senha@dominio:porta/dbname?sslmode=require"
+```
+
+Em seguida, rode:
+
+```bash
+docker compose up
 ```
 
 ###  4) Crie o banco e execute as migrações
@@ -60,13 +60,24 @@ npx prisma migrate dev
 
 ```
 
-### 5) Rode o seed para popular o banco
+### 4.1 ) Rode o seed para popular o banco
 
 Se o projeto tiver dados iniciais para o banco, execute:
 
 ```bash 
 npx prisma db seed
 ```
+
+### 5) Configure suas credenciais Google + NextAuth
+
+Dica: Setup Guide for NextAuth with Google and Credentials Providers in Next.js 13[https://karthickragavendran.medium.com/setup-guide-for-nextauth-with-google-and-credentials-providers-in-next-js-13-8f5f13414c1e]
+
+Para obter sua credencial NextAuth, rode
+
+```bash
+npx auth secret
+```
+Ela aparecerá no seu .env.local
 
 6) Inicie o projeto
 
@@ -78,7 +89,6 @@ npm run dev
 
 ```
 
-
 A aplicação estará disponível em http://localhost:3000
 
 
@@ -89,9 +99,3 @@ O arquivo .env-example contém as variáveis necessárias para rodar o projeto. 
 ```bash 
 DATABASE_URL="postgresql://usuario:senha@dominio:porta/dbname?sslmode=require"
 ```
-
-#### Observações
-
-Banco no Railway: Lembre-se de configurar o sslmode=require na URL do banco, como mostrado no exemplo, caso o Railway esteja usando TLS.
-
-Migrações Prisma: Se houver alterações no schema, use npx prisma migrate dev para aplicar as migrações.
