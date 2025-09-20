@@ -24,8 +24,8 @@ Git e conta no GitHub
 ### 1) Clone o repositório
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
-cd nome-do-projeto
+git clone https://github.com/laisapereira/self-test.git
+cd self-test
 ```
 ### 2) Instale as dependências
 ```bash
