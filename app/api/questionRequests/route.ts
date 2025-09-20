@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import OpenAI from "openai";
-import { QuestionRequest } from "@/app/generated/prisma";
+import { QuestionRequest } from "@/prisma";
 import { PrismaJson } from "@/prisma/types";
 
 export async function GET(req: Request) {

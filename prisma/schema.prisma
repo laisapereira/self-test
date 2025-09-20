@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+  output   = "../prisma"
 }
 
 generator json {
@@ -19,43 +19,43 @@ datasource db {
 }
 
 model User {
-  id            Int    @id @default(autoincrement())
-  admin         Boolean @default(false)
-  name          String?
-  email         String    @unique
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  admin     Boolean  @default(false)
+  name      String?
+  email     String   @unique
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  groups Group[] @relation("GroupUsers")
-  ownedGroups Group[]
+  groups                   Group[]                   @relation("GroupUsers")
+  ownedGroups              Group[]
   questionRequestTemplates QuestionRequestTemplate[]
-  questionRequests QuestionRequest[]
-  answers Answer[]
+  questionRequests         QuestionRequest[]
+  answers                  Answer[]
 }
 
 model Group {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   startDate DateTime
   endDate   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  ownerId   Int
-  owner     User   @relation(fields: [ownerId], references: [id])
-  users User[] @relation("GroupUsers")
+  ownerId Int
+  owner   User   @relation(fields: [ownerId], references: [id])
+  users   User[] @relation("GroupUsers")
 }
 
 model Topic {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model QuestionRequestTemplate {
-  id             Int    @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   name           String
   promptTemplate String
   createdAt      DateTime @default(now())
@@ -64,23 +64,23 @@ model QuestionRequestTemplate {
   parameters     Json[]
   ownerId        Int
 
-  owner          User @relation(fields: [ownerId], references: [id])
+  owner User @relation(fields: [ownerId], references: [id])
 
-  requests       QuestionRequest[]
+  requests QuestionRequest[]
 }
 
 model QuestionRequest {
-  id              Int    @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   /// [QuestionRequestParameterValue]
   parameterValues Json[]
   createdAt       DateTime @default(now())
 
-  templateId      Int
-  userId          Int
+  templateId Int
+  userId     Int
 
-  user           User @relation(fields: [userId], references: [id])
-  template       QuestionRequestTemplate? @relation(fields: [templateId], references: [id])
-  questions      Question[]
+  user      User                     @relation(fields: [userId], references: [id])
+  template  QuestionRequestTemplate? @relation(fields: [templateId], references: [id])
+  questions Question[]
 }
 
 model Question {
@@ -97,21 +97,22 @@ model Question {
 }
 
 model Answer {
-  id              Int    @id @default(autoincrement())
-  questionId      Int
-  userId          Int
+  id         Int @id @default(autoincrement())
+  questionId Int
+  userId     Int
 
   answerIndex     Int
   correct         Boolean
   confidenceLevel Int
   createdAt       DateTime @default(now())
 
-  flaggedIncorrect Boolean @default(false)
+  flaggedIncorrect   Boolean @default(false)
   flaggedProblematic Boolean @default(false)
-  flaggedExcellent Boolean @default(false)
-  observation     String @default("")
+  flaggedExcellent   Boolean @default(false)
+  observation        String  @default("")
 
   question Question @relation(fields: [questionId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
   @@index([userId, questionId], name: "user_question_unique")
 }

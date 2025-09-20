@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Fragment } from "react";
 import { PrismaJson } from "@/prisma/types";
-import { QuestionRequestTemplate } from "../generated/prisma/client";
+import { QuestionRequestTemplate } from "../../prisma";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";

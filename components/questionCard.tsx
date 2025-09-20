@@ -1,15 +1,16 @@
-import { Question, Answer } from "@/app/generated/prisma";
-import { marked } from "marked";
-import { useState, useEffect } from "react";
-import { unstable_batchedUpdates } from "react-dom";
-import { toast } from "sonner";
-import { Button } from "./ui/button";
-import { Card, CardHeader, CardContent } from "./ui/card";
-import { Input } from "./ui/input";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { Checkbox } from "./ui/checkbox";
+import { Answer, Question } from "../prisma";
 import { PrismaJson } from "@/prisma/types";
 import { Label } from "@radix-ui/react-label";
+import { marked } from "marked";
+import { useEffect, useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
+import { toast } from "sonner";
+
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader } from "./ui/card";
+import { Checkbox } from "./ui/checkbox";
+import { Input } from "./ui/input";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 export function QuestionCard(props: { question: Question, userId?: number, withAnswer?: Answer }) {
   const { question } = props;
@@ -98,7 +99,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
           value={alternative !== null ? '' + alternative : undefined}
           onValueChange={(value: string) => setAlternative(parseInt(value))}
         >
-          {question.alternatives.map((alternative: any, alternativeIdx: number) => (
+          {question.alternatives.map((alternative: { content: string; feedback: string }, alternativeIdx: number) => (
             <div className="flex flex-col space-y-1" key={alternativeIdx}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem id={`question-${question.id}-${alternativeIdx}`} value={'' + alternativeIdx} />
