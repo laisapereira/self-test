@@ -11,6 +11,7 @@ export namespace PrismaJson {
   };
 
   export type MultipleChoiceQuestionResponse = {
+    content: string;
     questions: MultipleChoiceQuestion[];
   }
 

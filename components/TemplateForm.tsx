@@ -59,6 +59,7 @@ export default function TemplateForm({ defaultValues, onSubmit, mode }: Template
     });
     setNewParameter({ name: "", values: "", multipleSelect: false });
   }
+  
 
   function removeParameter(index: number) {
     setNewTemplate({
