@@ -93,13 +93,17 @@ export default function QuestionRequestCreatePage() {
 
   }
 
-  function generateFinalPrompt(template: QuestionRequestTemplate, parameterValues: PrismaJson.QuestionRequestParameterValue[]): string { 
+  function generateFinalPrompt(
+    template: QuestionRequestTemplate,
+    parameterValues: PrismaJson.QuestionRequestParameterValue[]
+  ): string {
     const promptTemplate = template.promptTemplate;
+
     return promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
-      const value = parameterValues.find((param) => param.name === key);
-      return value ? value.values[0] : "";
+      const match = parameterValues.find(p => p.name.toLowerCase() === key.toLowerCase());
+      return match?.values?.[0] ?? `<${key}>`;
     });
-  }
+}
 
   function handleParameterChange(parameter: PrismaJson.QuestionRequestTemplateParameter, values: string[]) {
     const updatedValues = newRequest.parameterValues.map((param) => {
@@ -152,10 +156,17 @@ export default function QuestionRequestCreatePage() {
       return;
     }
 
+    const parameterSummary = newRequest.parameterValues
+    .map(p => `${p.name} = ${p.values.join(", ")}`)
+    .join(", ");
+
+    const finalPrompt = `${template.promptTemplate}\n\n[Parâmetros escolhidos: ${parameterSummary}]`;
+
     const request = {
-      templateId: template.id,
-      parameterValues: newRequest.parameterValues,
-      prompt: finalPrompt,
+    templateId: template.id,
+    parameterValues: newRequest.parameterValues,
+    generatedPrompt: finalPrompt, // você pode armazenar ou exibir esse prompt no front
+    
     };
    
     setIsLoading(true);
