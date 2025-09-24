@@ -94,18 +94,31 @@ export default function QuestionRequestCreatePage() {
   }
 
   function generateFinalPrompt(
-    template: QuestionRequestTemplate,
-    parameterValues: PrismaJson.QuestionRequestParameterValue[]
-  ): string {
-    const promptTemplate = template.promptTemplate;
+  template: QuestionRequestTemplate,
+  parameterValues: PrismaJson.QuestionRequestParameterValue[],
+  subtituloSelecionado: string,
+  tema: string,
+): string {
 
-    return promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
-      const match = parameterValues.find(p => p.name.toLowerCase() === key.toLowerCase());
-      return match?.values?.[0] ?? `<${key}>`;
-    });
+  let promptTemplate = template.promptTemplate;
+
+  //catch all "subtopico" mentions on template and replace
+
+  promptTemplate = promptTemplate.replace(/<Subtopico>/g, subtituloSelecionado);
+
+  //catch all "tema" mentions on template and replace
+  promptTemplate = promptTemplate.replace(/<Tema>/g, tema);
+
+  return promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
+    const match = parameterValues.find(p => p.name.toLowerCase() === key.toLowerCase());
+    return match?.values?.[0] ?? `<${key}>`; 
+  });
 }
 
   function handleParameterChange(parameter: PrismaJson.QuestionRequestTemplateParameter, values: string[]) {
+    
+    const subtituloSelecionado = values[0]
+
     const updatedValues = newRequest.parameterValues.map((param) => {
       if (param.name === parameter.name) {
         console.log("O parâmetro escolhido pelo usuário é", values);
@@ -115,8 +128,10 @@ export default function QuestionRequestCreatePage() {
     });
     setNewRequest({ ...newRequest, parameterValues: updatedValues });
 
+    const tema = template?.name || "";
     if (template) {
-      const generatedPrompt = generateFinalPrompt(template, updatedValues);
+      const generatedPrompt = generateFinalPrompt
+      (template, updatedValues, subtituloSelecionado, tema);
       setFinalPrompt(generatedPrompt);
       console.log("PROMPT GERADO:", generatedPrompt);
 
@@ -156,16 +171,10 @@ export default function QuestionRequestCreatePage() {
       return;
     }
 
-    const parameterSummary = newRequest.parameterValues
-    .map(p => `${p.name} = ${p.values.join(", ")}`)
-    .join(", ");
-
-    const finalPrompt = `${template.promptTemplate}\n\n[Parâmetros escolhidos: ${parameterSummary}]`;
-
     const request = {
-    templateId: template.id,
-    parameterValues: newRequest.parameterValues,
-    generatedPrompt: finalPrompt, // você pode armazenar ou exibir esse prompt no front
+      templateId: template.id,
+      parameterValues: newRequest.parameterValues,
+      generatedPrompt: finalPrompt,
     
     };
    
@@ -177,7 +186,7 @@ export default function QuestionRequestCreatePage() {
       },
       body: JSON.stringify(request),
     });
-     console.log("REQUEST É", request);
+
     setIsLoading(false);
     if (response.ok) {
       const newQuestionRequest = await response.json();

@@ -105,14 +105,14 @@ async function requestLLM(questionRequest: QuestionRequest) {
   console.log(prompt);
 
   const openai = new OpenAI({
-    apiKey: process.env.DEEPSEEK_API_KEY,
-    baseURL: process.env.DEEPSEEK_API_URL,
+    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: process.env.OPENAI_BASE_URL,
   });
 
   console.log('sending request to LLM');
   const completion = await openai.chat.completions.create({
     messages: [{ role: 'system', content: prompt }],
-    model: 'deepseek-chat',
+    model: 'gpt-4o',
     response_format: {
       type: 'json_object'
     }
