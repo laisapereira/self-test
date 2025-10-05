@@ -26,7 +26,6 @@ export default function QuestionRequestCreatePage() {
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const [template, setTemplate] = useState<QuestionRequestTemplate | null>(null);
   const [finalPrompt, setFinalPrompt] = useState<string>("");
-  
   const [newRequest, setNewRequest] = useState({
     parameterValues: [] as PrismaJson.QuestionRequestParameterValue[],
   });
@@ -40,11 +39,6 @@ export default function QuestionRequestCreatePage() {
     }
     fetchTemplates();
   }, []);
-  
-  const test = template?.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
-            renderParameterInput(parameter, `param${parameter.name}`));
-
-  //console.log("Subtópico", test);
 
   useEffect(() => {
     if (template) {
@@ -88,57 +82,48 @@ export default function QuestionRequestCreatePage() {
         placeholder={`Enter ${parameter.name}`}
         className="mb-2"
       />;
-    
     }
-
   }
 
-  function generateFinalPrompt(
-  template: QuestionRequestTemplate,
-  parameterValues: PrismaJson.QuestionRequestParameterValue[],
-  subtituloSelecionado: string,
-  tema: string,
-): string {
 
-  let promptTemplate = template.promptTemplate;
+  function generateFinalPrompt(template: QuestionRequestTemplate,
+  parameterValues: PrismaJson.QuestionRequestParameterValue[]) {
+    // Generate the final prompt by replacing placeholders in the template with actual values
+    const promptTemplate = template.promptTemplate;
 
-  //catch all "subtopico" mentions on template and replace
-
-  promptTemplate = promptTemplate.replace(/<Subtopico>/g, subtituloSelecionado);
-
-  //catch all "tema" mentions on template and replace
-  promptTemplate = promptTemplate.replace(/<Tema>/g, tema);
-
-  return promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
-    const match = parameterValues.find(p => p.name.toLowerCase() === key.toLowerCase());
-    return match?.values?.[0] ?? `<${key}>`; 
+    return promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
+    // match the parameter name case-insensitively
+    const match = parameterValues.find(
+      parameter => parameter.name.toLowerCase() === key.toLowerCase()
+      
+    );
+   
+    // replace with the frist value or the placeholder if not found
+      const replaced = match?.values?.[0] ?? `<${key}>`;
+      console.log("Replaced é assim:", replaced);
+      return replaced;
   });
-}
+  }
 
   function handleParameterChange(parameter: PrismaJson.QuestionRequestTemplateParameter, values: string[]) {
-    
-    const subtituloSelecionado = values[0]
+     const updatedValues = [...newRequest.parameterValues];
+     const index = updatedValues.findIndex(p => p.name === parameter.name);
 
-    const updatedValues = newRequest.parameterValues.map((param) => {
-      if (param.name === parameter.name) {
-        console.log("O parâmetro escolhido pelo usuário é", values);
-        return { ...param, values: values };
+      if (index >= 0) {
+        updatedValues[index] = { ...updatedValues[index], values };
+
+      } else {
+        updatedValues.push({ name: parameter.name, values });
       }
-      return param;
-    });
-    setNewRequest({ ...newRequest, parameterValues: updatedValues });
 
-    const tema = template?.name || "";
-    if (template) {
-      const generatedPrompt = generateFinalPrompt
-      (template, updatedValues, subtituloSelecionado, tema);
+      setNewRequest({ ...newRequest, parameterValues: updatedValues });
+
+      // Generate the final prompt whenever a parameter changes
+      const generatedPrompt = generateFinalPrompt(template!, updatedValues);
+     
       setFinalPrompt(generatedPrompt);
       console.log("PROMPT GERADO:", generatedPrompt);
-
-    }
-
-
-  }
+}
 
   function renderSelectTemplate() {
     return <Select onValueChange={(value) => value ? setTemplate(templates.find((t) => `${t.id}` === value) || null) : setTemplate(null)}>
@@ -154,8 +139,6 @@ export default function QuestionRequestCreatePage() {
       </SelectContent>
     </Select>;
   }
-
- 
 
   async function createRequest() {
     if (!template) return;
@@ -175,9 +158,7 @@ export default function QuestionRequestCreatePage() {
       templateId: template.id,
       parameterValues: newRequest.parameterValues,
       generatedPrompt: finalPrompt,
-    
     };
-   
     setIsLoading(true);
     const response = await fetch("/api/questionRequests", {
       method: "POST",
@@ -186,7 +167,6 @@ export default function QuestionRequestCreatePage() {
       },
       body: JSON.stringify(request),
     });
-
     setIsLoading(false);
     if (response.ok) {
       const newQuestionRequest = await response.json();
@@ -206,11 +186,8 @@ export default function QuestionRequestCreatePage() {
         {renderSelectTemplate()}
         {template && template.parameters?.length > 0 && <>
           <h2 className="text-2xl font-semibold mt-4">Parameters</h2>
-          {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) => {
-            console.log("Parametros subtópicos:", parameter.values)
-            return renderParameterInput(parameter, `param${parameter.name}`);
-          })}
-
+          {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
+            renderParameterInput(parameter, `param${parameter.name}`))}
         </>
         }
         {template &&
