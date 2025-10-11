@@ -90,16 +90,21 @@ export default function QuestionRequestCreatePage() {
   parameterValues: PrismaJson.QuestionRequestParameterValue[]) {
     // Generate the final prompt by replacing placeholders in the template with actual values
     const promptTemplate = template.promptTemplate;
+    
+    const merged = [...parameterValues, {name: "tema", values: [template.name ?? ""]}];
+
+    const paramMap = new Map<string, string[]>(
+      merged.map(param => [param.name.toLowerCase(), param.values ??[]])
+    );
 
     return promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
-    // match the parameter name case-insensitively
-    const match = parameterValues.find(
-      parameter => parameter.name.toLowerCase() === key.toLowerCase()
-      
-    );
-   
-    // replace with the frist value or the placeholder if not found
-      const replaced = match?.values?.[0] ?? `<${key}>`;
+      const matchValues = paramMap.get(key.toLowerCase());
+
+      if (!matchValues || matchValues.length === 0) return `<${key}>`;
+      // replace with the values, if multipleSelect and multiple values, join with commas
+      // using key as default value if no match found
+      const replaced = matchValues.length > 1
+      ? matchValues.join(", ") : matchValues?.[0] ?? `<${key}>`;
       console.log("Replaced é assim:", replaced);
       return replaced;
   });
