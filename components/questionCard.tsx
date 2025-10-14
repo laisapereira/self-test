@@ -11,12 +11,14 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { ConfidenceLevel } from "./confidenceLevel";
 
 export function QuestionCard(props: { question: Question, userId?: number, withAnswer?: Answer }) {
   const { question } = props;
   const [alternative, setAlternative] = useState<number | null>(null);
   const [confidenceLevel, setConfidenceLevel] = useState<number | null>(null);
   const [answer, setAnswer] = useState<Answer | null>(props.withAnswer ?? null);
+  const [discursiveAnswer, setDiscursiveAnswer] = useState<string>(""); 
 
   useEffect(() => {
     const searchParams = new URLSearchParams();
@@ -68,6 +70,10 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
     }
   }
 
+  async function submitDiscursiveAnswer() {
+    console.log("Ainda em construção")
+  }
+
   function getAnswerClassName(alternativeIdx: number) {
     if (answer === null) return '';
     if (alternativeIdx === question.correctAnswerIndex) {
@@ -78,79 +84,133 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <h1 className="text-2xl font-bold">Question</h1>
-        {answer && (
+  <Card className="w-full">
+    <CardHeader>
+      <h1 className="text-2xl font-bold">Question</h1>
+      {answer && (
+        <div>
+          <p className={answer?.answerIndex !== null && answer?.answerIndex !== undefined ? getAnswerClassName(answer.answerIndex) : ''}>
+            Your answer is {answer?.correct ? 'correct' : 'incorrect'}! (Confidence level: {answer?.confidenceLevel})
+          </p>
+        </div>
+      )}
+    </CardHeader>
+
+    <CardContent>
+      <p
+        className="text-gray-500"
+        dangerouslySetInnerHTML={{ __html: marked.parse(question.content) }}
+      />
+      <br />
+
+      {question.type === 'discursive' ? (
+        answer === null ? (
           <div>
-            {/* <p className="text-gray-500">You have already answered this question.</p> */}
-            <p className={getAnswerClassName(answer.answerIndex)}>Your answer is {answer.correct ? 'correct' : 'incorrect'}! (Confidence level: {answer.confidenceLevel})</p>
-          </div>
-        )}
-      </CardHeader>
-      <CardContent>
-        <p className="text-gray-500"
-          dangerouslySetInnerHTML={{ __html: marked.parse(question.content) }} />
-        <br />
-        {/* one item for each alternative */}
-        <RadioGroup
-          disabled={answer !== null}
-          className="flex flex-col space-y-2"
-          value={alternative !== null ? '' + alternative : undefined}
-          onValueChange={(value: string) => setAlternative(parseInt(value))}
-        >
-          {question.alternatives.map((alternative: { content: string; feedback: string }, alternativeIdx: number) => (
-            <div className="flex flex-col space-y-1" key={alternativeIdx}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem id={`question-${question.id}-${alternativeIdx}`} value={'' + alternativeIdx} />
-                <Label htmlFor={`question-${question.id}-${alternativeIdx}`} className="ml-2">
-                  {answer && (alternativeIdx === question.correctAnswerIndex
-                    ? <span className={getAnswerClassName(alternativeIdx)}>✓ </span>
-                    : <span className={getAnswerClassName(alternativeIdx)}>✗ </span>)}
-                  <span className="font-bold">{String.fromCharCode(65 + alternativeIdx)}. </span>
-                  <span dangerouslySetInnerHTML={{ __html: marked.parseInline(alternative.content) }} />
-                </Label>
-              </div>
-              {answer && (
-                <p className={getAnswerClassName(alternativeIdx)}>{question.alternatives[alternativeIdx].feedback}</p>
-              )}
-            </div>
-          ))}
-        </RadioGroup>
-        {/* Confidence level */}
-        {answer === null && (
-          <div>
-            <br />
-            <p>Nível de confiança de que acertou a resposta (1 = pouco confiante, 5 = muito confiante)</p>
-            <br />
-            <RadioGroup
+            <textarea
+              className="w-full border rounded p-2"
+              rows={5}
+              value={discursiveAnswer}
+              onChange={(e) => setDiscursiveAnswer(e.target.value)}
+              placeholder="Digite sua resposta aqui..."
               disabled={answer !== null}
-              className="flex flex-row space-x-1"
-              value={confidenceLevel !== null ? '' + confidenceLevel : undefined}
-              onValueChange={(value: string) => setConfidenceLevel(parseInt(value))}
-            >
-              {[1, 2, 3, 4, 5].map((value) => (
-                <span className="flex items-left space-x-1" key={value}>
-                  <RadioGroupItem value={value.toString()} id={`question-${question.id}-r${value}`} />
-                  <Label htmlFor={`question-${question.id}-r${value}`} className="ml-1">{value}</Label>
-                </span>
-              ))}
-            </RadioGroup>
+            />
+
+            
+            <ConfidenceLevel
+              questionId={question.id}
+              value={confidenceLevel}
+              disabled={answer !== null}
+              onChange={setConfidenceLevel}
+            />
+
             <br />
             <Button
               variant="default"
-              disabled={alternative === null || confidenceLevel === null}
-              onClick={() => submitAnswer()}
+              disabled={!discursiveAnswer.trim() || confidenceLevel === null}
+              onClick={submitDiscursiveAnswer}
             >
-              {/* get response to update self */}
-              Submit
+              Enviar resposta
             </Button>
-          </div>)}
-        {/* Feedback */}
-        {answer && <QuestionFeedback question={question} answer={answer} />}
-      </CardContent>
-    </Card>
-  )
+          </div>
+        ) : (
+          <div>
+            <p className="mt-2">
+              <b>Sua resposta:</b> {answer?.openAnswer}
+            </p>
+          </div>
+        )
+      ) : (
+        <>
+          <RadioGroup
+            disabled={answer !== null}
+            className="flex flex-col space-y-2"
+            value={alternative !== null ? String(alternative) : undefined}
+            onValueChange={(value: string) => setAlternative(parseInt(value))}
+          >
+            {question.alternatives.map(
+              (alternativeObj: { content: string; feedback: string }, alternativeIdx: number) => (
+                <div className="flex flex-col space-y-1" key={alternativeIdx}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      id={`question-${question.id}-${alternativeIdx}`}
+                      value={String(alternativeIdx)}
+                    />
+                    <Label
+                      htmlFor={`question-${question.id}-${alternativeIdx}`}
+                      className="ml-2"
+                    >
+                      {answer &&
+                        (alternativeIdx === question.correctAnswerIndex ? (
+                          <span className={getAnswerClassName(alternativeIdx)}>✓ </span>
+                        ) : (
+                          <span className={getAnswerClassName(alternativeIdx)}>✗ </span>
+                        ))}
+                      <span className="font-bold">{String.fromCharCode(65 + alternativeIdx)}. </span>
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: marked.parseInline(alternativeObj.content),
+                        }}
+                      />
+                    </Label>
+                  </div>
+                  {answer && (
+                    <p className={getAnswerClassName(alternativeIdx)}>
+                      {question.alternatives[alternativeIdx].feedback}
+                    </p>
+                  )}
+                </div>
+              )
+            )}
+          </RadioGroup>
+
+          {answer === null && (
+            <>
+              
+              <ConfidenceLevel
+                questionId={question.id}
+                value={confidenceLevel}
+                disabled={answer !== null}
+                onChange={setConfidenceLevel}
+              />
+
+              <br />
+              <Button
+                variant="default"
+                disabled={alternative === null || confidenceLevel === null}
+                onClick={() => submitAnswer()}
+              >
+                Submit
+              </Button>
+            </>
+          )}
+        </>
+      )}
+
+
+      {answer && <QuestionFeedback question={question} answer={answer} />}
+    </CardContent>
+  </Card>
+);
 }
 
 function QuestionFeedback(props: { question: Question, answer: Answer }) {

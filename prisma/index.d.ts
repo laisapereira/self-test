@@ -231,6 +231,11 @@ export type Question = $Result.DefaultSelection<Prisma.$QuestionPayload>
  * 
  */
 export type Answer = $Result.DefaultSelection<Prisma.$AnswerPayload>
+/**
+ * Model AutoEvaluation
+ * 
+ */
+export type AutoEvaluation = $Result.DefaultSelection<Prisma.$AutoEvaluationPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -419,6 +424,16 @@ export class PrismaClient<
     * ```
     */
   get answer(): Prisma.AnswerDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.autoEvaluation`: Exposes CRUD operations for the **AutoEvaluation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AutoEvaluations
+    * const autoEvaluations = await prisma.autoEvaluation.findMany()
+    * ```
+    */
+  get autoEvaluation(): Prisma.AutoEvaluationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -865,7 +880,8 @@ export namespace Prisma {
     QuestionRequestTemplate: 'QuestionRequestTemplate',
     QuestionRequest: 'QuestionRequest',
     Question: 'Question',
-    Answer: 'Answer'
+    Answer: 'Answer',
+    AutoEvaluation: 'AutoEvaluation'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -884,7 +900,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "group" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "answer"
+      modelProps: "user" | "group" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "answer" | "autoEvaluation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1406,6 +1422,80 @@ export namespace Prisma {
           }
         }
       }
+      AutoEvaluation: {
+        payload: Prisma.$AutoEvaluationPayload<ExtArgs>
+        fields: Prisma.AutoEvaluationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AutoEvaluationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AutoEvaluationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>
+          }
+          findFirst: {
+            args: Prisma.AutoEvaluationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AutoEvaluationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>
+          }
+          findMany: {
+            args: Prisma.AutoEvaluationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>[]
+          }
+          create: {
+            args: Prisma.AutoEvaluationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>
+          }
+          createMany: {
+            args: Prisma.AutoEvaluationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AutoEvaluationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>[]
+          }
+          delete: {
+            args: Prisma.AutoEvaluationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>
+          }
+          update: {
+            args: Prisma.AutoEvaluationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>
+          }
+          deleteMany: {
+            args: Prisma.AutoEvaluationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AutoEvaluationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AutoEvaluationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>[]
+          }
+          upsert: {
+            args: Prisma.AutoEvaluationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationPayload>
+          }
+          aggregate: {
+            args: Prisma.AutoEvaluationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAutoEvaluation>
+          }
+          groupBy: {
+            args: Prisma.AutoEvaluationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AutoEvaluationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AutoEvaluationCountArgs<ExtArgs>
+            result: $Utils.Optional<AutoEvaluationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1509,6 +1599,7 @@ export namespace Prisma {
     questionRequest?: QuestionRequestOmit
     question?: QuestionOmit
     answer?: AnswerOmit
+    autoEvaluation?: AutoEvaluationOmit
   }
 
   /* Types for Logging */
@@ -7524,6 +7615,8 @@ export namespace Prisma {
     id: number | null
     content: string | null
     correctAnswerIndex: number | null
+    type: string | null
+    referenceAnswer: string | null
     requestId: number | null
   }
 
@@ -7531,6 +7624,8 @@ export namespace Prisma {
     id: number | null
     content: string | null
     correctAnswerIndex: number | null
+    type: string | null
+    referenceAnswer: string | null
     requestId: number | null
   }
 
@@ -7539,6 +7634,9 @@ export namespace Prisma {
     content: number
     correctAnswerIndex: number
     alternatives: number
+    type: number
+    referenceAnswer: number
+    evaluationCriteria: number
     requestId: number
     _all: number
   }
@@ -7560,6 +7658,8 @@ export namespace Prisma {
     id?: true
     content?: true
     correctAnswerIndex?: true
+    type?: true
+    referenceAnswer?: true
     requestId?: true
   }
 
@@ -7567,6 +7667,8 @@ export namespace Prisma {
     id?: true
     content?: true
     correctAnswerIndex?: true
+    type?: true
+    referenceAnswer?: true
     requestId?: true
   }
 
@@ -7575,6 +7677,9 @@ export namespace Prisma {
     content?: true
     correctAnswerIndex?: true
     alternatives?: true
+    type?: true
+    referenceAnswer?: true
+    evaluationCriteria?: true
     requestId?: true
     _all?: true
   }
@@ -7668,8 +7773,11 @@ export namespace Prisma {
   export type QuestionGroupByOutputType = {
     id: number
     content: string
-    correctAnswerIndex: number
-    alternatives: PrismaJson.MultipleChoiceQuestionAlternative[]
+    correctAnswerIndex: number | null
+    alternatives: JsonValue[]
+    type: string
+    referenceAnswer: string | null
+    evaluationCriteria: JsonValue[]
     requestId: number
     _count: QuestionCountAggregateOutputType | null
     _avg: QuestionAvgAggregateOutputType | null
@@ -7697,6 +7805,9 @@ export namespace Prisma {
     content?: boolean
     correctAnswerIndex?: boolean
     alternatives?: boolean
+    type?: boolean
+    referenceAnswer?: boolean
+    evaluationCriteria?: boolean
     requestId?: boolean
     request?: boolean | QuestionRequestDefaultArgs<ExtArgs>
     answers?: boolean | Question$answersArgs<ExtArgs>
@@ -7708,6 +7819,9 @@ export namespace Prisma {
     content?: boolean
     correctAnswerIndex?: boolean
     alternatives?: boolean
+    type?: boolean
+    referenceAnswer?: boolean
+    evaluationCriteria?: boolean
     requestId?: boolean
     request?: boolean | QuestionRequestDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["question"]>
@@ -7717,6 +7831,9 @@ export namespace Prisma {
     content?: boolean
     correctAnswerIndex?: boolean
     alternatives?: boolean
+    type?: boolean
+    referenceAnswer?: boolean
+    evaluationCriteria?: boolean
     requestId?: boolean
     request?: boolean | QuestionRequestDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["question"]>
@@ -7726,10 +7843,13 @@ export namespace Prisma {
     content?: boolean
     correctAnswerIndex?: boolean
     alternatives?: boolean
+    type?: boolean
+    referenceAnswer?: boolean
+    evaluationCriteria?: boolean
     requestId?: boolean
   }
 
-  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "correctAnswerIndex" | "alternatives" | "requestId", ExtArgs["result"]["question"]>
+  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "correctAnswerIndex" | "alternatives" | "type" | "referenceAnswer" | "evaluationCriteria" | "requestId", ExtArgs["result"]["question"]>
   export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     request?: boolean | QuestionRequestDefaultArgs<ExtArgs>
     answers?: boolean | Question$answersArgs<ExtArgs>
@@ -7751,11 +7871,14 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       content: string
-      correctAnswerIndex: number
       /**
        * [MultipleChoiceQuestionAlternative]
        */
-      alternatives: PrismaJson.MultipleChoiceQuestionAlternative[]
+      correctAnswerIndex: number | null
+      alternatives: Prisma.JsonValue[]
+      type: string
+      referenceAnswer: string | null
+      evaluationCriteria: Prisma.JsonValue[]
       requestId: number
     }, ExtArgs["result"]["question"]>
     composites: {}
@@ -8186,6 +8309,9 @@ export namespace Prisma {
     readonly content: FieldRef<"Question", 'String'>
     readonly correctAnswerIndex: FieldRef<"Question", 'Int'>
     readonly alternatives: FieldRef<"Question", 'Json[]'>
+    readonly type: FieldRef<"Question", 'String'>
+    readonly referenceAnswer: FieldRef<"Question", 'String'>
+    readonly evaluationCriteria: FieldRef<"Question", 'Json[]'>
     readonly requestId: FieldRef<"Question", 'Int'>
   }
     
@@ -8660,6 +8786,7 @@ export namespace Prisma {
     answerIndex: number | null
     correct: boolean | null
     confidenceLevel: number | null
+    openAnswer: string | null
     createdAt: Date | null
     flaggedIncorrect: boolean | null
     flaggedProblematic: boolean | null
@@ -8674,6 +8801,7 @@ export namespace Prisma {
     answerIndex: number | null
     correct: boolean | null
     confidenceLevel: number | null
+    openAnswer: string | null
     createdAt: Date | null
     flaggedIncorrect: boolean | null
     flaggedProblematic: boolean | null
@@ -8688,6 +8816,7 @@ export namespace Prisma {
     answerIndex: number
     correct: number
     confidenceLevel: number
+    openAnswer: number
     createdAt: number
     flaggedIncorrect: number
     flaggedProblematic: number
@@ -8720,6 +8849,7 @@ export namespace Prisma {
     answerIndex?: true
     correct?: true
     confidenceLevel?: true
+    openAnswer?: true
     createdAt?: true
     flaggedIncorrect?: true
     flaggedProblematic?: true
@@ -8734,6 +8864,7 @@ export namespace Prisma {
     answerIndex?: true
     correct?: true
     confidenceLevel?: true
+    openAnswer?: true
     createdAt?: true
     flaggedIncorrect?: true
     flaggedProblematic?: true
@@ -8748,6 +8879,7 @@ export namespace Prisma {
     answerIndex?: true
     correct?: true
     confidenceLevel?: true
+    openAnswer?: true
     createdAt?: true
     flaggedIncorrect?: true
     flaggedProblematic?: true
@@ -8846,9 +8978,10 @@ export namespace Prisma {
     id: number
     questionId: number
     userId: number
-    answerIndex: number
+    answerIndex: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer: string | null
     createdAt: Date
     flaggedIncorrect: boolean
     flaggedProblematic: boolean
@@ -8882,6 +9015,7 @@ export namespace Prisma {
     answerIndex?: boolean
     correct?: boolean
     confidenceLevel?: boolean
+    openAnswer?: boolean
     createdAt?: boolean
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
@@ -8889,6 +9023,7 @@ export namespace Prisma {
     observation?: boolean
     question?: boolean | QuestionDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    autoEvaluation?: boolean | Answer$autoEvaluationArgs<ExtArgs>
   }, ExtArgs["result"]["answer"]>
 
   export type AnswerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8898,6 +9033,7 @@ export namespace Prisma {
     answerIndex?: boolean
     correct?: boolean
     confidenceLevel?: boolean
+    openAnswer?: boolean
     createdAt?: boolean
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
@@ -8914,6 +9050,7 @@ export namespace Prisma {
     answerIndex?: boolean
     correct?: boolean
     confidenceLevel?: boolean
+    openAnswer?: boolean
     createdAt?: boolean
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
@@ -8930,6 +9067,7 @@ export namespace Prisma {
     answerIndex?: boolean
     correct?: boolean
     confidenceLevel?: boolean
+    openAnswer?: boolean
     createdAt?: boolean
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
@@ -8937,10 +9075,11 @@ export namespace Prisma {
     observation?: boolean
   }
 
-  export type AnswerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "questionId" | "userId" | "answerIndex" | "correct" | "confidenceLevel" | "createdAt" | "flaggedIncorrect" | "flaggedProblematic" | "flaggedExcellent" | "observation", ExtArgs["result"]["answer"]>
+  export type AnswerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "questionId" | "userId" | "answerIndex" | "correct" | "confidenceLevel" | "openAnswer" | "createdAt" | "flaggedIncorrect" | "flaggedProblematic" | "flaggedExcellent" | "observation", ExtArgs["result"]["answer"]>
   export type AnswerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     question?: boolean | QuestionDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    autoEvaluation?: boolean | Answer$autoEvaluationArgs<ExtArgs>
   }
   export type AnswerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     question?: boolean | QuestionDefaultArgs<ExtArgs>
@@ -8956,14 +9095,16 @@ export namespace Prisma {
     objects: {
       question: Prisma.$QuestionPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs>
+      autoEvaluation: Prisma.$AutoEvaluationPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       questionId: number
       userId: number
-      answerIndex: number
+      answerIndex: number | null
       correct: boolean
       confidenceLevel: number
+      openAnswer: string | null
       createdAt: Date
       flaggedIncorrect: boolean
       flaggedProblematic: boolean
@@ -9365,6 +9506,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     question<T extends QuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionDefaultArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    autoEvaluation<T extends Answer$autoEvaluationArgs<ExtArgs> = {}>(args?: Subset<T, Answer$autoEvaluationArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9400,6 +9542,7 @@ export namespace Prisma {
     readonly answerIndex: FieldRef<"Answer", 'Int'>
     readonly correct: FieldRef<"Answer", 'Boolean'>
     readonly confidenceLevel: FieldRef<"Answer", 'Int'>
+    readonly openAnswer: FieldRef<"Answer", 'String'>
     readonly createdAt: FieldRef<"Answer", 'DateTime'>
     readonly flaggedIncorrect: FieldRef<"Answer", 'Boolean'>
     readonly flaggedProblematic: FieldRef<"Answer", 'Boolean'>
@@ -9801,6 +9944,25 @@ export namespace Prisma {
   }
 
   /**
+   * Answer.autoEvaluation
+   */
+  export type Answer$autoEvaluationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    where?: AutoEvaluationWhereInput
+  }
+
+  /**
    * Answer without action
    */
   export type AnswerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9816,6 +9978,1119 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AnswerInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AutoEvaluation
+   */
+
+  export type AggregateAutoEvaluation = {
+    _count: AutoEvaluationCountAggregateOutputType | null
+    _avg: AutoEvaluationAvgAggregateOutputType | null
+    _sum: AutoEvaluationSumAggregateOutputType | null
+    _min: AutoEvaluationMinAggregateOutputType | null
+    _max: AutoEvaluationMaxAggregateOutputType | null
+  }
+
+  export type AutoEvaluationAvgAggregateOutputType = {
+    id: number | null
+    answerId: number | null
+    score: number | null
+  }
+
+  export type AutoEvaluationSumAggregateOutputType = {
+    id: number | null
+    answerId: number | null
+    score: number | null
+  }
+
+  export type AutoEvaluationMinAggregateOutputType = {
+    id: number | null
+    answerId: number | null
+    score: number | null
+    justification: string | null
+    modelVersion: string | null
+    evaluatedAt: Date | null
+  }
+
+  export type AutoEvaluationMaxAggregateOutputType = {
+    id: number | null
+    answerId: number | null
+    score: number | null
+    justification: string | null
+    modelVersion: string | null
+    evaluatedAt: Date | null
+  }
+
+  export type AutoEvaluationCountAggregateOutputType = {
+    id: number
+    answerId: number
+    score: number
+    justification: number
+    modelVersion: number
+    evaluatedAt: number
+    _all: number
+  }
+
+
+  export type AutoEvaluationAvgAggregateInputType = {
+    id?: true
+    answerId?: true
+    score?: true
+  }
+
+  export type AutoEvaluationSumAggregateInputType = {
+    id?: true
+    answerId?: true
+    score?: true
+  }
+
+  export type AutoEvaluationMinAggregateInputType = {
+    id?: true
+    answerId?: true
+    score?: true
+    justification?: true
+    modelVersion?: true
+    evaluatedAt?: true
+  }
+
+  export type AutoEvaluationMaxAggregateInputType = {
+    id?: true
+    answerId?: true
+    score?: true
+    justification?: true
+    modelVersion?: true
+    evaluatedAt?: true
+  }
+
+  export type AutoEvaluationCountAggregateInputType = {
+    id?: true
+    answerId?: true
+    score?: true
+    justification?: true
+    modelVersion?: true
+    evaluatedAt?: true
+    _all?: true
+  }
+
+  export type AutoEvaluationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AutoEvaluation to aggregate.
+     */
+    where?: AutoEvaluationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoEvaluations to fetch.
+     */
+    orderBy?: AutoEvaluationOrderByWithRelationInput | AutoEvaluationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AutoEvaluationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoEvaluations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoEvaluations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AutoEvaluations
+    **/
+    _count?: true | AutoEvaluationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AutoEvaluationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AutoEvaluationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AutoEvaluationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AutoEvaluationMaxAggregateInputType
+  }
+
+  export type GetAutoEvaluationAggregateType<T extends AutoEvaluationAggregateArgs> = {
+        [P in keyof T & keyof AggregateAutoEvaluation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAutoEvaluation[P]>
+      : GetScalarType<T[P], AggregateAutoEvaluation[P]>
+  }
+
+
+
+
+  export type AutoEvaluationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AutoEvaluationWhereInput
+    orderBy?: AutoEvaluationOrderByWithAggregationInput | AutoEvaluationOrderByWithAggregationInput[]
+    by: AutoEvaluationScalarFieldEnum[] | AutoEvaluationScalarFieldEnum
+    having?: AutoEvaluationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AutoEvaluationCountAggregateInputType | true
+    _avg?: AutoEvaluationAvgAggregateInputType
+    _sum?: AutoEvaluationSumAggregateInputType
+    _min?: AutoEvaluationMinAggregateInputType
+    _max?: AutoEvaluationMaxAggregateInputType
+  }
+
+  export type AutoEvaluationGroupByOutputType = {
+    id: number
+    answerId: number
+    score: number
+    justification: string
+    modelVersion: string | null
+    evaluatedAt: Date
+    _count: AutoEvaluationCountAggregateOutputType | null
+    _avg: AutoEvaluationAvgAggregateOutputType | null
+    _sum: AutoEvaluationSumAggregateOutputType | null
+    _min: AutoEvaluationMinAggregateOutputType | null
+    _max: AutoEvaluationMaxAggregateOutputType | null
+  }
+
+  type GetAutoEvaluationGroupByPayload<T extends AutoEvaluationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AutoEvaluationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AutoEvaluationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AutoEvaluationGroupByOutputType[P]>
+            : GetScalarType<T[P], AutoEvaluationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AutoEvaluationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    answerId?: boolean
+    score?: boolean
+    justification?: boolean
+    modelVersion?: boolean
+    evaluatedAt?: boolean
+    answer?: boolean | AnswerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoEvaluation"]>
+
+  export type AutoEvaluationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    answerId?: boolean
+    score?: boolean
+    justification?: boolean
+    modelVersion?: boolean
+    evaluatedAt?: boolean
+    answer?: boolean | AnswerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoEvaluation"]>
+
+  export type AutoEvaluationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    answerId?: boolean
+    score?: boolean
+    justification?: boolean
+    modelVersion?: boolean
+    evaluatedAt?: boolean
+    answer?: boolean | AnswerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoEvaluation"]>
+
+  export type AutoEvaluationSelectScalar = {
+    id?: boolean
+    answerId?: boolean
+    score?: boolean
+    justification?: boolean
+    modelVersion?: boolean
+    evaluatedAt?: boolean
+  }
+
+  export type AutoEvaluationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "answerId" | "score" | "justification" | "modelVersion" | "evaluatedAt", ExtArgs["result"]["autoEvaluation"]>
+  export type AutoEvaluationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    answer?: boolean | AnswerDefaultArgs<ExtArgs>
+  }
+  export type AutoEvaluationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    answer?: boolean | AnswerDefaultArgs<ExtArgs>
+  }
+  export type AutoEvaluationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    answer?: boolean | AnswerDefaultArgs<ExtArgs>
+  }
+
+  export type $AutoEvaluationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AutoEvaluation"
+    objects: {
+      answer: Prisma.$AnswerPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      answerId: number
+      score: number
+      justification: string
+      modelVersion: string | null
+      evaluatedAt: Date
+    }, ExtArgs["result"]["autoEvaluation"]>
+    composites: {}
+  }
+
+  type AutoEvaluationGetPayload<S extends boolean | null | undefined | AutoEvaluationDefaultArgs> = $Result.GetResult<Prisma.$AutoEvaluationPayload, S>
+
+  type AutoEvaluationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AutoEvaluationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AutoEvaluationCountAggregateInputType | true
+    }
+
+  export interface AutoEvaluationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AutoEvaluation'], meta: { name: 'AutoEvaluation' } }
+    /**
+     * Find zero or one AutoEvaluation that matches the filter.
+     * @param {AutoEvaluationFindUniqueArgs} args - Arguments to find a AutoEvaluation
+     * @example
+     * // Get one AutoEvaluation
+     * const autoEvaluation = await prisma.autoEvaluation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AutoEvaluationFindUniqueArgs>(args: SelectSubset<T, AutoEvaluationFindUniqueArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AutoEvaluation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AutoEvaluationFindUniqueOrThrowArgs} args - Arguments to find a AutoEvaluation
+     * @example
+     * // Get one AutoEvaluation
+     * const autoEvaluation = await prisma.autoEvaluation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AutoEvaluationFindUniqueOrThrowArgs>(args: SelectSubset<T, AutoEvaluationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AutoEvaluation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationFindFirstArgs} args - Arguments to find a AutoEvaluation
+     * @example
+     * // Get one AutoEvaluation
+     * const autoEvaluation = await prisma.autoEvaluation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AutoEvaluationFindFirstArgs>(args?: SelectSubset<T, AutoEvaluationFindFirstArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AutoEvaluation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationFindFirstOrThrowArgs} args - Arguments to find a AutoEvaluation
+     * @example
+     * // Get one AutoEvaluation
+     * const autoEvaluation = await prisma.autoEvaluation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AutoEvaluationFindFirstOrThrowArgs>(args?: SelectSubset<T, AutoEvaluationFindFirstOrThrowArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AutoEvaluations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AutoEvaluations
+     * const autoEvaluations = await prisma.autoEvaluation.findMany()
+     * 
+     * // Get first 10 AutoEvaluations
+     * const autoEvaluations = await prisma.autoEvaluation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const autoEvaluationWithIdOnly = await prisma.autoEvaluation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AutoEvaluationFindManyArgs>(args?: SelectSubset<T, AutoEvaluationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AutoEvaluation.
+     * @param {AutoEvaluationCreateArgs} args - Arguments to create a AutoEvaluation.
+     * @example
+     * // Create one AutoEvaluation
+     * const AutoEvaluation = await prisma.autoEvaluation.create({
+     *   data: {
+     *     // ... data to create a AutoEvaluation
+     *   }
+     * })
+     * 
+     */
+    create<T extends AutoEvaluationCreateArgs>(args: SelectSubset<T, AutoEvaluationCreateArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AutoEvaluations.
+     * @param {AutoEvaluationCreateManyArgs} args - Arguments to create many AutoEvaluations.
+     * @example
+     * // Create many AutoEvaluations
+     * const autoEvaluation = await prisma.autoEvaluation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AutoEvaluationCreateManyArgs>(args?: SelectSubset<T, AutoEvaluationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AutoEvaluations and returns the data saved in the database.
+     * @param {AutoEvaluationCreateManyAndReturnArgs} args - Arguments to create many AutoEvaluations.
+     * @example
+     * // Create many AutoEvaluations
+     * const autoEvaluation = await prisma.autoEvaluation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AutoEvaluations and only return the `id`
+     * const autoEvaluationWithIdOnly = await prisma.autoEvaluation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AutoEvaluationCreateManyAndReturnArgs>(args?: SelectSubset<T, AutoEvaluationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AutoEvaluation.
+     * @param {AutoEvaluationDeleteArgs} args - Arguments to delete one AutoEvaluation.
+     * @example
+     * // Delete one AutoEvaluation
+     * const AutoEvaluation = await prisma.autoEvaluation.delete({
+     *   where: {
+     *     // ... filter to delete one AutoEvaluation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AutoEvaluationDeleteArgs>(args: SelectSubset<T, AutoEvaluationDeleteArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AutoEvaluation.
+     * @param {AutoEvaluationUpdateArgs} args - Arguments to update one AutoEvaluation.
+     * @example
+     * // Update one AutoEvaluation
+     * const autoEvaluation = await prisma.autoEvaluation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AutoEvaluationUpdateArgs>(args: SelectSubset<T, AutoEvaluationUpdateArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AutoEvaluations.
+     * @param {AutoEvaluationDeleteManyArgs} args - Arguments to filter AutoEvaluations to delete.
+     * @example
+     * // Delete a few AutoEvaluations
+     * const { count } = await prisma.autoEvaluation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AutoEvaluationDeleteManyArgs>(args?: SelectSubset<T, AutoEvaluationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AutoEvaluations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AutoEvaluations
+     * const autoEvaluation = await prisma.autoEvaluation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AutoEvaluationUpdateManyArgs>(args: SelectSubset<T, AutoEvaluationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AutoEvaluations and returns the data updated in the database.
+     * @param {AutoEvaluationUpdateManyAndReturnArgs} args - Arguments to update many AutoEvaluations.
+     * @example
+     * // Update many AutoEvaluations
+     * const autoEvaluation = await prisma.autoEvaluation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AutoEvaluations and only return the `id`
+     * const autoEvaluationWithIdOnly = await prisma.autoEvaluation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AutoEvaluationUpdateManyAndReturnArgs>(args: SelectSubset<T, AutoEvaluationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AutoEvaluation.
+     * @param {AutoEvaluationUpsertArgs} args - Arguments to update or create a AutoEvaluation.
+     * @example
+     * // Update or create a AutoEvaluation
+     * const autoEvaluation = await prisma.autoEvaluation.upsert({
+     *   create: {
+     *     // ... data to create a AutoEvaluation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AutoEvaluation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AutoEvaluationUpsertArgs>(args: SelectSubset<T, AutoEvaluationUpsertArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AutoEvaluations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationCountArgs} args - Arguments to filter AutoEvaluations to count.
+     * @example
+     * // Count the number of AutoEvaluations
+     * const count = await prisma.autoEvaluation.count({
+     *   where: {
+     *     // ... the filter for the AutoEvaluations we want to count
+     *   }
+     * })
+    **/
+    count<T extends AutoEvaluationCountArgs>(
+      args?: Subset<T, AutoEvaluationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AutoEvaluationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AutoEvaluation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AutoEvaluationAggregateArgs>(args: Subset<T, AutoEvaluationAggregateArgs>): Prisma.PrismaPromise<GetAutoEvaluationAggregateType<T>>
+
+    /**
+     * Group by AutoEvaluation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AutoEvaluationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AutoEvaluationGroupByArgs['orderBy'] }
+        : { orderBy?: AutoEvaluationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AutoEvaluationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAutoEvaluationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AutoEvaluation model
+   */
+  readonly fields: AutoEvaluationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AutoEvaluation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AutoEvaluationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    answer<T extends AnswerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AnswerDefaultArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AutoEvaluation model
+   */
+  interface AutoEvaluationFieldRefs {
+    readonly id: FieldRef<"AutoEvaluation", 'Int'>
+    readonly answerId: FieldRef<"AutoEvaluation", 'Int'>
+    readonly score: FieldRef<"AutoEvaluation", 'Float'>
+    readonly justification: FieldRef<"AutoEvaluation", 'String'>
+    readonly modelVersion: FieldRef<"AutoEvaluation", 'String'>
+    readonly evaluatedAt: FieldRef<"AutoEvaluation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AutoEvaluation findUnique
+   */
+  export type AutoEvaluationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluation to fetch.
+     */
+    where: AutoEvaluationWhereUniqueInput
+  }
+
+  /**
+   * AutoEvaluation findUniqueOrThrow
+   */
+  export type AutoEvaluationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluation to fetch.
+     */
+    where: AutoEvaluationWhereUniqueInput
+  }
+
+  /**
+   * AutoEvaluation findFirst
+   */
+  export type AutoEvaluationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluation to fetch.
+     */
+    where?: AutoEvaluationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoEvaluations to fetch.
+     */
+    orderBy?: AutoEvaluationOrderByWithRelationInput | AutoEvaluationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AutoEvaluations.
+     */
+    cursor?: AutoEvaluationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoEvaluations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoEvaluations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AutoEvaluations.
+     */
+    distinct?: AutoEvaluationScalarFieldEnum | AutoEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * AutoEvaluation findFirstOrThrow
+   */
+  export type AutoEvaluationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluation to fetch.
+     */
+    where?: AutoEvaluationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoEvaluations to fetch.
+     */
+    orderBy?: AutoEvaluationOrderByWithRelationInput | AutoEvaluationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AutoEvaluations.
+     */
+    cursor?: AutoEvaluationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoEvaluations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoEvaluations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AutoEvaluations.
+     */
+    distinct?: AutoEvaluationScalarFieldEnum | AutoEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * AutoEvaluation findMany
+   */
+  export type AutoEvaluationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluations to fetch.
+     */
+    where?: AutoEvaluationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoEvaluations to fetch.
+     */
+    orderBy?: AutoEvaluationOrderByWithRelationInput | AutoEvaluationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AutoEvaluations.
+     */
+    cursor?: AutoEvaluationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoEvaluations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoEvaluations.
+     */
+    skip?: number
+    distinct?: AutoEvaluationScalarFieldEnum | AutoEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * AutoEvaluation create
+   */
+  export type AutoEvaluationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AutoEvaluation.
+     */
+    data: XOR<AutoEvaluationCreateInput, AutoEvaluationUncheckedCreateInput>
+  }
+
+  /**
+   * AutoEvaluation createMany
+   */
+  export type AutoEvaluationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AutoEvaluations.
+     */
+    data: AutoEvaluationCreateManyInput | AutoEvaluationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AutoEvaluation createManyAndReturn
+   */
+  export type AutoEvaluationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * The data used to create many AutoEvaluations.
+     */
+    data: AutoEvaluationCreateManyInput | AutoEvaluationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AutoEvaluation update
+   */
+  export type AutoEvaluationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AutoEvaluation.
+     */
+    data: XOR<AutoEvaluationUpdateInput, AutoEvaluationUncheckedUpdateInput>
+    /**
+     * Choose, which AutoEvaluation to update.
+     */
+    where: AutoEvaluationWhereUniqueInput
+  }
+
+  /**
+   * AutoEvaluation updateMany
+   */
+  export type AutoEvaluationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AutoEvaluations.
+     */
+    data: XOR<AutoEvaluationUpdateManyMutationInput, AutoEvaluationUncheckedUpdateManyInput>
+    /**
+     * Filter which AutoEvaluations to update
+     */
+    where?: AutoEvaluationWhereInput
+    /**
+     * Limit how many AutoEvaluations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AutoEvaluation updateManyAndReturn
+   */
+  export type AutoEvaluationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * The data used to update AutoEvaluations.
+     */
+    data: XOR<AutoEvaluationUpdateManyMutationInput, AutoEvaluationUncheckedUpdateManyInput>
+    /**
+     * Filter which AutoEvaluations to update
+     */
+    where?: AutoEvaluationWhereInput
+    /**
+     * Limit how many AutoEvaluations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AutoEvaluation upsert
+   */
+  export type AutoEvaluationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AutoEvaluation to update in case it exists.
+     */
+    where: AutoEvaluationWhereUniqueInput
+    /**
+     * In case the AutoEvaluation found by the `where` argument doesn't exist, create a new AutoEvaluation with this data.
+     */
+    create: XOR<AutoEvaluationCreateInput, AutoEvaluationUncheckedCreateInput>
+    /**
+     * In case the AutoEvaluation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AutoEvaluationUpdateInput, AutoEvaluationUncheckedUpdateInput>
+  }
+
+  /**
+   * AutoEvaluation delete
+   */
+  export type AutoEvaluationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter which AutoEvaluation to delete.
+     */
+    where: AutoEvaluationWhereUniqueInput
+  }
+
+  /**
+   * AutoEvaluation deleteMany
+   */
+  export type AutoEvaluationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AutoEvaluations to delete
+     */
+    where?: AutoEvaluationWhereInput
+    /**
+     * Limit how many AutoEvaluations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AutoEvaluation without action
+   */
+  export type AutoEvaluationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluation
+     */
+    select?: AutoEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluation
+     */
+    omit?: AutoEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationInclude<ExtArgs> | null
   }
 
 
@@ -9898,6 +11173,9 @@ export namespace Prisma {
     content: 'content',
     correctAnswerIndex: 'correctAnswerIndex',
     alternatives: 'alternatives',
+    type: 'type',
+    referenceAnswer: 'referenceAnswer',
+    evaluationCriteria: 'evaluationCriteria',
     requestId: 'requestId'
   };
 
@@ -9911,6 +11189,7 @@ export namespace Prisma {
     answerIndex: 'answerIndex',
     correct: 'correct',
     confidenceLevel: 'confidenceLevel',
+    openAnswer: 'openAnswer',
     createdAt: 'createdAt',
     flaggedIncorrect: 'flaggedIncorrect',
     flaggedProblematic: 'flaggedProblematic',
@@ -9919,6 +11198,18 @@ export namespace Prisma {
   };
 
   export type AnswerScalarFieldEnum = (typeof AnswerScalarFieldEnum)[keyof typeof AnswerScalarFieldEnum]
+
+
+  export const AutoEvaluationScalarFieldEnum: {
+    id: 'id',
+    answerId: 'answerId',
+    score: 'score',
+    justification: 'justification',
+    modelVersion: 'modelVersion',
+    evaluatedAt: 'evaluatedAt'
+  };
+
+  export type AutoEvaluationScalarFieldEnum = (typeof AutoEvaluationScalarFieldEnum)[keyof typeof AutoEvaluationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10237,7 +11528,7 @@ export namespace Prisma {
     promptTemplate?: StringFilter<"QuestionRequestTemplate"> | string
     createdAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
-    parameters?: NullableListFilter<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
     ownerId?: IntFilter<"QuestionRequestTemplate"> | number
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     requests?: QuestionRequestListRelationFilter
@@ -10294,7 +11585,7 @@ export namespace Prisma {
     promptTemplate?: StringWithAggregatesFilter<"QuestionRequestTemplate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"QuestionRequestTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"QuestionRequestTemplate"> | Date | string
-    parameters?: NullableListFilter<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
     ownerId?: IntWithAggregatesFilter<"QuestionRequestTemplate"> | number
   }
 
@@ -10303,7 +11594,7 @@ export namespace Prisma {
     OR?: QuestionRequestWhereInput[]
     NOT?: QuestionRequestWhereInput | QuestionRequestWhereInput[]
     id?: IntFilter<"QuestionRequest"> | number
-    parameterValues?: NullableListFilter<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
     templateId?: IntFilter<"QuestionRequest"> | number
     userId?: IntFilter<"QuestionRequest"> | number
@@ -10355,7 +11646,7 @@ export namespace Prisma {
     OR?: QuestionRequestScalarWhereWithAggregatesInput[]
     NOT?: QuestionRequestScalarWhereWithAggregatesInput | QuestionRequestScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"QuestionRequest"> | number
-    parameterValues?: NullableListFilter<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeWithAggregatesFilter<"QuestionRequest"> | Date | string
     templateId?: IntWithAggregatesFilter<"QuestionRequest"> | number
     userId?: IntWithAggregatesFilter<"QuestionRequest"> | number
@@ -10367,8 +11658,11 @@ export namespace Prisma {
     NOT?: QuestionWhereInput | QuestionWhereInput[]
     id?: IntFilter<"Question"> | number
     content?: StringFilter<"Question"> | string
-    correctAnswerIndex?: IntFilter<"Question"> | number
-    alternatives?: NullableListFilter<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: IntNullableFilter<"Question"> | number | null
+    alternatives?: JsonNullableListFilter<"Question">
+    type?: StringFilter<"Question"> | string
+    referenceAnswer?: StringNullableFilter<"Question"> | string | null
+    evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntFilter<"Question"> | number
     request?: XOR<QuestionRequestScalarRelationFilter, QuestionRequestWhereInput>
     answers?: AnswerListRelationFilter
@@ -10377,8 +11671,11 @@ export namespace Prisma {
   export type QuestionOrderByWithRelationInput = {
     id?: SortOrder
     content?: SortOrder
-    correctAnswerIndex?: SortOrder
+    correctAnswerIndex?: SortOrderInput | SortOrder
     alternatives?: SortOrder
+    type?: SortOrder
+    referenceAnswer?: SortOrderInput | SortOrder
+    evaluationCriteria?: SortOrder
     requestId?: SortOrder
     request?: QuestionRequestOrderByWithRelationInput
     answers?: AnswerOrderByRelationAggregateInput
@@ -10390,8 +11687,11 @@ export namespace Prisma {
     OR?: QuestionWhereInput[]
     NOT?: QuestionWhereInput | QuestionWhereInput[]
     content?: StringFilter<"Question"> | string
-    correctAnswerIndex?: IntFilter<"Question"> | number
+    correctAnswerIndex?: IntNullableFilter<"Question"> | number | null
     alternatives?: JsonNullableListFilter<"Question">
+    type?: StringFilter<"Question"> | string
+    referenceAnswer?: StringNullableFilter<"Question"> | string | null
+    evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntFilter<"Question"> | number
     request?: XOR<QuestionRequestScalarRelationFilter, QuestionRequestWhereInput>
     answers?: AnswerListRelationFilter
@@ -10400,8 +11700,11 @@ export namespace Prisma {
   export type QuestionOrderByWithAggregationInput = {
     id?: SortOrder
     content?: SortOrder
-    correctAnswerIndex?: SortOrder
+    correctAnswerIndex?: SortOrderInput | SortOrder
     alternatives?: SortOrder
+    type?: SortOrder
+    referenceAnswer?: SortOrderInput | SortOrder
+    evaluationCriteria?: SortOrder
     requestId?: SortOrder
     _count?: QuestionCountOrderByAggregateInput
     _avg?: QuestionAvgOrderByAggregateInput
@@ -10416,8 +11719,11 @@ export namespace Prisma {
     NOT?: QuestionScalarWhereWithAggregatesInput | QuestionScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Question"> | number
     content?: StringWithAggregatesFilter<"Question"> | string
-    correctAnswerIndex?: IntWithAggregatesFilter<"Question"> | number
-    alternatives?: NullableListFilter<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: IntNullableWithAggregatesFilter<"Question"> | number | null
+    alternatives?: JsonNullableListFilter<"Question">
+    type?: StringWithAggregatesFilter<"Question"> | string
+    referenceAnswer?: StringNullableWithAggregatesFilter<"Question"> | string | null
+    evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntWithAggregatesFilter<"Question"> | number
   }
 
@@ -10428,9 +11734,10 @@ export namespace Prisma {
     id?: IntFilter<"Answer"> | number
     questionId?: IntFilter<"Answer"> | number
     userId?: IntFilter<"Answer"> | number
-    answerIndex?: IntFilter<"Answer"> | number
+    answerIndex?: IntNullableFilter<"Answer"> | number | null
     correct?: BoolFilter<"Answer"> | boolean
     confidenceLevel?: IntFilter<"Answer"> | number
+    openAnswer?: StringNullableFilter<"Answer"> | string | null
     createdAt?: DateTimeFilter<"Answer"> | Date | string
     flaggedIncorrect?: BoolFilter<"Answer"> | boolean
     flaggedProblematic?: BoolFilter<"Answer"> | boolean
@@ -10438,15 +11745,17 @@ export namespace Prisma {
     observation?: StringFilter<"Answer"> | string
     question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    autoEvaluation?: XOR<AutoEvaluationNullableScalarRelationFilter, AutoEvaluationWhereInput> | null
   }
 
   export type AnswerOrderByWithRelationInput = {
     id?: SortOrder
     questionId?: SortOrder
     userId?: SortOrder
-    answerIndex?: SortOrder
+    answerIndex?: SortOrderInput | SortOrder
     correct?: SortOrder
     confidenceLevel?: SortOrder
+    openAnswer?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     flaggedIncorrect?: SortOrder
     flaggedProblematic?: SortOrder
@@ -10454,6 +11763,7 @@ export namespace Prisma {
     observation?: SortOrder
     question?: QuestionOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
+    autoEvaluation?: AutoEvaluationOrderByWithRelationInput
   }
 
   export type AnswerWhereUniqueInput = Prisma.AtLeast<{
@@ -10463,9 +11773,10 @@ export namespace Prisma {
     NOT?: AnswerWhereInput | AnswerWhereInput[]
     questionId?: IntFilter<"Answer"> | number
     userId?: IntFilter<"Answer"> | number
-    answerIndex?: IntFilter<"Answer"> | number
+    answerIndex?: IntNullableFilter<"Answer"> | number | null
     correct?: BoolFilter<"Answer"> | boolean
     confidenceLevel?: IntFilter<"Answer"> | number
+    openAnswer?: StringNullableFilter<"Answer"> | string | null
     createdAt?: DateTimeFilter<"Answer"> | Date | string
     flaggedIncorrect?: BoolFilter<"Answer"> | boolean
     flaggedProblematic?: BoolFilter<"Answer"> | boolean
@@ -10473,15 +11784,17 @@ export namespace Prisma {
     observation?: StringFilter<"Answer"> | string
     question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    autoEvaluation?: XOR<AutoEvaluationNullableScalarRelationFilter, AutoEvaluationWhereInput> | null
   }, "id">
 
   export type AnswerOrderByWithAggregationInput = {
     id?: SortOrder
     questionId?: SortOrder
     userId?: SortOrder
-    answerIndex?: SortOrder
+    answerIndex?: SortOrderInput | SortOrder
     correct?: SortOrder
     confidenceLevel?: SortOrder
+    openAnswer?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     flaggedIncorrect?: SortOrder
     flaggedProblematic?: SortOrder
@@ -10501,14 +11814,77 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Answer"> | number
     questionId?: IntWithAggregatesFilter<"Answer"> | number
     userId?: IntWithAggregatesFilter<"Answer"> | number
-    answerIndex?: IntWithAggregatesFilter<"Answer"> | number
+    answerIndex?: IntNullableWithAggregatesFilter<"Answer"> | number | null
     correct?: BoolWithAggregatesFilter<"Answer"> | boolean
     confidenceLevel?: IntWithAggregatesFilter<"Answer"> | number
+    openAnswer?: StringNullableWithAggregatesFilter<"Answer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Answer"> | Date | string
     flaggedIncorrect?: BoolWithAggregatesFilter<"Answer"> | boolean
     flaggedProblematic?: BoolWithAggregatesFilter<"Answer"> | boolean
     flaggedExcellent?: BoolWithAggregatesFilter<"Answer"> | boolean
     observation?: StringWithAggregatesFilter<"Answer"> | string
+  }
+
+  export type AutoEvaluationWhereInput = {
+    AND?: AutoEvaluationWhereInput | AutoEvaluationWhereInput[]
+    OR?: AutoEvaluationWhereInput[]
+    NOT?: AutoEvaluationWhereInput | AutoEvaluationWhereInput[]
+    id?: IntFilter<"AutoEvaluation"> | number
+    answerId?: IntFilter<"AutoEvaluation"> | number
+    score?: FloatFilter<"AutoEvaluation"> | number
+    justification?: StringFilter<"AutoEvaluation"> | string
+    modelVersion?: StringNullableFilter<"AutoEvaluation"> | string | null
+    evaluatedAt?: DateTimeFilter<"AutoEvaluation"> | Date | string
+    answer?: XOR<AnswerScalarRelationFilter, AnswerWhereInput>
+  }
+
+  export type AutoEvaluationOrderByWithRelationInput = {
+    id?: SortOrder
+    answerId?: SortOrder
+    score?: SortOrder
+    justification?: SortOrder
+    modelVersion?: SortOrderInput | SortOrder
+    evaluatedAt?: SortOrder
+    answer?: AnswerOrderByWithRelationInput
+  }
+
+  export type AutoEvaluationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    answerId?: number
+    AND?: AutoEvaluationWhereInput | AutoEvaluationWhereInput[]
+    OR?: AutoEvaluationWhereInput[]
+    NOT?: AutoEvaluationWhereInput | AutoEvaluationWhereInput[]
+    score?: FloatFilter<"AutoEvaluation"> | number
+    justification?: StringFilter<"AutoEvaluation"> | string
+    modelVersion?: StringNullableFilter<"AutoEvaluation"> | string | null
+    evaluatedAt?: DateTimeFilter<"AutoEvaluation"> | Date | string
+    answer?: XOR<AnswerScalarRelationFilter, AnswerWhereInput>
+  }, "id" | "answerId">
+
+  export type AutoEvaluationOrderByWithAggregationInput = {
+    id?: SortOrder
+    answerId?: SortOrder
+    score?: SortOrder
+    justification?: SortOrder
+    modelVersion?: SortOrderInput | SortOrder
+    evaluatedAt?: SortOrder
+    _count?: AutoEvaluationCountOrderByAggregateInput
+    _avg?: AutoEvaluationAvgOrderByAggregateInput
+    _max?: AutoEvaluationMaxOrderByAggregateInput
+    _min?: AutoEvaluationMinOrderByAggregateInput
+    _sum?: AutoEvaluationSumOrderByAggregateInput
+  }
+
+  export type AutoEvaluationScalarWhereWithAggregatesInput = {
+    AND?: AutoEvaluationScalarWhereWithAggregatesInput | AutoEvaluationScalarWhereWithAggregatesInput[]
+    OR?: AutoEvaluationScalarWhereWithAggregatesInput[]
+    NOT?: AutoEvaluationScalarWhereWithAggregatesInput | AutoEvaluationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AutoEvaluation"> | number
+    answerId?: IntWithAggregatesFilter<"AutoEvaluation"> | number
+    score?: FloatWithAggregatesFilter<"AutoEvaluation"> | number
+    justification?: StringWithAggregatesFilter<"AutoEvaluation"> | string
+    modelVersion?: StringNullableWithAggregatesFilter<"AutoEvaluation"> | string | null
+    evaluatedAt?: DateTimeWithAggregatesFilter<"AutoEvaluation"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -10719,7 +12095,7 @@ export namespace Prisma {
     promptTemplate: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    parameters?: CreateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
   }
@@ -10730,7 +12106,7 @@ export namespace Prisma {
     promptTemplate: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    parameters?: CreateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     ownerId: number
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
   }
@@ -10740,7 +12116,7 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
   }
@@ -10751,7 +12127,7 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
   }
@@ -10762,7 +12138,7 @@ export namespace Prisma {
     promptTemplate: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    parameters?: CreateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     ownerId: number
   }
 
@@ -10771,7 +12147,7 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
   }
 
   export type QuestionRequestTemplateUncheckedUpdateManyInput = {
@@ -10780,12 +12156,12 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
   }
 
   export type QuestionRequestCreateInput = {
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
     template?: QuestionRequestTemplateCreateNestedOneWithoutRequestsInput
@@ -10794,7 +12170,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedCreateInput = {
     id?: number
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId: number
     userId: number
@@ -10802,7 +12178,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestUpdateInput = {
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
     template?: QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput
@@ -10811,7 +12187,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
@@ -10820,20 +12196,20 @@ export namespace Prisma {
 
   export type QuestionRequestCreateManyInput = {
     id?: number
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId: number
     userId: number
   }
 
   export type QuestionRequestUpdateManyMutationInput = {
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type QuestionRequestUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
@@ -10841,8 +12217,11 @@ export namespace Prisma {
 
   export type QuestionCreateInput = {
     content: string
-    correctAnswerIndex: number
-    alternatives?: CreateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: number | null
+    alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
+    type?: string
+    referenceAnswer?: string | null
+    evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     request: QuestionRequestCreateNestedOneWithoutQuestionsInput
     answers?: AnswerCreateNestedManyWithoutQuestionInput
   }
@@ -10850,16 +12229,22 @@ export namespace Prisma {
   export type QuestionUncheckedCreateInput = {
     id?: number
     content: string
-    correctAnswerIndex: number
-    alternatives?: CreateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: number | null
+    alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
+    type?: string
+    referenceAnswer?: string | null
+    evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     requestId: number
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
   export type QuestionUpdateInput = {
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     request?: QuestionRequestUpdateOneRequiredWithoutQuestionsNestedInput
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
   }
@@ -10867,8 +12252,11 @@ export namespace Prisma {
   export type QuestionUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     requestId?: IntFieldUpdateOperationsInput | number
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
@@ -10876,29 +12264,39 @@ export namespace Prisma {
   export type QuestionCreateManyInput = {
     id?: number
     content: string
-    correctAnswerIndex: number
-    alternatives?: CreateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: number | null
+    alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
+    type?: string
+    referenceAnswer?: string | null
+    evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     requestId: number
   }
 
   export type QuestionUpdateManyMutationInput = {
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
   }
 
   export type QuestionUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     requestId?: IntFieldUpdateOperationsInput | number
   }
 
   export type AnswerCreateInput = {
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
@@ -10906,26 +12304,30 @@ export namespace Prisma {
     observation?: string
     question: QuestionCreateNestedOneWithoutAnswersInput
     user: UserCreateNestedOneWithoutAnswersInput
+    autoEvaluation?: AutoEvaluationCreateNestedOneWithoutAnswerInput
   }
 
   export type AnswerUncheckedCreateInput = {
     id?: number
     questionId: number
     userId: number
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
     flaggedExcellent?: boolean
     observation?: string
+    autoEvaluation?: AutoEvaluationUncheckedCreateNestedOneWithoutAnswerInput
   }
 
   export type AnswerUpdateInput = {
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
@@ -10933,29 +12335,33 @@ export namespace Prisma {
     observation?: StringFieldUpdateOperationsInput | string
     question?: QuestionUpdateOneRequiredWithoutAnswersNestedInput
     user?: UserUpdateOneRequiredWithoutAnswersNestedInput
+    autoEvaluation?: AutoEvaluationUpdateOneWithoutAnswerNestedInput
   }
 
   export type AnswerUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     questionId?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
     flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
     observation?: StringFieldUpdateOperationsInput | string
+    autoEvaluation?: AutoEvaluationUncheckedUpdateOneWithoutAnswerNestedInput
   }
 
   export type AnswerCreateManyInput = {
     id?: number
     questionId: number
     userId: number
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
@@ -10964,9 +12370,10 @@ export namespace Prisma {
   }
 
   export type AnswerUpdateManyMutationInput = {
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
@@ -10978,14 +12385,74 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     questionId?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
     flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
     observation?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AutoEvaluationCreateInput = {
+    score: number
+    justification: string
+    modelVersion?: string | null
+    evaluatedAt?: Date | string
+    answer: AnswerCreateNestedOneWithoutAutoEvaluationInput
+  }
+
+  export type AutoEvaluationUncheckedCreateInput = {
+    id?: number
+    answerId: number
+    score: number
+    justification: string
+    modelVersion?: string | null
+    evaluatedAt?: Date | string
+  }
+
+  export type AutoEvaluationUpdateInput = {
+    score?: FloatFieldUpdateOperationsInput | number
+    justification?: StringFieldUpdateOperationsInput | string
+    modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answer?: AnswerUpdateOneRequiredWithoutAutoEvaluationNestedInput
+  }
+
+  export type AutoEvaluationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    answerId?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+    justification?: StringFieldUpdateOperationsInput | string
+    modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutoEvaluationCreateManyInput = {
+    id?: number
+    answerId: number
+    score: number
+    justification: string
+    modelVersion?: string | null
+    evaluatedAt?: Date | string
+  }
+
+  export type AutoEvaluationUpdateManyMutationInput = {
+    score?: FloatFieldUpdateOperationsInput | number
+    justification?: StringFieldUpdateOperationsInput | string
+    modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutoEvaluationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    answerId?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+    justification?: StringFieldUpdateOperationsInput | string
+    modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -11387,6 +12854,17 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type QuestionRequestScalarRelationFilter = {
     is?: QuestionRequestWhereInput
     isNot?: QuestionRequestWhereInput
@@ -11397,6 +12875,9 @@ export namespace Prisma {
     content?: SortOrder
     correctAnswerIndex?: SortOrder
     alternatives?: SortOrder
+    type?: SortOrder
+    referenceAnswer?: SortOrder
+    evaluationCriteria?: SortOrder
     requestId?: SortOrder
   }
 
@@ -11410,6 +12891,8 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     correctAnswerIndex?: SortOrder
+    type?: SortOrder
+    referenceAnswer?: SortOrder
     requestId?: SortOrder
   }
 
@@ -11417,6 +12900,8 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     correctAnswerIndex?: SortOrder
+    type?: SortOrder
+    referenceAnswer?: SortOrder
     requestId?: SortOrder
   }
 
@@ -11426,9 +12911,30 @@ export namespace Prisma {
     requestId?: SortOrder
   }
 
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type QuestionScalarRelationFilter = {
     is?: QuestionWhereInput
     isNot?: QuestionWhereInput
+  }
+
+  export type AutoEvaluationNullableScalarRelationFilter = {
+    is?: AutoEvaluationWhereInput | null
+    isNot?: AutoEvaluationWhereInput | null
   }
 
   export type AnswerCountOrderByAggregateInput = {
@@ -11438,6 +12944,7 @@ export namespace Prisma {
     answerIndex?: SortOrder
     correct?: SortOrder
     confidenceLevel?: SortOrder
+    openAnswer?: SortOrder
     createdAt?: SortOrder
     flaggedIncorrect?: SortOrder
     flaggedProblematic?: SortOrder
@@ -11460,6 +12967,7 @@ export namespace Prisma {
     answerIndex?: SortOrder
     correct?: SortOrder
     confidenceLevel?: SortOrder
+    openAnswer?: SortOrder
     createdAt?: SortOrder
     flaggedIncorrect?: SortOrder
     flaggedProblematic?: SortOrder
@@ -11474,6 +12982,7 @@ export namespace Prisma {
     answerIndex?: SortOrder
     correct?: SortOrder
     confidenceLevel?: SortOrder
+    openAnswer?: SortOrder
     createdAt?: SortOrder
     flaggedIncorrect?: SortOrder
     flaggedProblematic?: SortOrder
@@ -11487,6 +12996,77 @@ export namespace Prisma {
     userId?: SortOrder
     answerIndex?: SortOrder
     confidenceLevel?: SortOrder
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type AnswerScalarRelationFilter = {
+    is?: AnswerWhereInput
+    isNot?: AnswerWhereInput
+  }
+
+  export type AutoEvaluationCountOrderByAggregateInput = {
+    id?: SortOrder
+    answerId?: SortOrder
+    score?: SortOrder
+    justification?: SortOrder
+    modelVersion?: SortOrder
+    evaluatedAt?: SortOrder
+  }
+
+  export type AutoEvaluationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    answerId?: SortOrder
+    score?: SortOrder
+  }
+
+  export type AutoEvaluationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    answerId?: SortOrder
+    score?: SortOrder
+    justification?: SortOrder
+    modelVersion?: SortOrder
+    evaluatedAt?: SortOrder
+  }
+
+  export type AutoEvaluationMinOrderByAggregateInput = {
+    id?: SortOrder
+    answerId?: SortOrder
+    score?: SortOrder
+    justification?: SortOrder
+    modelVersion?: SortOrder
+    evaluatedAt?: SortOrder
+  }
+
+  export type AutoEvaluationSumOrderByAggregateInput = {
+    id?: SortOrder
+    answerId?: SortOrder
+    score?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type GroupCreateNestedManyWithoutUsersInput = {
@@ -11921,6 +13501,10 @@ export namespace Prisma {
     set: InputJsonValue[]
   }
 
+  export type QuestionCreateevaluationCriteriaInput = {
+    set: InputJsonValue[]
+  }
+
   export type QuestionRequestCreateNestedOneWithoutQuestionsInput = {
     create?: XOR<QuestionRequestCreateWithoutQuestionsInput, QuestionRequestUncheckedCreateWithoutQuestionsInput>
     connectOrCreate?: QuestionRequestCreateOrConnectWithoutQuestionsInput
@@ -11941,7 +13525,20 @@ export namespace Prisma {
     connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type QuestionUpdatealternativesInput = {
+    set?: InputJsonValue[]
+    push?: InputJsonValue | InputJsonValue[]
+  }
+
+  export type QuestionUpdateevaluationCriteriaInput = {
     set?: InputJsonValue[]
     push?: InputJsonValue | InputJsonValue[]
   }
@@ -11994,6 +13591,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type AutoEvaluationCreateNestedOneWithoutAnswerInput = {
+    create?: XOR<AutoEvaluationCreateWithoutAnswerInput, AutoEvaluationUncheckedCreateWithoutAnswerInput>
+    connectOrCreate?: AutoEvaluationCreateOrConnectWithoutAnswerInput
+    connect?: AutoEvaluationWhereUniqueInput
+  }
+
+  export type AutoEvaluationUncheckedCreateNestedOneWithoutAnswerInput = {
+    create?: XOR<AutoEvaluationCreateWithoutAnswerInput, AutoEvaluationUncheckedCreateWithoutAnswerInput>
+    connectOrCreate?: AutoEvaluationCreateOrConnectWithoutAnswerInput
+    connect?: AutoEvaluationWhereUniqueInput
+  }
+
   export type QuestionUpdateOneRequiredWithoutAnswersNestedInput = {
     create?: XOR<QuestionCreateWithoutAnswersInput, QuestionUncheckedCreateWithoutAnswersInput>
     connectOrCreate?: QuestionCreateOrConnectWithoutAnswersInput
@@ -12008,6 +13617,48 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAnswersInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAnswersInput, UserUpdateWithoutAnswersInput>, UserUncheckedUpdateWithoutAnswersInput>
+  }
+
+  export type AutoEvaluationUpdateOneWithoutAnswerNestedInput = {
+    create?: XOR<AutoEvaluationCreateWithoutAnswerInput, AutoEvaluationUncheckedCreateWithoutAnswerInput>
+    connectOrCreate?: AutoEvaluationCreateOrConnectWithoutAnswerInput
+    upsert?: AutoEvaluationUpsertWithoutAnswerInput
+    disconnect?: AutoEvaluationWhereInput | boolean
+    delete?: AutoEvaluationWhereInput | boolean
+    connect?: AutoEvaluationWhereUniqueInput
+    update?: XOR<XOR<AutoEvaluationUpdateToOneWithWhereWithoutAnswerInput, AutoEvaluationUpdateWithoutAnswerInput>, AutoEvaluationUncheckedUpdateWithoutAnswerInput>
+  }
+
+  export type AutoEvaluationUncheckedUpdateOneWithoutAnswerNestedInput = {
+    create?: XOR<AutoEvaluationCreateWithoutAnswerInput, AutoEvaluationUncheckedCreateWithoutAnswerInput>
+    connectOrCreate?: AutoEvaluationCreateOrConnectWithoutAnswerInput
+    upsert?: AutoEvaluationUpsertWithoutAnswerInput
+    disconnect?: AutoEvaluationWhereInput | boolean
+    delete?: AutoEvaluationWhereInput | boolean
+    connect?: AutoEvaluationWhereUniqueInput
+    update?: XOR<XOR<AutoEvaluationUpdateToOneWithWhereWithoutAnswerInput, AutoEvaluationUpdateWithoutAnswerInput>, AutoEvaluationUncheckedUpdateWithoutAnswerInput>
+  }
+
+  export type AnswerCreateNestedOneWithoutAutoEvaluationInput = {
+    create?: XOR<AnswerCreateWithoutAutoEvaluationInput, AnswerUncheckedCreateWithoutAutoEvaluationInput>
+    connectOrCreate?: AnswerCreateOrConnectWithoutAutoEvaluationInput
+    connect?: AnswerWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type AnswerUpdateOneRequiredWithoutAutoEvaluationNestedInput = {
+    create?: XOR<AnswerCreateWithoutAutoEvaluationInput, AnswerUncheckedCreateWithoutAutoEvaluationInput>
+    connectOrCreate?: AnswerCreateOrConnectWithoutAutoEvaluationInput
+    upsert?: AnswerUpsertWithoutAutoEvaluationInput
+    connect?: AnswerWhereUniqueInput
+    update?: XOR<XOR<AnswerUpdateToOneWithWhereWithoutAutoEvaluationInput, AnswerUpdateWithoutAutoEvaluationInput>, AnswerUncheckedUpdateWithoutAutoEvaluationInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -12159,6 +13810,49 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type GroupCreateWithoutUsersInput = {
     name: string
     startDate: Date | string
@@ -12217,7 +13911,7 @@ export namespace Prisma {
     promptTemplate: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    parameters?: CreateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
   }
 
@@ -12227,7 +13921,7 @@ export namespace Prisma {
     promptTemplate: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    parameters?: CreateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
   }
 
@@ -12242,7 +13936,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestCreateWithoutUserInput = {
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     template?: QuestionRequestTemplateCreateNestedOneWithoutRequestsInput
     questions?: QuestionCreateNestedManyWithoutRequestInput
@@ -12250,7 +13944,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedCreateWithoutUserInput = {
     id?: number
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId: number
     questions?: QuestionUncheckedCreateNestedManyWithoutRequestInput
@@ -12267,28 +13961,32 @@ export namespace Prisma {
   }
 
   export type AnswerCreateWithoutUserInput = {
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
     flaggedExcellent?: boolean
     observation?: string
     question: QuestionCreateNestedOneWithoutAnswersInput
+    autoEvaluation?: AutoEvaluationCreateNestedOneWithoutAnswerInput
   }
 
   export type AnswerUncheckedCreateWithoutUserInput = {
     id?: number
     questionId: number
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
     flaggedExcellent?: boolean
     observation?: string
+    autoEvaluation?: AutoEvaluationUncheckedCreateNestedOneWithoutAnswerInput
   }
 
   export type AnswerCreateOrConnectWithoutUserInput = {
@@ -12371,7 +14069,7 @@ export namespace Prisma {
     promptTemplate?: StringFilter<"QuestionRequestTemplate"> | string
     createdAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
-    parameters?: NullableListFilter<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
     ownerId?: IntFilter<"QuestionRequestTemplate"> | number
   }
 
@@ -12396,7 +14094,7 @@ export namespace Prisma {
     OR?: QuestionRequestScalarWhereInput[]
     NOT?: QuestionRequestScalarWhereInput | QuestionRequestScalarWhereInput[]
     id?: IntFilter<"QuestionRequest"> | number
-    parameterValues?: NullableListFilter<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
     templateId?: IntFilter<"QuestionRequest"> | number
     userId?: IntFilter<"QuestionRequest"> | number
@@ -12425,9 +14123,10 @@ export namespace Prisma {
     id?: IntFilter<"Answer"> | number
     questionId?: IntFilter<"Answer"> | number
     userId?: IntFilter<"Answer"> | number
-    answerIndex?: IntFilter<"Answer"> | number
+    answerIndex?: IntNullableFilter<"Answer"> | number | null
     correct?: BoolFilter<"Answer"> | boolean
     confidenceLevel?: IntFilter<"Answer"> | number
+    openAnswer?: StringNullableFilter<"Answer"> | string | null
     createdAt?: DateTimeFilter<"Answer"> | Date | string
     flaggedIncorrect?: BoolFilter<"Answer"> | boolean
     flaggedProblematic?: BoolFilter<"Answer"> | boolean
@@ -12599,7 +14298,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestCreateWithoutTemplateInput = {
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
     questions?: QuestionCreateNestedManyWithoutRequestInput
@@ -12607,7 +14306,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedCreateWithoutTemplateInput = {
     id?: number
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     userId: number
     questions?: QuestionUncheckedCreateNestedManyWithoutRequestInput
@@ -12714,7 +14413,7 @@ export namespace Prisma {
     promptTemplate: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    parameters?: CreateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
   }
 
@@ -12724,7 +14423,7 @@ export namespace Prisma {
     promptTemplate: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    parameters?: CreateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     ownerId: number
   }
 
@@ -12735,16 +14434,22 @@ export namespace Prisma {
 
   export type QuestionCreateWithoutRequestInput = {
     content: string
-    correctAnswerIndex: number
-    alternatives?: CreateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: number | null
+    alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
+    type?: string
+    referenceAnswer?: string | null
+    evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     answers?: AnswerCreateNestedManyWithoutQuestionInput
   }
 
   export type QuestionUncheckedCreateWithoutRequestInput = {
     id?: number
     content: string
-    correctAnswerIndex: number
-    alternatives?: CreateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: number | null
+    alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
+    type?: string
+    referenceAnswer?: string | null
+    evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
@@ -12812,7 +14517,7 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
   }
 
@@ -12822,7 +14527,7 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -12848,13 +14553,16 @@ export namespace Prisma {
     NOT?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
     id?: IntFilter<"Question"> | number
     content?: StringFilter<"Question"> | string
-    correctAnswerIndex?: IntFilter<"Question"> | number
-    alternatives?: NullableListFilter<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: IntNullableFilter<"Question"> | number | null
+    alternatives?: JsonNullableListFilter<"Question">
+    type?: StringFilter<"Question"> | string
+    referenceAnswer?: StringNullableFilter<"Question"> | string | null
+    evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntFilter<"Question"> | number
   }
 
   export type QuestionRequestCreateWithoutQuestionsInput = {
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
     template?: QuestionRequestTemplateCreateNestedOneWithoutRequestsInput
@@ -12862,7 +14570,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedCreateWithoutQuestionsInput = {
     id?: number
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId: number
     userId: number
@@ -12874,28 +14582,32 @@ export namespace Prisma {
   }
 
   export type AnswerCreateWithoutQuestionInput = {
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
     flaggedExcellent?: boolean
     observation?: string
     user: UserCreateNestedOneWithoutAnswersInput
+    autoEvaluation?: AutoEvaluationCreateNestedOneWithoutAnswerInput
   }
 
   export type AnswerUncheckedCreateWithoutQuestionInput = {
     id?: number
     userId: number
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
     flaggedExcellent?: boolean
     observation?: string
+    autoEvaluation?: AutoEvaluationUncheckedCreateNestedOneWithoutAnswerInput
   }
 
   export type AnswerCreateOrConnectWithoutQuestionInput = {
@@ -12920,7 +14632,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestUpdateWithoutQuestionsInput = {
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
     template?: QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput
@@ -12928,7 +14640,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateWithoutQuestionsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
@@ -12952,16 +14664,22 @@ export namespace Prisma {
 
   export type QuestionCreateWithoutAnswersInput = {
     content: string
-    correctAnswerIndex: number
-    alternatives?: CreateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: number | null
+    alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
+    type?: string
+    referenceAnswer?: string | null
+    evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     request: QuestionRequestCreateNestedOneWithoutQuestionsInput
   }
 
   export type QuestionUncheckedCreateWithoutAnswersInput = {
     id?: number
     content: string
-    correctAnswerIndex: number
-    alternatives?: CreateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: number | null
+    alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
+    type?: string
+    referenceAnswer?: string | null
+    evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     requestId: number
   }
 
@@ -13002,6 +14720,26 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutAnswersInput, UserUncheckedCreateWithoutAnswersInput>
   }
 
+  export type AutoEvaluationCreateWithoutAnswerInput = {
+    score: number
+    justification: string
+    modelVersion?: string | null
+    evaluatedAt?: Date | string
+  }
+
+  export type AutoEvaluationUncheckedCreateWithoutAnswerInput = {
+    id?: number
+    score: number
+    justification: string
+    modelVersion?: string | null
+    evaluatedAt?: Date | string
+  }
+
+  export type AutoEvaluationCreateOrConnectWithoutAnswerInput = {
+    where: AutoEvaluationWhereUniqueInput
+    create: XOR<AutoEvaluationCreateWithoutAnswerInput, AutoEvaluationUncheckedCreateWithoutAnswerInput>
+  }
+
   export type QuestionUpsertWithoutAnswersInput = {
     update: XOR<QuestionUpdateWithoutAnswersInput, QuestionUncheckedUpdateWithoutAnswersInput>
     create: XOR<QuestionCreateWithoutAnswersInput, QuestionUncheckedCreateWithoutAnswersInput>
@@ -13015,16 +14753,22 @@ export namespace Prisma {
 
   export type QuestionUpdateWithoutAnswersInput = {
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     request?: QuestionRequestUpdateOneRequiredWithoutQuestionsNestedInput
   }
 
   export type QuestionUncheckedUpdateWithoutAnswersInput = {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     requestId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13066,6 +14810,106 @@ export namespace Prisma {
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type AutoEvaluationUpsertWithoutAnswerInput = {
+    update: XOR<AutoEvaluationUpdateWithoutAnswerInput, AutoEvaluationUncheckedUpdateWithoutAnswerInput>
+    create: XOR<AutoEvaluationCreateWithoutAnswerInput, AutoEvaluationUncheckedCreateWithoutAnswerInput>
+    where?: AutoEvaluationWhereInput
+  }
+
+  export type AutoEvaluationUpdateToOneWithWhereWithoutAnswerInput = {
+    where?: AutoEvaluationWhereInput
+    data: XOR<AutoEvaluationUpdateWithoutAnswerInput, AutoEvaluationUncheckedUpdateWithoutAnswerInput>
+  }
+
+  export type AutoEvaluationUpdateWithoutAnswerInput = {
+    score?: FloatFieldUpdateOperationsInput | number
+    justification?: StringFieldUpdateOperationsInput | string
+    modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutoEvaluationUncheckedUpdateWithoutAnswerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+    justification?: StringFieldUpdateOperationsInput | string
+    modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnswerCreateWithoutAutoEvaluationInput = {
+    answerIndex?: number | null
+    correct: boolean
+    confidenceLevel: number
+    openAnswer?: string | null
+    createdAt?: Date | string
+    flaggedIncorrect?: boolean
+    flaggedProblematic?: boolean
+    flaggedExcellent?: boolean
+    observation?: string
+    question: QuestionCreateNestedOneWithoutAnswersInput
+    user: UserCreateNestedOneWithoutAnswersInput
+  }
+
+  export type AnswerUncheckedCreateWithoutAutoEvaluationInput = {
+    id?: number
+    questionId: number
+    userId: number
+    answerIndex?: number | null
+    correct: boolean
+    confidenceLevel: number
+    openAnswer?: string | null
+    createdAt?: Date | string
+    flaggedIncorrect?: boolean
+    flaggedProblematic?: boolean
+    flaggedExcellent?: boolean
+    observation?: string
+  }
+
+  export type AnswerCreateOrConnectWithoutAutoEvaluationInput = {
+    where: AnswerWhereUniqueInput
+    create: XOR<AnswerCreateWithoutAutoEvaluationInput, AnswerUncheckedCreateWithoutAutoEvaluationInput>
+  }
+
+  export type AnswerUpsertWithoutAutoEvaluationInput = {
+    update: XOR<AnswerUpdateWithoutAutoEvaluationInput, AnswerUncheckedUpdateWithoutAutoEvaluationInput>
+    create: XOR<AnswerCreateWithoutAutoEvaluationInput, AnswerUncheckedCreateWithoutAutoEvaluationInput>
+    where?: AnswerWhereInput
+  }
+
+  export type AnswerUpdateToOneWithWhereWithoutAutoEvaluationInput = {
+    where?: AnswerWhereInput
+    data: XOR<AnswerUpdateWithoutAutoEvaluationInput, AnswerUncheckedUpdateWithoutAutoEvaluationInput>
+  }
+
+  export type AnswerUpdateWithoutAutoEvaluationInput = {
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    correct?: BoolFieldUpdateOperationsInput | boolean
+    confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
+    flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
+    flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
+    observation?: StringFieldUpdateOperationsInput | string
+    question?: QuestionUpdateOneRequiredWithoutAnswersNestedInput
+    user?: UserUpdateOneRequiredWithoutAnswersNestedInput
+  }
+
+  export type AnswerUncheckedUpdateWithoutAutoEvaluationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    questionId?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    correct?: BoolFieldUpdateOperationsInput | boolean
+    confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
+    flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
+    flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
+    observation?: StringFieldUpdateOperationsInput | string
+  }
+
   export type GroupCreateManyOwnerInput = {
     id?: number
     name: string
@@ -13081,12 +14925,12 @@ export namespace Prisma {
     promptTemplate: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    parameters?: CreateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
   }
 
   export type QuestionRequestCreateManyUserInput = {
     id?: number
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId: number
   }
@@ -13094,9 +14938,10 @@ export namespace Prisma {
   export type AnswerCreateManyUserInput = {
     id?: number
     questionId: number
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
@@ -13166,7 +15011,7 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
   }
 
@@ -13176,7 +15021,7 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
@@ -13186,11 +15031,11 @@ export namespace Prisma {
     promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parameters?: UpdateManyInput<PrismaJson.QuestionRequestTemplateParameter>
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
   }
 
   export type QuestionRequestUpdateWithoutUserInput = {
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput
     questions?: QuestionUpdateManyWithoutRequestNestedInput
@@ -13198,7 +15043,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: IntFieldUpdateOperationsInput | number
     questions?: QuestionUncheckedUpdateManyWithoutRequestNestedInput
@@ -13206,42 +15051,47 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: IntFieldUpdateOperationsInput | number
   }
 
   export type AnswerUpdateWithoutUserInput = {
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
     flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
     observation?: StringFieldUpdateOperationsInput | string
     question?: QuestionUpdateOneRequiredWithoutAnswersNestedInput
+    autoEvaluation?: AutoEvaluationUpdateOneWithoutAnswerNestedInput
   }
 
   export type AnswerUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     questionId?: IntFieldUpdateOperationsInput | number
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
     flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
     observation?: StringFieldUpdateOperationsInput | string
+    autoEvaluation?: AutoEvaluationUncheckedUpdateOneWithoutAnswerNestedInput
   }
 
   export type AnswerUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     questionId?: IntFieldUpdateOperationsInput | number
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
@@ -13288,13 +15138,13 @@ export namespace Prisma {
 
   export type QuestionRequestCreateManyTemplateInput = {
     id?: number
-    parameterValues?: CreateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     userId: number
   }
 
   export type QuestionRequestUpdateWithoutTemplateInput = {
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
     questions?: QuestionUpdateManyWithoutRequestNestedInput
@@ -13302,7 +15152,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateWithoutTemplateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
     questions?: QuestionUncheckedUpdateManyWithoutRequestNestedInput
@@ -13310,7 +15160,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateManyWithoutTemplateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    parameterValues?: UpdateManyInput<PrismaJson.QuestionRequestParameterValue>
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
   }
@@ -13318,38 +15168,51 @@ export namespace Prisma {
   export type QuestionCreateManyRequestInput = {
     id?: number
     content: string
-    correctAnswerIndex: number
-    alternatives?: CreateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: number | null
+    alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
+    type?: string
+    referenceAnswer?: string | null
+    evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
   }
 
   export type QuestionUpdateWithoutRequestInput = {
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
   }
 
   export type QuestionUncheckedUpdateWithoutRequestInput = {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
   export type QuestionUncheckedUpdateManyWithoutRequestInput = {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
-    correctAnswerIndex?: IntFieldUpdateOperationsInput | number
-    alternatives?: UpdateManyInput<PrismaJson.MultipleChoiceQuestionAlternative>
+    correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
+    type?: StringFieldUpdateOperationsInput | string
+    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
   }
 
   export type AnswerCreateManyQuestionInput = {
     id?: number
     userId: number
-    answerIndex: number
+    answerIndex?: number | null
     correct: boolean
     confidenceLevel: number
+    openAnswer?: string | null
     createdAt?: Date | string
     flaggedIncorrect?: boolean
     flaggedProblematic?: boolean
@@ -13358,36 +15221,41 @@ export namespace Prisma {
   }
 
   export type AnswerUpdateWithoutQuestionInput = {
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
     flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
     observation?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutAnswersNestedInput
+    autoEvaluation?: AutoEvaluationUpdateOneWithoutAnswerNestedInput
   }
 
   export type AnswerUncheckedUpdateWithoutQuestionInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
     flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
     observation?: StringFieldUpdateOperationsInput | string
+    autoEvaluation?: AutoEvaluationUncheckedUpdateOneWithoutAnswerNestedInput
   }
 
   export type AnswerUncheckedUpdateManyWithoutQuestionInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    answerIndex?: IntFieldUpdateOperationsInput | number
+    answerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     correct?: BoolFieldUpdateOperationsInput | boolean
     confidenceLevel?: IntFieldUpdateOperationsInput | number
+    openAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flaggedIncorrect?: BoolFieldUpdateOperationsInput | boolean
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean

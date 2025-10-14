@@ -54,30 +54,50 @@ async function generateQuestions(questionRequest: QuestionRequest) {
     throw new Error("No response from LLM");
   }
   // console.log('RESULT', jsonString);
-  const json: PrismaJson.MultipleChoiceQuestionResponse = JSON.parse(jsonString);
+  const json: PrismaJson.MultipleChoiceQuestionResponse | PrismaJson.DiscursiveQuestionResponse = JSON.parse(jsonString);
   const questions = json.questions;
 
   console.log("As questoes geradas", questions);
-
   // for each question, shuffle the alternatives, updating the correctAnswerIndex
   questions.forEach((question) => {
-    const indices = Array.from({ length: question?.alternatives?.length }, (_, i) => i);
-    indices.sort((i) => Math.random() - 0.5);
-    // shuffle alternatives and update the index of the correct answer
-    question.alternatives = indices.map((i) => question.alternatives[i]);
-    question.correctAnswerIndex = indices.indexOf(question.correctAnswerIndex);
+
+    if ('evaluationCriteria' in question) {
+      console.log('Questão discursiva gerada:', question);
+    } else {
+      const indices = Array.from({ length: question?.alternatives?.length }, (_, i) => i);
+      indices.sort((i) => Math.random() - 0.5);
+      // shuffle alternatives and update the index of the correct answer
+      question.alternatives = indices.map((i) => question.alternatives[i]);
+      question.correctAnswerIndex = indices.indexOf(question.correctAnswerIndex);
+    }
+   
   });
 
   await prisma.question.createMany({
-    data: questions.map((question) => ({
-      content: question.content,
-      correctAnswerIndex: question.correctAnswerIndex,
-      requestId: questionRequest.id,
-      alternatives: question.alternatives.map((alternative) => ({
-        content: alternative.content,
-        feedback: alternative.feedback,
-      })),
-    })),
+    data: questions.map((question) => {
+      if ('alternatives' in question) {
+        return {
+          content: question.content,
+          correctAnswerIndex: question.correctAnswerIndex,
+          type: "multiple-choice",
+          requestId: questionRequest.id,
+          alternatives: question.alternatives.map((alternative) => ({
+            content: alternative.content,
+            feedback: alternative.feedback,
+          })),
+        };
+      } else {
+      
+        return {
+          content: question.content,
+          correctAnswerIndex: null,
+          type: "discursive",
+          requestId: questionRequest.id,
+          alternatives: [],
+          referenceAnswer: question.referenceAnswer,
+        };
+      }
+    }),
   });
 }
 

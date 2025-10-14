@@ -1,3 +1,5 @@
+import { AutoEvaluation } from "#main-entry-point";
+
 export namespace PrismaJson {
   export type QuestionRequestTemplateParameter = {
     name: string;
@@ -9,6 +11,17 @@ export namespace PrismaJson {
     name: string;
     values: string[];
   };
+
+ export type DiscursiveQuestion = {
+  content: string;
+  referenceAnswer: string;
+  evaluationCriteria: string[];
+};
+  
+export type DiscursiveQuestionResponse = {
+  content: string;
+  questions: DiscursiveQuestion[];
+}
 
   export type MultipleChoiceQuestionResponse = {
     content: string;
