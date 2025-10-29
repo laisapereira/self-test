@@ -89,8 +89,6 @@ model Question {
   correctAnswerIndex Int? /// [MultipleChoiceQuestionAlternative]
   alternatives       Json[]
   type               String @default("multiple-choice")
-
-  referenceAnswer    String?
   evaluationCriteria Json[]
 
   requestId Int

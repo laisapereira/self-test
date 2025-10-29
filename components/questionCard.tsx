@@ -70,8 +70,24 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
     }
   }
 
-  async function submitDiscursiveAnswer() {
-    console.log("Ainda em construção")
+  async function submitDiscursiveAnswer(evaluationCriteria: string[] = []) {
+    if (!discursiveAnswer.trim() || confidenceLevel === null) return;
+
+    try {
+      const response = await fetch(`/api/questions/${question.id}/answers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ openAnswer: discursiveAnswer, confidenceLevel, evaluationCriteria }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to submit discursive answer");
+      }
+      const data = await response.json();
+      setAnswer(data);
+      console.log("Discursive answer submitted successfully", data);
+    } catch (error) {
+      console.error("Error submitting discursive answer:", error);
+    }
   }
 
   function getAnswerClassName(alternativeIdx: number) {
@@ -127,7 +143,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
             <Button
               variant="default"
               disabled={!discursiveAnswer.trim() || confidenceLevel === null}
-              onClick={submitDiscursiveAnswer}
+              onClick={() => submitDiscursiveAnswer(String(question.evaluationCriteria).split(','))}
             >
               Enviar resposta
             </Button>

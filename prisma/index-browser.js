@@ -171,7 +171,6 @@ exports.Prisma.QuestionScalarFieldEnum = {
   correctAnswerIndex: 'correctAnswerIndex',
   alternatives: 'alternatives',
   type: 'type',
-  referenceAnswer: 'referenceAnswer',
   evaluationCriteria: 'evaluationCriteria',
   requestId: 'requestId'
 };

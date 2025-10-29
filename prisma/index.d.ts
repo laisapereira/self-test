@@ -7616,7 +7616,6 @@ export namespace Prisma {
     content: string | null
     correctAnswerIndex: number | null
     type: string | null
-    referenceAnswer: string | null
     requestId: number | null
   }
 
@@ -7625,7 +7624,6 @@ export namespace Prisma {
     content: string | null
     correctAnswerIndex: number | null
     type: string | null
-    referenceAnswer: string | null
     requestId: number | null
   }
 
@@ -7635,7 +7633,6 @@ export namespace Prisma {
     correctAnswerIndex: number
     alternatives: number
     type: number
-    referenceAnswer: number
     evaluationCriteria: number
     requestId: number
     _all: number
@@ -7659,7 +7656,6 @@ export namespace Prisma {
     content?: true
     correctAnswerIndex?: true
     type?: true
-    referenceAnswer?: true
     requestId?: true
   }
 
@@ -7668,7 +7664,6 @@ export namespace Prisma {
     content?: true
     correctAnswerIndex?: true
     type?: true
-    referenceAnswer?: true
     requestId?: true
   }
 
@@ -7678,7 +7673,6 @@ export namespace Prisma {
     correctAnswerIndex?: true
     alternatives?: true
     type?: true
-    referenceAnswer?: true
     evaluationCriteria?: true
     requestId?: true
     _all?: true
@@ -7776,7 +7770,6 @@ export namespace Prisma {
     correctAnswerIndex: number | null
     alternatives: JsonValue[]
     type: string
-    referenceAnswer: string | null
     evaluationCriteria: JsonValue[]
     requestId: number
     _count: QuestionCountAggregateOutputType | null
@@ -7806,7 +7799,6 @@ export namespace Prisma {
     correctAnswerIndex?: boolean
     alternatives?: boolean
     type?: boolean
-    referenceAnswer?: boolean
     evaluationCriteria?: boolean
     requestId?: boolean
     request?: boolean | QuestionRequestDefaultArgs<ExtArgs>
@@ -7820,7 +7812,6 @@ export namespace Prisma {
     correctAnswerIndex?: boolean
     alternatives?: boolean
     type?: boolean
-    referenceAnswer?: boolean
     evaluationCriteria?: boolean
     requestId?: boolean
     request?: boolean | QuestionRequestDefaultArgs<ExtArgs>
@@ -7832,7 +7823,6 @@ export namespace Prisma {
     correctAnswerIndex?: boolean
     alternatives?: boolean
     type?: boolean
-    referenceAnswer?: boolean
     evaluationCriteria?: boolean
     requestId?: boolean
     request?: boolean | QuestionRequestDefaultArgs<ExtArgs>
@@ -7844,12 +7834,11 @@ export namespace Prisma {
     correctAnswerIndex?: boolean
     alternatives?: boolean
     type?: boolean
-    referenceAnswer?: boolean
     evaluationCriteria?: boolean
     requestId?: boolean
   }
 
-  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "correctAnswerIndex" | "alternatives" | "type" | "referenceAnswer" | "evaluationCriteria" | "requestId", ExtArgs["result"]["question"]>
+  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "correctAnswerIndex" | "alternatives" | "type" | "evaluationCriteria" | "requestId", ExtArgs["result"]["question"]>
   export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     request?: boolean | QuestionRequestDefaultArgs<ExtArgs>
     answers?: boolean | Question$answersArgs<ExtArgs>
@@ -7877,7 +7866,6 @@ export namespace Prisma {
       correctAnswerIndex: number | null
       alternatives: Prisma.JsonValue[]
       type: string
-      referenceAnswer: string | null
       evaluationCriteria: Prisma.JsonValue[]
       requestId: number
     }, ExtArgs["result"]["question"]>
@@ -8310,7 +8298,6 @@ export namespace Prisma {
     readonly correctAnswerIndex: FieldRef<"Question", 'Int'>
     readonly alternatives: FieldRef<"Question", 'Json[]'>
     readonly type: FieldRef<"Question", 'String'>
-    readonly referenceAnswer: FieldRef<"Question", 'String'>
     readonly evaluationCriteria: FieldRef<"Question", 'Json[]'>
     readonly requestId: FieldRef<"Question", 'Int'>
   }
@@ -11174,7 +11161,6 @@ export namespace Prisma {
     correctAnswerIndex: 'correctAnswerIndex',
     alternatives: 'alternatives',
     type: 'type',
-    referenceAnswer: 'referenceAnswer',
     evaluationCriteria: 'evaluationCriteria',
     requestId: 'requestId'
   };
@@ -11661,7 +11647,6 @@ export namespace Prisma {
     correctAnswerIndex?: IntNullableFilter<"Question"> | number | null
     alternatives?: JsonNullableListFilter<"Question">
     type?: StringFilter<"Question"> | string
-    referenceAnswer?: StringNullableFilter<"Question"> | string | null
     evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntFilter<"Question"> | number
     request?: XOR<QuestionRequestScalarRelationFilter, QuestionRequestWhereInput>
@@ -11674,7 +11659,6 @@ export namespace Prisma {
     correctAnswerIndex?: SortOrderInput | SortOrder
     alternatives?: SortOrder
     type?: SortOrder
-    referenceAnswer?: SortOrderInput | SortOrder
     evaluationCriteria?: SortOrder
     requestId?: SortOrder
     request?: QuestionRequestOrderByWithRelationInput
@@ -11690,7 +11674,6 @@ export namespace Prisma {
     correctAnswerIndex?: IntNullableFilter<"Question"> | number | null
     alternatives?: JsonNullableListFilter<"Question">
     type?: StringFilter<"Question"> | string
-    referenceAnswer?: StringNullableFilter<"Question"> | string | null
     evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntFilter<"Question"> | number
     request?: XOR<QuestionRequestScalarRelationFilter, QuestionRequestWhereInput>
@@ -11703,7 +11686,6 @@ export namespace Prisma {
     correctAnswerIndex?: SortOrderInput | SortOrder
     alternatives?: SortOrder
     type?: SortOrder
-    referenceAnswer?: SortOrderInput | SortOrder
     evaluationCriteria?: SortOrder
     requestId?: SortOrder
     _count?: QuestionCountOrderByAggregateInput
@@ -11722,7 +11704,6 @@ export namespace Prisma {
     correctAnswerIndex?: IntNullableWithAggregatesFilter<"Question"> | number | null
     alternatives?: JsonNullableListFilter<"Question">
     type?: StringWithAggregatesFilter<"Question"> | string
-    referenceAnswer?: StringNullableWithAggregatesFilter<"Question"> | string | null
     evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntWithAggregatesFilter<"Question"> | number
   }
@@ -12220,7 +12201,6 @@ export namespace Prisma {
     correctAnswerIndex?: number | null
     alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
     type?: string
-    referenceAnswer?: string | null
     evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     request: QuestionRequestCreateNestedOneWithoutQuestionsInput
     answers?: AnswerCreateNestedManyWithoutQuestionInput
@@ -12232,7 +12212,6 @@ export namespace Prisma {
     correctAnswerIndex?: number | null
     alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
     type?: string
-    referenceAnswer?: string | null
     evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     requestId: number
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
@@ -12243,7 +12222,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     request?: QuestionRequestUpdateOneRequiredWithoutQuestionsNestedInput
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
@@ -12255,7 +12233,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     requestId?: IntFieldUpdateOperationsInput | number
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
@@ -12267,7 +12244,6 @@ export namespace Prisma {
     correctAnswerIndex?: number | null
     alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
     type?: string
-    referenceAnswer?: string | null
     evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     requestId: number
   }
@@ -12277,7 +12253,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
   }
 
@@ -12287,7 +12262,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     requestId?: IntFieldUpdateOperationsInput | number
   }
@@ -12876,7 +12850,6 @@ export namespace Prisma {
     correctAnswerIndex?: SortOrder
     alternatives?: SortOrder
     type?: SortOrder
-    referenceAnswer?: SortOrder
     evaluationCriteria?: SortOrder
     requestId?: SortOrder
   }
@@ -12892,7 +12865,6 @@ export namespace Prisma {
     content?: SortOrder
     correctAnswerIndex?: SortOrder
     type?: SortOrder
-    referenceAnswer?: SortOrder
     requestId?: SortOrder
   }
 
@@ -12901,7 +12873,6 @@ export namespace Prisma {
     content?: SortOrder
     correctAnswerIndex?: SortOrder
     type?: SortOrder
-    referenceAnswer?: SortOrder
     requestId?: SortOrder
   }
 
@@ -14437,7 +14408,6 @@ export namespace Prisma {
     correctAnswerIndex?: number | null
     alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
     type?: string
-    referenceAnswer?: string | null
     evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     answers?: AnswerCreateNestedManyWithoutQuestionInput
   }
@@ -14448,7 +14418,6 @@ export namespace Prisma {
     correctAnswerIndex?: number | null
     alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
     type?: string
-    referenceAnswer?: string | null
     evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
@@ -14556,7 +14525,6 @@ export namespace Prisma {
     correctAnswerIndex?: IntNullableFilter<"Question"> | number | null
     alternatives?: JsonNullableListFilter<"Question">
     type?: StringFilter<"Question"> | string
-    referenceAnswer?: StringNullableFilter<"Question"> | string | null
     evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntFilter<"Question"> | number
   }
@@ -14667,7 +14635,6 @@ export namespace Prisma {
     correctAnswerIndex?: number | null
     alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
     type?: string
-    referenceAnswer?: string | null
     evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     request: QuestionRequestCreateNestedOneWithoutQuestionsInput
   }
@@ -14678,7 +14645,6 @@ export namespace Prisma {
     correctAnswerIndex?: number | null
     alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
     type?: string
-    referenceAnswer?: string | null
     evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
     requestId: number
   }
@@ -14756,7 +14722,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     request?: QuestionRequestUpdateOneRequiredWithoutQuestionsNestedInput
   }
@@ -14767,7 +14732,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     requestId?: IntFieldUpdateOperationsInput | number
   }
@@ -15171,7 +15135,6 @@ export namespace Prisma {
     correctAnswerIndex?: number | null
     alternatives?: QuestionCreatealternativesInput | InputJsonValue[]
     type?: string
-    referenceAnswer?: string | null
     evaluationCriteria?: QuestionCreateevaluationCriteriaInput | InputJsonValue[]
   }
 
@@ -15180,7 +15143,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
   }
@@ -15191,7 +15153,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
@@ -15202,7 +15163,6 @@ export namespace Prisma {
     correctAnswerIndex?: NullableIntFieldUpdateOperationsInput | number | null
     alternatives?: QuestionUpdatealternativesInput | InputJsonValue[]
     type?: StringFieldUpdateOperationsInput | string
-    referenceAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
   }
 
