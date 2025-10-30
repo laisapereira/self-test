@@ -94,7 +94,7 @@ async function generateQuestions(questionRequest: QuestionRequest) {
           type: "discursive",
           requestId: questionRequest.id,
           alternatives: [],
-          referenceAnswer: question.referenceAnswer,
+          evaluationCriteria: question.evaluationCriteria,
         };
       }
     }),

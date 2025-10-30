@@ -74,7 +74,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
     if (!discursiveAnswer.trim() || confidenceLevel === null) return;
 
     try {
-      const response = await fetch(`/api/questions/${question.id}/answers`, {
+      const response = await fetch(`/api/questions/${question.id}/answers/discursiveAnswers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ openAnswer: discursiveAnswer, confidenceLevel, evaluationCriteria }),
