@@ -21,6 +21,20 @@ async function getParams(req: Request, params: Promise<{ id: string }>) {
     return { question, userId };
 }
 
+
+async function evaluateAnswer(openai: OpenAI, prompt: string) {
+    console.log('sending request to LLM');
+        const completion = await openai.chat.completions.create({
+            messages: [{ role: 'system', content: prompt }],
+            model: 'gpt-4o',
+            response_format: {
+            type: 'json_object'
+            }
+        });
+
+        return completion.choices[0].message.content;
+        }
+
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const user = await getCurrentUser();
@@ -56,9 +70,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
         Sua tarefa é analisar a resposta com base em cada critério e retornar um objeto JSON com o seguinte formato:
 
-        {
-        "score": Float (de 0.0 a 5.0),
-        "justification": "Uma justificativa breve explicando a nota com base nos critérios."
+        {"autoEvaluation": {
+            "score": Com base no ${evaluationCriteria}, forneça uma nota de 0 a 5 para a resposta do usuário. float,
+            "justification": "Uma justificativa breve explicando a nota com base nos critérios ${evaluationCriteria}"
+            }
         }
         `;
 
@@ -67,27 +82,31 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             baseURL: process.env.OPENAI_BASE_URL,
         });
 
-        console.log('sending request to LLM');
-        const completion = await openai.chat.completions.create({
-            messages: [{ role: 'system', content: prompt }],
-            model: 'gpt-4o',
-            response_format: {
-            type: 'json_object'
-            }
+        const llmResponse = await evaluateAnswer(openai, prompt)
+        const { autoEvaluation } = JSON.parse(llmResponse as string)
+
+        console.log(autoEvaluation)
+
+        const answer = await prisma.answer.create({
+        data: {
+            questionId: question.id,
+            userId: user.id,
+            openAnswer,
+            confidenceLevel,
+            correct: autoEvaluation.score >= 3, // it's a boolean
+        },
         });
 
-        return completion.choices[0].message.content;
-        }
+       const feedbackLLM = await prisma.autoEvaluation.create({
+        data: {
+            answerId: answer.id,
+            score: autoEvaluation.score,
+            justification: autoEvaluation.justification,
+            modelVersion: 'gpt-4o', 
+  },
+        })
 
-    const answer = await prisma.answer.create({
-      data: {
-        questionId: question.id,
-        userId: user.id,
-        openAnswer,
-        confidenceLevel,
-        correct: 
-      },
-    });
+        console.log(" o feedback do llm é", feedbackLLM) 
 
     return NextResponse.json(answer, { status: 201 });
   } catch (error) {
@@ -96,3 +115,4 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     }
     return NextResponse.json({ error: "Failed to create answer" }, { status: 500 });
   }
+}
