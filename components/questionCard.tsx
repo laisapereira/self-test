@@ -1,4 +1,4 @@
-import { Answer, Question } from "../prisma";
+import { Answer, AutoEvaluation, Question } from "../prisma";
 import { PrismaJson } from "@/prisma/types";
 import { Label } from "@radix-ui/react-label";
 import { marked } from "marked";
@@ -13,13 +13,15 @@ import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ConfidenceLevel } from "./confidenceLevel";
 
-export function QuestionCard(props: { question: Question, userId?: number, withAnswer?: Answer }) {
+export function QuestionCard(props: { question: Question, userId?: number, withAnswer?: Answer, withEvaluation?: AutoEvaluation }) {
   const { question } = props;
   const [alternative, setAlternative] = useState<number | null>(null);
   const [confidenceLevel, setConfidenceLevel] = useState<number | null>(null);
   const [answer, setAnswer] = useState<Answer | null>(props.withAnswer ?? null);
   const [discursiveAnswer, setDiscursiveAnswer] = useState<string>(""); 
-
+  const [feedbackLLM, setFeedbackLLM] = useState<AutoEvaluation | null>(props.withEvaluation ?? null)
+  
+  
   useEffect(() => {
     const searchParams = new URLSearchParams();
     if (props.userId) {
@@ -82,9 +84,11 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
       if (!response.ok) {
         throw new Error("Failed to submit discursive answer");
       }
-      const data = await response.json();
-      setAnswer(data);
-      console.log("Discursive answer submitted successfully", data);
+      const {answer, feedbackLLM} = await response.json();
+      console.log("retorno do post", answer, feedbackLLM)
+      setAnswer(answer);
+      setFeedbackLLM(feedbackLLM)
+      //console.log("Discursive answer submitted successfully",);
     } catch (error) {
       console.error("Error submitting discursive answer:", error);
     }
@@ -153,7 +157,17 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
             <p className="mt-2">
               <b>Sua resposta:</b> {answer?.openAnswer}
             </p>
-          </div>
+        
+
+          {feedbackLLM && (
+            <div className="mt-2 border-t pt-2">
+              <p className="text-center"><b>Feedback pelo LLM</b></p>
+              <p><b>Nota:</b> {feedbackLLM.score}/5</p>
+              <p><b>Justificativa do feedback</b> {feedbackLLM.justification}</p>
+            </div>
+          )}
+        </div>
+
         )
       ) : (
         <>

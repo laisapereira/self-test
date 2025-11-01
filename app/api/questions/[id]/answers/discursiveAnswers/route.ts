@@ -106,9 +106,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   },
         })
 
-        console.log(" o feedback do llm é", feedbackLLM) 
 
-    return NextResponse.json(answer, { status: 201 });
+    return NextResponse.json({answer, feedbackLLM}, { status: 201 });
   } catch (error) {
     if (error instanceof NextResponse) {
       return error;
