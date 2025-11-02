@@ -29,6 +29,8 @@ function QuestionRequestsPageInner() {
     fetchData();
   }, []);
 
+ 
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div>
@@ -120,11 +122,26 @@ function getNumberOfCorrectAnswers(questions: any) {
   let answered = 0;
 
   for (const question of questions) {
-    const answerIndex = question.answers[0]?.answerIndex;
-    if (answerIndex !== undefined && answerIndex !== null) {
-      answered++;
-      if (answerIndex == question.correctAnswerIndex) {
-        correct++;
+    // Questão de múltipla escolha
+    if (question.correctAnswerIndex !== null && question.correctAnswerIndex !== undefined) {
+      const answerIndex = question.answers[0]?.answerIndex;
+      if (answerIndex !== undefined && answerIndex !== null) {
+        answered++;
+        if (answerIndex == question.correctAnswerIndex) {
+          correct++;
+        }
+      }
+    }
+    // Questão discursiva
+    else {
+      const userAnswer = question.answers[0]?.content;
+      const autoEvaluation = question.answers[0]?.autoEvaluation; // supondo que você salva a avaliação automática aqui
+      if (userAnswer && autoEvaluation) {
+        answered++;
+        // Considere "correta" se a nota de corretude for >= 4, por exemplo
+        if (autoEvaluation.corretude >= 4) {
+          correct++;
+        }
       }
     }
   }
