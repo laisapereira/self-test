@@ -25,7 +25,7 @@ export async function fetchRequests(params: { userId?: number; page?:number; pag
     }
   })
 
-  return prisma.questionRequest.findMany({
+const data = await prisma.questionRequest.findMany({
     where: {
       ...(params.userId !== -1 && { userId: params.userId }),
     },
@@ -68,4 +68,10 @@ export async function fetchRequests(params: { userId?: number; page?:number; pag
       },
     },
   });
+
+
+  return {
+    data, totalPages: Math.ceil(totalCount/pageSize),
+    currentPage: page
+  }
 }

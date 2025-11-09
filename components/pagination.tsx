@@ -1,21 +1,27 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+'use client';
 
-const Pagination = ({ totalPages }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+type PaginationProps = {
+  totalPages: number
+  currentPage: number
+}
+
+
+const Pagination = ({ totalPages, currentPage}: PaginationProps) => {
   const router = useRouter();
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    router.push(`?page=${page}`, undefined, { shallow: true });
+    const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    router.push(`?page=${page}`);
   };
-
   return (
-    <div className=''>
+    <div className='flex gap-2'>
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className=''
+        className='cursor-pointer hover:text-gray-400'
       >
         Previous
       </button>
@@ -23,7 +29,8 @@ const Pagination = ({ totalPages }) => {
         <button
           key={page}
           onClick={() => handlePageChange(page)}
-          //className={`${styles.button} ${currentPage === page ? styles.active : ''}`}
+          //className={`cursor-pointer hover:text-gray-400 ${currentPage === page ? styles.active : ''}`}
+          className='cursor-pointer hover:text-gray-400'
         >
           {page}
         </button>
@@ -31,7 +38,7 @@ const Pagination = ({ totalPages }) => {
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={styles.button}
+       className='cursor-pointer hover:text-gray-400'
       >
         Next
       </button>
