@@ -97,7 +97,7 @@ export default function QuestionRequestCreatePage() {
       merged.map(param => [param.name.toLowerCase(), param.values ??[]])
     );
 
-    return promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
+ return promptTemplate.replace(/<([^>]+)>/g, (_, key) => {
       const matchValues = paramMap.get(key.toLowerCase());
 
       if (!matchValues || matchValues.length === 0) return `<${key}>`;
