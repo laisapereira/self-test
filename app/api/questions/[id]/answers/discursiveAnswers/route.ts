@@ -1,3 +1,4 @@
+import { EvaluationCriteria } from "@/components/questionCard";
 import { getCurrentUser, getParamId } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
@@ -26,7 +27,7 @@ async function evaluateAnswer(openai: OpenAI, prompt: string) {
     console.log('sending request to LLM');
         const completion = await openai.chat.completions.create({
             messages: [{ role: 'system', content: prompt }],
-            model: 'gpt-4o',
+            model: 'deepkseek-chat',
             response_format: {
             type: 'json_object'
             }
@@ -55,27 +56,61 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
         //body: JSON.stringify({ openAnswer: discursiveAnswer, confidenceLevel, evaluationCriteria }),
 
-        const { openAnswer, confidenceLevel, evaluationCriteria } = await req.json();
+        const { openAnswer, confidenceLevel, evaluationCriteria} = await req.json();
+
+        console.log("CRITERIOS VINDO DO SUBMIT", evaluationCriteria)
+      
+
+/*         const criteriaJSON: EvaluationCriteria[] = evaluationCriteria.map((criteria: EvaluationCriteria) => ({
+            description: criteria.description,
+            weight: criteria.weight,
+        })); */
+
+          const formatedCriteria = JSON.stringify(evaluationCriteria, null, 2);
 
        const prompt = `
-        Você é um especialista em avaliar respostas discursivas com base em critérios de avaliação específicos.
-
-        Avalie a resposta do aluno abaixo utilizando os critérios fornecidos.
-
-        Critérios de Avaliação:
-        ${evaluationCriteria.join(', ')}
-
-        Resposta do Aluno:
+        Você é um especialista em avaliar respostas discursivas com base em critérios de avaliação específicos. A Resposta do Aluno é
         """${openAnswer}"""
 
-        Sua tarefa é analisar a resposta com base em cada critério e retornar um objeto JSON com o seguinte formato:
+        Avalie a resposta do aluno utilizando os critérios fornecidos, que são ${formatedCriteria}
+        e seus respectivos pesos fornecidos em questão, em sua ordem respectiva em weight de ${formatedCriteria}
 
-        {"autoEvaluation": {
-            "score": Com base no ${evaluationCriteria}, forneça uma nota de 0 a 5 para a resposta do usuário. float,
-            "justification": "Uma justificativa breve explicando a nota com base nos critérios ${evaluationCriteria}"
+            1. Atribuir uma nota de **0 a 10** para **cada critério**, com base na resposta do aluno;
+            2. Gerar um objeto JSON com:
+            - "autoEvaluation": lista de objetos, cada um contendo:
+                - "description": o nome do critério,
+                - "weight": o peso atribuído a esse critério,
+                - "score": a nota atribuída (0 a 10);
+            - "finalScore": valor calculado pela **média ponderada** dos critérios;
+            - "finalScoreFormula": string descritiva explicando como o cálculo foi feito.
+
+            **Importante**: Retorne **apenas** o JSON no seguinte formato (exemplo):
+
+            \`\`\`json
+            {
+            "autoEvaluation": [
+                {
+                "description": "Primeiro <criterio de teste> ",
+                "weight": 2,
+                "score": 9
+                },
+                {
+                "description": "Segundo <criterio de teste>",
+                "weight": 3,
+                "score": 8
+                }
+            ],
+            "finalScore": 8.43,
+            "finalScoreFormula": "finalScore = (9×2 + 8×3) ÷ (2 + 3) = 42 ÷ 5 = 8.4"
             }
-        }
-        `;
+            \`\`\`
+
+            Se algum critério não for aplicável, justifique no campo "score" com o valor 0 e mantenha a explicação na sua análise interna.
+
+            Evite comentários fora do JSON. Apenas retorne o JSON conforme o formato acima.
+            `;;
+
+            console.log(prompt)
 
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY,
@@ -102,7 +137,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             answerId: answer.id,
             score: autoEvaluation.score,
             justification: autoEvaluation.justification,
-            modelVersion: 'gpt-4o', 
+            modelVersion: 'deepseek-chat', 
   },
         })
 

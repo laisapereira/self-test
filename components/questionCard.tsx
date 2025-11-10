@@ -13,6 +13,12 @@ import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ConfidenceLevel } from "./confidenceLevel";
 
+
+export type EvaluationCriteria = {
+  description: string,
+  weight: number;
+}
+
 export function QuestionCard(props: { question: Question, userId?: number, withAnswer?: Answer, withEvaluation?: AutoEvaluation }) {
   const { question } = props;
   const [alternative, setAlternative] = useState<number | null>(null);
@@ -72,8 +78,11 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
     }
   }
 
-  async function submitDiscursiveAnswer(evaluationCriteria: string[] = []) {
+  async function submitDiscursiveAnswer(evaluationCriteria: EvaluationCriteria[] = []) {
     if (!discursiveAnswer.trim() || confidenceLevel === null) return;
+
+
+    //const evaluationCriteriaJSON = JSON.stringify(evaluationCriteria, null, 2);
 
     try {
       const response = await fetch(`/api/questions/${question.id}/answers/discursiveAnswers`, {
@@ -147,7 +156,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
             <Button
               variant="default"
               disabled={!discursiveAnswer.trim() || confidenceLevel === null}
-              onClick={() => submitDiscursiveAnswer(String(question.evaluationCriteria).split(','))}
+              onClick={() => submitDiscursiveAnswer(question.evaluationCriteria as EvaluationCriteria[])}
             >
               Enviar resposta
             </Button>

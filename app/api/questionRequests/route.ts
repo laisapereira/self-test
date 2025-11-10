@@ -124,9 +124,9 @@ async function requestLLM(questionRequest: QuestionRequest) {
   
   console.log(prompt);
 
-  const openai = new OpenAI({
+    const openai = new OpenAI({
     apiKey: process.env.DEEPSEEK_API_KEY,
-    baseURL: process.env.DEEPSEEK_API_URL,
+    baseURL:process.env.DEEPSEEK_API_URL,
   });
 
   console.log('sending request to LLM');
@@ -137,6 +137,7 @@ async function requestLLM(questionRequest: QuestionRequest) {
       type: 'json_object'
     }
   });
+
 
   return completion.choices[0].message.content;
 }
