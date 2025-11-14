@@ -12,6 +12,7 @@ import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ConfidenceLevel } from "./confidenceLevel";
+import { Dekko } from "next/font/google";
 
 
 export type EvaluationCriteria = {
@@ -81,8 +82,8 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
   async function submitDiscursiveAnswer(evaluationCriteria: EvaluationCriteria[] = []) {
     if (!discursiveAnswer.trim() || confidenceLevel === null) return;
 
-
-    //const evaluationCriteriaJSON = JSON.stringify(evaluationCriteria, null, 2);
+    console.log("resposta", discursiveAnswer)
+    
 
     try {
       const response = await fetch(`/api/questions/${question.id}/answers/discursiveAnswers`, {
