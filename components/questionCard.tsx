@@ -213,7 +213,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
           {feedbackLLM && (
             <div className="mt-2 border-t pt-2">
               <p className="text-center"><b>Feedback pelo LLM</b></p>
-              <p><b>Nota:</b> {feedbackLLM.score}/5</p>
+              <p><b>Nota:</b> {feedbackLLM.score}</p>
               <p><b>Justificativa do feedback</b> {feedbackLLM.justification}</p>
             </div>
           )}
