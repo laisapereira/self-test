@@ -32,7 +32,7 @@ async function evaluateAnswer(openai: OpenAI, prompt: string) {
     console.log('sending request to LLM');
         const completion = await openai.chat.completions.create({
             messages: [{ role: 'system', content: prompt }],
-            model: 'deepkseek-chat',
+            model: 'deepseek-chat',
             response_format: {
             type: 'json_object'
             }
@@ -116,7 +116,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             }
         ],
         "finalScore": 8.4,
-        "finalScoreFormula": "finalScore = (9×2 + 8×1) ÷ (2 + 1) = 26 ÷ 3 ≈ 8.67"
+        "finalScoreFormula": "finalScore = (9×2 + 8×1) ÷ (2 + 1) = 26 ÷ 3 ≈ 8.67",
+        "justification": "Resumo textual explicando o desempenho geral da resposta do aluno."
         }
 
         ### Regras importantes
@@ -137,9 +138,31 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         });
 
         const llmResponse = await evaluateAnswer(openai, prompt)
-        const { autoEvaluation } = JSON.parse(llmResponse as string)
 
-        console.log(autoEvaluation)
+        const llmText = typeof llmResponse === "string" ? llmResponse : JSON.stringify(llmResponse);
+
+        let parsedResponse;
+        try {
+        parsedResponse = JSON.parse(llmText);
+        } catch (err) {
+        console.error("Falha ao fazer JSON.parse no retorno do LLM:", llmText, err);
+        return NextResponse.json(
+            { error: "LLM retornou uma resposta inválida (não é JSON puro)." },
+            { status: 500 }
+        );
+        }
+
+        const { autoEvaluation, finalScore, finalScoreFormula, justification } =
+            parsedResponse as {
+            autoEvaluation: { description: string; weight: number; score: number }[];
+            finalScore: number;
+            finalScoreFormula: string;
+            justification?: string;
+            };
+
+        console.log(autoEvaluation, finalScore, finalScoreFormula)
+
+        const isCorrect = finalScore >= 5.0;
 
         const answer = await prisma.answer.create({
         data: {
@@ -147,25 +170,25 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             userId: user.id,
             openAnswer,
             confidenceLevel,
-            correct: autoEvaluation.score >= 3, // it's a boolean
+            correct: isCorrect, // it's a boolean
         },
         });
 
        const feedbackLLM = await prisma.autoEvaluation.create({
         data: {
             answerId: answer.id,
-            score: autoEvaluation.score,
-            justification: autoEvaluation.justification,
+            score: finalScore,
+            justification: justification ?? "",
             modelVersion: 'deepseek-chat', 
   },
         })
 
 
-    return NextResponse.json({answer, feedbackLLM}, { status: 201 });
-  } catch (error) {
-    if (error instanceof NextResponse) {
-      return error;
-    }
-    return NextResponse.json({ error: "Failed to create answer" }, { status: 500 });
+    return NextResponse.json({answer, feedbackLLM, criteriaScores:autoEvaluation}, { status: 201 });
+} catch (error) {
+  console.error("Erro na rota de resposta discursiva:", error);
+  if (error instanceof NextResponse) {
+    return error;
   }
-}
+  return NextResponse.json({ error: "Failed to create answer" }, { status: 500 });
+}}

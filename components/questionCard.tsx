@@ -12,13 +12,19 @@ import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ConfidenceLevel } from "./confidenceLevel";
-import { Dekko } from "next/font/google";
 
 
 export type EvaluationCriteria = {
   description: string,
   weight: number;
 }
+
+
+type CriterionScore = {
+  description: string;
+  weight: number;
+  score: number;
+};
 
 export function QuestionCard(props: { question: Question, userId?: number, withAnswer?: Answer, withEvaluation?: AutoEvaluation }) {
   const { question } = props;
@@ -27,6 +33,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
   const [answer, setAnswer] = useState<Answer | null>(props.withAnswer ?? null);
   const [discursiveAnswer, setDiscursiveAnswer] = useState<string>(""); 
   const [feedbackLLM, setFeedbackLLM] = useState<AutoEvaluation | null>(props.withEvaluation ?? null)
+  const [criteriaScores, setCriteriaScores] = useState<CriterionScore[]>([]);
   
   
   useEffect(() => {
@@ -68,7 +75,9 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit answer");
+         const text = await response.text();
+         console.error("Erro ao enviar resposta discursiva:", response.status, text);
+         throw new Error("Failed to submit discursive answer");
       }
 
       const data = await response.json();
@@ -92,13 +101,22 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
         body: JSON.stringify({ openAnswer: discursiveAnswer, confidenceLevel, evaluationCriteria }),
       });
       if (!response.ok) {
+        const text = await response.text();
+        console.error("Erro ao enviar resposta discursiva:", response.status, text);
         throw new Error("Failed to submit discursive answer");
-      }
-      const {answer, feedbackLLM} = await response.json();
-      console.log("retorno do post", answer, feedbackLLM)
+    }
+      const {answer, feedbackLLM, criteriaScores} = await response.json();
+      console.log("resposta", answer, feedbackLLM)
+      console.log("feedback", feedbackLLM)
+      console.log("criterios", criteriaScores)
+    
       setAnswer(answer);
       setFeedbackLLM(feedbackLLM)
+      console.log("o feedbck", feedbackLLM)
+      setCriteriaScores(criteriaScores); 
       //console.log("Discursive answer submitted successfully",);
+
+      console.log("notas", criteriaScores)
     } catch (error) {
       console.error("Error submitting discursive answer:", error);
     }
@@ -167,6 +185,29 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
             <p className="mt-2">
               <b>Sua resposta:</b> {answer?.openAnswer}
             </p>
+
+
+            {criteriaScores.length > 0 && (
+              <table className="mt-4 w-full border text-sm">
+                <thead>
+                  <tr>
+                    <th className="border px-2 py-1 text-left">Critério</th>
+                    <th className="border px-2 py-1 text-center">Peso</th>
+                    <th className="border px-2 py-1 text-center">Nota</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {criteriaScores.map((c, index) => (
+                    <tr key={index}>
+                      <td className="border px-2 py-1">{c.description}</td>
+                      <td className="border px-2 py-1 text-center">{c.weight}</td>
+                      <td className="border px-2 py-1 text-center">{c.score}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
         
 
           {feedbackLLM && (
