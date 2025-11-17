@@ -3,7 +3,10 @@
 import { getCurrentUser } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 
-export async function fetchRequests(params: { userId?: number }) {
+export async function fetchRequests(params: { userId?: number; page?:number; pageSize?:number}) {
+
+  const page = Number(params.page) || 1
+  const pageSize = Number(params.pageSize) || 10 
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -16,14 +19,21 @@ export async function fetchRequests(params: { userId?: number }) {
     throw new Error("Unauthorized");
   }
 
-  return prisma.questionRequest.findMany({
+  const totalCount = await prisma.questionRequest.count({
+    where: {
+      ...(params.userId !== -1 && { userId: params.userId }),
+    }
+  })
+
+const data = await prisma.questionRequest.findMany({
     where: {
       ...(params.userId !== -1 && { userId: params.userId }),
     },
     orderBy: {
       createdAt: 'desc',
     },
-    take: params.userId === -1 ? 50 : undefined,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
     include: {
       template: {
         select: {
@@ -58,4 +68,10 @@ export async function fetchRequests(params: { userId?: number }) {
       },
     },
   });
+
+
+  return {
+    data, totalPages: Math.ceil(totalCount/pageSize),
+    currentPage: page
+  }
 }

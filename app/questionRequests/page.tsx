@@ -7,6 +7,38 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Date from "@/components/date";
 import QuestionRequestCreatePage from "./create/page";
+import Pagination from "@/components/pagination";
+
+
+export interface QuestionRequest {
+  id: number;
+  userId: number;
+  templateId: number;
+  createdAt: Date;
+  parameterValues: any[]
+
+  user: {
+    id: number;
+    name: string | null;
+  };
+
+  template: {
+    id: number;
+    name: string;
+  } | null;
+
+  questions: {
+    id: number;
+    correctAnswerIndex: number | null;
+    answers: {
+      id: number;
+      answerIndex: number | null;
+      confidenceLevel: number;
+      correct: boolean;
+    }[];
+  }[];
+}
+
 
 export default function QuestionRequestsPage() {
   return <Suspense>
@@ -15,20 +47,30 @@ export default function QuestionRequestsPage() {
 }
 
 function QuestionRequestsPageInner() {
-  const [requests, setRequests] = useState<any>([]);
+  const [requests, setRequests] = useState<QuestionRequest[] | null>(null);
   const searchParams = useSearchParams();
   const userIdStr = searchParams?.get("userId") || null;
   const userId = userIdStr === null || userIdStr == '' ? undefined : parseInt(userIdStr, 10);
-
+  const pageStr = searchParams?.get("page")
+  const page = pageStr? parseInt(pageStr, 10) : 1
+  const [totalPages, setTotalPages] = useState(1);
+const [currentPage, setCurrentPage] = useState(1);
+  
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchRequests({ userId });
-      setRequests(result);
+      const result = await fetchRequests({userId, page, pageSize: 10});
+      setRequests(result.data); 
+      
+      setTotalPages(result.totalPages);
+    
+      setCurrentPage(result.currentPage);
+         
     }
 
     fetchData();
-  }, []);
+  }, [userId, page]);
 
+  
  
 
   return (
@@ -64,7 +106,7 @@ function QuestionRequestsPageInner() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {requests.map((request: any) => (
+            {requests?.map((request: any) => (
               <TableRow key={request.id}>
                 <TableCell><Date date={request.createdAt} /></TableCell>
                 {
@@ -98,7 +140,13 @@ function QuestionRequestsPageInner() {
             ))}
           </TableBody>
         </Table>
+
+            <Pagination totalPages={totalPages} currentPage={currentPage}/>
+
       </div>
+
+            
+      
     </Suspense>
   );
 }
