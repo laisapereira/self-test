@@ -187,7 +187,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
             </p>
 
 
-            {criteriaScores.length > 0 && (
+            {criteriaScores && (
               <table className="mt-4 w-full border text-sm">
                 <thead>
                   <tr>
