@@ -2713,7 +2713,6 @@ declare type PrismaOperationSpec<TArgs, TAction = string> = {
 };
 
 export declare interface PrismaPromise<T> extends Promise<T> {
-    value(value: any): unknown;
     [Symbol.toStringTag]: 'PrismaPromise';
 }
 

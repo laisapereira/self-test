@@ -28,6 +28,40 @@ async function getParams(req: Request, params: Promise<{ id: string }>) {
 }
 
 
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { question, userId } = await getParams(req, params);
+
+  const answer = await prisma.answer.findFirst({
+    where: {
+      questionId: question.id,
+      ...(userId ? { userId } : {}),
+    },
+    include: {
+      autoEvaluation: {          // relação Answer -> AutoEvaluation
+        include: {
+          criteria: true,        // relação AutoEvaluation -> Criteria
+        },
+      },
+    },
+  });
+
+  if (!answer) {
+    return NextResponse.json({ message: "Not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(
+    {
+      answer,
+      feedbackLLM: answer.autoEvaluation ?? null,
+      criteriaScores: answer.autoEvaluation?.criteria ?? [],
+    },
+    { status: 200 }
+  );
+}
+
+
+
+
 async function evaluateAnswer(openai: OpenAI, prompt: string) {
     console.log('sending request to LLM');
         const completion = await openai.chat.completions.create({
@@ -174,17 +208,29 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         },
         });
 
-       const feedbackLLM = await prisma.autoEvaluation.create({
+        const feedbackLLM = await prisma.autoEvaluation.create({
         data: {
             answerId: answer.id,
             score: finalScore,
             justification: justification ?? "",
-            modelVersion: 'deepseek-chat', 
-  },
-        })
+            modelVersion: "deepseek-chat",
+            criteria: {
+            create: autoEvaluation.map((c) => ({
+                description: c.description,
+                weight: c.weight,
+                score: c.score,
+            })),
+            },
+        },
+        include: {
+            criteria: true,
+        },
+        });
+
+        const criteriaScores = feedbackLLM.criteria
 
 
-    return NextResponse.json({answer, feedbackLLM, criteriaScores:autoEvaluation}, { status: 201 });
+    return NextResponse.json({answer, feedbackLLM, criteriaScores}, { status: 201 });
 } catch (error) {
   console.error("Erro na rota de resposta discursiva:", error);
   if (error instanceof NextResponse) {
@@ -192,3 +238,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }
   return NextResponse.json({ error: "Failed to create answer" }, { status: 500 });
 }}
+
+
+

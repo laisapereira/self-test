@@ -199,6 +199,14 @@ exports.Prisma.AutoEvaluationScalarFieldEnum = {
   evaluatedAt: 'evaluatedAt'
 };
 
+exports.Prisma.AutoEvaluationCriterionScalarFieldEnum = {
+  id: 'id',
+  autoEvaluationId: 'autoEvaluationId',
+  description: 'description',
+  weight: 'weight',
+  score: 'score'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -223,7 +231,8 @@ exports.Prisma.ModelName = {
   QuestionRequest: 'QuestionRequest',
   Question: 'Question',
   Answer: 'Answer',
-  AutoEvaluation: 'AutoEvaluation'
+  AutoEvaluation: 'AutoEvaluation',
+  AutoEvaluationCriterion: 'AutoEvaluationCriterion'
 };
 
 /**

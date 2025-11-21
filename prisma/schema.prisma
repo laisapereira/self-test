@@ -122,11 +122,24 @@ model Answer {
 }
 
 model AutoEvaluation {
-  id            Int      @id @default(autoincrement())
-  answer        Answer   @relation(fields: [answerId], references: [id])
-  answerId      Int      @unique
-  score         Float // 0.0 a 5.0
+  id       Int    @id @default(autoincrement())
+  answer   Answer @relation(fields: [answerId], references: [id])
+  answerId Int    @unique
+
+  score         Float
   justification String
   modelVersion  String?
-  evaluatedAt   DateTime @default(now())
+
+  criteria    AutoEvaluationCriterion[]
+  evaluatedAt DateTime                  @default(now())
+}
+
+model AutoEvaluationCriterion {
+  id               Int            @id @default(autoincrement())
+  autoEvaluation   AutoEvaluation @relation(fields: [autoEvaluationId], references: [id])
+  autoEvaluationId Int
+
+  description String
+  weight      Float
+  score       Float
 }

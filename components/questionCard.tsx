@@ -43,17 +43,44 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
     }
     // searchParams.append("userId", userId ? userId.toString() : currentUser.id.toString());
 
-    const fetchAnswer = async () => {
-      const response = await fetch(`/api/questions/${question.id}/answers?${searchParams.toString()}`);
-      if (response.status === 404) {
-        return;
+    const fetchDiscursiveAnswer = async () => {
+      try {
+        const response = await fetch(`/api/questions/${question.id}/answers/discursiveAnswers?${searchParams.toString()}`)
+        
+         if (response.status === 404) return;
+
+        const { answer, feedbackLLM, criteriaScores} = await response.json()
+
+        console.log("criterios", criteriaScores)
+        
+        setAnswer(answer);
+        setCriteriaScores(criteriaScores ?? [])
+        
+        setFeedbackLLM(feedbackLLM ?? null)
+        console.log("feedback", feedbackLLM)
+      } catch (error) {
+        console.log("o erro", error)
       }
+  
+    
+    }
+
+    const fetchAnswer = async () => {
+      
+      const response = await fetch(`/api/questions/${question.id}/answers?${searchParams.toString()}`);
+
+     
+    
       const answer = await response.json();
+      console.log("a resposta", answer)
       setAnswer(answer);
+
+      
     };
 
-    fetchAnswer();
-  }, []);
+    question.type === 'multiple-choice' ? fetchAnswer() : fetchDiscursiveAnswer()
+
+  }, [question.id, props.question]);
 
   useEffect(() => {
     if (answer) {

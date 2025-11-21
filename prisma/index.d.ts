@@ -236,6 +236,11 @@ export type Answer = $Result.DefaultSelection<Prisma.$AnswerPayload>
  * 
  */
 export type AutoEvaluation = $Result.DefaultSelection<Prisma.$AutoEvaluationPayload>
+/**
+ * Model AutoEvaluationCriterion
+ * 
+ */
+export type AutoEvaluationCriterion = $Result.DefaultSelection<Prisma.$AutoEvaluationCriterionPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -434,6 +439,16 @@ export class PrismaClient<
     * ```
     */
   get autoEvaluation(): Prisma.AutoEvaluationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.autoEvaluationCriterion`: Exposes CRUD operations for the **AutoEvaluationCriterion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AutoEvaluationCriteria
+    * const autoEvaluationCriteria = await prisma.autoEvaluationCriterion.findMany()
+    * ```
+    */
+  get autoEvaluationCriterion(): Prisma.AutoEvaluationCriterionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -881,7 +896,8 @@ export namespace Prisma {
     QuestionRequest: 'QuestionRequest',
     Question: 'Question',
     Answer: 'Answer',
-    AutoEvaluation: 'AutoEvaluation'
+    AutoEvaluation: 'AutoEvaluation',
+    AutoEvaluationCriterion: 'AutoEvaluationCriterion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -900,7 +916,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "group" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "answer" | "autoEvaluation"
+      modelProps: "user" | "group" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "answer" | "autoEvaluation" | "autoEvaluationCriterion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1496,6 +1512,80 @@ export namespace Prisma {
           }
         }
       }
+      AutoEvaluationCriterion: {
+        payload: Prisma.$AutoEvaluationCriterionPayload<ExtArgs>
+        fields: Prisma.AutoEvaluationCriterionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AutoEvaluationCriterionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AutoEvaluationCriterionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>
+          }
+          findFirst: {
+            args: Prisma.AutoEvaluationCriterionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AutoEvaluationCriterionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>
+          }
+          findMany: {
+            args: Prisma.AutoEvaluationCriterionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>[]
+          }
+          create: {
+            args: Prisma.AutoEvaluationCriterionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>
+          }
+          createMany: {
+            args: Prisma.AutoEvaluationCriterionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AutoEvaluationCriterionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>[]
+          }
+          delete: {
+            args: Prisma.AutoEvaluationCriterionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>
+          }
+          update: {
+            args: Prisma.AutoEvaluationCriterionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>
+          }
+          deleteMany: {
+            args: Prisma.AutoEvaluationCriterionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AutoEvaluationCriterionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AutoEvaluationCriterionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>[]
+          }
+          upsert: {
+            args: Prisma.AutoEvaluationCriterionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoEvaluationCriterionPayload>
+          }
+          aggregate: {
+            args: Prisma.AutoEvaluationCriterionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAutoEvaluationCriterion>
+          }
+          groupBy: {
+            args: Prisma.AutoEvaluationCriterionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AutoEvaluationCriterionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AutoEvaluationCriterionCountArgs<ExtArgs>
+            result: $Utils.Optional<AutoEvaluationCriterionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1600,6 +1690,7 @@ export namespace Prisma {
     question?: QuestionOmit
     answer?: AnswerOmit
     autoEvaluation?: AutoEvaluationOmit
+    autoEvaluationCriterion?: AutoEvaluationCriterionOmit
   }
 
   /* Types for Logging */
@@ -1863,6 +1954,37 @@ export namespace Prisma {
    */
   export type QuestionCountOutputTypeCountAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnswerWhereInput
+  }
+
+
+  /**
+   * Count Type AutoEvaluationCountOutputType
+   */
+
+  export type AutoEvaluationCountOutputType = {
+    criteria: number
+  }
+
+  export type AutoEvaluationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    criteria?: boolean | AutoEvaluationCountOutputTypeCountCriteriaArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AutoEvaluationCountOutputType without action
+   */
+  export type AutoEvaluationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCountOutputType
+     */
+    select?: AutoEvaluationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AutoEvaluationCountOutputType without action
+   */
+  export type AutoEvaluationCountOutputTypeCountCriteriaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AutoEvaluationCriterionWhereInput
   }
 
 
@@ -10183,6 +10305,8 @@ export namespace Prisma {
     modelVersion?: boolean
     evaluatedAt?: boolean
     answer?: boolean | AnswerDefaultArgs<ExtArgs>
+    criteria?: boolean | AutoEvaluation$criteriaArgs<ExtArgs>
+    _count?: boolean | AutoEvaluationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["autoEvaluation"]>
 
   export type AutoEvaluationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10217,6 +10341,8 @@ export namespace Prisma {
   export type AutoEvaluationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "answerId" | "score" | "justification" | "modelVersion" | "evaluatedAt", ExtArgs["result"]["autoEvaluation"]>
   export type AutoEvaluationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     answer?: boolean | AnswerDefaultArgs<ExtArgs>
+    criteria?: boolean | AutoEvaluation$criteriaArgs<ExtArgs>
+    _count?: boolean | AutoEvaluationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AutoEvaluationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     answer?: boolean | AnswerDefaultArgs<ExtArgs>
@@ -10229,6 +10355,7 @@ export namespace Prisma {
     name: "AutoEvaluation"
     objects: {
       answer: Prisma.$AnswerPayload<ExtArgs>
+      criteria: Prisma.$AutoEvaluationCriterionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -10632,6 +10759,7 @@ export namespace Prisma {
   export interface Prisma__AutoEvaluationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     answer<T extends AnswerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AnswerDefaultArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    criteria<T extends AutoEvaluation$criteriaArgs<ExtArgs> = {}>(args?: Subset<T, AutoEvaluation$criteriaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11063,6 +11191,30 @@ export namespace Prisma {
   }
 
   /**
+   * AutoEvaluation.criteria
+   */
+  export type AutoEvaluation$criteriaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    where?: AutoEvaluationCriterionWhereInput
+    orderBy?: AutoEvaluationCriterionOrderByWithRelationInput | AutoEvaluationCriterionOrderByWithRelationInput[]
+    cursor?: AutoEvaluationCriterionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AutoEvaluationCriterionScalarFieldEnum | AutoEvaluationCriterionScalarFieldEnum[]
+  }
+
+  /**
    * AutoEvaluation without action
    */
   export type AutoEvaluationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11078,6 +11230,1110 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AutoEvaluationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AutoEvaluationCriterion
+   */
+
+  export type AggregateAutoEvaluationCriterion = {
+    _count: AutoEvaluationCriterionCountAggregateOutputType | null
+    _avg: AutoEvaluationCriterionAvgAggregateOutputType | null
+    _sum: AutoEvaluationCriterionSumAggregateOutputType | null
+    _min: AutoEvaluationCriterionMinAggregateOutputType | null
+    _max: AutoEvaluationCriterionMaxAggregateOutputType | null
+  }
+
+  export type AutoEvaluationCriterionAvgAggregateOutputType = {
+    id: number | null
+    autoEvaluationId: number | null
+    weight: number | null
+    score: number | null
+  }
+
+  export type AutoEvaluationCriterionSumAggregateOutputType = {
+    id: number | null
+    autoEvaluationId: number | null
+    weight: number | null
+    score: number | null
+  }
+
+  export type AutoEvaluationCriterionMinAggregateOutputType = {
+    id: number | null
+    autoEvaluationId: number | null
+    description: string | null
+    weight: number | null
+    score: number | null
+  }
+
+  export type AutoEvaluationCriterionMaxAggregateOutputType = {
+    id: number | null
+    autoEvaluationId: number | null
+    description: string | null
+    weight: number | null
+    score: number | null
+  }
+
+  export type AutoEvaluationCriterionCountAggregateOutputType = {
+    id: number
+    autoEvaluationId: number
+    description: number
+    weight: number
+    score: number
+    _all: number
+  }
+
+
+  export type AutoEvaluationCriterionAvgAggregateInputType = {
+    id?: true
+    autoEvaluationId?: true
+    weight?: true
+    score?: true
+  }
+
+  export type AutoEvaluationCriterionSumAggregateInputType = {
+    id?: true
+    autoEvaluationId?: true
+    weight?: true
+    score?: true
+  }
+
+  export type AutoEvaluationCriterionMinAggregateInputType = {
+    id?: true
+    autoEvaluationId?: true
+    description?: true
+    weight?: true
+    score?: true
+  }
+
+  export type AutoEvaluationCriterionMaxAggregateInputType = {
+    id?: true
+    autoEvaluationId?: true
+    description?: true
+    weight?: true
+    score?: true
+  }
+
+  export type AutoEvaluationCriterionCountAggregateInputType = {
+    id?: true
+    autoEvaluationId?: true
+    description?: true
+    weight?: true
+    score?: true
+    _all?: true
+  }
+
+  export type AutoEvaluationCriterionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AutoEvaluationCriterion to aggregate.
+     */
+    where?: AutoEvaluationCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoEvaluationCriteria to fetch.
+     */
+    orderBy?: AutoEvaluationCriterionOrderByWithRelationInput | AutoEvaluationCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AutoEvaluationCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoEvaluationCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoEvaluationCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AutoEvaluationCriteria
+    **/
+    _count?: true | AutoEvaluationCriterionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AutoEvaluationCriterionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AutoEvaluationCriterionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AutoEvaluationCriterionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AutoEvaluationCriterionMaxAggregateInputType
+  }
+
+  export type GetAutoEvaluationCriterionAggregateType<T extends AutoEvaluationCriterionAggregateArgs> = {
+        [P in keyof T & keyof AggregateAutoEvaluationCriterion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAutoEvaluationCriterion[P]>
+      : GetScalarType<T[P], AggregateAutoEvaluationCriterion[P]>
+  }
+
+
+
+
+  export type AutoEvaluationCriterionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AutoEvaluationCriterionWhereInput
+    orderBy?: AutoEvaluationCriterionOrderByWithAggregationInput | AutoEvaluationCriterionOrderByWithAggregationInput[]
+    by: AutoEvaluationCriterionScalarFieldEnum[] | AutoEvaluationCriterionScalarFieldEnum
+    having?: AutoEvaluationCriterionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AutoEvaluationCriterionCountAggregateInputType | true
+    _avg?: AutoEvaluationCriterionAvgAggregateInputType
+    _sum?: AutoEvaluationCriterionSumAggregateInputType
+    _min?: AutoEvaluationCriterionMinAggregateInputType
+    _max?: AutoEvaluationCriterionMaxAggregateInputType
+  }
+
+  export type AutoEvaluationCriterionGroupByOutputType = {
+    id: number
+    autoEvaluationId: number
+    description: string
+    weight: number
+    score: number
+    _count: AutoEvaluationCriterionCountAggregateOutputType | null
+    _avg: AutoEvaluationCriterionAvgAggregateOutputType | null
+    _sum: AutoEvaluationCriterionSumAggregateOutputType | null
+    _min: AutoEvaluationCriterionMinAggregateOutputType | null
+    _max: AutoEvaluationCriterionMaxAggregateOutputType | null
+  }
+
+  type GetAutoEvaluationCriterionGroupByPayload<T extends AutoEvaluationCriterionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AutoEvaluationCriterionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AutoEvaluationCriterionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AutoEvaluationCriterionGroupByOutputType[P]>
+            : GetScalarType<T[P], AutoEvaluationCriterionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AutoEvaluationCriterionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    autoEvaluationId?: boolean
+    description?: boolean
+    weight?: boolean
+    score?: boolean
+    autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoEvaluationCriterion"]>
+
+  export type AutoEvaluationCriterionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    autoEvaluationId?: boolean
+    description?: boolean
+    weight?: boolean
+    score?: boolean
+    autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoEvaluationCriterion"]>
+
+  export type AutoEvaluationCriterionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    autoEvaluationId?: boolean
+    description?: boolean
+    weight?: boolean
+    score?: boolean
+    autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoEvaluationCriterion"]>
+
+  export type AutoEvaluationCriterionSelectScalar = {
+    id?: boolean
+    autoEvaluationId?: boolean
+    description?: boolean
+    weight?: boolean
+    score?: boolean
+  }
+
+  export type AutoEvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "autoEvaluationId" | "description" | "weight" | "score", ExtArgs["result"]["autoEvaluationCriterion"]>
+  export type AutoEvaluationCriterionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+  }
+  export type AutoEvaluationCriterionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+  }
+  export type AutoEvaluationCriterionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+  }
+
+  export type $AutoEvaluationCriterionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AutoEvaluationCriterion"
+    objects: {
+      autoEvaluation: Prisma.$AutoEvaluationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      autoEvaluationId: number
+      description: string
+      weight: number
+      score: number
+    }, ExtArgs["result"]["autoEvaluationCriterion"]>
+    composites: {}
+  }
+
+  type AutoEvaluationCriterionGetPayload<S extends boolean | null | undefined | AutoEvaluationCriterionDefaultArgs> = $Result.GetResult<Prisma.$AutoEvaluationCriterionPayload, S>
+
+  type AutoEvaluationCriterionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AutoEvaluationCriterionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AutoEvaluationCriterionCountAggregateInputType | true
+    }
+
+  export interface AutoEvaluationCriterionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AutoEvaluationCriterion'], meta: { name: 'AutoEvaluationCriterion' } }
+    /**
+     * Find zero or one AutoEvaluationCriterion that matches the filter.
+     * @param {AutoEvaluationCriterionFindUniqueArgs} args - Arguments to find a AutoEvaluationCriterion
+     * @example
+     * // Get one AutoEvaluationCriterion
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AutoEvaluationCriterionFindUniqueArgs>(args: SelectSubset<T, AutoEvaluationCriterionFindUniqueArgs<ExtArgs>>): Prisma__AutoEvaluationCriterionClient<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AutoEvaluationCriterion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AutoEvaluationCriterionFindUniqueOrThrowArgs} args - Arguments to find a AutoEvaluationCriterion
+     * @example
+     * // Get one AutoEvaluationCriterion
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AutoEvaluationCriterionFindUniqueOrThrowArgs>(args: SelectSubset<T, AutoEvaluationCriterionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AutoEvaluationCriterionClient<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AutoEvaluationCriterion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationCriterionFindFirstArgs} args - Arguments to find a AutoEvaluationCriterion
+     * @example
+     * // Get one AutoEvaluationCriterion
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AutoEvaluationCriterionFindFirstArgs>(args?: SelectSubset<T, AutoEvaluationCriterionFindFirstArgs<ExtArgs>>): Prisma__AutoEvaluationCriterionClient<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AutoEvaluationCriterion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationCriterionFindFirstOrThrowArgs} args - Arguments to find a AutoEvaluationCriterion
+     * @example
+     * // Get one AutoEvaluationCriterion
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AutoEvaluationCriterionFindFirstOrThrowArgs>(args?: SelectSubset<T, AutoEvaluationCriterionFindFirstOrThrowArgs<ExtArgs>>): Prisma__AutoEvaluationCriterionClient<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AutoEvaluationCriteria that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationCriterionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AutoEvaluationCriteria
+     * const autoEvaluationCriteria = await prisma.autoEvaluationCriterion.findMany()
+     * 
+     * // Get first 10 AutoEvaluationCriteria
+     * const autoEvaluationCriteria = await prisma.autoEvaluationCriterion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const autoEvaluationCriterionWithIdOnly = await prisma.autoEvaluationCriterion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AutoEvaluationCriterionFindManyArgs>(args?: SelectSubset<T, AutoEvaluationCriterionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AutoEvaluationCriterion.
+     * @param {AutoEvaluationCriterionCreateArgs} args - Arguments to create a AutoEvaluationCriterion.
+     * @example
+     * // Create one AutoEvaluationCriterion
+     * const AutoEvaluationCriterion = await prisma.autoEvaluationCriterion.create({
+     *   data: {
+     *     // ... data to create a AutoEvaluationCriterion
+     *   }
+     * })
+     * 
+     */
+    create<T extends AutoEvaluationCriterionCreateArgs>(args: SelectSubset<T, AutoEvaluationCriterionCreateArgs<ExtArgs>>): Prisma__AutoEvaluationCriterionClient<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AutoEvaluationCriteria.
+     * @param {AutoEvaluationCriterionCreateManyArgs} args - Arguments to create many AutoEvaluationCriteria.
+     * @example
+     * // Create many AutoEvaluationCriteria
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AutoEvaluationCriterionCreateManyArgs>(args?: SelectSubset<T, AutoEvaluationCriterionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AutoEvaluationCriteria and returns the data saved in the database.
+     * @param {AutoEvaluationCriterionCreateManyAndReturnArgs} args - Arguments to create many AutoEvaluationCriteria.
+     * @example
+     * // Create many AutoEvaluationCriteria
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AutoEvaluationCriteria and only return the `id`
+     * const autoEvaluationCriterionWithIdOnly = await prisma.autoEvaluationCriterion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AutoEvaluationCriterionCreateManyAndReturnArgs>(args?: SelectSubset<T, AutoEvaluationCriterionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AutoEvaluationCriterion.
+     * @param {AutoEvaluationCriterionDeleteArgs} args - Arguments to delete one AutoEvaluationCriterion.
+     * @example
+     * // Delete one AutoEvaluationCriterion
+     * const AutoEvaluationCriterion = await prisma.autoEvaluationCriterion.delete({
+     *   where: {
+     *     // ... filter to delete one AutoEvaluationCriterion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AutoEvaluationCriterionDeleteArgs>(args: SelectSubset<T, AutoEvaluationCriterionDeleteArgs<ExtArgs>>): Prisma__AutoEvaluationCriterionClient<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AutoEvaluationCriterion.
+     * @param {AutoEvaluationCriterionUpdateArgs} args - Arguments to update one AutoEvaluationCriterion.
+     * @example
+     * // Update one AutoEvaluationCriterion
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AutoEvaluationCriterionUpdateArgs>(args: SelectSubset<T, AutoEvaluationCriterionUpdateArgs<ExtArgs>>): Prisma__AutoEvaluationCriterionClient<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AutoEvaluationCriteria.
+     * @param {AutoEvaluationCriterionDeleteManyArgs} args - Arguments to filter AutoEvaluationCriteria to delete.
+     * @example
+     * // Delete a few AutoEvaluationCriteria
+     * const { count } = await prisma.autoEvaluationCriterion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AutoEvaluationCriterionDeleteManyArgs>(args?: SelectSubset<T, AutoEvaluationCriterionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AutoEvaluationCriteria.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationCriterionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AutoEvaluationCriteria
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AutoEvaluationCriterionUpdateManyArgs>(args: SelectSubset<T, AutoEvaluationCriterionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AutoEvaluationCriteria and returns the data updated in the database.
+     * @param {AutoEvaluationCriterionUpdateManyAndReturnArgs} args - Arguments to update many AutoEvaluationCriteria.
+     * @example
+     * // Update many AutoEvaluationCriteria
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AutoEvaluationCriteria and only return the `id`
+     * const autoEvaluationCriterionWithIdOnly = await prisma.autoEvaluationCriterion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AutoEvaluationCriterionUpdateManyAndReturnArgs>(args: SelectSubset<T, AutoEvaluationCriterionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AutoEvaluationCriterion.
+     * @param {AutoEvaluationCriterionUpsertArgs} args - Arguments to update or create a AutoEvaluationCriterion.
+     * @example
+     * // Update or create a AutoEvaluationCriterion
+     * const autoEvaluationCriterion = await prisma.autoEvaluationCriterion.upsert({
+     *   create: {
+     *     // ... data to create a AutoEvaluationCriterion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AutoEvaluationCriterion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AutoEvaluationCriterionUpsertArgs>(args: SelectSubset<T, AutoEvaluationCriterionUpsertArgs<ExtArgs>>): Prisma__AutoEvaluationCriterionClient<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AutoEvaluationCriteria.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationCriterionCountArgs} args - Arguments to filter AutoEvaluationCriteria to count.
+     * @example
+     * // Count the number of AutoEvaluationCriteria
+     * const count = await prisma.autoEvaluationCriterion.count({
+     *   where: {
+     *     // ... the filter for the AutoEvaluationCriteria we want to count
+     *   }
+     * })
+    **/
+    count<T extends AutoEvaluationCriterionCountArgs>(
+      args?: Subset<T, AutoEvaluationCriterionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AutoEvaluationCriterionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AutoEvaluationCriterion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationCriterionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AutoEvaluationCriterionAggregateArgs>(args: Subset<T, AutoEvaluationCriterionAggregateArgs>): Prisma.PrismaPromise<GetAutoEvaluationCriterionAggregateType<T>>
+
+    /**
+     * Group by AutoEvaluationCriterion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoEvaluationCriterionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AutoEvaluationCriterionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AutoEvaluationCriterionGroupByArgs['orderBy'] }
+        : { orderBy?: AutoEvaluationCriterionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AutoEvaluationCriterionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAutoEvaluationCriterionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AutoEvaluationCriterion model
+   */
+  readonly fields: AutoEvaluationCriterionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AutoEvaluationCriterion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AutoEvaluationCriterionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    autoEvaluation<T extends AutoEvaluationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AutoEvaluationDefaultArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AutoEvaluationCriterion model
+   */
+  interface AutoEvaluationCriterionFieldRefs {
+    readonly id: FieldRef<"AutoEvaluationCriterion", 'Int'>
+    readonly autoEvaluationId: FieldRef<"AutoEvaluationCriterion", 'Int'>
+    readonly description: FieldRef<"AutoEvaluationCriterion", 'String'>
+    readonly weight: FieldRef<"AutoEvaluationCriterion", 'Float'>
+    readonly score: FieldRef<"AutoEvaluationCriterion", 'Float'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AutoEvaluationCriterion findUnique
+   */
+  export type AutoEvaluationCriterionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluationCriterion to fetch.
+     */
+    where: AutoEvaluationCriterionWhereUniqueInput
+  }
+
+  /**
+   * AutoEvaluationCriterion findUniqueOrThrow
+   */
+  export type AutoEvaluationCriterionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluationCriterion to fetch.
+     */
+    where: AutoEvaluationCriterionWhereUniqueInput
+  }
+
+  /**
+   * AutoEvaluationCriterion findFirst
+   */
+  export type AutoEvaluationCriterionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluationCriterion to fetch.
+     */
+    where?: AutoEvaluationCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoEvaluationCriteria to fetch.
+     */
+    orderBy?: AutoEvaluationCriterionOrderByWithRelationInput | AutoEvaluationCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AutoEvaluationCriteria.
+     */
+    cursor?: AutoEvaluationCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoEvaluationCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoEvaluationCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AutoEvaluationCriteria.
+     */
+    distinct?: AutoEvaluationCriterionScalarFieldEnum | AutoEvaluationCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * AutoEvaluationCriterion findFirstOrThrow
+   */
+  export type AutoEvaluationCriterionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluationCriterion to fetch.
+     */
+    where?: AutoEvaluationCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoEvaluationCriteria to fetch.
+     */
+    orderBy?: AutoEvaluationCriterionOrderByWithRelationInput | AutoEvaluationCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AutoEvaluationCriteria.
+     */
+    cursor?: AutoEvaluationCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoEvaluationCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoEvaluationCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AutoEvaluationCriteria.
+     */
+    distinct?: AutoEvaluationCriterionScalarFieldEnum | AutoEvaluationCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * AutoEvaluationCriterion findMany
+   */
+  export type AutoEvaluationCriterionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoEvaluationCriteria to fetch.
+     */
+    where?: AutoEvaluationCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoEvaluationCriteria to fetch.
+     */
+    orderBy?: AutoEvaluationCriterionOrderByWithRelationInput | AutoEvaluationCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AutoEvaluationCriteria.
+     */
+    cursor?: AutoEvaluationCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoEvaluationCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoEvaluationCriteria.
+     */
+    skip?: number
+    distinct?: AutoEvaluationCriterionScalarFieldEnum | AutoEvaluationCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * AutoEvaluationCriterion create
+   */
+  export type AutoEvaluationCriterionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AutoEvaluationCriterion.
+     */
+    data: XOR<AutoEvaluationCriterionCreateInput, AutoEvaluationCriterionUncheckedCreateInput>
+  }
+
+  /**
+   * AutoEvaluationCriterion createMany
+   */
+  export type AutoEvaluationCriterionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AutoEvaluationCriteria.
+     */
+    data: AutoEvaluationCriterionCreateManyInput | AutoEvaluationCriterionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AutoEvaluationCriterion createManyAndReturn
+   */
+  export type AutoEvaluationCriterionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * The data used to create many AutoEvaluationCriteria.
+     */
+    data: AutoEvaluationCriterionCreateManyInput | AutoEvaluationCriterionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AutoEvaluationCriterion update
+   */
+  export type AutoEvaluationCriterionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AutoEvaluationCriterion.
+     */
+    data: XOR<AutoEvaluationCriterionUpdateInput, AutoEvaluationCriterionUncheckedUpdateInput>
+    /**
+     * Choose, which AutoEvaluationCriterion to update.
+     */
+    where: AutoEvaluationCriterionWhereUniqueInput
+  }
+
+  /**
+   * AutoEvaluationCriterion updateMany
+   */
+  export type AutoEvaluationCriterionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AutoEvaluationCriteria.
+     */
+    data: XOR<AutoEvaluationCriterionUpdateManyMutationInput, AutoEvaluationCriterionUncheckedUpdateManyInput>
+    /**
+     * Filter which AutoEvaluationCriteria to update
+     */
+    where?: AutoEvaluationCriterionWhereInput
+    /**
+     * Limit how many AutoEvaluationCriteria to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AutoEvaluationCriterion updateManyAndReturn
+   */
+  export type AutoEvaluationCriterionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * The data used to update AutoEvaluationCriteria.
+     */
+    data: XOR<AutoEvaluationCriterionUpdateManyMutationInput, AutoEvaluationCriterionUncheckedUpdateManyInput>
+    /**
+     * Filter which AutoEvaluationCriteria to update
+     */
+    where?: AutoEvaluationCriterionWhereInput
+    /**
+     * Limit how many AutoEvaluationCriteria to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AutoEvaluationCriterion upsert
+   */
+  export type AutoEvaluationCriterionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AutoEvaluationCriterion to update in case it exists.
+     */
+    where: AutoEvaluationCriterionWhereUniqueInput
+    /**
+     * In case the AutoEvaluationCriterion found by the `where` argument doesn't exist, create a new AutoEvaluationCriterion with this data.
+     */
+    create: XOR<AutoEvaluationCriterionCreateInput, AutoEvaluationCriterionUncheckedCreateInput>
+    /**
+     * In case the AutoEvaluationCriterion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AutoEvaluationCriterionUpdateInput, AutoEvaluationCriterionUncheckedUpdateInput>
+  }
+
+  /**
+   * AutoEvaluationCriterion delete
+   */
+  export type AutoEvaluationCriterionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter which AutoEvaluationCriterion to delete.
+     */
+    where: AutoEvaluationCriterionWhereUniqueInput
+  }
+
+  /**
+   * AutoEvaluationCriterion deleteMany
+   */
+  export type AutoEvaluationCriterionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AutoEvaluationCriteria to delete
+     */
+    where?: AutoEvaluationCriterionWhereInput
+    /**
+     * Limit how many AutoEvaluationCriteria to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AutoEvaluationCriterion without action
+   */
+  export type AutoEvaluationCriterionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
   }
 
 
@@ -11196,6 +12452,17 @@ export namespace Prisma {
   };
 
   export type AutoEvaluationScalarFieldEnum = (typeof AutoEvaluationScalarFieldEnum)[keyof typeof AutoEvaluationScalarFieldEnum]
+
+
+  export const AutoEvaluationCriterionScalarFieldEnum: {
+    id: 'id',
+    autoEvaluationId: 'autoEvaluationId',
+    description: 'description',
+    weight: 'weight',
+    score: 'score'
+  };
+
+  export type AutoEvaluationCriterionScalarFieldEnum = (typeof AutoEvaluationCriterionScalarFieldEnum)[keyof typeof AutoEvaluationCriterionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -11817,6 +13084,7 @@ export namespace Prisma {
     modelVersion?: StringNullableFilter<"AutoEvaluation"> | string | null
     evaluatedAt?: DateTimeFilter<"AutoEvaluation"> | Date | string
     answer?: XOR<AnswerScalarRelationFilter, AnswerWhereInput>
+    criteria?: AutoEvaluationCriterionListRelationFilter
   }
 
   export type AutoEvaluationOrderByWithRelationInput = {
@@ -11827,6 +13095,7 @@ export namespace Prisma {
     modelVersion?: SortOrderInput | SortOrder
     evaluatedAt?: SortOrder
     answer?: AnswerOrderByWithRelationInput
+    criteria?: AutoEvaluationCriterionOrderByRelationAggregateInput
   }
 
   export type AutoEvaluationWhereUniqueInput = Prisma.AtLeast<{
@@ -11840,6 +13109,7 @@ export namespace Prisma {
     modelVersion?: StringNullableFilter<"AutoEvaluation"> | string | null
     evaluatedAt?: DateTimeFilter<"AutoEvaluation"> | Date | string
     answer?: XOR<AnswerScalarRelationFilter, AnswerWhereInput>
+    criteria?: AutoEvaluationCriterionListRelationFilter
   }, "id" | "answerId">
 
   export type AutoEvaluationOrderByWithAggregationInput = {
@@ -11866,6 +13136,63 @@ export namespace Prisma {
     justification?: StringWithAggregatesFilter<"AutoEvaluation"> | string
     modelVersion?: StringNullableWithAggregatesFilter<"AutoEvaluation"> | string | null
     evaluatedAt?: DateTimeWithAggregatesFilter<"AutoEvaluation"> | Date | string
+  }
+
+  export type AutoEvaluationCriterionWhereInput = {
+    AND?: AutoEvaluationCriterionWhereInput | AutoEvaluationCriterionWhereInput[]
+    OR?: AutoEvaluationCriterionWhereInput[]
+    NOT?: AutoEvaluationCriterionWhereInput | AutoEvaluationCriterionWhereInput[]
+    id?: IntFilter<"AutoEvaluationCriterion"> | number
+    autoEvaluationId?: IntFilter<"AutoEvaluationCriterion"> | number
+    description?: StringFilter<"AutoEvaluationCriterion"> | string
+    weight?: FloatFilter<"AutoEvaluationCriterion"> | number
+    score?: FloatFilter<"AutoEvaluationCriterion"> | number
+    autoEvaluation?: XOR<AutoEvaluationScalarRelationFilter, AutoEvaluationWhereInput>
+  }
+
+  export type AutoEvaluationCriterionOrderByWithRelationInput = {
+    id?: SortOrder
+    autoEvaluationId?: SortOrder
+    description?: SortOrder
+    weight?: SortOrder
+    score?: SortOrder
+    autoEvaluation?: AutoEvaluationOrderByWithRelationInput
+  }
+
+  export type AutoEvaluationCriterionWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AutoEvaluationCriterionWhereInput | AutoEvaluationCriterionWhereInput[]
+    OR?: AutoEvaluationCriterionWhereInput[]
+    NOT?: AutoEvaluationCriterionWhereInput | AutoEvaluationCriterionWhereInput[]
+    autoEvaluationId?: IntFilter<"AutoEvaluationCriterion"> | number
+    description?: StringFilter<"AutoEvaluationCriterion"> | string
+    weight?: FloatFilter<"AutoEvaluationCriterion"> | number
+    score?: FloatFilter<"AutoEvaluationCriterion"> | number
+    autoEvaluation?: XOR<AutoEvaluationScalarRelationFilter, AutoEvaluationWhereInput>
+  }, "id">
+
+  export type AutoEvaluationCriterionOrderByWithAggregationInput = {
+    id?: SortOrder
+    autoEvaluationId?: SortOrder
+    description?: SortOrder
+    weight?: SortOrder
+    score?: SortOrder
+    _count?: AutoEvaluationCriterionCountOrderByAggregateInput
+    _avg?: AutoEvaluationCriterionAvgOrderByAggregateInput
+    _max?: AutoEvaluationCriterionMaxOrderByAggregateInput
+    _min?: AutoEvaluationCriterionMinOrderByAggregateInput
+    _sum?: AutoEvaluationCriterionSumOrderByAggregateInput
+  }
+
+  export type AutoEvaluationCriterionScalarWhereWithAggregatesInput = {
+    AND?: AutoEvaluationCriterionScalarWhereWithAggregatesInput | AutoEvaluationCriterionScalarWhereWithAggregatesInput[]
+    OR?: AutoEvaluationCriterionScalarWhereWithAggregatesInput[]
+    NOT?: AutoEvaluationCriterionScalarWhereWithAggregatesInput | AutoEvaluationCriterionScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AutoEvaluationCriterion"> | number
+    autoEvaluationId?: IntWithAggregatesFilter<"AutoEvaluationCriterion"> | number
+    description?: StringWithAggregatesFilter<"AutoEvaluationCriterion"> | string
+    weight?: FloatWithAggregatesFilter<"AutoEvaluationCriterion"> | number
+    score?: FloatWithAggregatesFilter<"AutoEvaluationCriterion"> | number
   }
 
   export type UserCreateInput = {
@@ -12376,6 +13703,7 @@ export namespace Prisma {
     modelVersion?: string | null
     evaluatedAt?: Date | string
     answer: AnswerCreateNestedOneWithoutAutoEvaluationInput
+    criteria?: AutoEvaluationCriterionCreateNestedManyWithoutAutoEvaluationInput
   }
 
   export type AutoEvaluationUncheckedCreateInput = {
@@ -12385,6 +13713,7 @@ export namespace Prisma {
     justification: string
     modelVersion?: string | null
     evaluatedAt?: Date | string
+    criteria?: AutoEvaluationCriterionUncheckedCreateNestedManyWithoutAutoEvaluationInput
   }
 
   export type AutoEvaluationUpdateInput = {
@@ -12393,6 +13722,7 @@ export namespace Prisma {
     modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answer?: AnswerUpdateOneRequiredWithoutAutoEvaluationNestedInput
+    criteria?: AutoEvaluationCriterionUpdateManyWithoutAutoEvaluationNestedInput
   }
 
   export type AutoEvaluationUncheckedUpdateInput = {
@@ -12402,6 +13732,7 @@ export namespace Prisma {
     justification?: StringFieldUpdateOperationsInput | string
     modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    criteria?: AutoEvaluationCriterionUncheckedUpdateManyWithoutAutoEvaluationNestedInput
   }
 
   export type AutoEvaluationCreateManyInput = {
@@ -12427,6 +13758,58 @@ export namespace Prisma {
     justification?: StringFieldUpdateOperationsInput | string
     modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutoEvaluationCriterionCreateInput = {
+    description: string
+    weight: number
+    score: number
+    autoEvaluation: AutoEvaluationCreateNestedOneWithoutCriteriaInput
+  }
+
+  export type AutoEvaluationCriterionUncheckedCreateInput = {
+    id?: number
+    autoEvaluationId: number
+    description: string
+    weight: number
+    score: number
+  }
+
+  export type AutoEvaluationCriterionUpdateInput = {
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+    autoEvaluation?: AutoEvaluationUpdateOneRequiredWithoutCriteriaNestedInput
+  }
+
+  export type AutoEvaluationCriterionUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    autoEvaluationId?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type AutoEvaluationCriterionCreateManyInput = {
+    id?: number
+    autoEvaluationId: number
+    description: string
+    weight: number
+    score: number
+  }
+
+  export type AutoEvaluationCriterionUpdateManyMutationInput = {
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type AutoEvaluationCriterionUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    autoEvaluationId?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -12985,6 +14368,16 @@ export namespace Prisma {
     isNot?: AnswerWhereInput
   }
 
+  export type AutoEvaluationCriterionListRelationFilter = {
+    every?: AutoEvaluationCriterionWhereInput
+    some?: AutoEvaluationCriterionWhereInput
+    none?: AutoEvaluationCriterionWhereInput
+  }
+
+  export type AutoEvaluationCriterionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type AutoEvaluationCountOrderByAggregateInput = {
     id?: SortOrder
     answerId?: SortOrder
@@ -13038,6 +14431,49 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type AutoEvaluationScalarRelationFilter = {
+    is?: AutoEvaluationWhereInput
+    isNot?: AutoEvaluationWhereInput
+  }
+
+  export type AutoEvaluationCriterionCountOrderByAggregateInput = {
+    id?: SortOrder
+    autoEvaluationId?: SortOrder
+    description?: SortOrder
+    weight?: SortOrder
+    score?: SortOrder
+  }
+
+  export type AutoEvaluationCriterionAvgOrderByAggregateInput = {
+    id?: SortOrder
+    autoEvaluationId?: SortOrder
+    weight?: SortOrder
+    score?: SortOrder
+  }
+
+  export type AutoEvaluationCriterionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    autoEvaluationId?: SortOrder
+    description?: SortOrder
+    weight?: SortOrder
+    score?: SortOrder
+  }
+
+  export type AutoEvaluationCriterionMinOrderByAggregateInput = {
+    id?: SortOrder
+    autoEvaluationId?: SortOrder
+    description?: SortOrder
+    weight?: SortOrder
+    score?: SortOrder
+  }
+
+  export type AutoEvaluationCriterionSumOrderByAggregateInput = {
+    id?: SortOrder
+    autoEvaluationId?: SortOrder
+    weight?: SortOrder
+    score?: SortOrder
   }
 
   export type GroupCreateNestedManyWithoutUsersInput = {
@@ -13616,6 +15052,20 @@ export namespace Prisma {
     connect?: AnswerWhereUniqueInput
   }
 
+  export type AutoEvaluationCriterionCreateNestedManyWithoutAutoEvaluationInput = {
+    create?: XOR<AutoEvaluationCriterionCreateWithoutAutoEvaluationInput, AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput> | AutoEvaluationCriterionCreateWithoutAutoEvaluationInput[] | AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput[]
+    connectOrCreate?: AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput | AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput[]
+    createMany?: AutoEvaluationCriterionCreateManyAutoEvaluationInputEnvelope
+    connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+  }
+
+  export type AutoEvaluationCriterionUncheckedCreateNestedManyWithoutAutoEvaluationInput = {
+    create?: XOR<AutoEvaluationCriterionCreateWithoutAutoEvaluationInput, AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput> | AutoEvaluationCriterionCreateWithoutAutoEvaluationInput[] | AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput[]
+    connectOrCreate?: AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput | AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput[]
+    createMany?: AutoEvaluationCriterionCreateManyAutoEvaluationInputEnvelope
+    connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+  }
+
   export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -13630,6 +15080,48 @@ export namespace Prisma {
     upsert?: AnswerUpsertWithoutAutoEvaluationInput
     connect?: AnswerWhereUniqueInput
     update?: XOR<XOR<AnswerUpdateToOneWithWhereWithoutAutoEvaluationInput, AnswerUpdateWithoutAutoEvaluationInput>, AnswerUncheckedUpdateWithoutAutoEvaluationInput>
+  }
+
+  export type AutoEvaluationCriterionUpdateManyWithoutAutoEvaluationNestedInput = {
+    create?: XOR<AutoEvaluationCriterionCreateWithoutAutoEvaluationInput, AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput> | AutoEvaluationCriterionCreateWithoutAutoEvaluationInput[] | AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput[]
+    connectOrCreate?: AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput | AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput[]
+    upsert?: AutoEvaluationCriterionUpsertWithWhereUniqueWithoutAutoEvaluationInput | AutoEvaluationCriterionUpsertWithWhereUniqueWithoutAutoEvaluationInput[]
+    createMany?: AutoEvaluationCriterionCreateManyAutoEvaluationInputEnvelope
+    set?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    disconnect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    delete?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    update?: AutoEvaluationCriterionUpdateWithWhereUniqueWithoutAutoEvaluationInput | AutoEvaluationCriterionUpdateWithWhereUniqueWithoutAutoEvaluationInput[]
+    updateMany?: AutoEvaluationCriterionUpdateManyWithWhereWithoutAutoEvaluationInput | AutoEvaluationCriterionUpdateManyWithWhereWithoutAutoEvaluationInput[]
+    deleteMany?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
+  }
+
+  export type AutoEvaluationCriterionUncheckedUpdateManyWithoutAutoEvaluationNestedInput = {
+    create?: XOR<AutoEvaluationCriterionCreateWithoutAutoEvaluationInput, AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput> | AutoEvaluationCriterionCreateWithoutAutoEvaluationInput[] | AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput[]
+    connectOrCreate?: AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput | AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput[]
+    upsert?: AutoEvaluationCriterionUpsertWithWhereUniqueWithoutAutoEvaluationInput | AutoEvaluationCriterionUpsertWithWhereUniqueWithoutAutoEvaluationInput[]
+    createMany?: AutoEvaluationCriterionCreateManyAutoEvaluationInputEnvelope
+    set?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    disconnect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    delete?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    update?: AutoEvaluationCriterionUpdateWithWhereUniqueWithoutAutoEvaluationInput | AutoEvaluationCriterionUpdateWithWhereUniqueWithoutAutoEvaluationInput[]
+    updateMany?: AutoEvaluationCriterionUpdateManyWithWhereWithoutAutoEvaluationInput | AutoEvaluationCriterionUpdateManyWithWhereWithoutAutoEvaluationInput[]
+    deleteMany?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
+  }
+
+  export type AutoEvaluationCreateNestedOneWithoutCriteriaInput = {
+    create?: XOR<AutoEvaluationCreateWithoutCriteriaInput, AutoEvaluationUncheckedCreateWithoutCriteriaInput>
+    connectOrCreate?: AutoEvaluationCreateOrConnectWithoutCriteriaInput
+    connect?: AutoEvaluationWhereUniqueInput
+  }
+
+  export type AutoEvaluationUpdateOneRequiredWithoutCriteriaNestedInput = {
+    create?: XOR<AutoEvaluationCreateWithoutCriteriaInput, AutoEvaluationUncheckedCreateWithoutCriteriaInput>
+    connectOrCreate?: AutoEvaluationCreateOrConnectWithoutCriteriaInput
+    upsert?: AutoEvaluationUpsertWithoutCriteriaInput
+    connect?: AutoEvaluationWhereUniqueInput
+    update?: XOR<XOR<AutoEvaluationUpdateToOneWithWhereWithoutCriteriaInput, AutoEvaluationUpdateWithoutCriteriaInput>, AutoEvaluationUncheckedUpdateWithoutCriteriaInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -14691,6 +16183,7 @@ export namespace Prisma {
     justification: string
     modelVersion?: string | null
     evaluatedAt?: Date | string
+    criteria?: AutoEvaluationCriterionCreateNestedManyWithoutAutoEvaluationInput
   }
 
   export type AutoEvaluationUncheckedCreateWithoutAnswerInput = {
@@ -14699,6 +16192,7 @@ export namespace Prisma {
     justification: string
     modelVersion?: string | null
     evaluatedAt?: Date | string
+    criteria?: AutoEvaluationCriterionUncheckedCreateNestedManyWithoutAutoEvaluationInput
   }
 
   export type AutoEvaluationCreateOrConnectWithoutAnswerInput = {
@@ -14790,6 +16284,7 @@ export namespace Prisma {
     justification?: StringFieldUpdateOperationsInput | string
     modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    criteria?: AutoEvaluationCriterionUpdateManyWithoutAutoEvaluationNestedInput
   }
 
   export type AutoEvaluationUncheckedUpdateWithoutAnswerInput = {
@@ -14798,6 +16293,7 @@ export namespace Prisma {
     justification?: StringFieldUpdateOperationsInput | string
     modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    criteria?: AutoEvaluationCriterionUncheckedUpdateManyWithoutAutoEvaluationNestedInput
   }
 
   export type AnswerCreateWithoutAutoEvaluationInput = {
@@ -14832,6 +16328,29 @@ export namespace Prisma {
   export type AnswerCreateOrConnectWithoutAutoEvaluationInput = {
     where: AnswerWhereUniqueInput
     create: XOR<AnswerCreateWithoutAutoEvaluationInput, AnswerUncheckedCreateWithoutAutoEvaluationInput>
+  }
+
+  export type AutoEvaluationCriterionCreateWithoutAutoEvaluationInput = {
+    description: string
+    weight: number
+    score: number
+  }
+
+  export type AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput = {
+    id?: number
+    description: string
+    weight: number
+    score: number
+  }
+
+  export type AutoEvaluationCriterionCreateOrConnectWithoutAutoEvaluationInput = {
+    where: AutoEvaluationCriterionWhereUniqueInput
+    create: XOR<AutoEvaluationCriterionCreateWithoutAutoEvaluationInput, AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput>
+  }
+
+  export type AutoEvaluationCriterionCreateManyAutoEvaluationInputEnvelope = {
+    data: AutoEvaluationCriterionCreateManyAutoEvaluationInput | AutoEvaluationCriterionCreateManyAutoEvaluationInput[]
+    skipDuplicates?: boolean
   }
 
   export type AnswerUpsertWithoutAutoEvaluationInput = {
@@ -14872,6 +16391,83 @@ export namespace Prisma {
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
     flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
     observation?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AutoEvaluationCriterionUpsertWithWhereUniqueWithoutAutoEvaluationInput = {
+    where: AutoEvaluationCriterionWhereUniqueInput
+    update: XOR<AutoEvaluationCriterionUpdateWithoutAutoEvaluationInput, AutoEvaluationCriterionUncheckedUpdateWithoutAutoEvaluationInput>
+    create: XOR<AutoEvaluationCriterionCreateWithoutAutoEvaluationInput, AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput>
+  }
+
+  export type AutoEvaluationCriterionUpdateWithWhereUniqueWithoutAutoEvaluationInput = {
+    where: AutoEvaluationCriterionWhereUniqueInput
+    data: XOR<AutoEvaluationCriterionUpdateWithoutAutoEvaluationInput, AutoEvaluationCriterionUncheckedUpdateWithoutAutoEvaluationInput>
+  }
+
+  export type AutoEvaluationCriterionUpdateManyWithWhereWithoutAutoEvaluationInput = {
+    where: AutoEvaluationCriterionScalarWhereInput
+    data: XOR<AutoEvaluationCriterionUpdateManyMutationInput, AutoEvaluationCriterionUncheckedUpdateManyWithoutAutoEvaluationInput>
+  }
+
+  export type AutoEvaluationCriterionScalarWhereInput = {
+    AND?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
+    OR?: AutoEvaluationCriterionScalarWhereInput[]
+    NOT?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
+    id?: IntFilter<"AutoEvaluationCriterion"> | number
+    autoEvaluationId?: IntFilter<"AutoEvaluationCriterion"> | number
+    description?: StringFilter<"AutoEvaluationCriterion"> | string
+    weight?: FloatFilter<"AutoEvaluationCriterion"> | number
+    score?: FloatFilter<"AutoEvaluationCriterion"> | number
+  }
+
+  export type AutoEvaluationCreateWithoutCriteriaInput = {
+    score: number
+    justification: string
+    modelVersion?: string | null
+    evaluatedAt?: Date | string
+    answer: AnswerCreateNestedOneWithoutAutoEvaluationInput
+  }
+
+  export type AutoEvaluationUncheckedCreateWithoutCriteriaInput = {
+    id?: number
+    answerId: number
+    score: number
+    justification: string
+    modelVersion?: string | null
+    evaluatedAt?: Date | string
+  }
+
+  export type AutoEvaluationCreateOrConnectWithoutCriteriaInput = {
+    where: AutoEvaluationWhereUniqueInput
+    create: XOR<AutoEvaluationCreateWithoutCriteriaInput, AutoEvaluationUncheckedCreateWithoutCriteriaInput>
+  }
+
+  export type AutoEvaluationUpsertWithoutCriteriaInput = {
+    update: XOR<AutoEvaluationUpdateWithoutCriteriaInput, AutoEvaluationUncheckedUpdateWithoutCriteriaInput>
+    create: XOR<AutoEvaluationCreateWithoutCriteriaInput, AutoEvaluationUncheckedCreateWithoutCriteriaInput>
+    where?: AutoEvaluationWhereInput
+  }
+
+  export type AutoEvaluationUpdateToOneWithWhereWithoutCriteriaInput = {
+    where?: AutoEvaluationWhereInput
+    data: XOR<AutoEvaluationUpdateWithoutCriteriaInput, AutoEvaluationUncheckedUpdateWithoutCriteriaInput>
+  }
+
+  export type AutoEvaluationUpdateWithoutCriteriaInput = {
+    score?: FloatFieldUpdateOperationsInput | number
+    justification?: StringFieldUpdateOperationsInput | string
+    modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answer?: AnswerUpdateOneRequiredWithoutAutoEvaluationNestedInput
+  }
+
+  export type AutoEvaluationUncheckedUpdateWithoutCriteriaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    answerId?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+    justification?: StringFieldUpdateOperationsInput | string
+    modelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GroupCreateManyOwnerInput = {
@@ -15221,6 +16817,33 @@ export namespace Prisma {
     flaggedProblematic?: BoolFieldUpdateOperationsInput | boolean
     flaggedExcellent?: BoolFieldUpdateOperationsInput | boolean
     observation?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AutoEvaluationCriterionCreateManyAutoEvaluationInput = {
+    id?: number
+    description: string
+    weight: number
+    score: number
+  }
+
+  export type AutoEvaluationCriterionUpdateWithoutAutoEvaluationInput = {
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type AutoEvaluationCriterionUncheckedUpdateWithoutAutoEvaluationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type AutoEvaluationCriterionUncheckedUpdateManyWithoutAutoEvaluationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
   }
 
 
