@@ -61,7 +61,7 @@ const router = useRouter();
   
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchRequests({userId, page, pageSize: 10});
+      const result = await fetchRequests({userId, page, pageSize: 6});
       setRequests(result.data); 
       
       setTotalPages(result.totalPages);
@@ -136,8 +136,8 @@ const router = useRouter();
                       {new Date(request.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })}
                     </div>
                     <div className="text-xs text-slate-400 flex">
-                      <p>Hora: </p>
-                       {new Date(request.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute:'2-digit' })}
+                     
+                       Hora: {new Date(request.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute:'2-digit' })}
                     </div>
                   </TableCell>
 
@@ -148,21 +148,21 @@ const router = useRouter();
                     </TableCell>
                   )}
 
-                  {/* CONTEÚDO PRINCIPAL: Empilhado para economizar largura */}
-                  <TableCell className="align-top py-4 max-w-[400px]"> {/* max-w força o truncate funcionar */}
+                  
+                  <TableCell className="align-top py-4 max-w-[400px]"> 
                     <div className="flex flex-col gap-1">
                       <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                         {request.template?.name}
                       </span>
                       
-                      {/* Parâmetros viram subtexto cinza e truncado */}
+                      
                       <span className="text-xs text-slate-500 truncate block w-full" title={getParameterString(request.parameterValues)}>
                         {getParameterString(request.parameterValues)}
                       </span>
                     </div>
                   </TableCell>
 
-                  {/* SCORE: Compacto e alinhado à direita */}
+                  
                   <TableCell className="text-right align-top py-4">
                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${scoreColor}`}>
                         {score.correct} / {score.total} acertos
@@ -198,7 +198,7 @@ function getParameterString(parameterValues: any) {
   }).join(", ");
 }
 
-function getNumberOfCorrectAnswers(questions: any) {
+function getNumberOfCorrectAnswers(questions: PrismaJson.MultipleChoiceQuestion[] | PrismaJson.DiscursiveQuestion[]) {
   const total = questions.length;
   let correct = 0;
   let answered = 0;
