@@ -10,6 +10,7 @@ import QuestionRequestCreatePage from "./create/page";
 import Pagination from "@/components/pagination";
 
 import { useRouter } from 'next/navigation';
+// apenas pra questao multipla escolha qnd temos discursiva agr tbm
 
 export interface QuestionRequest {
   id: number;
@@ -171,10 +172,8 @@ const router = useRouter();
                 </TableRow>
               );
             })}
-          </TableBody>
-        </Table>
+        </TableBody>      </Table>
       </div>
-
       <div className="mt-4">
         <Pagination totalPages={totalPages} currentPage={currentPage}/>
       </div>
