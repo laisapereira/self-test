@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import QuestionRequestCreatePage from "./questionRequests/create/page";
 
 export default function Home() {
   // const { data: session, status } = useSession();
@@ -25,8 +26,10 @@ export default function Home() {
   // }, [isMounted, status, router]);
 
   return (
-    <div>
-      <h1>SelfTest allows students to test their knowledge leveraging custom, AI-generated questions.</h1>
+    <div className="flex flex-col items-center justify-center h-screen px-4">
+      <h1 className="text-center text-xl">O SelfTest ajuda você a testar o que realmente sabe com questões personalizadas geradas por IA.</h1>
+
+      <QuestionRequestCreatePage />
     </div>
   );
 }

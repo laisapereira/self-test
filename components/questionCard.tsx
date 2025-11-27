@@ -12,6 +12,8 @@ import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ConfidenceLevel } from "./confidenceLevel";
+import { set } from "date-fns";
+import { Spinner } from "./spinner";
 
 
 export type EvaluationCriteria = {
@@ -34,7 +36,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
   const [discursiveAnswer, setDiscursiveAnswer] = useState<string>(""); 
   const [feedbackLLM, setFeedbackLLM] = useState<AutoEvaluation | null>(props.withEvaluation ?? null)
   const [criteriaScores, setCriteriaScores] = useState<CriterionScore[]>([]);
-  
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
     const searchParams = new URLSearchParams();
@@ -69,7 +71,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
       
       const response = await fetch(`/api/questions/${question.id}/answers?${searchParams.toString()}`);
 
-     
+      if (response.status === 404) return;
     
       const answer = await response.json();
       console.log("a resposta", answer)
@@ -77,6 +79,8 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
 
       
     };
+
+    fetchAnswer();
 
     question.type === 'multiple-choice' ? fetchAnswer() : fetchDiscursiveAnswer()
 
@@ -93,6 +97,8 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
 
   async function submitAnswer() {
     if (alternative === null || confidenceLevel === null) return;
+
+    setIsLoading(true);
 
     try {
       const response = await fetch(`/api/questions/${question.id}/answers`, {
@@ -112,11 +118,15 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
       console.log("Answer submitted successfully", data);
     } catch (error) {
       console.error("Error submitting answer:", error);
+    } finally{
+      setIsLoading(false);
     }
   }
 
   async function submitDiscursiveAnswer(evaluationCriteria: EvaluationCriteria[] = []) {
     if (!discursiveAnswer.trim() || confidenceLevel === null) return;
+
+    setIsLoading(true);
 
     console.log("resposta", discursiveAnswer)
     
@@ -146,6 +156,8 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
       console.log("notas", criteriaScores)
     } catch (error) {
       console.error("Error submitting discursive answer:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -199,6 +211,14 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
             />
 
             <br />
+
+            { isLoading
+            
+            ? ( <Spinner>
+                Enviando a resposta...
+            </Spinner>
+            ) : (    
+            
             <Button
               variant="default"
               disabled={!discursiveAnswer.trim() || confidenceLevel === null}
@@ -206,6 +226,8 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
             >
               Enviar resposta
             </Button>
+
+            )}
           </div>
         ) : (
           <div>
@@ -294,6 +316,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
           {answer === null && (
             <>
               
+
               <ConfidenceLevel
                 questionId={question.id}
                 value={confidenceLevel}
@@ -302,15 +325,23 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
               />
 
               <br />
-              <Button
+
+              { isLoading 
+              ? ( <Spinner>
+                Enviando a resposta...
+              </Spinner>
+              ): ( <Button
                 variant="default"
                 disabled={alternative === null || confidenceLevel === null}
                 onClick={() => submitAnswer()}
               >
-                Submit
+                Enviar
               </Button>
+
+              )}
             </>
           )}
+
         </>
       )}
 

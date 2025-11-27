@@ -132,6 +132,8 @@ export default function QuestionRequestCreatePage() {
 
   function renderSelectTemplate() {
     return <Select onValueChange={(value) => value ? setTemplate(templates.find((t) => `${t.id}` === value) || null) : setTemplate(null)}>
+
+       <label className="text-[1.1rem] font-semibold mt-4">Selecione um tema principal</label>
       <SelectTrigger>
         <SelectValue placeholder="Select a template" />
       </SelectTrigger>
@@ -183,14 +185,17 @@ export default function QuestionRequestCreatePage() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto mt-10 p-6">
+    <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex">
       <CardHeader className="text-center">
-        <h1 className="text-4xl font-bold">Generate Questions</h1>
+        <h1 className="text-4xl font-bold">Vamos testar seu conhecimento?</h1>
+        <p className="text-slate-500 py-3">
+          Configure abaixo os tópicos para gerar um desafio personalizado de perguntas!
+        </p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-2.5">
         {renderSelectTemplate()}
         {template && template.parameters?.length > 0 && <>
-          <h2 className="text-2xl font-semibold mt-4">Parameters</h2>
+          <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros que a IA deve priorizar</h2>
           {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
             renderParameterInput(parameter, `param${parameter.name}`))}
         </>
@@ -199,10 +204,10 @@ export default function QuestionRequestCreatePage() {
           (
             isLoading
               ? <Spinner>
-                Generating questions...
+                O SelfTest está estruturando um desafio personalizado para você...
               </Spinner>
               : <Button onClick={createRequest} disabled={isLoading}>
-                {isLoading ? <span className="spinner" /> : "Generate Questions"}
+                {isLoading ? <span className="spinner" /> : "Gerar minhas questões"}
               </Button>
           )
         }

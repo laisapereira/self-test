@@ -16,24 +16,34 @@ const inter = Inter({ subsets: ['latin'] })
 // }
 
 const routes = [
+
+
+    {
+  title: 'Gerar Questões',
+  href: '/',
+  },
   {
-    title: 'Templates',
+    title: 'Templates de Questões',
     href: '/templates',
     requireAdmin: true,
   },
+  
   {
-    title: 'Users',
+    title: 'Questões Geradas',
+    href: '/questionRequests',
+  },
+
+  {
+    title: 'Usuários',
     href: '/users',
     requireAdmin: true,
-  },
-  {
-    title: 'Questions',
-    href: '/questionRequests',
   },
   {
     title: 'Dashboard',
     href: '/dashboard',
   },
+
+
 ]
 
 export default function RootLayout({
@@ -47,7 +57,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <title>SelfTest</title>
-        <meta name="description" content="SelfTest allows students to test their knowledge leveraging custom, AI-generated questions." />
+        <meta name="description" content="SelfTest permite estudantes testarem seus conhecimentos utilizando perguntas personalizadas geradas por IA." />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>

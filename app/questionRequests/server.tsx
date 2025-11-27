@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 export async function fetchRequests(params: { userId?: number; page?:number; pageSize?:number}) {
 
   const page = Number(params.page) || 1
-  const pageSize = Number(params.pageSize) || 10 
+  const pageSize = Number(params.pageSize) || 5
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {

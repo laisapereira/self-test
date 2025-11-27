@@ -5,10 +5,11 @@ import { useSearchParams } from "next/navigation";
 import { fetchRequests } from "./server";
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import Date from "@/components/date";
+import DateComponent from "@/components/date";
 import QuestionRequestCreatePage from "./create/page";
 import Pagination from "@/components/pagination";
 
+import { useRouter } from 'next/navigation';
 
 export interface QuestionRequest {
   id: number;
@@ -55,6 +56,8 @@ function QuestionRequestsPageInner() {
   const page = pageStr? parseInt(pageStr, 10) : 1
   const [totalPages, setTotalPages] = useState(1);
 const [currentPage, setCurrentPage] = useState(1);
+
+const router = useRouter();
   
   useEffect(() => {
     async function fetchData() {
@@ -71,83 +74,114 @@ const [currentPage, setCurrentPage] = useState(1);
   }, [userId, page]);
 
   
+  const handleRowClick = (requestId: string, requestUserId: number) => {
+    router.push(`/questions?questionRequestId=${requestId}&userId=${requestUserId}`);
+  };
  
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div>
-        <QuestionRequestCreatePage />
+    <>
 
-        {userId !== -1 ? <>
-          <a href="/questionRequests?userId=-1" className="text-blue-500 hover:underline">
-            View recent requests from all users
+
+    
+    <div className="w-full max-w-5xl mx-auto p-4 my-6"> 
+      
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-slate-800 text-center">Histórico de Perguntas Geradas</h1>
+        
+        {userId !== -1 ? (
+          <a href="/questionRequests?userId=-1" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+            Ver as questões geradas de todos os usuários&rarr;
           </a>
-          <br />
-        </>
-          :
-          <>
-            <a href="/questionRequests" className="text-blue-500 hover:underline">
-              View your requests
-            </a>
-            <br />
-          </>
-        }
-
-        <h1>Question Requests</h1>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-left">Creation</TableHead>
-              {userId === -1 && <TableHead className="text-left">User</TableHead>}
-              <TableHead className="text-left">Template</TableHead>
-              <TableHead className="text-left">Parameters</TableHead>
-              <TableHead className="text-left">Correct</TableHead>
-              <TableHead className="text-left">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {requests?.map((request: any) => (
-              <TableRow key={request.id}>
-                <TableCell><Date date={request.createdAt} /></TableCell>
-                {
-                  userId === -1 &&
-                  <TableCell>
-                    <Link href={`/questionRequests?userId=${request.userId}`} className="text-blue-500 hover:underline">
-                      {request.user.name}
-                    </Link>
-                  </TableCell>
-                }
-                <TableCell>{request.template?.name}</TableCell>
-                <TableCell>{getParameterString(request.parameterValues)}</TableCell>
-                <TableCell>
-                  {
-                    (() => {
-                      const data = getNumberOfCorrectAnswers(request.questions);
-                      return <span>
-                        <span title="Correct" style={{ cursor: 'pointer', color: 'green', fontWeight: 'bold' }}>{data.correct}</span>&nbsp;
-                        <span title="Answered" style={{ cursor: 'pointer', color: 'blue' }}>{data.answered}</span>&nbsp;
-                        <span title="Total" style={{ cursor: 'pointer' }}>{data.total}</span>
-                      </span>;
-                    })()
-                  }
-                </TableCell>
-                <TableCell>
-                  <Link href={`/questions?questionRequestId=${request.id}&userId=${request.userId}`} className="text-blue-500 hover:underline">
-                    View Questions
-                  </Link>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-
-            <Pagination totalPages={totalPages} currentPage={currentPage}/>
-
+        ) : (
+          <a href="/questionRequests" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+            Ver minhas questões geradas &rarr;
+          </a>
+        )}
       </div>
 
-            
+      <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+        <Table>
+          <TableHeader className="bg-slate-50">
+            <TableRow>
+              
+              <TableHead className="w-[100px]">Data de Geração</TableHead>
+              
+              {userId === -1 && <TableHead className="w-[150px]">Usuário</TableHead>}
+              
+             
+              <TableHead className="text-center">Tema e Parâmetros</TableHead>
+              
+              {/* Score compacto */}
+              <TableHead className="text-right">Desempenho</TableHead>
+            </TableRow>
+          </TableHeader>
+          
+          <TableBody>
+            {requests?.map((request: any) => {
+             
+               const score = getNumberOfCorrectAnswers(request.questions);
+               const scoreColor = score.correct === score.total ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-700";
+
+               return (
+                <TableRow 
+                  key={request.id} 
+                  
+                  className="cursor-pointer hover:bg-blue-50/50 transition-colors group"
+                  onClick={() => handleRowClick(request.id, request.userId)}
+                >
+                  {/* DATA: Simplificada */}
+                  <TableCell className="align-top py-4">
+                    <div className="text-sm font-medium text-slate-700">
+                      {new Date(request.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })}
+                    </div>
+                    <div className="text-xs text-slate-400 flex">
+                      <p>Hora: </p>
+                       {new Date(request.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute:'2-digit' })}
+                    </div>
+                  </TableCell>
+
+                  {/* USUÁRIO (Apenas se admin) */}
+                  {userId === -1 && (
+                    <TableCell className="align-top py-4">
+                      <div className="font-medium text-sm">{request.user.name}</div>
+                    </TableCell>
+                  )}
+
+                  {/* CONTEÚDO PRINCIPAL: Empilhado para economizar largura */}
+                  <TableCell className="align-top py-4 max-w-[400px]"> {/* max-w força o truncate funcionar */}
+                    <div className="flex flex-col gap-1">
+                      <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        {request.template?.name}
+                      </span>
+                      
+                      {/* Parâmetros viram subtexto cinza e truncado */}
+                      <span className="text-xs text-slate-500 truncate block w-full" title={getParameterString(request.parameterValues)}>
+                        {getParameterString(request.parameterValues)}
+                      </span>
+                    </div>
+                  </TableCell>
+
+                  {/* SCORE: Compacto e alinhado à direita */}
+                  <TableCell className="text-right align-top py-4">
+                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${scoreColor}`}>
+                        {score.correct} / {score.total} acertos
+                     </span>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="mt-4">
+        <Pagination totalPages={totalPages} currentPage={currentPage}/>
+      </div>
+    </div>
+
+      </>
       
-    </Suspense>
   );
 }
 
@@ -171,23 +205,24 @@ function getNumberOfCorrectAnswers(questions: any) {
 
   for (const question of questions) {
     // Questão de múltipla escolha
-    if (question.correctAnswerIndex !== null && question.correctAnswerIndex !== undefined) {
+    if (question.type === "multiple-choice") {
       const answerIndex = question.answers[0]?.answerIndex;
       if (answerIndex !== undefined && answerIndex !== null) {
         answered++;
         if (answerIndex == question.correctAnswerIndex) {
           correct++;
+          console.log(  'Resposta correta para questão de múltipla escolha:', question);
         }
       }
     }
     // Questão discursiva
-    else {
+    else if (question.type === "discursive") {
       const userAnswer = question.answers[0]?.content;
-      const autoEvaluation = question.answers[0]?.autoEvaluation; // supondo que você salva a avaliação automática aqui
+      const autoEvaluation = question.answers[0]?.autoEvaluation; 
       if (userAnswer && autoEvaluation) {
         answered++;
-        // Considere "correta" se a nota de corretude for >= 4, por exemplo
-        if (autoEvaluation.corretude >= 4) {
+        console.log('Autoavaliação da resposta discursiva:', autoEvaluation);
+        if (autoEvaluation.score >= 4) {
           correct++;
         }
       }

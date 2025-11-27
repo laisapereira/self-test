@@ -12,24 +12,26 @@ export namespace PrismaJson {
     values: string[];
   };
 
- export type DiscursiveQuestion = {
-  content: string;
-  referenceAnswer: string;
+type BaseQuestion = { content: string; }
+
+ export type DiscursiveQuestion =  BaseQuestion & {
+  type: "discursive";
   evaluationCriteria: string[];
 };
   
-export type DiscursiveQuestionResponse = {
-  content: string;
+export type DiscursiveQuestionResponse = BaseQuestion & {
   questions: DiscursiveQuestion[];
 }
 
-  export type MultipleChoiceQuestionResponse = {
-    content: string;
+
+
+
+  export type MultipleChoiceQuestionResponse = BaseQuestion & {
     questions: MultipleChoiceQuestion[];
   }
 
-  export type MultipleChoiceQuestion = {
-    content: string;
+  export type MultipleChoiceQuestion = BaseQuestion & {
+    type: "multiple-choice";
     correctAnswerIndex: number;
     alternatives: MultipleChoiceQuestionAlternative[];
   }
