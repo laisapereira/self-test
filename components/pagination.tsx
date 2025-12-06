@@ -22,6 +22,14 @@ const Pagination = ({ totalPages, currentPage }: PaginationProps) => {
     router.push(`?${current.toString()}`);
   };
 
+  const PAGE_WINDOW = 10; // number of page buttons shown per window
+
+  // compute window start and end so currentPage is always visible
+  const windowStart = Math.floor((Math.max(currentPage, 1) - 1) / PAGE_WINDOW) * PAGE_WINDOW + 1;
+  const windowEnd = Math.min(windowStart + PAGE_WINDOW - 1, totalPages);
+
+  const pagesInWindow = Array.from({ length: Math.max(0, windowEnd - windowStart + 1) }, (_, i) => windowStart + i);
+
   return (
     <div className="flex items-center justify-center gap-2 mt-6">
 
@@ -36,7 +44,18 @@ const Pagination = ({ totalPages, currentPage }: PaginationProps) => {
       </button>
 
       <div className="flex items-center gap-1">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+        {/* show previous window jump if applicable */}
+        {windowStart > 1 && (
+          <button
+            onClick={() => handlePageChange(Math.max(1, windowStart - PAGE_WINDOW))}
+            className="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-md text-slate-600 hover:bg-slate-100"
+            aria-label="previous pages"
+          >
+            ...
+          </button>
+        )}
+
+        {pagesInWindow.map((page) => {
           const isActive = currentPage === page;
           
           return (
@@ -55,6 +74,17 @@ const Pagination = ({ totalPages, currentPage }: PaginationProps) => {
             </button>
           );
         })}
+
+        {/* show next window jump if applicable */}
+        {windowEnd < totalPages && (
+          <button
+            onClick={() => handlePageChange(Math.min(totalPages, windowEnd + 1))}
+            className="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-md text-slate-600 hover:bg-slate-100"
+            aria-label="next pages"
+          >
+            ...
+          </button>
+        )}
       </div>
 
 

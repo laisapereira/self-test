@@ -51,6 +51,10 @@ const data = await prisma.questionRequest.findMany({
         select: {
           id: true,
           correctAnswerIndex: true,
+          content: true,
+          type: true,
+          evaluationCriteria: true,
+          alternatives: true,
           answers: {
             ...(params.userId !== -1 && {
               where: {
@@ -62,16 +66,53 @@ const data = await prisma.questionRequest.findMany({
               answerIndex: true,
               confidenceLevel: true,
               correct: true,
+
+              autoEvaluation: {
+                select: {
+                  id: true,
+                  score: true,
+                  justification: true,
+                  criteria: true,
+                  evaluatedAt: true,
+                  modelVersion: true,
+                              }
             },
           },
         },
       },
     },
-  });
+  }});
+
+  const normalizedData = data.map(r => ({
+  ...r,
+  questions: r.questions.map(q => ({
+    ...q,
+    alternatives: q.alternatives as { content: string; feedback: string }[],
+    answers: q.answers.map(a => ({
+      ...a,
+      autoEvaluation: a.autoEvaluation ? {
+        score: a.autoEvaluation.score,
+        justification: a.autoEvaluation.justification,
+        evaluatedAt: a.autoEvaluation.evaluatedAt,
+        modelVersion: a.autoEvaluation.modelVersion,
+        criteria: a.autoEvaluation.criteria.map(c => ({
+          description: c.description,
+          weight: c.weight,
+          score: c.score
+        }))
+      } : null
+    }))
+  }))
+}));
+
+
+
+
+
 
 
   return {
-    data, totalPages: Math.ceil(totalCount/pageSize),
+    data: normalizedData, totalPages: Math.ceil(totalCount/pageSize),
     currentPage: page
   }
 }

@@ -50,6 +50,8 @@ export async function POST(req: Request) {
 
 async function generateQuestions(questionRequest: QuestionRequest) {
   const jsonString = await requestLLM(questionRequest);
+
+  console.log('JSON STRING', jsonString);
   if (!jsonString) {
     throw new Error("No response from LLM");
   }
@@ -57,24 +59,32 @@ async function generateQuestions(questionRequest: QuestionRequest) {
   const json: PrismaJson.MultipleChoiceQuestionResponse | PrismaJson.DiscursiveQuestionResponse = JSON.parse(jsonString);
   const questions = json.questions;
 
-  console.log("As questoes geradas", questions);
+  console.log("As questoes geradas", json.questions);
   // for each question, shuffle the alternatives, updating the correctAnswerIndex
   questions.forEach((question) => {
 
-    if ('evaluationCriteria' in question) {
-      console.log('Questão discursiva gerada:', question);
-    } else {
-      const indices = Array.from({ length: question?.alternatives?.length }, (_, i) => i);
+    //questão não tem o tipo. por isso a validação está frouxa,. preciso definir o tipo antes,
+    // com uma espécie de flag mesmo, na hora de criar a questão no prompt template.
+
+    //console.log("Tipo da questão", question.type);
+
+    if ('alternatives' in question) {
+    
+       const indices = Array.from({ length: question?.alternatives?.length }, (_, i) => i);
       indices.sort((i) => Math.random() - 0.5);
       // shuffle alternatives and update the index of the correct answer
       question.alternatives = indices.map((i) => question.alternatives[i]);
       question.correctAnswerIndex = indices.indexOf(question.correctAnswerIndex);
+    } else {
+     console.log('Questão discursiva gerada:', question);
     }
    
   });
 
   await prisma.question.createMany({
     data: questions.map((question) => {
+
+      console.log("Criação da questão", question.type);
       if ('alternatives' in question) {
         return {
           content: question.content,
@@ -125,14 +135,14 @@ async function requestLLM(questionRequest: QuestionRequest) {
   console.log(prompt);
 
     const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    baseURL:process.env.OPENAI_API_URL,
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL:process.env.DEEPSEEK_API_URL,
   });
 
   console.log('sending request to LLM');
   const completion = await openai.chat.completions.create({
     messages: [{ role: 'system', content: prompt }],
-    model: 'gpt-4o',
+    model: 'deepseek-chat',
     response_format: {
       type: 'json_object'
     }

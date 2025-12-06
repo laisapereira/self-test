@@ -177,7 +177,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
       {answer && (
         <div>
           <p className={answer?.answerIndex !== null && answer?.answerIndex !== undefined ? getAnswerClassName(answer.answerIndex) : ''}>
-            Your answer is {answer?.correct ? 'correct' : 'incorrect'}! (Confidence level: {answer?.confidenceLevel})
+            Sua resposta está {answer?.correct ? 'correta' : 'incorreta'}! ( e seu nível de confiança para responder foi: {answer?.confidenceLevel})
           </p>
         </div>
       )}

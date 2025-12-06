@@ -135,7 +135,7 @@ export default function QuestionRequestCreatePage() {
 
        <label className="text-[1.1rem] font-semibold mt-4">Selecione um tema principal</label>
       <SelectTrigger>
-        <SelectValue placeholder="Select a template" />
+        <SelectValue placeholder="Selecione uma àrea geral" />
       </SelectTrigger>
       <SelectContent>
         {templates.map((template: QuestionRequestTemplate) => (
@@ -157,7 +157,7 @@ export default function QuestionRequestCreatePage() {
     });
 
     if (missingParameters.length > 0) {
-      alert(`Please select a value for the following parameters: ${missingParameters.map((p) => p.name).join(", ")}`);
+      alert(`Por favor, selecione um valor para os seguintes parâmetros: ${missingParameters.map((p) => p.name).join(", ")}`);
       return;
     }
 

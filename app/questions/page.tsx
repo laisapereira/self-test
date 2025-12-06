@@ -59,7 +59,7 @@ function QuestionsPageInner() {
 
   return <Card className="w-full">
     <CardHeader>
-      <h1 className="text-2xl font-bold">Questions</h1>
+      <h1 className="text-2xl font-bold">Questões</h1>
     </CardHeader>
     <CardContent>
       {questions.length > 0 ? (

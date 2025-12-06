@@ -48,7 +48,7 @@ function DashboardInner() {
         <SelectValue placeholder={`Select template`} />
       </SelectTrigger>
       <SelectContent>
-        {templates.map((template: QuestionRequestTemplate, index: number) => (
+        {templates?.map((template: QuestionRequestTemplate, index: number) => (
           <SelectItem key={`k${index}`} value={template.id.toString()}>
             {template.name}
           </SelectItem>

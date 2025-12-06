@@ -49,3 +49,43 @@ export type DiscursiveQuestionResponse = BaseQuestion & {
   }
 
 }
+
+export interface QuestionRequest {
+  id: number;
+  userId: number;
+  templateId: number;
+  createdAt: Date;
+  parameterValues: any[];
+
+  user: { id: number; name: string | null };
+  template: { id: number; name: string } | null;
+
+  questions: {
+    id: number;
+    content: string;
+    type: "multiple-choice" | "discursive" | string;
+    correctAnswerIndex: number | null;
+
+   
+    alternatives: { content: string; feedback: string }[] | null;
+
+    evaluationCriteria?: string[];
+    referenceAnswer?: string;
+
+    answers: {
+      id: number;
+      answerIndex: number | null;
+      confidenceLevel: number;
+      correct: boolean;
+      content?: string;
+
+      autoEvaluation?: {
+        score: number;
+        justification: string;
+        modelVersion?: string;
+        evaluatedAt: string;
+        criteria: { description: string; weight: number; score: number }[];
+      } | null;
+    }[];
+  }[];
+}

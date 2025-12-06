@@ -66,7 +66,7 @@ async function evaluateAnswer(openai: OpenAI, prompt: string) {
     console.log('sending request to LLM');
         const completion = await openai.chat.completions.create({
             messages: [{ role: 'system', content: prompt }],
-            model: 'gpt-4o',
+            model: 'deepseek-chat',
             response_format: {
             type: 'json_object'
             }
@@ -167,8 +167,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             console.log(prompt)
 
         const openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY,
-            baseURL: process.env.OPENAI_API_URL,
+            apiKey: process.env.DEEPSEEK_API_KEY,
+            baseURL: process.env.DEEPSEEK_API_URL,
         });
 
         const llmResponse = await evaluateAnswer(openai, prompt)
@@ -213,7 +213,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             answerId: answer.id,
             score: finalScore,
             justification: justification ?? "",
-            modelVersion: "gpt-4o",
+            modelVersion: "deepseek-chat",
             criteria: {
             create: autoEvaluation.map((c) => ({
                 description: c.description,
