@@ -55,14 +55,14 @@ export default function QuestionRequestCreatePage() {
       if (parameter.multipleSelect) {
         return <MultiSelect
           key={key}
-          placeholder={`Select ${parameter.name}`}
+          placeholder={`Selecione os parâmetros de: ${parameter.name}`}
           options={parameter.values.map((value) => ({ value, label: value }))}
           onValueChange={(values) => handleParameterChange(parameter, values)}
         />
       } else {
         return <Select onValueChange={(value => handleParameterChange(parameter, [value]))} key={key}>
           <SelectTrigger>
-            <SelectValue placeholder={`Select ${parameter.name}`} />
+            <SelectValue placeholder={`Selecione o parâmetro: ${parameter.name}`} />
           </SelectTrigger>
           <SelectContent>
             {parameter.values.map((value: string) => (
@@ -140,7 +140,7 @@ export default function QuestionRequestCreatePage() {
       <SelectContent>
         {templates.map((template: QuestionRequestTemplate) => (
           <SelectItem key={template.id} value={`${template.id}`}>
-            {template.name}
+           {template.name}
           </SelectItem>
         ))}
       </SelectContent>
@@ -197,7 +197,7 @@ export default function QuestionRequestCreatePage() {
         {template && template.parameters?.length > 0 && <>
           <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros que a IA deve priorizar</h2>
           {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
-            renderParameterInput(parameter, `param${parameter.name}`))}
+            renderParameterInput(parameter, `${parameter.name}`))}
         </>
         }
         {template &&

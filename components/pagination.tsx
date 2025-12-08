@@ -44,7 +44,7 @@ const Pagination = ({ totalPages, currentPage }: PaginationProps) => {
       </button>
 
       <div className="flex items-center gap-1">
-        {/* show previous window jump if applicable */}
+      
         {windowStart > 1 && (
           <button
             onClick={() => handlePageChange(Math.max(1, windowStart - PAGE_WINDOW))}
@@ -75,7 +75,7 @@ const Pagination = ({ totalPages, currentPage }: PaginationProps) => {
           );
         })}
 
-        {/* show next window jump if applicable */}
+    
         {windowEnd < totalPages && (
           <button
             onClick={() => handlePageChange(Math.min(totalPages, windowEnd + 1))}

@@ -2,11 +2,13 @@
 
 import './globals.css'
 import { Inter } from 'next/font/google'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment, ReactNode, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { SessionProvider, signIn, signOut, useSession } from 'next-auth/react';
 import { Toaster } from '@/components/ui/sonner';
+import Footer from '@/components/footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -55,18 +57,28 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.png" />
         <title>SelfTest</title>
-        <meta name="description" content="SelfTest permite estudantes testarem seus conhecimentos utilizando perguntas personalizadas geradas por IA." />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="description" content="O SelfTest permite estudantes testarem seus conhecimentos utilizando perguntas personalizadas geradas por IA. Venha se testar!" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={inter.className}>
         <SessionProvider>
           <Navbar />
+
+          <Link href="https://forms.gle/BLVawYyYqAWBM1Vd8" target="_blank" className="mt-4 text-xl text-blue-600 hover:underline text-center flex justify-center">
+            O que têm achado do SelfTest? Avalie aqui!;
+          </Link>
           <main className="p-4">
             {children}
+         
           </main>
+          
+          <Link href="https://forms.gle/BLVawYyYqAWBM1Vd8" target="_blank" className="mt-4 text-xl text-blue-600 hover:underline text-center flex justify-center">
+            O que você tem achado do SelfTest? Avalie aqui!
+          </Link>
+          <Footer />
           <Toaster />
         </SessionProvider>
       </body>
@@ -80,9 +92,9 @@ function Navbar() {
   return (
     <nav className="bg-white shadow-md px-4 py-3 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" className="text-xl font-semibold text-gray-800">
-          SelfTest
-        </Link>
+
+       <Link href="/"> <Image src="/logo.png" alt="SelfTest Logo" width={150} height={150} /></Link>
+  
         <button
           className="md:hidden text-gray-800"
           onClick={() => setOpen(!open)}
@@ -91,17 +103,13 @@ function Navbar() {
           {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
         <ul className="hidden md:flex gap-6 text-gray-700 font-medium">
-          {/* <li><Link href="/">Home</Link></li>
-          <li><Link href="/about">About</Link></li>
-          <li><Link href="/contact">Contact</Link></li> */}
+     
           <MenuItems />
         </ul>
       </div>
       {open && (
         <ul className="md:hidden mt-2 space-y-2 text-gray-700 font-medium">
-          {/* <li><Link href="/" onClick={() => setOpen(false)}>Home</Link></li>
-          <li><Link href="/about" onClick={() => setOpen(false)}>About</Link></li>
-          <li><Link href="/contact" onClick={() => setOpen(false)}>Contact</Link></li> */}
+     
           <MenuItems onClick={() => setOpen(false)} />
         </ul>
       )}
