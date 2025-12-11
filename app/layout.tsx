@@ -66,10 +66,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <SessionProvider>
           <Navbar />
-
-          <Link href="https://forms.gle/BLVawYyYqAWBM1Vd8" target="_blank" className="mt-4 text-xl text-blue-600 hover:underline text-center flex justify-center">
-            O que têm achado do SelfTest? Avalie aqui!;
-          </Link>
           <main className="p-4">
             {children}
          
@@ -93,7 +89,7 @@ function Navbar() {
     <nav className="bg-white shadow-md px-4 py-3 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
 
-       <Link href="/"> <Image src="/logo.png" alt="SelfTest Logo" width={150} height={150} /></Link>
+       <Link href="/"> <Image src="/logo.png" alt="SelfTest Logo" width={200} height={150} /></Link>
   
         <button
           className="md:hidden text-gray-800"
