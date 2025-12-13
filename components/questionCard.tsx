@@ -277,8 +277,8 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
             value={alternative !== null ? String(alternative) : undefined}
             onValueChange={(value: string) => setAlternative(parseInt(value))}
           >
-            {question.alternatives.map(
-              (alternativeObj: { content: string; feedback: string }, alternativeIdx: number) => (
+            {(question.alternatives as Array<{ content: string; feedback: string }>).map(
+              (alternativeObj, alternativeIdx: number) => (
                 <div className="flex flex-col space-y-1" key={alternativeIdx}>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem
@@ -305,7 +305,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
                   </div>
                   {answer && (
                     <p className={getAnswerClassName(alternativeIdx)}>
-                      {question.alternatives[alternativeIdx].feedback}
+                      {(question.alternatives[alternativeIdx] as { content: string; feedback: string })?.feedback}
                     </p>
                   )}
                 </div>
