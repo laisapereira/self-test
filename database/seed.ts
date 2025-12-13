@@ -1,7 +1,3 @@
-
-
-
-
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -83,57 +79,112 @@ Esquema da saída:
 }
 `.trim();
 
-
 const PARAMS_WEB = [
-  { name: "linguagem", values: [{"name":"linguagem","values":["Typescript","Go","PHP"],"multipleSelect":true}] },
-  { name: "subtopico", multiple: true, values: [{"name":"subtopico","values":["Desenvolvimento front-end","Desenvolvimento Backend","Observabilidade"],"multipleSelect":false}]},
+  {
+    name: "linguagem",
+    values: [
+      {
+        name: "linguagem",
+        values: ["Typescript", "Go", "PHP"],
+        multipleSelect: true,
+      },
+    ],
+  },
+  {
+    name: "subtopico",
+    multiple: true,
+    values: [
+      {
+        name: "subtopico",
+        values: [
+          "Desenvolvimento front-end",
+          "Desenvolvimento Backend",
+          "Observabilidade",
+        ],
+        multipleSelect: false,
+      },
+    ],
+  },
 ];
 const PARAMS_APLICACOES_DISPOSITIVOS_MOVEIS = [
-  { name: "linguagem", multiple: true, values: [
   {
-    "name": "subtopico",
-    "values": [
-      "Conceito de mobilidade",
-      "Visão geral sobre dispositivos móveis",
-      "Tecnologias e ferramentas para desenvolvimento de aplicações móveis",
-      "Persistência e Comunicação de Dados",
-      "Arquitetura J2ME: Configurations, CLDC e MIDP",
-      "Recursos da linguagem: MIDLETS (aplicação / interface), GCF (comunicação), RMS (registro de dados)"
+    name: "linguagem",
+    multiple: true,
+    values: [
+      {
+        name: "subtopico",
+        values: [
+          "Conceito de mobilidade",
+          "Visão geral sobre dispositivos móveis",
+          "Tecnologias e ferramentas para desenvolvimento de aplicações móveis",
+          "Persistência e Comunicação de Dados",
+          "Arquitetura J2ME: Configurations, CLDC e MIDP",
+          "Recursos da linguagem: MIDLETS (aplicação / interface), GCF (comunicação), RMS (registro de dados)",
+        ],
+        multipleSelect: true,
+      },
+      {
+        name: "linguagem",
+        values: ["Kotlin", "Swift", "Dart (Flutter)", "TypeScript"],
+        multipleSelect: false,
+      },
     ],
-    "multipleSelect": true
   },
-  {
-    "name": "linguagem",
-    "values": ["Kotlin", "Swift", "Dart (Flutter)", "TypeScript"],
-    "multipleSelect": false
-  }
-] },
 ];
 const PARAMS_POO = [
-  { name: "linguagem", multiple: true, values: [
   {
-    "name": "subtopico",
-    "values": [
-      "Conceitos de Orientação a Objetos",
-      "Programação orientada a objetos: Implementação de classes, herança, polimorfismo, comunicação e associação",
-      "Conceito de reuso",
-      "Exemplos de implementação dos conceitos estudados em mais de uma linguagem orientada a objeto"
+    name: "linguagem",
+    multiple: true,
+    values: [
+      {
+        name: "subtopico",
+        values: [
+          "Conceitos de Orientação a Objetos",
+          "Programação orientada a objetos: Implementação de classes, herança, polimorfismo, comunicação e associação",
+          "Conceito de reuso",
+          "Exemplos de implementação dos conceitos estudados em mais de uma linguagem orientada a objeto",
+        ],
+        multipleSelect: true,
+      },
+      {
+        name: "linguagem",
+        values: ["Java", "C#", "Python", "Golang", "JavaScript"],
+        multipleSelect: true,
+      },
     ],
-    "multipleSelect": true
   },
-  {
-    "name": "linguagem",
-    "values": ["Java", "C#", "Python", "Golang", "JavaScript"],
-    "multipleSelect": true
-  }
-]
-}
 ];
 
 const PARAMS_BD = [
-  { name: "subtopico", values: [{"name":"subtopico","values":["SQL VS NoSQL","Transações","Técnicas de Bakcup e Recuperação"],
-        "multipleSelect":false}]},
-  { name: "linguagem", values:[{"name":"subtopico","values":["SQL VS NoSQL","Transações","Técnicas de Bakcup e Recuperação"],"multipleSelect":false},{"name":"linguagem","values":["PL/SQL","SQL"],"multipleSelect":true}]},
+  {
+    name: "subtopico",
+    values: [
+      {
+        name: "subtopico",
+        values: [
+          "SQL VS NoSQL",
+          "Transações",
+          "Técnicas de Bakcup e Recuperação",
+        ],
+        multipleSelect: false,
+      },
+    ],
+  },
+  {
+    name: "linguagem",
+    values: [
+      {
+        name: "subtopico",
+        values: [
+          "SQL VS NoSQL",
+          "Transações",
+          "Técnicas de Bakcup e Recuperação",
+        ],
+        multipleSelect: false,
+      },
+      { name: "linguagem", values: ["PL/SQL", "SQL"], multipleSelect: true },
+    ],
+  },
 ];
 
 /** --------- TEMPLATES QUE SERÃO CRIADOS --------- **/
@@ -195,7 +246,7 @@ async function main() {
         where: { id: existing.id },
         data: {
           promptTemplate: t.promptTemplate,
-          parameters: t.parameters as any, // Json[]
+          parameters: t.parameters as unknown, // Json[]
           ownerId: owner.id,
         },
       });
@@ -204,7 +255,7 @@ async function main() {
         data: {
           name: t.name,
           promptTemplate: t.promptTemplate,
-          parameters: t.parameters as any, // Json[]
+          parameters: t.parameters as unknown, // Json[]
           ownerId: owner.id,
         },
       });
