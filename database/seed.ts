@@ -173,11 +173,11 @@ const templatesSeed = [
 /** --------- SEED --------- **/
 async function main() {
   const owner = await prisma.user.upsert({
-    where: { email: "owner@example.com" },
+    where: { email: "laisapereira@ufba.br" },
     update: {},
     create: {
-      email: "owner@example.com",
-      name: "Owner",
+      email: "laisapereira@ufba.br",
+      name: "Laisa Pereira",
     },
   });
 
