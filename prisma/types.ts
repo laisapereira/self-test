@@ -12,19 +12,20 @@ export namespace PrismaJson {
     values: string[];
   };
 
-type BaseQuestion = { content: string; }
+type BaseQuestion = { 
+  content: string; 
+  type: "discursive" | "multiple-choice";
+
+}
 
  export type DiscursiveQuestion =  BaseQuestion & {
-  type: "discursive";
   evaluationCriteria: string[];
 };
   
 export type DiscursiveQuestionResponse = BaseQuestion & {
+  type: "discursive";
   questions: DiscursiveQuestion[];
 }
-
-
-
 
   export type MultipleChoiceQuestionResponse = BaseQuestion & {
     questions: MultipleChoiceQuestion[];

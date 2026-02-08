@@ -25,6 +25,7 @@ export default function QuestionRequestCreatePage() {
 
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const [template, setTemplate] = useState<QuestionRequestTemplate | null>(null);
+  const [questionType, setQuestionType] = useState<"discursive" | "multiple-choice" | "both">("both");
   const [finalPrompt, setFinalPrompt] = useState<string>("");
   const [newRequest, setNewRequest] = useState({
     parameterValues: [] as PrismaJson.QuestionRequestParameterValue[],
@@ -165,6 +166,7 @@ export default function QuestionRequestCreatePage() {
       templateId: template.id,
       parameterValues: newRequest.parameterValues,
       generatedPrompt: finalPrompt,
+      questionType,
     };
     setIsLoading(true);
     const response = await fetch("/api/questionRequests", {
@@ -194,6 +196,7 @@ export default function QuestionRequestCreatePage() {
       </CardHeader>
       <CardContent className="flex flex-col gap-2.5">
         {renderSelectTemplate()}
+        {renderSelectQuestionType()}
         {template && template.parameters?.length > 0 && <>
           <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros que a IA deve priorizar</h2>
           {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
@@ -214,5 +217,23 @@ export default function QuestionRequestCreatePage() {
       </CardContent>
     </Card>
   );
+
+
+
+function renderSelectQuestionType() {
+    return (
+      <Select onValueChange={(value) => setQuestionType(value as "discursive" | "multiple-choice" | "both")}>
+        <label className="text-[1.1rem] font-semibold mt-4">Tipo de questão</label>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha o tipo" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="discursive">Discursiva</SelectItem>
+          <SelectItem value="multiple-choice">Múltipla escolha</SelectItem>
+          <SelectItem value="both">Ambas</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+  }
 
 }
