@@ -29,6 +29,11 @@ const routes = [
     href: '/templates',
     requireAdmin: true,
   },
+  {
+    title: 'Temas',
+    href: '/topics',
+    requireAdmin: true,
+  },
   
   {
     title: 'Questões Geradas',

@@ -143,6 +143,18 @@ exports.Prisma.GroupScalarFieldEnum = {
 exports.Prisma.TopicScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  parameters: 'parameters',
+  evaluationCriteria: 'evaluationCriteria',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  ownerId: 'ownerId'
+};
+
+exports.Prisma.PromptTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  questionType: 'questionType',
+  promptTemplate: 'promptTemplate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -160,7 +172,10 @@ exports.Prisma.QuestionRequestTemplateScalarFieldEnum = {
 exports.Prisma.QuestionRequestScalarFieldEnum = {
   id: 'id',
   parameterValues: 'parameterValues',
+  questionType: 'questionType',
+  generatedPrompt: 'generatedPrompt',
   createdAt: 'createdAt',
+  topicId: 'topicId',
   templateId: 'templateId',
   userId: 'userId'
 };
@@ -212,6 +227,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -222,11 +242,18 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
   Group: 'Group',
   Topic: 'Topic',
+  PromptTemplate: 'PromptTemplate',
   QuestionRequestTemplate: 'QuestionRequestTemplate',
   QuestionRequest: 'QuestionRequest',
   Question: 'Question',

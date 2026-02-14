@@ -212,6 +212,11 @@ export type Group = $Result.DefaultSelection<Prisma.$GroupPayload>
  */
 export type Topic = $Result.DefaultSelection<Prisma.$TopicPayload>
 /**
+ * Model PromptTemplate
+ * 
+ */
+export type PromptTemplate = $Result.DefaultSelection<Prisma.$PromptTemplatePayload>
+/**
  * Model QuestionRequestTemplate
  * 
  */
@@ -389,6 +394,16 @@ export class PrismaClient<
     * ```
     */
   get topic(): Prisma.TopicDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.promptTemplate`: Exposes CRUD operations for the **PromptTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PromptTemplates
+    * const promptTemplates = await prisma.promptTemplate.findMany()
+    * ```
+    */
+  get promptTemplate(): Prisma.PromptTemplateDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.questionRequestTemplate`: Exposes CRUD operations for the **QuestionRequestTemplate** model.
@@ -892,6 +907,7 @@ export namespace Prisma {
     User: 'User',
     Group: 'Group',
     Topic: 'Topic',
+    PromptTemplate: 'PromptTemplate',
     QuestionRequestTemplate: 'QuestionRequestTemplate',
     QuestionRequest: 'QuestionRequest',
     Question: 'Question',
@@ -916,7 +932,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "group" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "answer" | "autoEvaluation" | "autoEvaluationCriterion"
+      modelProps: "user" | "group" | "topic" | "promptTemplate" | "questionRequestTemplate" | "questionRequest" | "question" | "answer" | "autoEvaluation" | "autoEvaluationCriterion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1139,6 +1155,80 @@ export namespace Prisma {
           count: {
             args: Prisma.TopicCountArgs<ExtArgs>
             result: $Utils.Optional<TopicCountAggregateOutputType> | number
+          }
+        }
+      }
+      PromptTemplate: {
+        payload: Prisma.$PromptTemplatePayload<ExtArgs>
+        fields: Prisma.PromptTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PromptTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PromptTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.PromptTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PromptTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.PromptTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.PromptTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.PromptTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PromptTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.PromptTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>
+          }
+          update: {
+            args: Prisma.PromptTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.PromptTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PromptTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PromptTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.PromptTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromptTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.PromptTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePromptTemplate>
+          }
+          groupBy: {
+            args: Prisma.PromptTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PromptTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PromptTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<PromptTemplateCountAggregateOutputType> | number
           }
         }
       }
@@ -1685,6 +1775,7 @@ export namespace Prisma {
     user?: UserOmit
     group?: GroupOmit
     topic?: TopicOmit
+    promptTemplate?: PromptTemplateOmit
     questionRequestTemplate?: QuestionRequestTemplateOmit
     questionRequest?: QuestionRequestOmit
     question?: QuestionOmit
@@ -1773,6 +1864,7 @@ export namespace Prisma {
   export type UserCountOutputType = {
     groups: number
     ownedGroups: number
+    topics: number
     questionRequestTemplates: number
     questionRequests: number
     answers: number
@@ -1781,6 +1873,7 @@ export namespace Prisma {
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     groups?: boolean | UserCountOutputTypeCountGroupsArgs
     ownedGroups?: boolean | UserCountOutputTypeCountOwnedGroupsArgs
+    topics?: boolean | UserCountOutputTypeCountTopicsArgs
     questionRequestTemplates?: boolean | UserCountOutputTypeCountQuestionRequestTemplatesArgs
     questionRequests?: boolean | UserCountOutputTypeCountQuestionRequestsArgs
     answers?: boolean | UserCountOutputTypeCountAnswersArgs
@@ -1809,6 +1902,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOwnedGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GroupWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTopicsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TopicWhereInput
   }
 
   /**
@@ -1861,6 +1961,37 @@ export namespace Prisma {
    */
   export type GroupCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserWhereInput
+  }
+
+
+  /**
+   * Count Type TopicCountOutputType
+   */
+
+  export type TopicCountOutputType = {
+    questionRequests: number
+  }
+
+  export type TopicCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    questionRequests?: boolean | TopicCountOutputTypeCountQuestionRequestsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TopicCountOutputType without action
+   */
+  export type TopicCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TopicCountOutputType
+     */
+    select?: TopicCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TopicCountOutputType without action
+   */
+  export type TopicCountOutputTypeCountQuestionRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuestionRequestWhereInput
   }
 
 
@@ -2208,6 +2339,7 @@ export namespace Prisma {
     updatedAt?: boolean
     groups?: boolean | User$groupsArgs<ExtArgs>
     ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
+    topics?: boolean | User$topicsArgs<ExtArgs>
     questionRequestTemplates?: boolean | User$questionRequestTemplatesArgs<ExtArgs>
     questionRequests?: boolean | User$questionRequestsArgs<ExtArgs>
     answers?: boolean | User$answersArgs<ExtArgs>
@@ -2248,6 +2380,7 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     groups?: boolean | User$groupsArgs<ExtArgs>
     ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
+    topics?: boolean | User$topicsArgs<ExtArgs>
     questionRequestTemplates?: boolean | User$questionRequestTemplatesArgs<ExtArgs>
     questionRequests?: boolean | User$questionRequestsArgs<ExtArgs>
     answers?: boolean | User$answersArgs<ExtArgs>
@@ -2261,6 +2394,7 @@ export namespace Prisma {
     objects: {
       groups: Prisma.$GroupPayload<ExtArgs>[]
       ownedGroups: Prisma.$GroupPayload<ExtArgs>[]
+      topics: Prisma.$TopicPayload<ExtArgs>[]
       questionRequestTemplates: Prisma.$QuestionRequestTemplatePayload<ExtArgs>[]
       questionRequests: Prisma.$QuestionRequestPayload<ExtArgs>[]
       answers: Prisma.$AnswerPayload<ExtArgs>[]
@@ -2669,6 +2803,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     groups<T extends User$groupsArgs<ExtArgs> = {}>(args?: Subset<T, User$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ownedGroups<T extends User$ownedGroupsArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    topics<T extends User$topicsArgs<ExtArgs> = {}>(args?: Subset<T, User$topicsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questionRequestTemplates<T extends User$questionRequestTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$questionRequestTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questionRequests<T extends User$questionRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$questionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     answers<T extends User$answersArgs<ExtArgs> = {}>(args?: Subset<T, User$answersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3141,6 +3276,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
+  }
+
+  /**
+   * User.topics
+   */
+  export type User$topicsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Topic
+     */
+    select?: TopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Topic
+     */
+    omit?: TopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+    where?: TopicWhereInput
+    orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
+    cursor?: TopicWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TopicScalarFieldEnum | TopicScalarFieldEnum[]
   }
 
   /**
@@ -4400,10 +4559,12 @@ export namespace Prisma {
 
   export type TopicAvgAggregateOutputType = {
     id: number | null
+    ownerId: number | null
   }
 
   export type TopicSumAggregateOutputType = {
     id: number | null
+    ownerId: number | null
   }
 
   export type TopicMinAggregateOutputType = {
@@ -4411,6 +4572,7 @@ export namespace Prisma {
     name: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    ownerId: number | null
   }
 
   export type TopicMaxAggregateOutputType = {
@@ -4418,23 +4580,29 @@ export namespace Prisma {
     name: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    ownerId: number | null
   }
 
   export type TopicCountAggregateOutputType = {
     id: number
     name: number
+    parameters: number
+    evaluationCriteria: number
     createdAt: number
     updatedAt: number
+    ownerId: number
     _all: number
   }
 
 
   export type TopicAvgAggregateInputType = {
     id?: true
+    ownerId?: true
   }
 
   export type TopicSumAggregateInputType = {
     id?: true
+    ownerId?: true
   }
 
   export type TopicMinAggregateInputType = {
@@ -4442,6 +4610,7 @@ export namespace Prisma {
     name?: true
     createdAt?: true
     updatedAt?: true
+    ownerId?: true
   }
 
   export type TopicMaxAggregateInputType = {
@@ -4449,13 +4618,17 @@ export namespace Prisma {
     name?: true
     createdAt?: true
     updatedAt?: true
+    ownerId?: true
   }
 
   export type TopicCountAggregateInputType = {
     id?: true
     name?: true
+    parameters?: true
+    evaluationCriteria?: true
     createdAt?: true
     updatedAt?: true
+    ownerId?: true
     _all?: true
   }
 
@@ -4548,8 +4721,11 @@ export namespace Prisma {
   export type TopicGroupByOutputType = {
     id: number
     name: string
+    parameters: PrismaJson.QuestionRequestTemplateParameter[]
+    evaluationCriteria: PrismaJson.EvaluationCriteria | null
     createdAt: Date
     updatedAt: Date
+    ownerId: number
     _count: TopicCountAggregateOutputType | null
     _avg: TopicAvgAggregateOutputType | null
     _sum: TopicSumAggregateOutputType | null
@@ -4574,41 +4750,81 @@ export namespace Prisma {
   export type TopicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    parameters?: boolean
+    evaluationCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    questionRequests?: boolean | Topic$questionRequestsArgs<ExtArgs>
+    _count?: boolean | TopicCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["topic"]>
 
   export type TopicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    parameters?: boolean
+    evaluationCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["topic"]>
 
   export type TopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    parameters?: boolean
+    evaluationCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["topic"]>
 
   export type TopicSelectScalar = {
     id?: boolean
     name?: boolean
+    parameters?: boolean
+    evaluationCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ownerId?: boolean
   }
 
-  export type TopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["topic"]>
+  export type TopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "parameters" | "evaluationCriteria" | "createdAt" | "updatedAt" | "ownerId", ExtArgs["result"]["topic"]>
+  export type TopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    questionRequests?: boolean | Topic$questionRequestsArgs<ExtArgs>
+    _count?: boolean | TopicCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TopicIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TopicIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $TopicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Topic"
-    objects: {}
+    objects: {
+      owner: Prisma.$UserPayload<ExtArgs>
+      questionRequests: Prisma.$QuestionRequestPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
+      /**
+       * [QuestionRequestTemplateParameter]
+       */
+      parameters: PrismaJson.QuestionRequestTemplateParameter[]
+      /**
+       * [EvaluationCriteria]
+       */
+      evaluationCriteria: PrismaJson.EvaluationCriteria | null
       createdAt: Date
       updatedAt: Date
+      ownerId: number
     }, ExtArgs["result"]["topic"]>
     composites: {}
   }
@@ -5003,6 +5219,8 @@ export namespace Prisma {
    */
   export interface Prisma__TopicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    questionRequests<T extends Topic$questionRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$questionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5034,8 +5252,11 @@ export namespace Prisma {
   interface TopicFieldRefs {
     readonly id: FieldRef<"Topic", 'Int'>
     readonly name: FieldRef<"Topic", 'String'>
+    readonly parameters: FieldRef<"Topic", 'Json[]'>
+    readonly evaluationCriteria: FieldRef<"Topic", 'Json'>
     readonly createdAt: FieldRef<"Topic", 'DateTime'>
     readonly updatedAt: FieldRef<"Topic", 'DateTime'>
+    readonly ownerId: FieldRef<"Topic", 'Int'>
   }
     
 
@@ -5052,6 +5273,10 @@ export namespace Prisma {
      * Omit specific fields from the Topic
      */
     omit?: TopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
     /**
      * Filter, which Topic to fetch.
      */
@@ -5071,6 +5296,10 @@ export namespace Prisma {
      */
     omit?: TopicOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+    /**
      * Filter, which Topic to fetch.
      */
     where: TopicWhereUniqueInput
@@ -5088,6 +5317,10 @@ export namespace Prisma {
      * Omit specific fields from the Topic
      */
     omit?: TopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
     /**
      * Filter, which Topic to fetch.
      */
@@ -5137,6 +5370,10 @@ export namespace Prisma {
      */
     omit?: TopicOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+    /**
      * Filter, which Topic to fetch.
      */
     where?: TopicWhereInput
@@ -5185,6 +5422,10 @@ export namespace Prisma {
      */
     omit?: TopicOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+    /**
      * Filter, which Topics to fetch.
      */
     where?: TopicWhereInput
@@ -5228,6 +5469,10 @@ export namespace Prisma {
      */
     omit?: TopicOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+    /**
      * The data needed to create a Topic.
      */
     data: XOR<TopicCreateInput, TopicUncheckedCreateInput>
@@ -5261,6 +5506,10 @@ export namespace Prisma {
      */
     data: TopicCreateManyInput | TopicCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5275,6 +5524,10 @@ export namespace Prisma {
      * Omit specific fields from the Topic
      */
     omit?: TopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
     /**
      * The data needed to update a Topic.
      */
@@ -5327,6 +5580,10 @@ export namespace Prisma {
      * Limit how many Topics to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5341,6 +5598,10 @@ export namespace Prisma {
      * Omit specific fields from the Topic
      */
     omit?: TopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
     /**
      * The filter to search for the Topic to update in case it exists.
      */
@@ -5368,6 +5629,10 @@ export namespace Prisma {
      */
     omit?: TopicOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+    /**
      * Filter which Topic to delete.
      */
     where: TopicWhereUniqueInput
@@ -5388,6 +5653,30 @@ export namespace Prisma {
   }
 
   /**
+   * Topic.questionRequests
+   */
+  export type Topic$questionRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuestionRequest
+     */
+    select?: QuestionRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuestionRequest
+     */
+    omit?: QuestionRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionRequestInclude<ExtArgs> | null
+    where?: QuestionRequestWhereInput
+    orderBy?: QuestionRequestOrderByWithRelationInput | QuestionRequestOrderByWithRelationInput[]
+    cursor?: QuestionRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuestionRequestScalarFieldEnum | QuestionRequestScalarFieldEnum[]
+  }
+
+  /**
    * Topic without action
    */
   export type TopicDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5399,6 +5688,1052 @@ export namespace Prisma {
      * Omit specific fields from the Topic
      */
     omit?: TopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PromptTemplate
+   */
+
+  export type AggregatePromptTemplate = {
+    _count: PromptTemplateCountAggregateOutputType | null
+    _avg: PromptTemplateAvgAggregateOutputType | null
+    _sum: PromptTemplateSumAggregateOutputType | null
+    _min: PromptTemplateMinAggregateOutputType | null
+    _max: PromptTemplateMaxAggregateOutputType | null
+  }
+
+  export type PromptTemplateAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type PromptTemplateSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type PromptTemplateMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    questionType: string | null
+    promptTemplate: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PromptTemplateMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    questionType: string | null
+    promptTemplate: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PromptTemplateCountAggregateOutputType = {
+    id: number
+    name: number
+    questionType: number
+    promptTemplate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PromptTemplateAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type PromptTemplateSumAggregateInputType = {
+    id?: true
+  }
+
+  export type PromptTemplateMinAggregateInputType = {
+    id?: true
+    name?: true
+    questionType?: true
+    promptTemplate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PromptTemplateMaxAggregateInputType = {
+    id?: true
+    name?: true
+    questionType?: true
+    promptTemplate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PromptTemplateCountAggregateInputType = {
+    id?: true
+    name?: true
+    questionType?: true
+    promptTemplate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PromptTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PromptTemplate to aggregate.
+     */
+    where?: PromptTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PromptTemplates to fetch.
+     */
+    orderBy?: PromptTemplateOrderByWithRelationInput | PromptTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PromptTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PromptTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PromptTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PromptTemplates
+    **/
+    _count?: true | PromptTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PromptTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PromptTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PromptTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PromptTemplateMaxAggregateInputType
+  }
+
+  export type GetPromptTemplateAggregateType<T extends PromptTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregatePromptTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePromptTemplate[P]>
+      : GetScalarType<T[P], AggregatePromptTemplate[P]>
+  }
+
+
+
+
+  export type PromptTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PromptTemplateWhereInput
+    orderBy?: PromptTemplateOrderByWithAggregationInput | PromptTemplateOrderByWithAggregationInput[]
+    by: PromptTemplateScalarFieldEnum[] | PromptTemplateScalarFieldEnum
+    having?: PromptTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PromptTemplateCountAggregateInputType | true
+    _avg?: PromptTemplateAvgAggregateInputType
+    _sum?: PromptTemplateSumAggregateInputType
+    _min?: PromptTemplateMinAggregateInputType
+    _max?: PromptTemplateMaxAggregateInputType
+  }
+
+  export type PromptTemplateGroupByOutputType = {
+    id: number
+    name: string
+    questionType: string
+    promptTemplate: string
+    createdAt: Date
+    updatedAt: Date
+    _count: PromptTemplateCountAggregateOutputType | null
+    _avg: PromptTemplateAvgAggregateOutputType | null
+    _sum: PromptTemplateSumAggregateOutputType | null
+    _min: PromptTemplateMinAggregateOutputType | null
+    _max: PromptTemplateMaxAggregateOutputType | null
+  }
+
+  type GetPromptTemplateGroupByPayload<T extends PromptTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PromptTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PromptTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PromptTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], PromptTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PromptTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    questionType?: boolean
+    promptTemplate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["promptTemplate"]>
+
+  export type PromptTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    questionType?: boolean
+    promptTemplate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["promptTemplate"]>
+
+  export type PromptTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    questionType?: boolean
+    promptTemplate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["promptTemplate"]>
+
+  export type PromptTemplateSelectScalar = {
+    id?: boolean
+    name?: boolean
+    questionType?: boolean
+    promptTemplate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PromptTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "questionType" | "promptTemplate" | "createdAt" | "updatedAt", ExtArgs["result"]["promptTemplate"]>
+
+  export type $PromptTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PromptTemplate"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      questionType: string
+      promptTemplate: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["promptTemplate"]>
+    composites: {}
+  }
+
+  type PromptTemplateGetPayload<S extends boolean | null | undefined | PromptTemplateDefaultArgs> = $Result.GetResult<Prisma.$PromptTemplatePayload, S>
+
+  type PromptTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PromptTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PromptTemplateCountAggregateInputType | true
+    }
+
+  export interface PromptTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PromptTemplate'], meta: { name: 'PromptTemplate' } }
+    /**
+     * Find zero or one PromptTemplate that matches the filter.
+     * @param {PromptTemplateFindUniqueArgs} args - Arguments to find a PromptTemplate
+     * @example
+     * // Get one PromptTemplate
+     * const promptTemplate = await prisma.promptTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PromptTemplateFindUniqueArgs>(args: SelectSubset<T, PromptTemplateFindUniqueArgs<ExtArgs>>): Prisma__PromptTemplateClient<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PromptTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PromptTemplateFindUniqueOrThrowArgs} args - Arguments to find a PromptTemplate
+     * @example
+     * // Get one PromptTemplate
+     * const promptTemplate = await prisma.promptTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PromptTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, PromptTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PromptTemplateClient<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PromptTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromptTemplateFindFirstArgs} args - Arguments to find a PromptTemplate
+     * @example
+     * // Get one PromptTemplate
+     * const promptTemplate = await prisma.promptTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PromptTemplateFindFirstArgs>(args?: SelectSubset<T, PromptTemplateFindFirstArgs<ExtArgs>>): Prisma__PromptTemplateClient<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PromptTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromptTemplateFindFirstOrThrowArgs} args - Arguments to find a PromptTemplate
+     * @example
+     * // Get one PromptTemplate
+     * const promptTemplate = await prisma.promptTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PromptTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, PromptTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__PromptTemplateClient<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PromptTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromptTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PromptTemplates
+     * const promptTemplates = await prisma.promptTemplate.findMany()
+     * 
+     * // Get first 10 PromptTemplates
+     * const promptTemplates = await prisma.promptTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const promptTemplateWithIdOnly = await prisma.promptTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PromptTemplateFindManyArgs>(args?: SelectSubset<T, PromptTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PromptTemplate.
+     * @param {PromptTemplateCreateArgs} args - Arguments to create a PromptTemplate.
+     * @example
+     * // Create one PromptTemplate
+     * const PromptTemplate = await prisma.promptTemplate.create({
+     *   data: {
+     *     // ... data to create a PromptTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends PromptTemplateCreateArgs>(args: SelectSubset<T, PromptTemplateCreateArgs<ExtArgs>>): Prisma__PromptTemplateClient<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PromptTemplates.
+     * @param {PromptTemplateCreateManyArgs} args - Arguments to create many PromptTemplates.
+     * @example
+     * // Create many PromptTemplates
+     * const promptTemplate = await prisma.promptTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PromptTemplateCreateManyArgs>(args?: SelectSubset<T, PromptTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PromptTemplates and returns the data saved in the database.
+     * @param {PromptTemplateCreateManyAndReturnArgs} args - Arguments to create many PromptTemplates.
+     * @example
+     * // Create many PromptTemplates
+     * const promptTemplate = await prisma.promptTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PromptTemplates and only return the `id`
+     * const promptTemplateWithIdOnly = await prisma.promptTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PromptTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, PromptTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PromptTemplate.
+     * @param {PromptTemplateDeleteArgs} args - Arguments to delete one PromptTemplate.
+     * @example
+     * // Delete one PromptTemplate
+     * const PromptTemplate = await prisma.promptTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one PromptTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PromptTemplateDeleteArgs>(args: SelectSubset<T, PromptTemplateDeleteArgs<ExtArgs>>): Prisma__PromptTemplateClient<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PromptTemplate.
+     * @param {PromptTemplateUpdateArgs} args - Arguments to update one PromptTemplate.
+     * @example
+     * // Update one PromptTemplate
+     * const promptTemplate = await prisma.promptTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PromptTemplateUpdateArgs>(args: SelectSubset<T, PromptTemplateUpdateArgs<ExtArgs>>): Prisma__PromptTemplateClient<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PromptTemplates.
+     * @param {PromptTemplateDeleteManyArgs} args - Arguments to filter PromptTemplates to delete.
+     * @example
+     * // Delete a few PromptTemplates
+     * const { count } = await prisma.promptTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PromptTemplateDeleteManyArgs>(args?: SelectSubset<T, PromptTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PromptTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromptTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PromptTemplates
+     * const promptTemplate = await prisma.promptTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PromptTemplateUpdateManyArgs>(args: SelectSubset<T, PromptTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PromptTemplates and returns the data updated in the database.
+     * @param {PromptTemplateUpdateManyAndReturnArgs} args - Arguments to update many PromptTemplates.
+     * @example
+     * // Update many PromptTemplates
+     * const promptTemplate = await prisma.promptTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PromptTemplates and only return the `id`
+     * const promptTemplateWithIdOnly = await prisma.promptTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PromptTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, PromptTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PromptTemplate.
+     * @param {PromptTemplateUpsertArgs} args - Arguments to update or create a PromptTemplate.
+     * @example
+     * // Update or create a PromptTemplate
+     * const promptTemplate = await prisma.promptTemplate.upsert({
+     *   create: {
+     *     // ... data to create a PromptTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PromptTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PromptTemplateUpsertArgs>(args: SelectSubset<T, PromptTemplateUpsertArgs<ExtArgs>>): Prisma__PromptTemplateClient<$Result.GetResult<Prisma.$PromptTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PromptTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromptTemplateCountArgs} args - Arguments to filter PromptTemplates to count.
+     * @example
+     * // Count the number of PromptTemplates
+     * const count = await prisma.promptTemplate.count({
+     *   where: {
+     *     // ... the filter for the PromptTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends PromptTemplateCountArgs>(
+      args?: Subset<T, PromptTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PromptTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PromptTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromptTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PromptTemplateAggregateArgs>(args: Subset<T, PromptTemplateAggregateArgs>): Prisma.PrismaPromise<GetPromptTemplateAggregateType<T>>
+
+    /**
+     * Group by PromptTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromptTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PromptTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PromptTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: PromptTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PromptTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPromptTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PromptTemplate model
+   */
+  readonly fields: PromptTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PromptTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PromptTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PromptTemplate model
+   */
+  interface PromptTemplateFieldRefs {
+    readonly id: FieldRef<"PromptTemplate", 'Int'>
+    readonly name: FieldRef<"PromptTemplate", 'String'>
+    readonly questionType: FieldRef<"PromptTemplate", 'String'>
+    readonly promptTemplate: FieldRef<"PromptTemplate", 'String'>
+    readonly createdAt: FieldRef<"PromptTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"PromptTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PromptTemplate findUnique
+   */
+  export type PromptTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which PromptTemplate to fetch.
+     */
+    where: PromptTemplateWhereUniqueInput
+  }
+
+  /**
+   * PromptTemplate findUniqueOrThrow
+   */
+  export type PromptTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which PromptTemplate to fetch.
+     */
+    where: PromptTemplateWhereUniqueInput
+  }
+
+  /**
+   * PromptTemplate findFirst
+   */
+  export type PromptTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which PromptTemplate to fetch.
+     */
+    where?: PromptTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PromptTemplates to fetch.
+     */
+    orderBy?: PromptTemplateOrderByWithRelationInput | PromptTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PromptTemplates.
+     */
+    cursor?: PromptTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PromptTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PromptTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PromptTemplates.
+     */
+    distinct?: PromptTemplateScalarFieldEnum | PromptTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * PromptTemplate findFirstOrThrow
+   */
+  export type PromptTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which PromptTemplate to fetch.
+     */
+    where?: PromptTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PromptTemplates to fetch.
+     */
+    orderBy?: PromptTemplateOrderByWithRelationInput | PromptTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PromptTemplates.
+     */
+    cursor?: PromptTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PromptTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PromptTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PromptTemplates.
+     */
+    distinct?: PromptTemplateScalarFieldEnum | PromptTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * PromptTemplate findMany
+   */
+  export type PromptTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which PromptTemplates to fetch.
+     */
+    where?: PromptTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PromptTemplates to fetch.
+     */
+    orderBy?: PromptTemplateOrderByWithRelationInput | PromptTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PromptTemplates.
+     */
+    cursor?: PromptTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PromptTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PromptTemplates.
+     */
+    skip?: number
+    distinct?: PromptTemplateScalarFieldEnum | PromptTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * PromptTemplate create
+   */
+  export type PromptTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PromptTemplate.
+     */
+    data: XOR<PromptTemplateCreateInput, PromptTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * PromptTemplate createMany
+   */
+  export type PromptTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PromptTemplates.
+     */
+    data: PromptTemplateCreateManyInput | PromptTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PromptTemplate createManyAndReturn
+   */
+  export type PromptTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many PromptTemplates.
+     */
+    data: PromptTemplateCreateManyInput | PromptTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PromptTemplate update
+   */
+  export type PromptTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PromptTemplate.
+     */
+    data: XOR<PromptTemplateUpdateInput, PromptTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which PromptTemplate to update.
+     */
+    where: PromptTemplateWhereUniqueInput
+  }
+
+  /**
+   * PromptTemplate updateMany
+   */
+  export type PromptTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PromptTemplates.
+     */
+    data: XOR<PromptTemplateUpdateManyMutationInput, PromptTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which PromptTemplates to update
+     */
+    where?: PromptTemplateWhereInput
+    /**
+     * Limit how many PromptTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PromptTemplate updateManyAndReturn
+   */
+  export type PromptTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update PromptTemplates.
+     */
+    data: XOR<PromptTemplateUpdateManyMutationInput, PromptTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which PromptTemplates to update
+     */
+    where?: PromptTemplateWhereInput
+    /**
+     * Limit how many PromptTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PromptTemplate upsert
+   */
+  export type PromptTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PromptTemplate to update in case it exists.
+     */
+    where: PromptTemplateWhereUniqueInput
+    /**
+     * In case the PromptTemplate found by the `where` argument doesn't exist, create a new PromptTemplate with this data.
+     */
+    create: XOR<PromptTemplateCreateInput, PromptTemplateUncheckedCreateInput>
+    /**
+     * In case the PromptTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PromptTemplateUpdateInput, PromptTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * PromptTemplate delete
+   */
+  export type PromptTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
+    /**
+     * Filter which PromptTemplate to delete.
+     */
+    where: PromptTemplateWhereUniqueInput
+  }
+
+  /**
+   * PromptTemplate deleteMany
+   */
+  export type PromptTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PromptTemplates to delete
+     */
+    where?: PromptTemplateWhereInput
+    /**
+     * Limit how many PromptTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PromptTemplate without action
+   */
+  export type PromptTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PromptTemplate
+     */
+    select?: PromptTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PromptTemplate
+     */
+    omit?: PromptTemplateOmit<ExtArgs> | null
   }
 
 
@@ -6567,26 +7902,34 @@ export namespace Prisma {
 
   export type QuestionRequestAvgAggregateOutputType = {
     id: number | null
+    topicId: number | null
     templateId: number | null
     userId: number | null
   }
 
   export type QuestionRequestSumAggregateOutputType = {
     id: number | null
+    topicId: number | null
     templateId: number | null
     userId: number | null
   }
 
   export type QuestionRequestMinAggregateOutputType = {
     id: number | null
+    questionType: string | null
+    generatedPrompt: string | null
     createdAt: Date | null
+    topicId: number | null
     templateId: number | null
     userId: number | null
   }
 
   export type QuestionRequestMaxAggregateOutputType = {
     id: number | null
+    questionType: string | null
+    generatedPrompt: string | null
     createdAt: Date | null
+    topicId: number | null
     templateId: number | null
     userId: number | null
   }
@@ -6594,7 +7937,10 @@ export namespace Prisma {
   export type QuestionRequestCountAggregateOutputType = {
     id: number
     parameterValues: number
+    questionType: number
+    generatedPrompt: number
     createdAt: number
+    topicId: number
     templateId: number
     userId: number
     _all: number
@@ -6603,26 +7949,34 @@ export namespace Prisma {
 
   export type QuestionRequestAvgAggregateInputType = {
     id?: true
+    topicId?: true
     templateId?: true
     userId?: true
   }
 
   export type QuestionRequestSumAggregateInputType = {
     id?: true
+    topicId?: true
     templateId?: true
     userId?: true
   }
 
   export type QuestionRequestMinAggregateInputType = {
     id?: true
+    questionType?: true
+    generatedPrompt?: true
     createdAt?: true
+    topicId?: true
     templateId?: true
     userId?: true
   }
 
   export type QuestionRequestMaxAggregateInputType = {
     id?: true
+    questionType?: true
+    generatedPrompt?: true
     createdAt?: true
+    topicId?: true
     templateId?: true
     userId?: true
   }
@@ -6630,7 +7984,10 @@ export namespace Prisma {
   export type QuestionRequestCountAggregateInputType = {
     id?: true
     parameterValues?: true
+    questionType?: true
+    generatedPrompt?: true
     createdAt?: true
+    topicId?: true
     templateId?: true
     userId?: true
     _all?: true
@@ -6725,8 +8082,11 @@ export namespace Prisma {
   export type QuestionRequestGroupByOutputType = {
     id: number
     parameterValues: PrismaJson.QuestionRequestParameterValue[]
+    questionType: string
+    generatedPrompt: string | null
     createdAt: Date
-    templateId: number
+    topicId: number | null
+    templateId: number | null
     userId: number
     _count: QuestionRequestCountAggregateOutputType | null
     _avg: QuestionRequestAvgAggregateOutputType | null
@@ -6752,10 +8112,14 @@ export namespace Prisma {
   export type QuestionRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     parameterValues?: boolean
+    questionType?: boolean
+    generatedPrompt?: boolean
     createdAt?: boolean
+    topicId?: boolean
     templateId?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    topic?: boolean | QuestionRequest$topicArgs<ExtArgs>
     template?: boolean | QuestionRequest$templateArgs<ExtArgs>
     questions?: boolean | QuestionRequest$questionsArgs<ExtArgs>
     _count?: boolean | QuestionRequestCountOutputTypeDefaultArgs<ExtArgs>
@@ -6764,44 +8128,58 @@ export namespace Prisma {
   export type QuestionRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     parameterValues?: boolean
+    questionType?: boolean
+    generatedPrompt?: boolean
     createdAt?: boolean
+    topicId?: boolean
     templateId?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    topic?: boolean | QuestionRequest$topicArgs<ExtArgs>
     template?: boolean | QuestionRequest$templateArgs<ExtArgs>
   }, ExtArgs["result"]["questionRequest"]>
 
   export type QuestionRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     parameterValues?: boolean
+    questionType?: boolean
+    generatedPrompt?: boolean
     createdAt?: boolean
+    topicId?: boolean
     templateId?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    topic?: boolean | QuestionRequest$topicArgs<ExtArgs>
     template?: boolean | QuestionRequest$templateArgs<ExtArgs>
   }, ExtArgs["result"]["questionRequest"]>
 
   export type QuestionRequestSelectScalar = {
     id?: boolean
     parameterValues?: boolean
+    questionType?: boolean
+    generatedPrompt?: boolean
     createdAt?: boolean
+    topicId?: boolean
     templateId?: boolean
     userId?: boolean
   }
 
-  export type QuestionRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "parameterValues" | "createdAt" | "templateId" | "userId", ExtArgs["result"]["questionRequest"]>
+  export type QuestionRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "parameterValues" | "questionType" | "generatedPrompt" | "createdAt" | "topicId" | "templateId" | "userId", ExtArgs["result"]["questionRequest"]>
   export type QuestionRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    topic?: boolean | QuestionRequest$topicArgs<ExtArgs>
     template?: boolean | QuestionRequest$templateArgs<ExtArgs>
     questions?: boolean | QuestionRequest$questionsArgs<ExtArgs>
     _count?: boolean | QuestionRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type QuestionRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    topic?: boolean | QuestionRequest$topicArgs<ExtArgs>
     template?: boolean | QuestionRequest$templateArgs<ExtArgs>
   }
   export type QuestionRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    topic?: boolean | QuestionRequest$topicArgs<ExtArgs>
     template?: boolean | QuestionRequest$templateArgs<ExtArgs>
   }
 
@@ -6809,6 +8187,7 @@ export namespace Prisma {
     name: "QuestionRequest"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      topic: Prisma.$TopicPayload<ExtArgs> | null
       template: Prisma.$QuestionRequestTemplatePayload<ExtArgs> | null
       questions: Prisma.$QuestionPayload<ExtArgs>[]
     }
@@ -6818,8 +8197,11 @@ export namespace Prisma {
        * [QuestionRequestParameterValue]
        */
       parameterValues: PrismaJson.QuestionRequestParameterValue[]
+      questionType: string
+      generatedPrompt: string | null
       createdAt: Date
-      templateId: number
+      topicId: number | null
+      templateId: number | null
       userId: number
     }, ExtArgs["result"]["questionRequest"]>
     composites: {}
@@ -7216,6 +8598,7 @@ export namespace Prisma {
   export interface Prisma__QuestionRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    topic<T extends QuestionRequest$topicArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequest$topicArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     template<T extends QuestionRequest$templateArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequest$templateArgs<ExtArgs>>): Prisma__QuestionRequestTemplateClient<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     questions<T extends QuestionRequest$questionsArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequest$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -7249,7 +8632,10 @@ export namespace Prisma {
   interface QuestionRequestFieldRefs {
     readonly id: FieldRef<"QuestionRequest", 'Int'>
     readonly parameterValues: FieldRef<"QuestionRequest", 'Json[]'>
+    readonly questionType: FieldRef<"QuestionRequest", 'String'>
+    readonly generatedPrompt: FieldRef<"QuestionRequest", 'String'>
     readonly createdAt: FieldRef<"QuestionRequest", 'DateTime'>
+    readonly topicId: FieldRef<"QuestionRequest", 'Int'>
     readonly templateId: FieldRef<"QuestionRequest", 'Int'>
     readonly userId: FieldRef<"QuestionRequest", 'Int'>
   }
@@ -7645,6 +9031,25 @@ export namespace Prisma {
      * Limit how many QuestionRequests to delete.
      */
     limit?: number
+  }
+
+  /**
+   * QuestionRequest.topic
+   */
+  export type QuestionRequest$topicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Topic
+     */
+    select?: TopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Topic
+     */
+    omit?: TopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+    where?: TopicWhereInput
   }
 
   /**
@@ -12380,11 +13785,26 @@ export namespace Prisma {
   export const TopicScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    parameters: 'parameters',
+    evaluationCriteria: 'evaluationCriteria',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    ownerId: 'ownerId'
+  };
+
+  export type TopicScalarFieldEnum = (typeof TopicScalarFieldEnum)[keyof typeof TopicScalarFieldEnum]
+
+
+  export const PromptTemplateScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    questionType: 'questionType',
+    promptTemplate: 'promptTemplate',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
-  export type TopicScalarFieldEnum = (typeof TopicScalarFieldEnum)[keyof typeof TopicScalarFieldEnum]
+  export type PromptTemplateScalarFieldEnum = (typeof PromptTemplateScalarFieldEnum)[keyof typeof PromptTemplateScalarFieldEnum]
 
 
   export const QuestionRequestTemplateScalarFieldEnum: {
@@ -12403,7 +13823,10 @@ export namespace Prisma {
   export const QuestionRequestScalarFieldEnum: {
     id: 'id',
     parameterValues: 'parameterValues',
+    questionType: 'questionType',
+    generatedPrompt: 'generatedPrompt',
     createdAt: 'createdAt',
+    topicId: 'topicId',
     templateId: 'templateId',
     userId: 'userId'
   };
@@ -12473,6 +13896,14 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -12487,6 +13918,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -12558,6 +13998,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -12587,6 +14034,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     groups?: GroupListRelationFilter
     ownedGroups?: GroupListRelationFilter
+    topics?: TopicListRelationFilter
     questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
     questionRequests?: QuestionRequestListRelationFilter
     answers?: AnswerListRelationFilter
@@ -12602,6 +14050,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     groups?: GroupOrderByRelationAggregateInput
     ownedGroups?: GroupOrderByRelationAggregateInput
+    topics?: TopicOrderByRelationAggregateInput
     questionRequestTemplates?: QuestionRequestTemplateOrderByRelationAggregateInput
     questionRequests?: QuestionRequestOrderByRelationAggregateInput
     answers?: AnswerOrderByRelationAggregateInput
@@ -12620,6 +14069,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     groups?: GroupListRelationFilter
     ownedGroups?: GroupListRelationFilter
+    topics?: TopicListRelationFilter
     questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
     questionRequests?: QuestionRequestListRelationFilter
     answers?: AnswerListRelationFilter
@@ -12729,32 +14179,50 @@ export namespace Prisma {
     NOT?: TopicWhereInput | TopicWhereInput[]
     id?: IntFilter<"Topic"> | number
     name?: StringFilter<"Topic"> | string
+    parameters?: JsonNullableListFilter<"Topic">
+    evaluationCriteria?: JsonNullableFilter<"Topic">
     createdAt?: DateTimeFilter<"Topic"> | Date | string
     updatedAt?: DateTimeFilter<"Topic"> | Date | string
+    ownerId?: IntFilter<"Topic"> | number
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    questionRequests?: QuestionRequestListRelationFilter
   }
 
   export type TopicOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    parameters?: SortOrder
+    evaluationCriteria?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ownerId?: SortOrder
+    owner?: UserOrderByWithRelationInput
+    questionRequests?: QuestionRequestOrderByRelationAggregateInput
   }
 
   export type TopicWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    name?: string
     AND?: TopicWhereInput | TopicWhereInput[]
     OR?: TopicWhereInput[]
     NOT?: TopicWhereInput | TopicWhereInput[]
-    name?: StringFilter<"Topic"> | string
+    parameters?: JsonNullableListFilter<"Topic">
+    evaluationCriteria?: JsonNullableFilter<"Topic">
     createdAt?: DateTimeFilter<"Topic"> | Date | string
     updatedAt?: DateTimeFilter<"Topic"> | Date | string
-  }, "id">
+    ownerId?: IntFilter<"Topic"> | number
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    questionRequests?: QuestionRequestListRelationFilter
+  }, "id" | "name">
 
   export type TopicOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    parameters?: SortOrder
+    evaluationCriteria?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ownerId?: SortOrder
     _count?: TopicCountOrderByAggregateInput
     _avg?: TopicAvgOrderByAggregateInput
     _max?: TopicMaxOrderByAggregateInput
@@ -12768,8 +14236,70 @@ export namespace Prisma {
     NOT?: TopicScalarWhereWithAggregatesInput | TopicScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Topic"> | number
     name?: StringWithAggregatesFilter<"Topic"> | string
+    parameters?: JsonNullableListFilter<"Topic">
+    evaluationCriteria?: JsonNullableWithAggregatesFilter<"Topic">
     createdAt?: DateTimeWithAggregatesFilter<"Topic"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Topic"> | Date | string
+    ownerId?: IntWithAggregatesFilter<"Topic"> | number
+  }
+
+  export type PromptTemplateWhereInput = {
+    AND?: PromptTemplateWhereInput | PromptTemplateWhereInput[]
+    OR?: PromptTemplateWhereInput[]
+    NOT?: PromptTemplateWhereInput | PromptTemplateWhereInput[]
+    id?: IntFilter<"PromptTemplate"> | number
+    name?: StringFilter<"PromptTemplate"> | string
+    questionType?: StringFilter<"PromptTemplate"> | string
+    promptTemplate?: StringFilter<"PromptTemplate"> | string
+    createdAt?: DateTimeFilter<"PromptTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"PromptTemplate"> | Date | string
+  }
+
+  export type PromptTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    questionType?: SortOrder
+    promptTemplate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PromptTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: PromptTemplateWhereInput | PromptTemplateWhereInput[]
+    OR?: PromptTemplateWhereInput[]
+    NOT?: PromptTemplateWhereInput | PromptTemplateWhereInput[]
+    name?: StringFilter<"PromptTemplate"> | string
+    questionType?: StringFilter<"PromptTemplate"> | string
+    promptTemplate?: StringFilter<"PromptTemplate"> | string
+    createdAt?: DateTimeFilter<"PromptTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"PromptTemplate"> | Date | string
+  }, "id">
+
+  export type PromptTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    questionType?: SortOrder
+    promptTemplate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PromptTemplateCountOrderByAggregateInput
+    _avg?: PromptTemplateAvgOrderByAggregateInput
+    _max?: PromptTemplateMaxOrderByAggregateInput
+    _min?: PromptTemplateMinOrderByAggregateInput
+    _sum?: PromptTemplateSumOrderByAggregateInput
+  }
+
+  export type PromptTemplateScalarWhereWithAggregatesInput = {
+    AND?: PromptTemplateScalarWhereWithAggregatesInput | PromptTemplateScalarWhereWithAggregatesInput[]
+    OR?: PromptTemplateScalarWhereWithAggregatesInput[]
+    NOT?: PromptTemplateScalarWhereWithAggregatesInput | PromptTemplateScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"PromptTemplate"> | number
+    name?: StringWithAggregatesFilter<"PromptTemplate"> | string
+    questionType?: StringWithAggregatesFilter<"PromptTemplate"> | string
+    promptTemplate?: StringWithAggregatesFilter<"PromptTemplate"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PromptTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PromptTemplate"> | Date | string
   }
 
   export type QuestionRequestTemplateWhereInput = {
@@ -12848,10 +14378,14 @@ export namespace Prisma {
     NOT?: QuestionRequestWhereInput | QuestionRequestWhereInput[]
     id?: IntFilter<"QuestionRequest"> | number
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
+    questionType?: StringFilter<"QuestionRequest"> | string
+    generatedPrompt?: StringNullableFilter<"QuestionRequest"> | string | null
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
-    templateId?: IntFilter<"QuestionRequest"> | number
+    topicId?: IntNullableFilter<"QuestionRequest"> | number | null
+    templateId?: IntNullableFilter<"QuestionRequest"> | number | null
     userId?: IntFilter<"QuestionRequest"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
     template?: XOR<QuestionRequestTemplateNullableScalarRelationFilter, QuestionRequestTemplateWhereInput> | null
     questions?: QuestionListRelationFilter
   }
@@ -12859,10 +14393,14 @@ export namespace Prisma {
   export type QuestionRequestOrderByWithRelationInput = {
     id?: SortOrder
     parameterValues?: SortOrder
+    questionType?: SortOrder
+    generatedPrompt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    templateId?: SortOrder
+    topicId?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
+    topic?: TopicOrderByWithRelationInput
     template?: QuestionRequestTemplateOrderByWithRelationInput
     questions?: QuestionOrderByRelationAggregateInput
   }
@@ -12873,10 +14411,14 @@ export namespace Prisma {
     OR?: QuestionRequestWhereInput[]
     NOT?: QuestionRequestWhereInput | QuestionRequestWhereInput[]
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
+    questionType?: StringFilter<"QuestionRequest"> | string
+    generatedPrompt?: StringNullableFilter<"QuestionRequest"> | string | null
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
-    templateId?: IntFilter<"QuestionRequest"> | number
+    topicId?: IntNullableFilter<"QuestionRequest"> | number | null
+    templateId?: IntNullableFilter<"QuestionRequest"> | number | null
     userId?: IntFilter<"QuestionRequest"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
     template?: XOR<QuestionRequestTemplateNullableScalarRelationFilter, QuestionRequestTemplateWhereInput> | null
     questions?: QuestionListRelationFilter
   }, "id">
@@ -12884,8 +14426,11 @@ export namespace Prisma {
   export type QuestionRequestOrderByWithAggregationInput = {
     id?: SortOrder
     parameterValues?: SortOrder
+    questionType?: SortOrder
+    generatedPrompt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    templateId?: SortOrder
+    topicId?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
     userId?: SortOrder
     _count?: QuestionRequestCountOrderByAggregateInput
     _avg?: QuestionRequestAvgOrderByAggregateInput
@@ -12900,8 +14445,11 @@ export namespace Prisma {
     NOT?: QuestionRequestScalarWhereWithAggregatesInput | QuestionRequestScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"QuestionRequest"> | number
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
+    questionType?: StringWithAggregatesFilter<"QuestionRequest"> | string
+    generatedPrompt?: StringNullableWithAggregatesFilter<"QuestionRequest"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"QuestionRequest"> | Date | string
-    templateId?: IntWithAggregatesFilter<"QuestionRequest"> | number
+    topicId?: IntNullableWithAggregatesFilter<"QuestionRequest"> | number | null
+    templateId?: IntNullableWithAggregatesFilter<"QuestionRequest"> | number | null
     userId?: IntWithAggregatesFilter<"QuestionRequest"> | number
   }
 
@@ -13204,6 +14752,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     groups?: GroupCreateNestedManyWithoutUsersInput
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    topics?: TopicCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
@@ -13219,6 +14768,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    topics?: TopicUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
@@ -13233,6 +14783,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUpdateManyWithoutUsersNestedInput
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
@@ -13248,6 +14799,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
@@ -13354,39 +14906,60 @@ export namespace Prisma {
 
   export type TopicCreateInput = {
     name: string
+    parameters?: TopicCreateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutTopicsInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutTopicInput
   }
 
   export type TopicUncheckedCreateInput = {
     id?: number
     name: string
+    parameters?: TopicCreateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    ownerId: number
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutTopicInput
   }
 
   export type TopicUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutTopicsNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutTopicNestedInput
   }
 
   export type TopicUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutTopicNestedInput
   }
 
   export type TopicCreateManyInput = {
     id?: number
     name: string
+    parameters?: TopicCreateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    ownerId: number
   }
 
   export type TopicUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13394,6 +14967,69 @@ export namespace Prisma {
   export type TopicUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PromptTemplateCreateInput = {
+    name: string
+    questionType: string
+    promptTemplate: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PromptTemplateUncheckedCreateInput = {
+    id?: number
+    name: string
+    questionType: string
+    promptTemplate: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PromptTemplateUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    questionType?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PromptTemplateUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    questionType?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PromptTemplateCreateManyInput = {
+    id?: number
+    name: string
+    questionType: string
+    promptTemplate: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PromptTemplateUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    questionType?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PromptTemplateUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    questionType?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13470,8 +15106,11 @@ export namespace Prisma {
 
   export type QuestionRequestCreateInput = {
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
+    topic?: TopicCreateNestedOneWithoutQuestionRequestsInput
     template?: QuestionRequestTemplateCreateNestedOneWithoutRequestsInput
     questions?: QuestionCreateNestedManyWithoutRequestInput
   }
@@ -13479,16 +15118,22 @@ export namespace Prisma {
   export type QuestionRequestUncheckedCreateInput = {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
-    templateId: number
+    topicId?: number | null
+    templateId?: number | null
     userId: number
     questions?: QuestionUncheckedCreateNestedManyWithoutRequestInput
   }
 
   export type QuestionRequestUpdateInput = {
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
+    topic?: TopicUpdateOneWithoutQuestionRequestsNestedInput
     template?: QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput
     questions?: QuestionUpdateManyWithoutRequestNestedInput
   }
@@ -13496,8 +15141,11 @@ export namespace Prisma {
   export type QuestionRequestUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
     userId?: IntFieldUpdateOperationsInput | number
     questions?: QuestionUncheckedUpdateManyWithoutRequestNestedInput
   }
@@ -13505,21 +15153,29 @@ export namespace Prisma {
   export type QuestionRequestCreateManyInput = {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
-    templateId: number
+    topicId?: number | null
+    templateId?: number | null
     userId: number
   }
 
   export type QuestionRequestUpdateManyMutationInput = {
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type QuestionRequestUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13875,6 +15531,12 @@ export namespace Prisma {
     none?: GroupWhereInput
   }
 
+  export type TopicListRelationFilter = {
+    every?: TopicWhereInput
+    some?: TopicWhereInput
+    none?: TopicWhereInput
+  }
+
   export type QuestionRequestTemplateListRelationFilter = {
     every?: QuestionRequestTemplateWhereInput
     some?: QuestionRequestTemplateWhereInput
@@ -13899,6 +15561,10 @@ export namespace Prisma {
   }
 
   export type GroupOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TopicOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14080,35 +15746,6 @@ export namespace Prisma {
     id?: SortOrder
     ownerId?: SortOrder
   }
-
-  export type TopicCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TopicAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type TopicMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TopicMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TopicSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
   export type JsonNullableListFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableListFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>,
@@ -14122,6 +15759,126 @@ export namespace Prisma {
     hasEvery?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
     hasSome?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
     isEmpty?: boolean
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type TopicCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    parameters?: SortOrder
+    evaluationCriteria?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type TopicAvgOrderByAggregateInput = {
+    id?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type TopicMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type TopicMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type TopicSumOrderByAggregateInput = {
+    id?: SortOrder
+    ownerId?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type PromptTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    questionType?: SortOrder
+    promptTemplate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PromptTemplateAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type PromptTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    questionType?: SortOrder
+    promptTemplate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PromptTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    questionType?: SortOrder
+    promptTemplate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PromptTemplateSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type QuestionRequestTemplateCountOrderByAggregateInput = {
@@ -14162,6 +15919,22 @@ export namespace Prisma {
     ownerId?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type TopicNullableScalarRelationFilter = {
+    is?: TopicWhereInput | null
+    isNot?: TopicWhereInput | null
+  }
+
   export type QuestionRequestTemplateNullableScalarRelationFilter = {
     is?: QuestionRequestTemplateWhereInput | null
     isNot?: QuestionRequestTemplateWhereInput | null
@@ -14180,38 +15953,49 @@ export namespace Prisma {
   export type QuestionRequestCountOrderByAggregateInput = {
     id?: SortOrder
     parameterValues?: SortOrder
+    questionType?: SortOrder
+    generatedPrompt?: SortOrder
     createdAt?: SortOrder
+    topicId?: SortOrder
     templateId?: SortOrder
     userId?: SortOrder
   }
 
   export type QuestionRequestAvgOrderByAggregateInput = {
     id?: SortOrder
+    topicId?: SortOrder
     templateId?: SortOrder
     userId?: SortOrder
   }
 
   export type QuestionRequestMaxOrderByAggregateInput = {
     id?: SortOrder
+    questionType?: SortOrder
+    generatedPrompt?: SortOrder
     createdAt?: SortOrder
+    topicId?: SortOrder
     templateId?: SortOrder
     userId?: SortOrder
   }
 
   export type QuestionRequestMinOrderByAggregateInput = {
     id?: SortOrder
+    questionType?: SortOrder
+    generatedPrompt?: SortOrder
     createdAt?: SortOrder
+    topicId?: SortOrder
     templateId?: SortOrder
     userId?: SortOrder
   }
 
   export type QuestionRequestSumOrderByAggregateInput = {
     id?: SortOrder
+    topicId?: SortOrder
     templateId?: SortOrder
     userId?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -14219,7 +16003,12 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type QuestionRequestScalarRelationFilter = {
@@ -14263,22 +16052,6 @@ export namespace Prisma {
     id?: SortOrder
     correctAnswerIndex?: SortOrder
     requestId?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type QuestionScalarRelationFilter = {
@@ -14489,6 +16262,13 @@ export namespace Prisma {
     connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
   }
 
+  export type TopicCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<TopicCreateWithoutOwnerInput, TopicUncheckedCreateWithoutOwnerInput> | TopicCreateWithoutOwnerInput[] | TopicUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: TopicCreateOrConnectWithoutOwnerInput | TopicCreateOrConnectWithoutOwnerInput[]
+    createMany?: TopicCreateManyOwnerInputEnvelope
+    connect?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+  }
+
   export type QuestionRequestTemplateCreateNestedManyWithoutOwnerInput = {
     create?: XOR<QuestionRequestTemplateCreateWithoutOwnerInput, QuestionRequestTemplateUncheckedCreateWithoutOwnerInput> | QuestionRequestTemplateCreateWithoutOwnerInput[] | QuestionRequestTemplateUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutOwnerInput | QuestionRequestTemplateCreateOrConnectWithoutOwnerInput[]
@@ -14521,6 +16301,13 @@ export namespace Prisma {
     connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
     createMany?: GroupCreateManyOwnerInputEnvelope
     connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  }
+
+  export type TopicUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<TopicCreateWithoutOwnerInput, TopicUncheckedCreateWithoutOwnerInput> | TopicCreateWithoutOwnerInput[] | TopicUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: TopicCreateOrConnectWithoutOwnerInput | TopicCreateOrConnectWithoutOwnerInput[]
+    createMany?: TopicCreateManyOwnerInputEnvelope
+    connect?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
   }
 
   export type QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput = {
@@ -14585,6 +16372,20 @@ export namespace Prisma {
     update?: GroupUpdateWithWhereUniqueWithoutOwnerInput | GroupUpdateWithWhereUniqueWithoutOwnerInput[]
     updateMany?: GroupUpdateManyWithWhereWithoutOwnerInput | GroupUpdateManyWithWhereWithoutOwnerInput[]
     deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
+  }
+
+  export type TopicUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<TopicCreateWithoutOwnerInput, TopicUncheckedCreateWithoutOwnerInput> | TopicCreateWithoutOwnerInput[] | TopicUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: TopicCreateOrConnectWithoutOwnerInput | TopicCreateOrConnectWithoutOwnerInput[]
+    upsert?: TopicUpsertWithWhereUniqueWithoutOwnerInput | TopicUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: TopicCreateManyOwnerInputEnvelope
+    set?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+    disconnect?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+    delete?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+    connect?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+    update?: TopicUpdateWithWhereUniqueWithoutOwnerInput | TopicUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: TopicUpdateManyWithWhereWithoutOwnerInput | TopicUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: TopicScalarWhereInput | TopicScalarWhereInput[]
   }
 
   export type QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput = {
@@ -14662,6 +16463,20 @@ export namespace Prisma {
     update?: GroupUpdateWithWhereUniqueWithoutOwnerInput | GroupUpdateWithWhereUniqueWithoutOwnerInput[]
     updateMany?: GroupUpdateManyWithWhereWithoutOwnerInput | GroupUpdateManyWithWhereWithoutOwnerInput[]
     deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
+  }
+
+  export type TopicUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<TopicCreateWithoutOwnerInput, TopicUncheckedCreateWithoutOwnerInput> | TopicCreateWithoutOwnerInput[] | TopicUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: TopicCreateOrConnectWithoutOwnerInput | TopicCreateOrConnectWithoutOwnerInput[]
+    upsert?: TopicUpsertWithWhereUniqueWithoutOwnerInput | TopicUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: TopicCreateManyOwnerInputEnvelope
+    set?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+    disconnect?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+    delete?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+    connect?: TopicWhereUniqueInput | TopicWhereUniqueInput[]
+    update?: TopicUpdateWithWhereUniqueWithoutOwnerInput | TopicUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: TopicUpdateManyWithWhereWithoutOwnerInput | TopicUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: TopicScalarWhereInput | TopicScalarWhereInput[]
   }
 
   export type QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput = {
@@ -14758,6 +16573,71 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
+  export type TopicCreateparametersInput = {
+    set: InputJsonValue[]
+  }
+
+  export type UserCreateNestedOneWithoutTopicsInput = {
+    create?: XOR<UserCreateWithoutTopicsInput, UserUncheckedCreateWithoutTopicsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTopicsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type QuestionRequestCreateNestedManyWithoutTopicInput = {
+    create?: XOR<QuestionRequestCreateWithoutTopicInput, QuestionRequestUncheckedCreateWithoutTopicInput> | QuestionRequestCreateWithoutTopicInput[] | QuestionRequestUncheckedCreateWithoutTopicInput[]
+    connectOrCreate?: QuestionRequestCreateOrConnectWithoutTopicInput | QuestionRequestCreateOrConnectWithoutTopicInput[]
+    createMany?: QuestionRequestCreateManyTopicInputEnvelope
+    connect?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+  }
+
+  export type QuestionRequestUncheckedCreateNestedManyWithoutTopicInput = {
+    create?: XOR<QuestionRequestCreateWithoutTopicInput, QuestionRequestUncheckedCreateWithoutTopicInput> | QuestionRequestCreateWithoutTopicInput[] | QuestionRequestUncheckedCreateWithoutTopicInput[]
+    connectOrCreate?: QuestionRequestCreateOrConnectWithoutTopicInput | QuestionRequestCreateOrConnectWithoutTopicInput[]
+    createMany?: QuestionRequestCreateManyTopicInputEnvelope
+    connect?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+  }
+
+  export type TopicUpdateparametersInput = {
+    set?: InputJsonValue[]
+    push?: InputJsonValue | InputJsonValue[]
+  }
+
+  export type UserUpdateOneRequiredWithoutTopicsNestedInput = {
+    create?: XOR<UserCreateWithoutTopicsInput, UserUncheckedCreateWithoutTopicsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTopicsInput
+    upsert?: UserUpsertWithoutTopicsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTopicsInput, UserUpdateWithoutTopicsInput>, UserUncheckedUpdateWithoutTopicsInput>
+  }
+
+  export type QuestionRequestUpdateManyWithoutTopicNestedInput = {
+    create?: XOR<QuestionRequestCreateWithoutTopicInput, QuestionRequestUncheckedCreateWithoutTopicInput> | QuestionRequestCreateWithoutTopicInput[] | QuestionRequestUncheckedCreateWithoutTopicInput[]
+    connectOrCreate?: QuestionRequestCreateOrConnectWithoutTopicInput | QuestionRequestCreateOrConnectWithoutTopicInput[]
+    upsert?: QuestionRequestUpsertWithWhereUniqueWithoutTopicInput | QuestionRequestUpsertWithWhereUniqueWithoutTopicInput[]
+    createMany?: QuestionRequestCreateManyTopicInputEnvelope
+    set?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+    disconnect?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+    delete?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+    connect?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+    update?: QuestionRequestUpdateWithWhereUniqueWithoutTopicInput | QuestionRequestUpdateWithWhereUniqueWithoutTopicInput[]
+    updateMany?: QuestionRequestUpdateManyWithWhereWithoutTopicInput | QuestionRequestUpdateManyWithWhereWithoutTopicInput[]
+    deleteMany?: QuestionRequestScalarWhereInput | QuestionRequestScalarWhereInput[]
+  }
+
+  export type QuestionRequestUncheckedUpdateManyWithoutTopicNestedInput = {
+    create?: XOR<QuestionRequestCreateWithoutTopicInput, QuestionRequestUncheckedCreateWithoutTopicInput> | QuestionRequestCreateWithoutTopicInput[] | QuestionRequestUncheckedCreateWithoutTopicInput[]
+    connectOrCreate?: QuestionRequestCreateOrConnectWithoutTopicInput | QuestionRequestCreateOrConnectWithoutTopicInput[]
+    upsert?: QuestionRequestUpsertWithWhereUniqueWithoutTopicInput | QuestionRequestUpsertWithWhereUniqueWithoutTopicInput[]
+    createMany?: QuestionRequestCreateManyTopicInputEnvelope
+    set?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+    disconnect?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+    delete?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+    connect?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+    update?: QuestionRequestUpdateWithWhereUniqueWithoutTopicInput | QuestionRequestUpdateWithWhereUniqueWithoutTopicInput[]
+    updateMany?: QuestionRequestUpdateManyWithWhereWithoutTopicInput | QuestionRequestUpdateManyWithWhereWithoutTopicInput[]
+    deleteMany?: QuestionRequestScalarWhereInput | QuestionRequestScalarWhereInput[]
+  }
+
   export type QuestionRequestTemplateCreateparametersInput = {
     set: InputJsonValue[]
   }
@@ -14833,6 +16713,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type TopicCreateNestedOneWithoutQuestionRequestsInput = {
+    create?: XOR<TopicCreateWithoutQuestionRequestsInput, TopicUncheckedCreateWithoutQuestionRequestsInput>
+    connectOrCreate?: TopicCreateOrConnectWithoutQuestionRequestsInput
+    connect?: TopicWhereUniqueInput
+  }
+
   export type QuestionRequestTemplateCreateNestedOneWithoutRequestsInput = {
     create?: XOR<QuestionRequestTemplateCreateWithoutRequestsInput, QuestionRequestTemplateUncheckedCreateWithoutRequestsInput>
     connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutRequestsInput
@@ -14866,6 +16752,16 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutQuestionRequestsInput, UserUpdateWithoutQuestionRequestsInput>, UserUncheckedUpdateWithoutQuestionRequestsInput>
   }
 
+  export type TopicUpdateOneWithoutQuestionRequestsNestedInput = {
+    create?: XOR<TopicCreateWithoutQuestionRequestsInput, TopicUncheckedCreateWithoutQuestionRequestsInput>
+    connectOrCreate?: TopicCreateOrConnectWithoutQuestionRequestsInput
+    upsert?: TopicUpsertWithoutQuestionRequestsInput
+    disconnect?: TopicWhereInput | boolean
+    delete?: TopicWhereInput | boolean
+    connect?: TopicWhereUniqueInput
+    update?: XOR<XOR<TopicUpdateToOneWithWhereWithoutQuestionRequestsInput, TopicUpdateWithoutQuestionRequestsInput>, TopicUncheckedUpdateWithoutQuestionRequestsInput>
+  }
+
   export type QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput = {
     create?: XOR<QuestionRequestTemplateCreateWithoutRequestsInput, QuestionRequestTemplateUncheckedCreateWithoutRequestsInput>
     connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutRequestsInput
@@ -14888,6 +16784,14 @@ export namespace Prisma {
     update?: QuestionUpdateWithWhereUniqueWithoutRequestInput | QuestionUpdateWithWhereUniqueWithoutRequestInput[]
     updateMany?: QuestionUpdateManyWithWhereWithoutRequestInput | QuestionUpdateManyWithWhereWithoutRequestInput[]
     deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type QuestionUncheckedUpdateManyWithoutRequestNestedInput = {
@@ -14930,14 +16834,6 @@ export namespace Prisma {
     connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
     createMany?: AnswerCreateManyQuestionInputEnvelope
     connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type QuestionUpdatealternativesInput = {
@@ -15272,6 +17168,29 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
@@ -15369,6 +17288,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TopicCreateWithoutOwnerInput = {
+    name: string
+    parameters?: TopicCreateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequests?: QuestionRequestCreateNestedManyWithoutTopicInput
+  }
+
+  export type TopicUncheckedCreateWithoutOwnerInput = {
+    id?: number
+    name: string
+    parameters?: TopicCreateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutTopicInput
+  }
+
+  export type TopicCreateOrConnectWithoutOwnerInput = {
+    where: TopicWhereUniqueInput
+    create: XOR<TopicCreateWithoutOwnerInput, TopicUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type TopicCreateManyOwnerInputEnvelope = {
+    data: TopicCreateManyOwnerInput | TopicCreateManyOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type QuestionRequestTemplateCreateWithoutOwnerInput = {
     name: string
     promptTemplate: string
@@ -15400,7 +17348,10 @@ export namespace Prisma {
 
   export type QuestionRequestCreateWithoutUserInput = {
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
+    topic?: TopicCreateNestedOneWithoutQuestionRequestsInput
     template?: QuestionRequestTemplateCreateNestedOneWithoutRequestsInput
     questions?: QuestionCreateNestedManyWithoutRequestInput
   }
@@ -15408,8 +17359,11 @@ export namespace Prisma {
   export type QuestionRequestUncheckedCreateWithoutUserInput = {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
-    templateId: number
+    topicId?: number | null
+    templateId?: number | null
     questions?: QuestionUncheckedCreateNestedManyWithoutRequestInput
   }
 
@@ -15507,6 +17461,35 @@ export namespace Prisma {
     data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyWithoutOwnerInput>
   }
 
+  export type TopicUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: TopicWhereUniqueInput
+    update: XOR<TopicUpdateWithoutOwnerInput, TopicUncheckedUpdateWithoutOwnerInput>
+    create: XOR<TopicCreateWithoutOwnerInput, TopicUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type TopicUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: TopicWhereUniqueInput
+    data: XOR<TopicUpdateWithoutOwnerInput, TopicUncheckedUpdateWithoutOwnerInput>
+  }
+
+  export type TopicUpdateManyWithWhereWithoutOwnerInput = {
+    where: TopicScalarWhereInput
+    data: XOR<TopicUpdateManyMutationInput, TopicUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type TopicScalarWhereInput = {
+    AND?: TopicScalarWhereInput | TopicScalarWhereInput[]
+    OR?: TopicScalarWhereInput[]
+    NOT?: TopicScalarWhereInput | TopicScalarWhereInput[]
+    id?: IntFilter<"Topic"> | number
+    name?: StringFilter<"Topic"> | string
+    parameters?: JsonNullableListFilter<"Topic">
+    evaluationCriteria?: JsonNullableFilter<"Topic">
+    createdAt?: DateTimeFilter<"Topic"> | Date | string
+    updatedAt?: DateTimeFilter<"Topic"> | Date | string
+    ownerId?: IntFilter<"Topic"> | number
+  }
+
   export type QuestionRequestTemplateUpsertWithWhereUniqueWithoutOwnerInput = {
     where: QuestionRequestTemplateWhereUniqueInput
     update: XOR<QuestionRequestTemplateUpdateWithoutOwnerInput, QuestionRequestTemplateUncheckedUpdateWithoutOwnerInput>
@@ -15558,8 +17541,11 @@ export namespace Prisma {
     NOT?: QuestionRequestScalarWhereInput | QuestionRequestScalarWhereInput[]
     id?: IntFilter<"QuestionRequest"> | number
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
+    questionType?: StringFilter<"QuestionRequest"> | string
+    generatedPrompt?: StringNullableFilter<"QuestionRequest"> | string | null
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
-    templateId?: IntFilter<"QuestionRequest"> | number
+    topicId?: IntNullableFilter<"QuestionRequest"> | number | null
+    templateId?: IntNullableFilter<"QuestionRequest"> | number | null
     userId?: IntFilter<"QuestionRequest"> | number
   }
 
@@ -15605,6 +17591,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groups?: GroupCreateNestedManyWithoutUsersInput
+    topics?: TopicCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
@@ -15619,6 +17606,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
+    topics?: TopicUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
@@ -15637,6 +17625,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    topics?: TopicCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
@@ -15651,6 +17640,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    topics?: TopicUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
@@ -15680,6 +17670,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUpdateManyWithoutUsersNestedInput
+    topics?: TopicUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
@@ -15694,6 +17685,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
+    topics?: TopicUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
@@ -15728,6 +17720,127 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
   }
 
+  export type UserCreateWithoutTopicsInput = {
+    admin?: boolean
+    name?: string | null
+    email: string
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groups?: GroupCreateNestedManyWithoutUsersInput
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    answers?: AnswerCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutTopicsInput = {
+    id?: number
+    admin?: boolean
+    name?: string | null
+    email: string
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutTopicsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTopicsInput, UserUncheckedCreateWithoutTopicsInput>
+  }
+
+  export type QuestionRequestCreateWithoutTopicInput = {
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutQuestionRequestsInput
+    template?: QuestionRequestTemplateCreateNestedOneWithoutRequestsInput
+    questions?: QuestionCreateNestedManyWithoutRequestInput
+  }
+
+  export type QuestionRequestUncheckedCreateWithoutTopicInput = {
+    id?: number
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
+    createdAt?: Date | string
+    templateId?: number | null
+    userId: number
+    questions?: QuestionUncheckedCreateNestedManyWithoutRequestInput
+  }
+
+  export type QuestionRequestCreateOrConnectWithoutTopicInput = {
+    where: QuestionRequestWhereUniqueInput
+    create: XOR<QuestionRequestCreateWithoutTopicInput, QuestionRequestUncheckedCreateWithoutTopicInput>
+  }
+
+  export type QuestionRequestCreateManyTopicInputEnvelope = {
+    data: QuestionRequestCreateManyTopicInput | QuestionRequestCreateManyTopicInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutTopicsInput = {
+    update: XOR<UserUpdateWithoutTopicsInput, UserUncheckedUpdateWithoutTopicsInput>
+    create: XOR<UserCreateWithoutTopicsInput, UserUncheckedCreateWithoutTopicsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTopicsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTopicsInput, UserUncheckedUpdateWithoutTopicsInput>
+  }
+
+  export type UserUpdateWithoutTopicsInput = {
+    admin?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groups?: GroupUpdateManyWithoutUsersNestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    answers?: AnswerUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTopicsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    admin?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type QuestionRequestUpsertWithWhereUniqueWithoutTopicInput = {
+    where: QuestionRequestWhereUniqueInput
+    update: XOR<QuestionRequestUpdateWithoutTopicInput, QuestionRequestUncheckedUpdateWithoutTopicInput>
+    create: XOR<QuestionRequestCreateWithoutTopicInput, QuestionRequestUncheckedCreateWithoutTopicInput>
+  }
+
+  export type QuestionRequestUpdateWithWhereUniqueWithoutTopicInput = {
+    where: QuestionRequestWhereUniqueInput
+    data: XOR<QuestionRequestUpdateWithoutTopicInput, QuestionRequestUncheckedUpdateWithoutTopicInput>
+  }
+
+  export type QuestionRequestUpdateManyWithWhereWithoutTopicInput = {
+    where: QuestionRequestScalarWhereInput
+    data: XOR<QuestionRequestUpdateManyMutationInput, QuestionRequestUncheckedUpdateManyWithoutTopicInput>
+  }
+
   export type UserCreateWithoutQuestionRequestTemplatesInput = {
     admin?: boolean
     name?: string | null
@@ -15737,6 +17850,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     groups?: GroupCreateNestedManyWithoutUsersInput
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    topics?: TopicCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
   }
@@ -15751,6 +17865,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    topics?: TopicUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
   }
@@ -15762,15 +17877,21 @@ export namespace Prisma {
 
   export type QuestionRequestCreateWithoutTemplateInput = {
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
+    topic?: TopicCreateNestedOneWithoutQuestionRequestsInput
     questions?: QuestionCreateNestedManyWithoutRequestInput
   }
 
   export type QuestionRequestUncheckedCreateWithoutTemplateInput = {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
+    topicId?: number | null
     userId: number
     questions?: QuestionUncheckedCreateNestedManyWithoutRequestInput
   }
@@ -15805,6 +17926,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUpdateManyWithoutUsersNestedInput
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
   }
@@ -15819,6 +17941,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -15848,6 +17971,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     groups?: GroupCreateNestedManyWithoutUsersInput
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    topics?: TopicCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     answers?: AnswerCreateNestedManyWithoutUserInput
   }
@@ -15862,6 +17986,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    topics?: TopicUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
   }
@@ -15869,6 +17994,30 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutQuestionRequestsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutQuestionRequestsInput, UserUncheckedCreateWithoutQuestionRequestsInput>
+  }
+
+  export type TopicCreateWithoutQuestionRequestsInput = {
+    name: string
+    parameters?: TopicCreateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutTopicsInput
+  }
+
+  export type TopicUncheckedCreateWithoutQuestionRequestsInput = {
+    id?: number
+    name: string
+    parameters?: TopicCreateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+  }
+
+  export type TopicCreateOrConnectWithoutQuestionRequestsInput = {
+    where: TopicWhereUniqueInput
+    create: XOR<TopicCreateWithoutQuestionRequestsInput, TopicUncheckedCreateWithoutQuestionRequestsInput>
   }
 
   export type QuestionRequestTemplateCreateWithoutRequestsInput = {
@@ -15944,6 +18093,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUpdateManyWithoutUsersNestedInput
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
   }
@@ -15958,8 +18108,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type TopicUpsertWithoutQuestionRequestsInput = {
+    update: XOR<TopicUpdateWithoutQuestionRequestsInput, TopicUncheckedUpdateWithoutQuestionRequestsInput>
+    create: XOR<TopicCreateWithoutQuestionRequestsInput, TopicUncheckedCreateWithoutQuestionRequestsInput>
+    where?: TopicWhereInput
+  }
+
+  export type TopicUpdateToOneWithWhereWithoutQuestionRequestsInput = {
+    where?: TopicWhereInput
+    data: XOR<TopicUpdateWithoutQuestionRequestsInput, TopicUncheckedUpdateWithoutQuestionRequestsInput>
+  }
+
+  export type TopicUpdateWithoutQuestionRequestsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutTopicsNestedInput
+  }
+
+  export type TopicUncheckedUpdateWithoutQuestionRequestsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
   }
 
   export type QuestionRequestTemplateUpsertWithoutRequestsInput = {
@@ -16023,16 +18204,22 @@ export namespace Prisma {
 
   export type QuestionRequestCreateWithoutQuestionsInput = {
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
+    topic?: TopicCreateNestedOneWithoutQuestionRequestsInput
     template?: QuestionRequestTemplateCreateNestedOneWithoutRequestsInput
   }
 
   export type QuestionRequestUncheckedCreateWithoutQuestionsInput = {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
-    templateId: number
+    topicId?: number | null
+    templateId?: number | null
     userId: number
   }
 
@@ -16093,16 +18280,22 @@ export namespace Prisma {
 
   export type QuestionRequestUpdateWithoutQuestionsInput = {
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
+    topic?: TopicUpdateOneWithoutQuestionRequestsNestedInput
     template?: QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput
   }
 
   export type QuestionRequestUncheckedUpdateWithoutQuestionsInput = {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -16155,6 +18348,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     groups?: GroupCreateNestedManyWithoutUsersInput
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    topics?: TopicCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
   }
@@ -16169,6 +18363,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    topics?: TopicUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
   }
@@ -16250,6 +18445,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUpdateManyWithoutUsersNestedInput
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
   }
@@ -16264,6 +18460,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -16479,6 +18676,15 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type TopicCreateManyOwnerInput = {
+    id?: number
+    name: string
+    parameters?: TopicCreateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type QuestionRequestTemplateCreateManyOwnerInput = {
     id?: number
     name: string
@@ -16491,8 +18697,11 @@ export namespace Prisma {
   export type QuestionRequestCreateManyUserInput = {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
-    templateId: number
+    topicId?: number | null
+    templateId?: number | null
   }
 
   export type AnswerCreateManyUserInput = {
@@ -16566,6 +18775,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TopicUpdateWithoutOwnerInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequests?: QuestionRequestUpdateManyWithoutTopicNestedInput
+  }
+
+  export type TopicUncheckedUpdateWithoutOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutTopicNestedInput
+  }
+
+  export type TopicUncheckedUpdateManyWithoutOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    parameters?: TopicUpdateparametersInput | InputJsonValue[]
+    evaluationCriteria?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type QuestionRequestTemplateUpdateWithoutOwnerInput = {
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
@@ -16596,7 +18833,10 @@ export namespace Prisma {
 
   export type QuestionRequestUpdateWithoutUserInput = {
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    topic?: TopicUpdateOneWithoutQuestionRequestsNestedInput
     template?: QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput
     questions?: QuestionUpdateManyWithoutRequestNestedInput
   }
@@ -16604,16 +18844,22 @@ export namespace Prisma {
   export type QuestionRequestUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
     questions?: QuestionUncheckedUpdateManyWithoutRequestNestedInput
   }
 
   export type QuestionRequestUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AnswerUpdateWithoutUserInput = {
@@ -16667,6 +18913,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
@@ -16681,6 +18928,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    topics?: TopicUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
@@ -16696,24 +18944,74 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type QuestionRequestCreateManyTopicInput = {
+    id?: number
+    parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
+    createdAt?: Date | string
+    templateId?: number | null
+    userId: number
+  }
+
+  export type QuestionRequestUpdateWithoutTopicInput = {
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
+    template?: QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput
+    questions?: QuestionUpdateManyWithoutRequestNestedInput
+  }
+
+  export type QuestionRequestUncheckedUpdateWithoutTopicInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: IntFieldUpdateOperationsInput | number
+    questions?: QuestionUncheckedUpdateManyWithoutRequestNestedInput
+  }
+
+  export type QuestionRequestUncheckedUpdateManyWithoutTopicInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type QuestionRequestCreateManyTemplateInput = {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
+    questionType?: string
+    generatedPrompt?: string | null
     createdAt?: Date | string
+    topicId?: number | null
     userId: number
   }
 
   export type QuestionRequestUpdateWithoutTemplateInput = {
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
+    topic?: TopicUpdateOneWithoutQuestionRequestsNestedInput
     questions?: QuestionUpdateManyWithoutRequestNestedInput
   }
 
   export type QuestionRequestUncheckedUpdateWithoutTemplateInput = {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     userId?: IntFieldUpdateOperationsInput | number
     questions?: QuestionUncheckedUpdateManyWithoutRequestNestedInput
   }
@@ -16721,7 +19019,10 @@ export namespace Prisma {
   export type QuestionRequestUncheckedUpdateManyWithoutTemplateInput = {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
+    questionType?: StringFieldUpdateOperationsInput | string
+    generatedPrompt?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 

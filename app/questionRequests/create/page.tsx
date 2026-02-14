@@ -2,7 +2,6 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import { QuestionRequestTemplate } from "@/prisma";
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select";
 import { PrismaJson } from "@/prisma/types";
 import { MultiSelect } from "@/components/ui/multi-select";
@@ -12,6 +11,12 @@ import { Spinner } from "@/components/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+type Topic = {
+  id: number;
+  name: string;
+  parameters: PrismaJson.QuestionRequestTemplateParameter[];
+  evaluationCriteria?: any;
+};
 
 export default function QuestionRequestCreatePage() {
   const { data: session, status } = useSession();
@@ -23,33 +28,32 @@ export default function QuestionRequestCreatePage() {
     }
   }, [status, router]);
 
-  const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
-  const [template, setTemplate] = useState<QuestionRequestTemplate | null>(null);
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [questionType, setQuestionType] = useState<"discursive" | "multiple-choice" | "both">("both");
-  const [finalPrompt, setFinalPrompt] = useState<string>("");
   const [newRequest, setNewRequest] = useState({
     parameterValues: [] as PrismaJson.QuestionRequestParameterValue[],
   });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    async function fetchTemplates() {
-      const response = await fetch("/api/templates");
+    async function fetchTopics() {
+      const response = await fetch("/api/topics");
       const data = await response.json();
-      setTemplates(data);
+      setTopics(data);
     }
-    fetchTemplates();
+    fetchTopics();
   }, []);
 
   useEffect(() => {
-    if (template) {
-      const initialValues = template.parameters.map((param) => ({
+    if (selectedTopic) {
+      const initialValues = selectedTopic.parameters.map((param) => ({
         name: param.name,
         values: param.multipleSelect ? [] : [""],
       }));
       setNewRequest({ parameterValues: initialValues });
     }
-  }, [template]);
+  }, [selectedTopic]);
 
   function renderParameterInput(parameter: PrismaJson.QuestionRequestTemplateParameter, key: string): any {
     if (parameter.values && parameter.values.length > 0) {
@@ -87,72 +91,59 @@ export default function QuestionRequestCreatePage() {
   }
 
 
-  function generateFinalPrompt(template: QuestionRequestTemplate,
-  parameterValues: PrismaJson.QuestionRequestParameterValue[]) {
-    // Generate the final prompt by replacing placeholders in the template with actual values
-    const promptTemplate = template.promptTemplate;
-    
-    const merged = [...parameterValues, {name: "tema", values: [template.name ?? ""]}];
+  function handleParameterChange(parameter: PrismaJson.QuestionRequestTemplateParameter, values: string[]) {
+    const updatedValues = [...newRequest.parameterValues];
+    const index = updatedValues.findIndex(p => p.name === parameter.name);
 
-    const paramMap = new Map<string, string[]>(
-      merged.map(param => [param.name.toLowerCase(), param.values ??[]])
-    );
+    if (index >= 0) {
+      updatedValues[index] = { ...updatedValues[index], values };
+    } else {
+      updatedValues.push({ name: parameter.name, values });
+    }
 
- return promptTemplate.replace(/<([^>]+)>/g, (_, key) => {
-      const matchValues = paramMap.get(key.toLowerCase());
-
-      if (!matchValues || matchValues.length === 0) return `<${key}>`;
-      // replace with the values, if multipleSelect and multiple values, join with commas
-      // using key as default value if no match found
-      const replaced = matchValues.length > 1
-      ? matchValues.join(", ") : matchValues?.[0] ?? `<${key}>`;
-      console.log("Replaced é assim:", replaced);
-      return replaced;
-  });
+    setNewRequest({ ...newRequest, parameterValues: updatedValues });
   }
 
-  function handleParameterChange(parameter: PrismaJson.QuestionRequestTemplateParameter, values: string[]) {
-     const updatedValues = [...newRequest.parameterValues];
-     const index = updatedValues.findIndex(p => p.name === parameter.name);
-
-      if (index >= 0) {
-        updatedValues[index] = { ...updatedValues[index], values };
-
-      } else {
-        updatedValues.push({ name: parameter.name, values });
-      }
-
-      setNewRequest({ ...newRequest, parameterValues: updatedValues });
-
-      // Generate the final prompt whenever a parameter changes
-      const generatedPrompt = generateFinalPrompt(template!, updatedValues);
-     
-      setFinalPrompt(generatedPrompt);
-      console.log("PROMPT GERADO:", generatedPrompt);
-}
-
-  function renderSelectTemplate() {
-    return <Select onValueChange={(value) => value ? setTemplate(templates.find((t) => `${t.id}` === value) || null) : setTemplate(null)}>
-
-       <label className="text-[1.1rem] font-semibold mt-4">Selecione um tema principal</label>
+  function renderSelectTopic() {
+    return <Select onValueChange={(value) => value ? setSelectedTopic(topics.find((t) => `${t.id}` === value) || null) : setSelectedTopic(null)}>
+      <label className="text-[1.1rem] font-semibold mt-4">Selecione um tema</label>
       <SelectTrigger>
-        <SelectValue placeholder="Selecione uma àrea geral" />
+        <SelectValue placeholder="Escolha o tema" />
       </SelectTrigger>
       <SelectContent>
-        {templates.map((template: QuestionRequestTemplate) => (
-          <SelectItem key={template.id} value={`${template.id}`}>
-           {template.name}
+        {topics.map((topic: Topic) => (
+          <SelectItem key={topic.id} value={`${topic.id}`}>
+            {topic.name}
           </SelectItem>
         ))}
       </SelectContent>
     </Select>;
   }
 
+  function renderSelectQuestionType() {
+    return (
+      <Select 
+        value={questionType}
+        onValueChange={(value) => setQuestionType(value as "discursive" | "multiple-choice" | "both")}
+      >
+        <label className="text-[1.1rem] font-semibold mt-4">Tipo de questão</label>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha o tipo" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="discursive">Discursiva</SelectItem>
+          <SelectItem value="multiple-choice">Múltipla escolha</SelectItem>
+          <SelectItem value="both">Ambas</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+  }
+
   async function createRequest() {
-    if (!template) return;
+    if (!selectedTopic) return;
 
     // Validate that all parameters have values
-    const missingParameters = template.parameters.filter((parameter) => {
+    const missingParameters = selectedTopic.parameters.filter((parameter) => {
       const paramValue = newRequest.parameterValues.find((param) => param.name === parameter.name);
       return !paramValue || paramValue.values.length === 0 || paramValue.values[0] === "";
     });
@@ -163,11 +154,11 @@ export default function QuestionRequestCreatePage() {
     }
 
     const request = {
-      templateId: template.id,
+      topicId: selectedTopic.id,
       parameterValues: newRequest.parameterValues,
-      generatedPrompt: finalPrompt,
       questionType,
     };
+    
     setIsLoading(true);
     const response = await fetch("/api/questionRequests", {
       method: "POST",
@@ -177,6 +168,7 @@ export default function QuestionRequestCreatePage() {
       body: JSON.stringify(request),
     });
     setIsLoading(false);
+    
     if (response.ok) {
       const newQuestionRequest = await response.json();
       window.location.href = `/questions?questionRequestId=${newQuestionRequest.id}`;
@@ -191,49 +183,27 @@ export default function QuestionRequestCreatePage() {
       <CardHeader className="text-center">
         <h1 className="text-4xl font-bold">Vamos testar seu conhecimento?</h1>
         <p className="text-slate-500 py-3">
-          Configure abaixo os tópicos para gerar um desafio personalizado de perguntas!
+          Escolha um tema, tipo de questão e configure os parâmetros!
         </p>
       </CardHeader>
       <CardContent className="flex flex-col gap-2.5">
-        {renderSelectTemplate()}
+        {renderSelectTopic()}
         {renderSelectQuestionType()}
-        {template && template.parameters?.length > 0 && <>
-          <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros que a IA deve priorizar</h2>
-          {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
+        {selectedTopic && selectedTopic.parameters?.length > 0 && <>
+          <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros</h2>
+          {selectedTopic.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
             renderParameterInput(parameter, `${parameter.name}`))}
-        </>
-        }
-        {template &&
-          (
-            isLoading
-              ? <Spinner>
-                O SelfTest está estruturando um desafio personalizado para você...
-              </Spinner>
-              : <Button onClick={createRequest} disabled={isLoading}>
-                {isLoading ? <span className="spinner" /> : "Gerar minhas questões"}
-              </Button>
+        </>}
+        {selectedTopic && (
+          isLoading ? (
+            <Spinner>O SelfTest está estruturando um desafio personalizado para você...</Spinner>
+          ) : (
+            <Button onClick={createRequest} disabled={isLoading}>
+              Gerar minhas questões
+            </Button>
           )
-        }
+        )}
       </CardContent>
     </Card>
   );
-
-
-
-function renderSelectQuestionType() {
-    return (
-      <Select onValueChange={(value) => setQuestionType(value as "discursive" | "multiple-choice" | "both")}>
-        <label className="text-[1.1rem] font-semibold mt-4">Tipo de questão</label>
-        <SelectTrigger>
-          <SelectValue placeholder="Escolha o tipo" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="discursive">Discursiva</SelectItem>
-          <SelectItem value="multiple-choice">Múltipla escolha</SelectItem>
-          <SelectItem value="both">Ambas</SelectItem>
-        </SelectContent>
-      </Select>
-    );
-  }
-
 }
