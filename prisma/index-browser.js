@@ -150,19 +150,11 @@ exports.Prisma.TopicScalarFieldEnum = {
   ownerId: 'ownerId'
 };
 
-exports.Prisma.PromptTemplateScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  questionType: 'questionType',
-  promptTemplate: 'promptTemplate',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.QuestionRequestTemplateScalarFieldEnum = {
   id: 'id',
   name: 'name',
   promptTemplate: 'promptTemplate',
+  questionType: 'questionType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   parameters: 'parameters',
@@ -253,7 +245,6 @@ exports.Prisma.ModelName = {
   User: 'User',
   Group: 'Group',
   Topic: 'Topic',
-  PromptTemplate: 'PromptTemplate',
   QuestionRequestTemplate: 'QuestionRequestTemplate',
   QuestionRequest: 'QuestionRequest',
   Question: 'Question',

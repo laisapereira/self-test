@@ -9,23 +9,6 @@ import Footer from "@/components/footer";
 import Link from "next/link";
 
 export default function Home() {
-  // const { data: session, status } = useSession();
-  // const router = useRouter();
-  // const [isMounted, setIsMounted] = useState(false);
-
-  // useEffect(() => {
-  //   setIsMounted(true);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (isMounted) {
-  //     if (status === "authenticated") {
-  //       router.push("/profile");
-  //     } else if (status === "unauthenticated") {
-  //       signIn("google");
-  //     }
-  //   }
-  // }, [isMounted, status, router]);
 
   return (
     <div className="flex flex-col items-center justify-center h-[70vh] px-4">
@@ -34,7 +17,7 @@ export default function Home() {
       <QuestionRequestCreatePage />
 
 
-    
+
     </div>
   );
 }

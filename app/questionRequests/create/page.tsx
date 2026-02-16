@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 type Topic = {
   id: number;
   name: string;
-  parameters: PrismaJson.QuestionRequestTemplateParameter[];
+  parameters: PrismaJson.TopicParameters[];
   evaluationCriteria?: any;
 };
 
@@ -55,7 +55,7 @@ export default function QuestionRequestCreatePage() {
     }
   }, [selectedTopic]);
 
-  function renderParameterInput(parameter: PrismaJson.QuestionRequestTemplateParameter, key: string): any {
+  function renderParameterInput(parameter: PrismaJson.TopicParameters, key: string): any {
     if (parameter.values && parameter.values.length > 0) {
       if (parameter.multipleSelect) {
         return <MultiSelect
@@ -91,7 +91,7 @@ export default function QuestionRequestCreatePage() {
   }
 
 
-  function handleParameterChange(parameter: PrismaJson.QuestionRequestTemplateParameter, values: string[]) {
+  function handleParameterChange(parameter: PrismaJson.TopicParameters, values: string[]) {
     const updatedValues = [...newRequest.parameterValues];
     const index = updatedValues.findIndex(p => p.name === parameter.name);
 
@@ -122,7 +122,7 @@ export default function QuestionRequestCreatePage() {
 
   function renderSelectQuestionType() {
     return (
-      <Select 
+      <Select
         value={questionType}
         onValueChange={(value) => setQuestionType(value as "discursive" | "multiple-choice" | "both")}
       >
@@ -158,7 +158,7 @@ export default function QuestionRequestCreatePage() {
       parameterValues: newRequest.parameterValues,
       questionType,
     };
-    
+
     setIsLoading(true);
     const response = await fetch("/api/questionRequests", {
       method: "POST",
@@ -168,7 +168,7 @@ export default function QuestionRequestCreatePage() {
       body: JSON.stringify(request),
     });
     setIsLoading(false);
-    
+
     if (response.ok) {
       const newQuestionRequest = await response.json();
       window.location.href = `/questions?questionRequestId=${newQuestionRequest.id}`;
@@ -191,7 +191,7 @@ export default function QuestionRequestCreatePage() {
         {renderSelectQuestionType()}
         {selectedTopic && selectedTopic.parameters?.length > 0 && <>
           <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros</h2>
-          {selectedTopic.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
+          {selectedTopic.parameters.map((parameter: PrismaJson.TopicParameters) =>
             renderParameterInput(parameter, `${parameter.name}`))}
         </>}
         {selectedTopic && (

@@ -28,14 +28,14 @@ export async function POST(req: Request) {
   try {
     const user = await prisma.user.findUnique({ where: { email: session.user.email } });
     if (!user) {
-        return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const newTemplate = await prisma.questionRequestTemplate.create({
       data: {
         name,
         promptTemplate,
-        parameters: parameters as PrismaJson.QuestionRequestTemplateParameter[],
+        parameters: parameters as PrismaJson.TopicParameters[],
         ownerId: user.id,
       },
     });

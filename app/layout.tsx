@@ -12,17 +12,12 @@ import Footer from '@/components/footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
-// export const metadata = {
-//   title: 'My App',
-//   description: 'Responsive menu example in Next.js 15',
-// }
-
 const routes = [
 
 
-    {
-  title: 'Gerar Questões',
-  href: '/',
+  {
+    title: 'Gerar Questões',
+    href: '/',
   },
   {
     title: 'Templates de Questões',
@@ -34,7 +29,7 @@ const routes = [
     href: '/topics',
     requireAdmin: true,
   },
-  
+
   {
     title: 'Questões Geradas',
     href: '/questionRequests',
@@ -73,9 +68,9 @@ export default function RootLayout({
           <Navbar />
           <main className="p-4">
             {children}
-         
+
           </main>
-          
+
           <Link href="https://forms.gle/BLVawYyYqAWBM1Vd8" target="_blank" className="mt-4 text-xl text-blue-600 hover:underline text-center flex justify-center">
             O que você tem achado do SelfTest? Avalie aqui!
           </Link>
@@ -94,8 +89,8 @@ function Navbar() {
     <nav className="bg-white shadow-md px-4 py-3 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
 
-       <Link href="/"> <Image src="/logo.png" alt="SelfTest Logo" width={200} height={150} /></Link>
-  
+        <Link href="/"> <Image src="/logo.png" alt="SelfTest Logo" width={200} height={150} /></Link>
+
         <button
           className="md:hidden text-gray-800"
           onClick={() => setOpen(!open)}
@@ -104,13 +99,13 @@ function Navbar() {
           {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
         <ul className="hidden md:flex gap-6 text-gray-700 font-medium">
-     
+
           <MenuItems />
         </ul>
       </div>
       {open && (
         <ul className="md:hidden mt-2 space-y-2 text-gray-700 font-medium">
-     
+
           <MenuItems onClick={() => setOpen(false)} />
         </ul>
       )}

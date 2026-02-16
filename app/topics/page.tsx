@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 type Topic = {
   id: number;
   name: string;
-  parameters: PrismaJson.QuestionRequestTemplateParameter[];
+  parameters: PrismaJson.TopicParameters[];
   evaluationCriteria?: any;
   createdAt: Date;
   updatedAt: Date;
@@ -19,7 +19,7 @@ type Topic = {
 export default function TopicsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/api/auth/signin");
@@ -43,7 +43,7 @@ export default function TopicsPage() {
 
   async function removeTopic(id: number) {
     if (!confirm("Tem certeza que deseja remover este tema?")) return;
-    
+
     await fetch(`/api/topics/${id}`, {
       method: "DELETE",
     });

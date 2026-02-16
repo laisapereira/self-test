@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 type Topic = {
   id?: number;
   name: string;
-  parameters: PrismaJson.QuestionRequestTemplateParameter[];
+  parameters: PrismaJson.TopicParameters[];
   evaluationCriteria?: any;
 };
 
@@ -26,7 +26,7 @@ type TopicFormProps = {
 export default function TopicForm({ defaultValues, onSubmit, mode }: TopicFormProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/api/auth/signin");
@@ -41,7 +41,7 @@ export default function TopicForm({ defaultValues, onSubmit, mode }: TopicFormPr
     parameters: defaultValues?.parameters || [],
     evaluationCriteria: defaultValues?.evaluationCriteria || null,
   });
-  
+
   const [newParameter, setNewParameter] = useState({
     name: "",
     values: "",
@@ -85,12 +85,12 @@ export default function TopicForm({ defaultValues, onSubmit, mode }: TopicFormPr
             placeholder="Ex: Programação Mobile, Estruturas de Dados, etc."
             className="mb-4"
           />
-          
+
           <h3 className="text-lg font-medium mb-2">Parâmetros do Tema</h3>
           <p className="text-sm text-gray-600 mb-4">
             Defina os parâmetros que o usuário poderá escolher ao criar questões sobre este tema.
           </p>
-          
+
           <ul className="mt-4 space-y-2">
             {newTopic.parameters.map((param: any, index: any) => (
               <li key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
@@ -108,7 +108,7 @@ export default function TopicForm({ defaultValues, onSubmit, mode }: TopicFormPr
               </li>
             ))}
           </ul>
-          
+
           <Card className="mt-4">
             <CardContent className="pt-4">
               <h3 className="text-lg font-medium mb-2">Adicionar Parâmetro</h3>
@@ -131,7 +131,7 @@ export default function TopicForm({ defaultValues, onSubmit, mode }: TopicFormPr
                 className="mb-2"
               />
               <div className="flex items-center space-x-2 mb-2">
-                <Checkbox 
+                <Checkbox
                   id="multipleSelect"
                   checked={newParameter.multipleSelect}
                   onCheckedChange={(checked) => setNewParameter({ ...newParameter, multipleSelect: !!checked })}
@@ -141,7 +141,7 @@ export default function TopicForm({ defaultValues, onSubmit, mode }: TopicFormPr
               <Button onClick={addParameter} className="mt-2">Adicionar Parâmetro</Button>
             </CardContent>
           </Card>
-          
+
           <Button onClick={() => onSubmit(newTopic)} className="mt-4 w-full">
             {mode == 'create' ? 'Criar Tema' : 'Atualizar Tema'}
           </Button>

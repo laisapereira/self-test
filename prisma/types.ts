@@ -1,7 +1,7 @@
 import { AutoEvaluation } from "#main-entry-point";
 
 export namespace PrismaJson {
-  export type QuestionRequestTemplateParameter = {
+  export type TopicParameters = {
     name: string;
     values: string[];
     multipleSelect: boolean;
@@ -12,20 +12,20 @@ export namespace PrismaJson {
     values: string[];
   };
 
-type BaseQuestion = { 
-  content: string; 
-  type: "discursive" | "multiple-choice";
+  type BaseQuestion = {
+    content: string;
+    type: "discursive" | "multiple-choice";
 
-}
+  }
 
- export type DiscursiveQuestion =  BaseQuestion & {
-  evaluationCriteria: string[];
-};
-  
-export type DiscursiveQuestionResponse = BaseQuestion & {
-  type: "discursive";
-  questions: DiscursiveQuestion[];
-}
+  export type DiscursiveQuestion = BaseQuestion & {
+    evaluationCriteria: string[];
+  };
+
+  export type DiscursiveQuestionResponse = BaseQuestion & {
+    type: "discursive";
+    questions: DiscursiveQuestion[];
+  }
 
   export type MultipleChoiceQuestionResponse = BaseQuestion & {
     questions: MultipleChoiceQuestion[];
@@ -67,7 +67,7 @@ export interface QuestionRequest {
     type: "multiple-choice" | "discursive" | string;
     correctAnswerIndex: number | null;
 
-   
+
     alternatives: { content: string; feedback: string }[] | null;
 
     evaluationCriteria?: string[];

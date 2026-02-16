@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     const newTopic = await prisma.topic.create({
       data: {
         name,
-        parameters: parameters as PrismaJson.QuestionRequestTemplateParameter[] || [],
+        parameters: parameters as PrismaJson.TopicParameters[] || [],
         evaluationCriteria: evaluationCriteria || null,
         ownerId: user.id,
       },

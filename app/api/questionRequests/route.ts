@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
   // Suporta tanto o novo modelo (topicId) quanto o antigo (templateId) durante a transição
   if (!topicId && !templateId) {
-    return NextResponse.json({ error: "topicId or templateId is required" }, { status: 400 });
+    return NextResponse.json({ error: "topicId or templateId is required" }, { status: 400 }); // json mal formatado
   }
 
   if (!parameterValues) {
@@ -37,8 +37,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // ajustar para gerar questao baseada em um template x
-
     const newQuestionRequest = await prisma.questionRequest.create({
       data: {
         parameterValues,
@@ -48,6 +46,8 @@ export async function POST(req: Request) {
         userId: user.id,
       },
     });
+
+    console.log("nova requisição", newQuestionRequest)
 
     await generateQuestions(newQuestionRequest);
 
@@ -59,6 +59,7 @@ export async function POST(req: Request) {
 }
 
 async function generateQuestions(questionRequest: QuestionRequest) {
+
   const jsonString = await requestLLM(questionRequest);
 
   console.log('JSON STRING', jsonString);
@@ -72,11 +73,6 @@ async function generateQuestions(questionRequest: QuestionRequest) {
   console.log("As questoes geradas", json.questions);
   // for each question, shuffle the alternatives, updating the correctAnswerIndex
   questions.forEach((question) => {
-
-    //questão não tem o tipo. por isso a validação está frouxa,. preciso definir o tipo antes,
-    // com uma espécie de flag mesmo, na hora de criar a questão no prompt template.
-
-    //console.log("Tipo da questão", question.type);
 
     if ('alternatives' in question) {
 
@@ -121,76 +117,77 @@ async function generateQuestions(questionRequest: QuestionRequest) {
   });
 }
 
-async function generatePrompt(questionRequest: QuestionRequest) {
+async function generatePrompt(questionRequest: QuestionRequest,) {
   let promptTemplate: string;
   let topicName: string = "";
+  let topicParameters: PrismaJson.TopicParameters[] = [];
 
-  // Novo modelo: usa Topic + PromptTemplate genérico
   if (questionRequest.topicId) {
     const topic = await prisma.topic.findUnique({
       where: { id: questionRequest.topicId },
     });
+
+    console.log("o topico é", topic)
 
     if (!topic) {
       throw new Error("Topic not found");
     }
 
     topicName = topic.name;
+    topicParameters = topic.parameters.map((param) => ({
+      name: param.name,
+      values: param.values,
+      multipleSelect: param.multipleSelect,
+    }));
+
+    console.log("os parametros do topico", topicParameters)
 
     // Buscar o PromptTemplate genérico baseado no tipo de questão
-    const genericPromptTemplate = await prisma.promptTemplate.findFirst({
+    const genericPromptTemplate = await prisma.questionRequestTemplate.findFirst({
       where: { questionType: questionRequest.questionType || "multiple-choice" },
     });
+
+    console.log("o template generico", genericPromptTemplate)
 
     if (!genericPromptTemplate) {
       throw new Error("Generic prompt template not found for question type: " + questionRequest.questionType);
     }
 
     promptTemplate = genericPromptTemplate.promptTemplate;
-  }
-  // Modelo antigo: usa QuestionRequestTemplate
-  else if (questionRequest.templateId) {
-    const template = await prisma.questionRequestTemplate.findUnique({
-      where: { id: questionRequest.templateId },
+
+
+    const parameterValues = topicParameters;
+
+    const allParams = [
+      ...parameterValues,
+      { name: "tema", values: [parameterValues.map((param) => param.values.join(", ")).join(", ")] }
+    ];
+
+    const paramMap = new Map(
+      allParams.map((param: any) => [param.name.toLowerCase(), param.values])
+    );
+
+    const prompt = promptTemplate.replace(/<([^>]+)>/g, (_, key) => {
+      const matchValues = paramMap.get(key.toLowerCase());
+      if (!matchValues || matchValues.length === 0) return `<${key}>`;
+
+      return matchValues.length > 1
+        ? matchValues.join(", ")
+        : matchValues[0] || `<${key}>`;
     });
 
-    if (!template) {
-      throw new Error("Template not found");
-    }
+    return prompt;
 
-    topicName = template.name;
-    promptTemplate = template.promptTemplate;
-  } else {
+  }
+  else {
     throw new Error("Neither topicId nor templateId provided");
   }
 
-  // Substituir placeholders no prompt
-  const parameterValues = questionRequest.parameterValues;
-
-  // Adicionar o nome do tema aos parâmetros
-  const allParams = [
-    ...parameterValues,
-    { name: "tema", values: [topicName] }
-  ];
-
-  // Montar string de parâmetros adicionais
-  const paramMap = new Map(
-    allParams.map((param: any) => [param.name.toLowerCase(), param.values])
-  );
-
-  const prompt = promptTemplate.replace(/<([^>]+)>/g, (_, key) => {
-    const matchValues = paramMap.get(key.toLowerCase());
-    if (!matchValues || matchValues.length === 0) return `<${key}>`;
-
-    return matchValues.length > 1
-      ? matchValues.join(", ")
-      : matchValues[0] || `<${key}>`;
-  });
-
-  return prompt;
 }
 
 async function requestLLM(questionRequest: QuestionRequest) {
+
+  console.log("a questao requisitada", questionRequest)
   const prompt = await generatePrompt(questionRequest);
 
 

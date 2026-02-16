@@ -18,7 +18,7 @@ export default function CreateTemplatePage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Create Template</h1>
+      <h1 className="text-2xl font-bold">Criar Template de Questão</h1>
       <TemplateForm onSubmit={createTemplate} mode="create" />
     </div>
   );

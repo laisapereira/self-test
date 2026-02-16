@@ -18,7 +18,7 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
     }
     return response.json();
   }
-  
+
   async function updateTemplate(newTemplate: any) {
     if (!newTemplate.name || !newTemplate.promptTemplate) return;
     console.log('Updating template:', newTemplate);
@@ -29,7 +29,7 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
     });
     router.push("/templates");
   }
-  
+
   useEffect(() => {
     async function loadTemplate() {
       try {
@@ -48,8 +48,8 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Edit Template</h1>
-      <TemplateForm onSubmit={updateTemplate} mode="edit" defaultValues={template}/>
+      <h1 className="text-2xl font-bold">Editar template</h1>
+      <TemplateForm onSubmit={updateTemplate} mode="edit" defaultValues={template} />
     </div>
   );
 }

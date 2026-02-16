@@ -49,33 +49,25 @@ model Group {
 }
 
 model Topic {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
+  id                 Int      @id @default(autoincrement())
+  name               String   @unique
   /// [QuestionRequestTemplateParameter]
-  parameters Json[]
+  parameters         Json[]
   /// [EvaluationCriteria]
   evaluationCriteria Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ownerId   Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  ownerId            Int
 
   owner            User              @relation(fields: [ownerId], references: [id])
   questionRequests QuestionRequest[]
-}
-
-model PromptTemplate {
-  id             Int      @id @default(autoincrement())
-  name           String
-  questionType   String   // "discursive", "multiple-choice", "both"
-  promptTemplate String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
 }
 
 model QuestionRequestTemplate {
   id             Int      @id @default(autoincrement())
   name           String
   promptTemplate String
+  questionType   String   @default("multiple-choice")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   /// [QuestionRequestTemplateParameter]

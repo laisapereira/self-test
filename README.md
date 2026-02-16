@@ -60,6 +60,12 @@ npx prisma migrate dev
 
 ```
 
+ou se forem alterações posteriores
+
+```bash
+ npx prisma migrate dev --name nome_da_migracao
+```
+
 ### 4.1 ) Rode o seed para popular o banco
 
 Se o projeto tiver dados iniciais para o banco, execute:
