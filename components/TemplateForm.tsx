@@ -3,6 +3,8 @@
 import { PrismaJson } from "@/prisma/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -59,7 +61,7 @@ export default function TemplateForm({ defaultValues, onSubmit, mode }: Template
     });
     setNewParameter({ name: "", values: "", multipleSelect: false });
   }
-  
+
 
   function removeParameter(index: number) {
     setNewTemplate({
@@ -70,10 +72,10 @@ export default function TemplateForm({ defaultValues, onSubmit, mode }: Template
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Question Request Templates</h1>
+      <h1 className="text-2xl font-bold mb-4">Template de Questões</h1>
       <Card className="mb-4">
         <CardHeader>
-          <h2 className="text-xl font-semibold">Create New Template</h2>
+          <h2 className="text-xl font-semibold">Criar novo template</h2>
         </CardHeader>
         <CardContent>
           <Input
@@ -83,6 +85,21 @@ export default function TemplateForm({ defaultValues, onSubmit, mode }: Template
             placeholder="Template Name"
             className="mb-2"
           />
+
+          <Select>
+            <SelectGroup>
+              <SelectValue placeholder="Selecione o tipo de questão que esse template irá gerar" />
+              <SelectTrigger>
+                <SelectValue placeholder="Tipo de questão" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="multiple-choice">Múltipla escolha</SelectItem>
+                <SelectItem value="discursive">Discursiva</SelectItem>
+                <SelectItem value="mixed">Ambas</SelectItem>
+              </SelectContent>
+            </SelectGroup>
+
+          </Select>
           <Textarea
             value={newTemplate.promptTemplate}
             onChange={(e) => setNewTemplate({ ...newTemplate, promptTemplate: e.target.value })}

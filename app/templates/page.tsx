@@ -50,13 +50,13 @@ export default function QuestionRequestTemplates() {
   }
 
   return (
-      <div>
-        {/* Button to add */}
-        <Button onClick={() => router.push("/templates/create")} className="mb-4">Create New Template</Button>
-        {/* List of templates */}
-        <h1 className="text-2xl font-bold mb-4">Question Request Templates</h1>
-        <TemplateList templates={templates} removeTemplate={removeTemplate} />
-      </div>
+    <div>
+      {/* Button to add */}
+      <Button onClick={() => router.push("/templates/create")} className="mb-4">Create New Template</Button>
+      {/* List of templates */}
+      <h1 className="text-2xl font-bold mb-4">Templates de Questões</h1>
+      <TemplateList templates={templates} removeTemplate={removeTemplate} />
+    </div>
   );
 }
 
@@ -71,10 +71,11 @@ function TemplateList(props: { templates: QuestionRequestTemplate[], removeTempl
       {templates.map((template) => (
         <Card key={template.id}>
           <CardHeader>
-            <h3 className="text-lg font-medium">{template.name}</h3>
+            <h3 className="text-lg font-medium">{template.name}</h3>s
           </CardHeader>
           <CardContent>
             <p>{template.promptTemplate}</p>
+
             <ul className="mt-2 space-y-2">
               {template.parameters.map((param, index) => (
                 <li key={index}>
