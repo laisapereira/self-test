@@ -165,7 +165,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
   function getAnswerClassName(alternativeIdx: number) {
     if (answer === null) return '';
     if (alternativeIdx === question.correctAnswerIndex) {
-      return 'text-green-700';
+      return 'text-green-600';
     } else {
       return 'text-red-700';
     }
