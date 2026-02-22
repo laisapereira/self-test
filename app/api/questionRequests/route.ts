@@ -69,16 +69,16 @@ async function generateQuestions(questionRequest: QuestionRequest) {
     //console.log("Tipo da questão", question.type);
 
     if ('alternatives' in question) {
-    
-       const indices = Array.from({ length: question?.alternatives?.length }, (_, i) => i);
+
+      const indices = Array.from({ length: question?.alternatives?.length }, (_, i) => i);
       indices.sort((i) => Math.random() - 0.5);
       // shuffle alternatives and update the index of the correct answer
       question.alternatives = indices.map((i) => question.alternatives[i]);
       question.correctAnswerIndex = indices.indexOf(question.correctAnswerIndex);
     } else {
-     console.log('Questão discursiva gerada:', question);
+      console.log('Questão discursiva gerada:', question);
     }
-   
+
   });
 
   await prisma.question.createMany({
@@ -97,7 +97,7 @@ async function generateQuestions(questionRequest: QuestionRequest) {
           })),
         };
       } else {
-      
+
         return {
           content: question.content,
           correctAnswerIndex: null,
@@ -112,9 +112,14 @@ async function generateQuestions(questionRequest: QuestionRequest) {
 }
 
 async function generatePrompt(questionRequest: QuestionRequest) {
+  if (!questionRequest.templateId) {
+    throw new Error("templateId is null");
+  }
+
   const template = await prisma.questionRequestTemplate.findUnique({
     where: { id: questionRequest.templateId },
   });
+
   if (!template) {
     throw new Error("Template not found");
   }
@@ -130,13 +135,13 @@ async function generatePrompt(questionRequest: QuestionRequest) {
 
 async function requestLLM(questionRequest: QuestionRequest) {
   const prompt = await generatePrompt(questionRequest);
-  
-  
+
+
   console.log(prompt);
 
-    const openai = new OpenAI({
+  const openai = new OpenAI({
     apiKey: process.env.DEEPSEEK_API_KEY,
-    baseURL:process.env.DEEPSEEK_API_URL,
+    baseURL: process.env.DEEPSEEK_API_URL,
   });
 
   console.log('sending request to LLM');

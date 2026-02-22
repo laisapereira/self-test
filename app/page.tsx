@@ -29,12 +29,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center h-[70vh] px-4">
-      <h1 className="text-center text-xl">O SelfTest ajuda você a testar o que realmente sabe com questões personalizadas geradas por IA. Venha se testar!</h1>
+      <h1 className="text-center text-xl">O SelfTest ajuda você a testar o que realmente sabe com questões de computação personalizadas geradas por IA. Venha se testar!</h1>
 
       <QuestionRequestCreatePage />
 
 
-    
+
     </div>
   );
 }

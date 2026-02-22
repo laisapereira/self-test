@@ -6726,7 +6726,7 @@ export namespace Prisma {
     id: number
     parameterValues: PrismaJson.QuestionRequestParameterValue[]
     createdAt: Date
-    templateId: number
+    templateId: number | null
     userId: number
     _count: QuestionRequestCountAggregateOutputType | null
     _avg: QuestionRequestAvgAggregateOutputType | null
@@ -6819,7 +6819,7 @@ export namespace Prisma {
        */
       parameterValues: PrismaJson.QuestionRequestParameterValue[]
       createdAt: Date
-      templateId: number
+      templateId: number | null
       userId: number
     }, ExtArgs["result"]["questionRequest"]>
     composites: {}
@@ -12849,7 +12849,7 @@ export namespace Prisma {
     id?: IntFilter<"QuestionRequest"> | number
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
-    templateId?: IntFilter<"QuestionRequest"> | number
+    templateId?: IntNullableFilter<"QuestionRequest"> | number | null
     userId?: IntFilter<"QuestionRequest"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     template?: XOR<QuestionRequestTemplateNullableScalarRelationFilter, QuestionRequestTemplateWhereInput> | null
@@ -12860,7 +12860,7 @@ export namespace Prisma {
     id?: SortOrder
     parameterValues?: SortOrder
     createdAt?: SortOrder
-    templateId?: SortOrder
+    templateId?: SortOrderInput | SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
     template?: QuestionRequestTemplateOrderByWithRelationInput
@@ -12874,7 +12874,7 @@ export namespace Prisma {
     NOT?: QuestionRequestWhereInput | QuestionRequestWhereInput[]
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
-    templateId?: IntFilter<"QuestionRequest"> | number
+    templateId?: IntNullableFilter<"QuestionRequest"> | number | null
     userId?: IntFilter<"QuestionRequest"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     template?: XOR<QuestionRequestTemplateNullableScalarRelationFilter, QuestionRequestTemplateWhereInput> | null
@@ -12885,7 +12885,7 @@ export namespace Prisma {
     id?: SortOrder
     parameterValues?: SortOrder
     createdAt?: SortOrder
-    templateId?: SortOrder
+    templateId?: SortOrderInput | SortOrder
     userId?: SortOrder
     _count?: QuestionRequestCountOrderByAggregateInput
     _avg?: QuestionRequestAvgOrderByAggregateInput
@@ -12901,7 +12901,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"QuestionRequest"> | number
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeWithAggregatesFilter<"QuestionRequest"> | Date | string
-    templateId?: IntWithAggregatesFilter<"QuestionRequest"> | number
+    templateId?: IntNullableWithAggregatesFilter<"QuestionRequest"> | number | null
     userId?: IntWithAggregatesFilter<"QuestionRequest"> | number
   }
 
@@ -13480,7 +13480,7 @@ export namespace Prisma {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
-    templateId: number
+    templateId?: number | null
     userId: number
     questions?: QuestionUncheckedCreateNestedManyWithoutRequestInput
   }
@@ -13497,7 +13497,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
     userId?: IntFieldUpdateOperationsInput | number
     questions?: QuestionUncheckedUpdateManyWithoutRequestNestedInput
   }
@@ -13506,7 +13506,7 @@ export namespace Prisma {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
-    templateId: number
+    templateId?: number | null
     userId: number
   }
 
@@ -13519,7 +13519,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -14162,6 +14162,17 @@ export namespace Prisma {
     ownerId?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type QuestionRequestTemplateNullableScalarRelationFilter = {
     is?: QuestionRequestTemplateWhereInput | null
     isNot?: QuestionRequestTemplateWhereInput | null
@@ -14211,7 +14222,7 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -14219,7 +14230,12 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type QuestionRequestScalarRelationFilter = {
@@ -14263,22 +14279,6 @@ export namespace Prisma {
     id?: SortOrder
     correctAnswerIndex?: SortOrder
     requestId?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type QuestionScalarRelationFilter = {
@@ -14890,6 +14890,14 @@ export namespace Prisma {
     deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type QuestionUncheckedUpdateManyWithoutRequestNestedInput = {
     create?: XOR<QuestionCreateWithoutRequestInput, QuestionUncheckedCreateWithoutRequestInput> | QuestionCreateWithoutRequestInput[] | QuestionUncheckedCreateWithoutRequestInput[]
     connectOrCreate?: QuestionCreateOrConnectWithoutRequestInput | QuestionCreateOrConnectWithoutRequestInput[]
@@ -14930,14 +14938,6 @@ export namespace Prisma {
     connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
     createMany?: AnswerCreateManyQuestionInputEnvelope
     connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type QuestionUpdatealternativesInput = {
@@ -15409,7 +15409,7 @@ export namespace Prisma {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
-    templateId: number
+    templateId?: number | null
     questions?: QuestionUncheckedCreateNestedManyWithoutRequestInput
   }
 
@@ -15559,7 +15559,7 @@ export namespace Prisma {
     id?: IntFilter<"QuestionRequest"> | number
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
-    templateId?: IntFilter<"QuestionRequest"> | number
+    templateId?: IntNullableFilter<"QuestionRequest"> | number | null
     userId?: IntFilter<"QuestionRequest"> | number
   }
 
@@ -16032,7 +16032,7 @@ export namespace Prisma {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
-    templateId: number
+    templateId?: number | null
     userId: number
   }
 
@@ -16102,7 +16102,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -16492,7 +16492,7 @@ export namespace Prisma {
     id?: number
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
-    templateId: number
+    templateId?: number | null
   }
 
   export type AnswerCreateManyUserInput = {
@@ -16605,7 +16605,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
     questions?: QuestionUncheckedUpdateManyWithoutRequestNestedInput
   }
 
@@ -16613,7 +16613,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    templateId?: IntFieldUpdateOperationsInput | number
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AnswerUpdateWithoutUserInput = {

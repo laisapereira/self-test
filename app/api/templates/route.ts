@@ -5,18 +5,30 @@ import { NextResponse } from "next/server";
 import { getSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 
-export async function GET(req: Request) {
+export async function GET(req: Request): Promise<NextResponse> {
   try {
-    const templates = await prisma.questionRequestTemplate.findMany();
-    return NextResponse.json(templates);
+    const session = await getServerSession();
+
+    if (!session || !session.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (session?.user?.isAdmin) {
+      const templates = await prisma.questionRequestTemplate.findMany();
+      return NextResponse.json(templates);
+    } else {
+      const templates = await prisma.questionRequestTemplate.findMany({
+        select: { id: true, name: true },
+      });
+      return NextResponse.json(templates);
+    }
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch templates" }, { status: 500 });
   }
 }
-
 export async function POST(req: Request) {
   const session = await getServerSession();
-  if (!session || !session.user || !session.user.email) {
+  if (!session || !session.user || !session.user.email || !session.user.isAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -28,7 +40,7 @@ export async function POST(req: Request) {
   try {
     const user = await prisma.user.findUnique({ where: { email: session.user.email } });
     if (!user) {
-        return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const newTemplate = await prisma.questionRequestTemplate.create({

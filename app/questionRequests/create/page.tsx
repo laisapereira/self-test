@@ -42,7 +42,7 @@ export default function QuestionRequestCreatePage() {
 
   useEffect(() => {
     if (template) {
-      const initialValues = template.parameters.map((param) => ({
+      const initialValues = template.parameters?.map((param) => ({
         name: param.name,
         values: param.multipleSelect ? [] : [""],
       }));
@@ -87,60 +87,60 @@ export default function QuestionRequestCreatePage() {
 
 
   function generateFinalPrompt(template: QuestionRequestTemplate,
-  parameterValues: PrismaJson.QuestionRequestParameterValue[]) {
+    parameterValues: PrismaJson.QuestionRequestParameterValue[]) {
     // Generate the final prompt by replacing placeholders in the template with actual values
     const promptTemplate = template.promptTemplate;
-    
-    const merged = [...parameterValues, {name: "tema", values: [template.name ?? ""]}];
+
+    const merged = [...parameterValues, { name: "tema", values: [template.name ?? ""] }];
 
     const paramMap = new Map<string, string[]>(
-      merged.map(param => [param.name.toLowerCase(), param.values ??[]])
+      merged.map(param => [param.name.toLowerCase(), param.values ?? []])
     );
 
- return promptTemplate.replace(/<([^>]+)>/g, (_, key) => {
+    return promptTemplate.replace(/<([^>]+)>/g, (_, key) => {
       const matchValues = paramMap.get(key.toLowerCase());
 
       if (!matchValues || matchValues.length === 0) return `<${key}>`;
       // replace with the values, if multipleSelect and multiple values, join with commas
       // using key as default value if no match found
       const replaced = matchValues.length > 1
-      ? matchValues.join(", ") : matchValues?.[0] ?? `<${key}>`;
+        ? matchValues.join(", ") : matchValues?.[0] ?? `<${key}>`;
       console.log("Replaced é assim:", replaced);
       return replaced;
-  });
+    });
   }
 
   function handleParameterChange(parameter: PrismaJson.QuestionRequestTemplateParameter, values: string[]) {
-     const updatedValues = [...newRequest.parameterValues];
-     const index = updatedValues.findIndex(p => p.name === parameter.name);
+    const updatedValues = [...newRequest.parameterValues];
+    const index = updatedValues.findIndex(p => p.name === parameter.name);
 
-      if (index >= 0) {
-        updatedValues[index] = { ...updatedValues[index], values };
+    if (index >= 0) {
+      updatedValues[index] = { ...updatedValues[index], values };
 
-      } else {
-        updatedValues.push({ name: parameter.name, values });
-      }
+    } else {
+      updatedValues.push({ name: parameter.name, values });
+    }
 
-      setNewRequest({ ...newRequest, parameterValues: updatedValues });
+    setNewRequest({ ...newRequest, parameterValues: updatedValues });
 
-      // Generate the final prompt whenever a parameter changes
-      const generatedPrompt = generateFinalPrompt(template!, updatedValues);
-     
-      setFinalPrompt(generatedPrompt);
-      console.log("PROMPT GERADO:", generatedPrompt);
-}
+    // Generate the final prompt whenever a parameter changes
+    const generatedPrompt = generateFinalPrompt(template!, updatedValues);
+
+    setFinalPrompt(generatedPrompt);
+    console.log("PROMPT GERADO:", generatedPrompt);
+  }
 
   function renderSelectTemplate() {
     return <Select onValueChange={(value) => value ? setTemplate(templates.find((t) => `${t.id}` === value) || null) : setTemplate(null)}>
 
-       <label className="text-[1.1rem] font-semibold mt-4">Selecione um tema principal</label>
+      <label className="text-[1.1rem] font-semibold mt-4">Selecione um tema principal</label>
       <SelectTrigger>
         <SelectValue placeholder="Selecione uma àrea geral" />
       </SelectTrigger>
       <SelectContent>
         {templates.map((template: QuestionRequestTemplate) => (
           <SelectItem key={template.id} value={`${template.id}`}>
-           {template.name}
+            {template.name}
           </SelectItem>
         ))}
       </SelectContent>

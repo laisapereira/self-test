@@ -75,7 +75,7 @@ model QuestionRequest {
   parameterValues Json[]
   createdAt       DateTime @default(now())
 
-  templateId Int
+  templateId Int?
   userId     Int
 
   user      User                     @relation(fields: [userId], references: [id])

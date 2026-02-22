@@ -3,14 +3,15 @@
 import { getCurrentUser } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 
-export async function fetchRequests(params: { userId?: number; page?:number; pageSize?:number}) {
+export async function fetchRequests(params: { userId?: number; page?: number; pageSize?: number; templateId?: number }) {
 
   const page = Number(params.page) || 1
-  const pageSize = Number(params.pageSize) ||6
+  const pageSize = Number(params.pageSize) || 6
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     throw new Error("Unauthorized");
+
   }
   if (!params.userId) {
     params.userId = currentUser.id;
@@ -19,16 +20,17 @@ export async function fetchRequests(params: { userId?: number; page?:number; pag
     throw new Error("Unauthorized");
   }
 
+  const whereClause = {
+    ...(params.userId !== -1 && { userId: params.userId }),
+    ...(params.templateId && { templateId: params.templateId }),
+  };
+
   const totalCount = await prisma.questionRequest.count({
-    where: {
-      ...(params.userId !== -1 && { userId: params.userId }),
-    }
+    where: whereClause
   })
 
-const data = await prisma.questionRequest.findMany({
-    where: {
-      ...(params.userId !== -1 && { userId: params.userId }),
-    },
+  const data = await prisma.questionRequest.findMany({
+    where: whereClause,
     orderBy: {
       createdAt: 'desc',
     },
@@ -75,35 +77,36 @@ const data = await prisma.questionRequest.findMany({
                   criteria: true,
                   evaluatedAt: true,
                   modelVersion: true,
-                              }
+                }
+              },
             },
           },
         },
       },
-    },
-  }});
+    }
+  });
 
   const normalizedData = data.map(r => ({
-  ...r,
-  questions: r.questions.map(q => ({
-    ...q,
-    alternatives: q.alternatives as { content: string; feedback: string }[],
-    answers: q.answers.map(a => ({
-      ...a,
-      autoEvaluation: a.autoEvaluation ? {
-        score: a.autoEvaluation.score,
-        justification: a.autoEvaluation.justification,
-        evaluatedAt: a.autoEvaluation.evaluatedAt,
-        modelVersion: a.autoEvaluation.modelVersion,
-        criteria: a.autoEvaluation.criteria.map(c => ({
-          description: c.description,
-          weight: c.weight,
-          score: c.score
-        }))
-      } : null
+    ...r,
+    questions: r.questions.map(q => ({
+      ...q,
+      alternatives: q.alternatives as { content: string; feedback: string }[],
+      answers: q.answers.map(a => ({
+        ...a,
+        autoEvaluation: a.autoEvaluation ? {
+          score: a.autoEvaluation.score,
+          justification: a.autoEvaluation.justification,
+          evaluatedAt: a.autoEvaluation.evaluatedAt,
+          modelVersion: a.autoEvaluation.modelVersion,
+          criteria: a.autoEvaluation.criteria.map(c => ({
+            description: c.description,
+            weight: c.weight,
+            score: c.score
+          }))
+        } : null
+      }))
     }))
-  }))
-}));
+  }));
 
 
 
@@ -112,7 +115,7 @@ const data = await prisma.questionRequest.findMany({
 
 
   return {
-    data: normalizedData, totalPages: Math.ceil(totalCount/pageSize),
+    data: normalizedData, totalPages: Math.ceil(totalCount / pageSize),
     currentPage: page
   }
 }

@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 async function getParams(req: Request) {
   const { searchParams } = new URL(req.url);
   const templateIdStr = searchParams.get("templateId");
+  //O 10 é o radix (base numérica). Ele diz ao parseInt em qual sistema numérico a string deve ser interpretada:
   const templateId = templateIdStr === null || templateIdStr == '' ? undefined : parseInt(templateIdStr, 10);
 
   const userIdStr = searchParams.get("userId");

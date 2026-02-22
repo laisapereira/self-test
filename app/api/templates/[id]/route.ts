@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession();
-  if (!session || !session.user || !session.user.email) {
+  if (!session || !session.user || !session.user.email || !session.user.isAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -28,7 +28,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession();
-  if (!session || !session.user || !session.user.email) {
+  if (!session || !session.user || !session.user.email || !session.user.isAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -53,7 +53,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession();
-  if (!session || !session.user || !session.user.email) {
+  if (!session || !session.user || !session.user.email || !session.user.isAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

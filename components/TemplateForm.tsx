@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Forbidden from "./forbidden";
 
 type Template = {
   id?: number;
@@ -27,14 +28,30 @@ type TemplateFormProps = {
 export default function TemplateForm({ defaultValues, onSubmit, mode }: TemplateFormProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
+
+
+  const isForbidden = status === "authenticated" && session?.user?.isAdmin === false;
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/api/auth/signin");
-    } else if (status === "authenticated" && session?.user?.isAdmin === false) {
-      alert("You do not have permission to access this page.");
-      router.push("/");
     }
   }, [status, router]);
+
+  if (status === "loading") {
+    return <div className="p-8 text-center text-slate-500">Carregando...</div>;
+  }
+
+  if (isForbidden) {
+    return (
+      <Forbidden
+        message="Apenas administradores podem gerenciar templates."
+        redirectTo="/dashboard"
+        redirectDelay={5}
+      />
+    );
+  }
+
 
   const [newTemplate, setNewTemplate] = useState<Template>({
     name: defaultValues?.name || "",
@@ -59,7 +76,7 @@ export default function TemplateForm({ defaultValues, onSubmit, mode }: Template
     });
     setNewParameter({ name: "", values: "", multipleSelect: false });
   }
-  
+
 
   function removeParameter(index: number) {
     setNewTemplate({
@@ -67,6 +84,8 @@ export default function TemplateForm({ defaultValues, onSubmit, mode }: Template
       parameters: newTemplate.parameters.filter((_: any, i: number) => i !== index),
     });
   }
+
+
 
   return (
     <div className="p-4">

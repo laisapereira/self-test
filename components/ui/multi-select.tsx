@@ -58,7 +58,7 @@ const multiSelectVariants = cva(
  */
 interface MultiSelectProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof multiSelectVariants> {
+  VariantProps<typeof multiSelectVariants> {
   /**
    * An array of option objects to be displayed in the multi-select component.
    * Each option object has a label, value, and an optional icon.
@@ -217,7 +217,8 @@ export const MultiSelect = React.forwardRef<
                         key={value}
                         className={cn(
                           isAnimating ? "animate-bounce" : "",
-                          multiSelectVariants({ variant })
+                          multiSelectVariants({ variant }),
+                          "whitespace-normal h-auto text-left"
                         )}
                         style={{ animationDuration: `${animation}s` }}
                       >

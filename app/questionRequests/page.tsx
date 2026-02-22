@@ -1,14 +1,13 @@
 'use client';
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useSearchParams } from "next/navigation";
 import { fetchRequests } from "./server";
 import { Suspense, useEffect, useState } from "react";
 import Pagination from "@/components/pagination";
-
 import { useRouter } from 'next/navigation';
-import { request } from "http";
-import { QuestionRequest } from "@/prisma";
+import { QuestionRequest, QuestionRequestTemplate } from "@/prisma";
 import { normalizeQuestionRequests } from "@/lib/utils";
 
 export default function QuestionRequestsPage() {
@@ -19,9 +18,13 @@ export default function QuestionRequestsPage() {
 
 function QuestionRequestsPageInner() {
   const [requests, setRequests] = useState<QuestionRequest[] | null>(null);
+  const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const searchParams = useSearchParams();
   const userIdStr = searchParams?.get("userId") || null;
   const userId = userIdStr === null || userIdStr == '' ? undefined : parseInt(userIdStr, 10);
+  const templateIdStr = searchParams?.get("templateId") || null;
+  const templateId = templateIdStr ? parseInt(templateIdStr, 10) : undefined;
+
   const pageStr = searchParams?.get("page")
   const page = pageStr ? parseInt(pageStr, 10) : 1
   const [totalPages, setTotalPages] = useState(1);
@@ -30,8 +33,17 @@ function QuestionRequestsPageInner() {
   const router = useRouter();
 
   useEffect(() => {
+    async function fetchTemplates() {
+      const response = await fetch("/api/templates");
+      const data = await response.json();
+      setTemplates(data);
+    }
+    fetchTemplates();
+  }, []);
+
+  useEffect(() => {
     async function fetchData() {
-      const result = await fetchRequests({ userId, page, pageSize: 6 });
+      const result = await fetchRequests({ userId, page, pageSize: 6, templateId });
       setRequests(normalizeQuestionRequests(result.data));
 
       setTotalPages(result.totalPages);
@@ -41,10 +53,21 @@ function QuestionRequestsPageInner() {
     }
 
     fetchData();
-  }, [userId, page]);
+  }, [userId, page, templateId]);
 
   const handleRowClick = (requestId: string, requestUserId: number) => {
     router.push(`/questions?questionRequestId=${requestId}&userId=${requestUserId}`);
+  };
+
+  const handleTemplateChange = (value: string) => {
+    const params = new URLSearchParams(searchParams?.toString());
+    if (value === "all") {
+      params.delete("templateId");
+    } else {
+      params.set("templateId", value);
+    }
+    params.set("page", "1"); // Reset to first page on filter change
+    router.push(`/questionRequests?${params.toString()}`);
   };
 
 
@@ -53,18 +76,36 @@ function QuestionRequestsPageInner() {
 
       <div className="w-full max-w-5xl mx-auto p-4 my-6">
 
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <h1 className="text-2xl font-bold text-slate-800 text-center">Histórico de Perguntas Geradas</h1>
 
-          {userId !== -1 ? (
-            <a href="/questionRequests?userId=-1" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
-              Ver as questões geradas de todos os usuários&rarr;
-            </a>
-          ) : (
-            <a href="/questionRequests" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
-              Ver minhas questões geradas &rarr;
-            </a>
-          )}
+          <div className="flex items-center gap-4">
+            <div className="w-64">
+              <Select onValueChange={handleTemplateChange} value={templateId ? templateId.toString() : "all"}>
+                <SelectTrigger className="w-full bg-white">
+                  <SelectValue placeholder="Filtrar por Template" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os Templates</SelectItem>
+                  {templates?.map((template) => (
+                    <SelectItem key={template.id} value={template.id.toString()}>
+                      {template.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {userId !== -1 ? (
+              <a href="/questionRequests?userId=-1" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                Ver de todos os usuários&rarr;
+              </a>
+            ) : (
+              <a href="/questionRequests" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                Ver minhas questões &rarr;
+              </a>
+            )}
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
@@ -165,9 +206,9 @@ function getParameterString(parameterValues: any) {
 }
 
 function getNumberOfCorrectAnswers(questions: any[]): { total: number; correct: number; answered: number } {
- 
- if (!Array.isArray(questions) || questions.length === 0) return { total: 0, correct: 0, answered: 0 };
- 
+
+  if (!Array.isArray(questions) || questions.length === 0) return { total: 0, correct: 0, answered: 0 };
+
   const total = questions.length;
 
   let correct = 0;
@@ -178,7 +219,7 @@ function getNumberOfCorrectAnswers(questions: any[]): { total: number; correct: 
     if (question.type === "discursive") {
       const autoEvaluation = question.answers[0]?.autoEvaluation;
       autoEvaluation ? console.log('Autoevaluation for discursive answer:', autoEvaluation) : 'no autoevaluation found';
-     
+
       if (autoEvaluation) {
         answered++;
         console.log('Autoavaliação da resposta discursiva:', autoEvaluation);
@@ -190,7 +231,7 @@ function getNumberOfCorrectAnswers(questions: any[]): { total: number; correct: 
 
         console.log("Correto depois do if:", correct);
       }
-      
+
     }
     // Questão múltipla escolha
     else if (question.type === "multiple-choice") {
@@ -203,7 +244,7 @@ function getNumberOfCorrectAnswers(questions: any[]): { total: number; correct: 
           console.log('Resposta correta para questão de múltipla escolha:', question);
         }
       }
-      
+
     }
   }
 
