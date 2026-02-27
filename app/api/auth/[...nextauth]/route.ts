@@ -13,7 +13,7 @@ declare module "next-auth" {
   }
 }
 
-const authOptions = {
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -41,9 +41,13 @@ const authOptions = {
       return false;
     },
     async session({ session, token }: { session: any; token: any }) {
-      if (token.email) {
+      const fs = require('fs');
+      fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'session', token, session }) + '\\n');
+      if (token && token.email) {
         const user = await prisma.user.findUnique({ where: { email: token.email } });
+        fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'user_fetched', user }) + '\\n');
         session.user.isAdmin = user?.admin || false;
+        fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'session_modified', session }) + '\\n');
       }
       return session;
     },

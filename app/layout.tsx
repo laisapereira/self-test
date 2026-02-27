@@ -117,6 +117,7 @@ function MenuItems(props: { onClick?: () => void }) {
   const { onClick } = props;
   const { data: session } = useSession();
   const isUserAdmin = () => {
+    console.log("a session", session?.user?.isAdmin)
     if (!session || !session.user) return false;
     return session.user.isAdmin === true;
   }

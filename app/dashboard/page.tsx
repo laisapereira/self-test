@@ -42,7 +42,7 @@ function DashboardInner() {
 
   return <div>
 
-    Select a question template:
+    Selecione um template de questão:
     <Select key="mysel" onValueChange={(value) => { setSelectedTemplateId(Number(value)); }}>
       <SelectTrigger>
         <SelectValue placeholder={`Select template`} />

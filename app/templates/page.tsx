@@ -11,6 +11,7 @@ import Forbidden from "@/components/forbidden";
 
 export default function QuestionRequestTemplates() {
   const { data: session, status } = useSession();
+  console.log("a session na page", session?.user?.isAdmin)
   const router = useRouter();
 
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
