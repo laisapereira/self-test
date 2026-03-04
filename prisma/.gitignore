@@ -1,0 +1,6 @@
+*
+!*/
+!schema.prisma
+!types.ts
+!migrations/
+!.gitignore
