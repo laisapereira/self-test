@@ -10,6 +10,7 @@ import { Marked } from "marked";
 import { Suspense } from "react";
 import 'highlight.js/styles/github.css';
 import { QuestionCard } from "@/components/questionCard";
+import { QuestionRequest } from "@/prisma";
 
 const marked = new Marked(
   markedHighlight({
@@ -24,10 +25,14 @@ const marked = new Marked(
 function QuestionsPageInner() {
   const searchParams = useSearchParams();
   const [questions, setQuestions] = useState<any[]>([]);
+  const [requests, setRequests] = useState<QuestionRequest[] | null>(null);
+
 
   // Fetch questions from the server
   async function fetchQuestions(params: { templateId?: string, userId?: string, questionRequestId?: string }) {
     const { templateId, userId, questionRequestId } = params;
+
+
 
     const fetchSearchParams = new URLSearchParams();
 
@@ -63,13 +68,13 @@ function QuestionsPageInner() {
     </CardHeader>
     <CardContent>
       {questions.length > 0 ? (
-        questions.map((question: any) => (
+        questions.map((question: any, index: number) => (
           <div key={question.id} className="mb-4">
-            <QuestionCard question={question} userId={userId} />
+            <QuestionCard question={question} userId={userId} questionNumber={index + 1} />
           </div>
         ))
       ) : (
-        <p className="text-gray-500">No questions available.</p>
+        <p className="text-gray-500">Nenhuma questão disponível por aqui ;/</p>
       )}
     </CardContent>
   </Card>
@@ -77,7 +82,7 @@ function QuestionsPageInner() {
 
 export default function QuestionsPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Carregando...</div>}>
       <QuestionsPageInner />
     </Suspense>
   );

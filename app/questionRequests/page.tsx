@@ -129,7 +129,7 @@ function QuestionRequestsPageInner() {
               {requests?.map((request: any) => {
 
                 const score = getNumberOfCorrectAnswers(request.questions);
-                console.log('Score calculado para request ID', request.id, ':', page);
+
                 const scoreColor = score.correct > 0 && score.correct === score.total ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-700";
 
                 return (

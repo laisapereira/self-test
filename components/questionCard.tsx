@@ -29,8 +29,8 @@ type CriterionScore = {
   score: number;
 };
 
-export function QuestionCard(props: { question: Question, userId?: number, withAnswer?: Answer, withEvaluation?: AutoEvaluation }) {
-  const { question } = props;
+export function QuestionCard(props: { question: Question, userId?: number, withAnswer?: Answer, withEvaluation?: AutoEvaluation, questionNumber?: number }) {
+  const { question, questionNumber } = props;
   const [alternative, setAlternative] = useState<number | null>(null);
   const [confidenceLevel, setConfidenceLevel] = useState<number | null>(null);
   const [answer, setAnswer] = useState<Answer | null>(props.withAnswer ?? null);
@@ -174,7 +174,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
   return (
     <Card className="w-full">
       <CardHeader>
-        <h1 className="text-2xl font-bold">Question</h1>
+        <h3 className="text-2xl font-bold">Questão {questionNumber}</h3>
         {answer && (
           <div>
             <p className={answer?.answerIndex !== null && answer?.answerIndex !== undefined ? getAnswerClassName(answer.answerIndex) : ''}>
@@ -262,7 +262,7 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
 
               {feedbackLLM && (
                 <div className="mt-2 border-t pt-2">
-                  <p className="text-center"><b>Feedback pelo LLM</b></p>
+                  <p className="text-center"><b>Feedback do modelo: </b></p>
                   <p><b>Nota:</b> {feedbackLLM.score}</p>
                   <p><b>Justificativa do feedback</b> {feedbackLLM.justification}</p>
                 </div>
