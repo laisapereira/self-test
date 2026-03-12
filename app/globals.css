@@ -116,13 +116,21 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   pre {
-    border: 2px solid #ccc; /* Add a light gray border around the code block */
+    border: 2px solid #ccc;
+    /* Add a light gray border around the code block */
   }
+
   pre code.hljs {
     background: #eee !important;
+  }
+
+  button {
+    cursor: pointer;
   }
 }

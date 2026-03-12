@@ -20,6 +20,9 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  pages: {
+    signIn: '/login',
+  },
   callbacks: {
     async signIn({ user }: { user: { email?: string | null; name?: string | null; image?: string | null } }) {
       if (user.email /*user.email?.endsWith("@ufba.br")*/) {

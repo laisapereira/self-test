@@ -32,12 +32,12 @@ export default function TemplateForm({ defaultValues, onSubmit, mode }: Template
 
   const isForbidden = status === "authenticated" && session?.user?.isAdmin === false;
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/api/auth/signin");
     }
   }, [status, router]);
-
+ */
   if (status === "loading") {
     return <div className="p-8 text-center text-slate-500">Carregando...</div>;
   }

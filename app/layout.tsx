@@ -84,6 +84,7 @@ export default function RootLayout({
 
 function Navbar() {
   const [open, setOpen] = useState(false)
+  const { data: session } = useSession()
 
   return (
     <nav className="bg-white shadow-md px-4 py-3 sticky top-0 z-50">
@@ -91,21 +92,28 @@ function Navbar() {
 
         <Link href="/"> <Image src="/logo.png" alt="SelfTest Logo" width={200} height={150} /></Link>
 
-        <button
-          className="md:hidden text-gray-800"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle Menu"
-        >
-          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-        <ul className="hidden md:flex gap-6 text-gray-700 font-medium">
+        {session && (
+          <button
+            className="md:hidden text-gray-800"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle Menu"
+          >
+            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        )}
 
+        <ul className="hidden md:flex gap-6 text-gray-700 font-medium items-center">
           <MenuItems />
         </ul>
-      </div>
-      {open && (
-        <ul className="md:hidden mt-2 space-y-2 text-gray-700 font-medium">
 
+        {!session && (
+          <ul className="flex md:hidden gap-6 text-gray-700 font-medium items-center">
+            <MenuItems />
+          </ul>
+        )}
+      </div>
+      {open && session && (
+        <ul className="md:hidden mt-2 space-y-2 text-gray-700 font-medium pb-2">
           <MenuItems onClick={() => setOpen(false)} />
         </ul>
       )}
@@ -133,7 +141,7 @@ function MenuItems(props: { onClick?: () => void }) {
           </Link>))}
       <Link href='/api/auth/signout' className="block px-4 py-2 hover:bg-gray-100">{session.user?.email}</Link>
     </Fragment>) : (
-    <Link href='/api/auth/signin' >Login</Link>
+    <Link href='/login' >Login</Link>
   );
 
 }

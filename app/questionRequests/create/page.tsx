@@ -17,11 +17,7 @@ export default function QuestionRequestCreatePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/api/auth/signin");
-    }
-  }, [status, router]);
+
 
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const [template, setTemplate] = useState<QuestionRequestTemplate | null>(null);

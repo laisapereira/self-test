@@ -37,12 +37,10 @@ export default function QuestionRequestTemplates() {
   }
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/api/auth/signin");
-    } else if (status === "authenticated" && !isForbidden) {
+    if (status === "authenticated" && !isForbidden) {
       fetchTemplates();
     }
-  }, [status, isForbidden, router]);
+  }, [status, isForbidden]);
 
   async function removeTemplate(id: number) {
     await fetch(`/api/templates/${id}`, {
