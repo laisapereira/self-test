@@ -91,7 +91,7 @@ export default function QuestionRequestCreatePage() {
         value={newRequest.parameterValues.find((param) => param.name === parameter.name)?.values[0] || ""}
         onChange={(e) => handleParameterChange(parameter, [e.target.value])}
         placeholder={`Enter ${parameter.name}`}
-        className="mb-2"
+        className="mb-4"
       />;
     }
   }
