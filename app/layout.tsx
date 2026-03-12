@@ -2,11 +2,13 @@
 
 import './globals.css'
 import { Inter } from 'next/font/google'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment, ReactNode, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { SessionProvider, signIn, signOut, useSession } from 'next-auth/react';
 import { Toaster } from '@/components/ui/sonner';
+import Footer from '@/components/footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,24 +18,34 @@ const inter = Inter({ subsets: ['latin'] })
 // }
 
 const routes = [
+
+
   {
-    title: 'Templates',
+    title: 'Gerar Questões',
+    href: '/',
+  },
+  {
+    title: 'Templates de Questões',
     href: '/templates',
     requireAdmin: true,
   },
+
   {
-    title: 'Users',
+    title: 'Questões Geradas',
+    href: '/questionRequests',
+  },
+
+  {
+    title: 'Usuários',
     href: '/users',
     requireAdmin: true,
-  },
-  {
-    title: 'Questions',
-    href: '/questionRequests',
   },
   {
     title: 'Dashboard',
     href: '/dashboard',
   },
+
+
 ]
 
 export default function RootLayout({
@@ -45,10 +57,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.png" />
         <title>SelfTest</title>
-        <meta name="description" content="SelfTest allows students to test their knowledge leveraging custom, AI-generated questions." />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="description" content="O SelfTest permite estudantes de computação testarem seus conhecimentos utilizando perguntas personalizadas geradas por IA. Venha se testar!" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={inter.className}>
@@ -56,7 +68,13 @@ export default function RootLayout({
           <Navbar />
           <main className="p-4">
             {children}
+
           </main>
+
+          <Link href="https://forms.gle/BLVawYyYqAWBM1Vd8" target="_blank" className="mt-4 text-xl text-blue-600 hover:underline text-center flex justify-center">
+            O que você tem achado do SelfTest? Avalie aqui!
+          </Link>
+          <Footer />
           <Toaster />
         </SessionProvider>
       </body>
@@ -70,9 +88,9 @@ function Navbar() {
   return (
     <nav className="bg-white shadow-md px-4 py-3 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" className="text-xl font-semibold text-gray-800">
-          SelfTest
-        </Link>
+
+        <Link href="/"> <Image src="/logo.png" alt="SelfTest Logo" width={200} height={150} /></Link>
+
         <button
           className="md:hidden text-gray-800"
           onClick={() => setOpen(!open)}
@@ -81,17 +99,13 @@ function Navbar() {
           {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
         <ul className="hidden md:flex gap-6 text-gray-700 font-medium">
-          {/* <li><Link href="/">Home</Link></li>
-          <li><Link href="/about">About</Link></li>
-          <li><Link href="/contact">Contact</Link></li> */}
+
           <MenuItems />
         </ul>
       </div>
       {open && (
         <ul className="md:hidden mt-2 space-y-2 text-gray-700 font-medium">
-          {/* <li><Link href="/" onClick={() => setOpen(false)}>Home</Link></li>
-          <li><Link href="/about" onClick={() => setOpen(false)}>About</Link></li>
-          <li><Link href="/contact" onClick={() => setOpen(false)}>Contact</Link></li> */}
+
           <MenuItems onClick={() => setOpen(false)} />
         </ul>
       )}
@@ -103,6 +117,7 @@ function MenuItems(props: { onClick?: () => void }) {
   const { onClick } = props;
   const { data: session } = useSession();
   const isUserAdmin = () => {
+    console.log("a session", session?.user?.isAdmin)
     if (!session || !session.user) return false;
     return session.user.isAdmin === true;
   }
@@ -118,7 +133,7 @@ function MenuItems(props: { onClick?: () => void }) {
           </Link>))}
       <Link href='/api/auth/signout' className="block px-4 py-2 hover:bg-gray-100">{session.user?.email}</Link>
     </Fragment>) : (
-    <Link href='/api/auth/signin' >Sign in</Link>
+    <Link href='/api/auth/signin' >Login</Link>
   );
 
 }

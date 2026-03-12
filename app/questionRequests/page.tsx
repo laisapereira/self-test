@@ -1,12 +1,14 @@
 'use client';
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useSearchParams } from "next/navigation";
 import { fetchRequests } from "./server";
 import { Suspense, useEffect, useState } from "react";
-import Link from "next/link";
-import Date from "@/components/date";
-import QuestionRequestCreatePage from "./create/page";
+import Pagination from "@/components/pagination";
+import { useRouter } from 'next/navigation';
+import { QuestionRequest, QuestionRequestTemplate } from "@/prisma";
+import { normalizeQuestionRequests } from "@/lib/utils";
 
 export default function QuestionRequestsPage() {
   return <Suspense>
@@ -15,95 +17,184 @@ export default function QuestionRequestsPage() {
 }
 
 function QuestionRequestsPageInner() {
-  const [requests, setRequests] = useState<any>([]);
+  const [requests, setRequests] = useState<QuestionRequest[] | null>(null);
+  const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const searchParams = useSearchParams();
   const userIdStr = searchParams?.get("userId") || null;
   const userId = userIdStr === null || userIdStr == '' ? undefined : parseInt(userIdStr, 10);
+  const templateIdStr = searchParams?.get("templateId") || null;
+  const templateId = templateIdStr ? parseInt(templateIdStr, 10) : undefined;
+
+  const pageStr = searchParams?.get("page")
+  const page = pageStr ? parseInt(pageStr, 10) : 1
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchTemplates() {
+      const response = await fetch("/api/templates");
+      const data = await response.json();
+      setTemplates(data);
+    }
+    fetchTemplates();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchRequests({ userId });
-      setRequests(result);
+      const result = await fetchRequests({ userId, page, pageSize: 6, templateId });
+      setRequests(normalizeQuestionRequests(result.data));
+
+      setTotalPages(result.totalPages);
+
+      setCurrentPage(result.currentPage);
+
     }
 
     fetchData();
-  }, []);
+  }, [userId, page, templateId]);
+
+  const handleRowClick = (requestId: string, requestUserId: number) => {
+    router.push(`/questions?questionRequestId=${requestId}&userId=${requestUserId}`);
+  };
+
+  const handleTemplateChange = (value: string) => {
+    const params = new URLSearchParams(searchParams?.toString());
+    if (value === "all") {
+      params.delete("templateId");
+    } else {
+      params.set("templateId", value);
+    }
+    params.set("page", "1"); // Reset to first page on filter change
+    router.push(`/questionRequests?${params.toString()}`);
+  };
+
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div>
-        <QuestionRequestCreatePage />
+    <>
 
-        {userId !== -1 ? <>
-          <a href="/questionRequests?userId=-1" className="text-blue-500 hover:underline">
-            View recent requests from all users
-          </a>
-          <br />
-        </>
-          :
-          <>
-            <a href="/questionRequests" className="text-blue-500 hover:underline">
-              View your requests
-            </a>
-            <br />
-          </>
-        }
+      <div className="w-full max-w-5xl mx-auto p-4 my-6">
 
-        <h1>Question Requests</h1>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-left">Creation</TableHead>
-              {userId === -1 && <TableHead className="text-left">User</TableHead>}
-              <TableHead className="text-left">Template</TableHead>
-              <TableHead className="text-left">Parameters</TableHead>
-              <TableHead className="text-left">Correct</TableHead>
-              <TableHead className="text-left">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {requests.map((request: any) => (
-              <TableRow key={request.id}>
-                <TableCell><Date date={request.createdAt} /></TableCell>
-                {
-                  userId === -1 &&
-                  <TableCell>
-                    <Link href={`/questionRequests?userId=${request.userId}`} className="text-blue-500 hover:underline">
-                      {request.user.name}
-                    </Link>
-                  </TableCell>
-                }
-                <TableCell>{request.template?.name}</TableCell>
-                <TableCell>{getParameterString(request.parameterValues)}</TableCell>
-                <TableCell>
-                  {
-                    (() => {
-                      const data = getNumberOfCorrectAnswers(request.questions);
-                      return <span>
-                        <span title="Correct" style={{ cursor: 'pointer', color: 'green', fontWeight: 'bold' }}>{data.correct}</span>&nbsp;
-                        <span title="Answered" style={{ cursor: 'pointer', color: 'blue' }}>{data.answered}</span>&nbsp;
-                        <span title="Total" style={{ cursor: 'pointer' }}>{data.total}</span>
-                      </span>;
-                    })()
-                  }
-                </TableCell>
-                <TableCell>
-                  <Link href={`/questions?questionRequestId=${request.id}&userId=${request.userId}`} className="text-blue-500 hover:underline">
-                    View Questions
-                  </Link>
-                </TableCell>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+          <h1 className="text-2xl font-bold text-slate-800 text-center">Histórico de Perguntas Geradas</h1>
+
+          <div className="flex items-center gap-4">
+            <div className="w-64">
+              <Select onValueChange={handleTemplateChange} value={templateId ? templateId.toString() : "all"}>
+                <SelectTrigger className="w-full bg-white">
+                  <SelectValue placeholder="Filtrar por Template" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os Templates</SelectItem>
+                  {templates?.map((template) => (
+                    <SelectItem key={template.id} value={template.id.toString()}>
+                      {template.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {userId !== -1 ? (
+              <a href="/questionRequests?userId=-1" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                Ver de todos os usuários&rarr;
+              </a>
+            ) : (
+              <a href="/questionRequests" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                Ver minhas questões &rarr;
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+          <Table>
+            <TableHeader className="bg-slate-50">
+              <TableRow>
+
+                <TableHead className="w-[100px]">Data de Geração</TableHead>
+
+                {userId === -1 && <TableHead className="w-[150px]">Usuário</TableHead>}
+
+
+                <TableHead className="text-center">Tema e Parâmetros</TableHead>
+
+                {/* Score compacto */}
+                <TableHead className="text-right">Desempenho</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+
+            <TableBody>
+              {requests?.map((request: any) => {
+
+                const score = getNumberOfCorrectAnswers(request.questions);
+
+                const scoreColor = score.correct > 0 && score.correct === score.total ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-700";
+
+                return (
+                  <TableRow
+                    key={request.id}
+
+                    className="cursor-pointer hover:bg-blue-50/50 transition-colors group"
+                    onClick={() => handleRowClick(request.id, request.userId)}
+                  >
+
+                    <TableCell className="align-top py-4">
+                      <div className="text-sm font-medium text-slate-700">
+                        {new Date(request.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })}
+                      </div>
+                      <div className="text-xs text-slate-400 flex">
+
+                        Hora: {new Date(request.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    </TableCell>
+
+                    {/* USUÁRIO (Apenas se admin) */}
+                    {userId === -1 && (
+                      <TableCell className="align-top py-4">
+                        <div className="font-medium text-sm">{request.user.name}</div>
+                      </TableCell>
+                    )}
+
+
+                    <TableCell className="align-top py-4 max-w-[400px]">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                          {request.template?.name}
+                        </span>
+
+
+                        <span className="text-xs text-slate-500 truncate block w-full" title={getParameterString(request.parameterValues)}>
+                          {getParameterString(request.parameterValues)}
+                        </span>
+                      </div>
+                    </TableCell>
+
+
+                    <TableCell className="text-right align-top py-4">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${scoreColor}`}>
+                        {score.correct} / {score.total} acertos
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>      </Table>
+        </div>
+        <div className="mt-4">
+          <Pagination totalPages={totalPages} currentPage={currentPage} />
+        </div>
       </div>
-    </Suspense>
+
+    </>
+
   );
 }
 
 function getParameterString(parameterValues: any) {
   if (parameterValues.length === 0) {
-    return "No parameters";
+    return "Sem parâmetros";
   }
   return parameterValues.map((param: any) => {
     if (param.values.length > 0) {
@@ -114,18 +205,46 @@ function getParameterString(parameterValues: any) {
   }).join(", ");
 }
 
-function getNumberOfCorrectAnswers(questions: any) {
+function getNumberOfCorrectAnswers(questions: any[]): { total: number; correct: number; answered: number } {
+
+  if (!Array.isArray(questions) || questions.length === 0) return { total: 0, correct: 0, answered: 0 };
+
   const total = questions.length;
+
   let correct = 0;
   let answered = 0;
 
   for (const question of questions) {
-    const answerIndex = question.answers[0]?.answerIndex;
-    if (answerIndex !== undefined && answerIndex !== null) {
-      answered++;
-      if (answerIndex == question.correctAnswerIndex) {
-        correct++;
+    console.log('Processing question:', question);
+    if (question.type === "discursive") {
+      const autoEvaluation = question.answers[0]?.autoEvaluation;
+      autoEvaluation ? console.log('Autoevaluation for discursive answer:', autoEvaluation) : 'no autoevaluation found';
+
+      if (autoEvaluation) {
+        answered++;
+        console.log('Autoavaliação da resposta discursiva:', autoEvaluation);
+        const numericScore = Number(autoEvaluation.score);
+        if (!isNaN(numericScore) && numericScore >= 5) {
+          correct++;
+          console.log("correto dentro do if:", correct);
+        }
+
+        console.log("Correto depois do if:", correct);
       }
+
+    }
+    // Questão múltipla escolha
+    else if (question.type === "multiple-choice") {
+      const answerIndex = question.answers[0]?.answerIndex;
+      console.log('User answer index for question:', answerIndex);
+      if (answerIndex !== undefined && answerIndex !== null) {
+        answered++;
+        if (answerIndex == question.correctAnswerIndex) {
+          correct++;
+          console.log('Resposta correta para questão de múltipla escolha:', question);
+        }
+      }
+
     }
   }
 

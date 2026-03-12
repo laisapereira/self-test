@@ -2,7 +2,7 @@
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import React, { Suspense, useEffect, useState } from "react";
 import { fetchRequestsForTemplate, fetchTemplate, fetchUsersWhoUsedTemplate, fetchTemplates } from "./server";
-import { QuestionRequestTemplate, User } from "../generated/prisma";
+import { QuestionRequestTemplate, User } from "../../prisma";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Dashboard() {
@@ -42,13 +42,13 @@ function DashboardInner() {
 
   return <div>
 
-    Select a question template:
+    Selecione um template de questão:
     <Select key="mysel" onValueChange={(value) => { setSelectedTemplateId(Number(value)); }}>
       <SelectTrigger>
         <SelectValue placeholder={`Select template`} />
       </SelectTrigger>
       <SelectContent>
-        {templates.map((template: QuestionRequestTemplate, index: number) => (
+        {templates?.map((template: QuestionRequestTemplate, index: number) => (
           <SelectItem key={`k${index}`} value={template.id.toString()}>
             {template.name}
           </SelectItem>

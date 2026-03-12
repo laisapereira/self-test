@@ -75,7 +75,7 @@ model QuestionRequest {
   parameterValues Json[]
   createdAt       DateTime @default(now())
 
-  templateId Int
+  templateId Int?
   userId     Int
 
   user      User                     @relation(fields: [userId], references: [id])
@@ -86,9 +86,10 @@ model QuestionRequest {
 model Question {
   id                 Int    @id @default(autoincrement())
   content            String
-  correctAnswerIndex Int
-  /// [MultipleChoiceQuestionAlternative]
+  correctAnswerIndex Int? /// [MultipleChoiceQuestionAlternative]
   alternatives       Json[]
+  type               String @default("multiple-choice")
+  evaluationCriteria Json[]
 
   requestId Int
   request   QuestionRequest @relation(fields: [requestId], references: [id])
@@ -101,9 +102,10 @@ model Answer {
   questionId Int
   userId     Int
 
-  answerIndex     Int
+  answerIndex     Int?
   correct         Boolean
   confidenceLevel Int
+  openAnswer      String?
   createdAt       DateTime @default(now())
 
   flaggedIncorrect   Boolean @default(false)
@@ -114,5 +116,30 @@ model Answer {
   question Question @relation(fields: [questionId], references: [id])
   user     User     @relation(fields: [userId], references: [id])
 
+  autoEvaluation AutoEvaluation?
+
   @@index([userId, questionId], name: "user_question_unique")
+}
+
+model AutoEvaluation {
+  id       Int    @id @default(autoincrement())
+  answer   Answer @relation(fields: [answerId], references: [id])
+  answerId Int    @unique
+
+  score         Float
+  justification String
+  modelVersion  String?
+
+  criteria    AutoEvaluationCriterion[]
+  evaluatedAt DateTime                  @default(now())
+}
+
+model AutoEvaluationCriterion {
+  id               Int            @id @default(autoincrement())
+  autoEvaluation   AutoEvaluation @relation(fields: [autoEvaluationId], references: [id])
+  autoEvaluationId Int
+
+  description String
+  weight      Float
+  score       Float
 }

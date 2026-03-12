@@ -70,7 +70,7 @@ export default function InterestingAnswers() {
     ) : (
       <ul>
         {answers.map((answer: any) => (
-          <QuestionCard key={answer.id} question={answer.question} withAnswer={answer} />
+          <QuestionCard key={answer.id} question={answer.question} withAnswer={answer} withEvaluation={answer.autoEvaluation}  />
           // <li key={answer.id}># {answer.question.content}</li>
         ))}
       </ul>

@@ -50,39 +50,76 @@ export async function POST(req: Request) {
 
 async function generateQuestions(questionRequest: QuestionRequest) {
   const jsonString = await requestLLM(questionRequest);
+
+  console.log('JSON STRING', jsonString);
   if (!jsonString) {
     throw new Error("No response from LLM");
   }
   // console.log('RESULT', jsonString);
-  const json: PrismaJson.MultipleChoiceQuestionResponse = JSON.parse(jsonString);
+  const json: PrismaJson.MultipleChoiceQuestionResponse | PrismaJson.DiscursiveQuestionResponse = JSON.parse(jsonString);
   const questions = json.questions;
 
+  console.log("As questoes geradas", json.questions);
   // for each question, shuffle the alternatives, updating the correctAnswerIndex
   questions.forEach((question) => {
-    const indices = Array.from({ length: question.alternatives.length }, (_, i) => i);
-    indices.sort((i) => Math.random() - 0.5);
-    // shuffle alternatives and update the index of the correct answer
-    question.alternatives = indices.map((i) => question.alternatives[i]);
-    question.correctAnswerIndex = indices.indexOf(question.correctAnswerIndex);
+
+    //questão não tem o tipo. por isso a validação está frouxa,. preciso definir o tipo antes,
+    // com uma espécie de flag mesmo, na hora de criar a questão no prompt template.
+
+    //console.log("Tipo da questão", question.type);
+
+    if ('alternatives' in question) {
+
+      const indices = Array.from({ length: question?.alternatives?.length }, (_, i) => i);
+      indices.sort((i) => Math.random() - 0.5);
+      // shuffle alternatives and update the index of the correct answer
+      question.alternatives = indices.map((i) => question.alternatives[i]);
+      question.correctAnswerIndex = indices.indexOf(question.correctAnswerIndex);
+    } else {
+      console.log('Questão discursiva gerada:', question);
+    }
+
   });
 
   await prisma.question.createMany({
-    data: questions.map((question) => ({
-      content: question.content,
-      correctAnswerIndex: question.correctAnswerIndex,
-      requestId: questionRequest.id,
-      alternatives: question.alternatives.map((alternative) => ({
-        content: alternative.content,
-        feedback: alternative.feedback,
-      })),
-    })),
+    data: questions.map((question) => {
+
+      console.log("Criação da questão", question.type);
+      if ('alternatives' in question) {
+        return {
+          content: question.content,
+          correctAnswerIndex: question.correctAnswerIndex,
+          type: "multiple-choice",
+          requestId: questionRequest.id,
+          alternatives: question.alternatives.map((alternative) => ({
+            content: alternative.content,
+            feedback: alternative.feedback,
+          })),
+        };
+      } else {
+
+        return {
+          content: question.content,
+          correctAnswerIndex: null,
+          type: "discursive",
+          requestId: questionRequest.id,
+          alternatives: [],
+          evaluationCriteria: question.evaluationCriteria,
+        };
+      }
+    }),
   });
 }
 
 async function generatePrompt(questionRequest: QuestionRequest) {
+  if (!questionRequest.templateId) {
+    throw new Error("templateId is null");
+  }
+
   const template = await prisma.questionRequestTemplate.findUnique({
     where: { id: questionRequest.templateId },
   });
+
   if (!template) {
     throw new Error("Template not found");
   }
@@ -98,12 +135,13 @@ async function generatePrompt(questionRequest: QuestionRequest) {
 
 async function requestLLM(questionRequest: QuestionRequest) {
   const prompt = await generatePrompt(questionRequest);
-  
+
+
   console.log(prompt);
 
   const openai = new OpenAI({
     apiKey: process.env.DEEPSEEK_API_KEY,
-    baseURL: 'https://api.deepseek.com',
+    baseURL: process.env.DEEPSEEK_API_URL,
   });
 
   console.log('sending request to LLM');
@@ -114,6 +152,7 @@ async function requestLLM(questionRequest: QuestionRequest) {
       type: 'json_object'
     }
   });
+
 
   return completion.choices[0].message.content;
 }

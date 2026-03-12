@@ -1,37 +1,28 @@
 services:
-  db:
-    image: postgres:14
-    container_name: self-test-db
+  db_selftest:
+    image: postgres:13.22-alpine3.21
+    container_name: self_test_db
+    restart: unless-stopped
+    ports:
+      - "5433:5432"         
     environment:
       POSTGRES_USER: usertest
-      POSTGRES_PASSWORD: passwordtest
-      POSTGRES_DB: selftestdb
-    ports:
-      - "8000:8000"
+      POSTGRES_PASSWORD: passwtest
+      POSTGRES_DB: selftest_dev
     volumes:
-      - selftest_data:/var/lib/postgresql/data
-    networks:
-      - mynetwork
-    restart: always
+      - pgdev-selftest:/var/lib/postgresql/data
 
   pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
+    image: dpage/pgadmin4:8
+    container_name: pgadmin_selftest
+    depends_on:
+      - db_selftest
     environment:
-      PGADMIN_DEFAULT_EMAIL: self@admin
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "5432:5432"
-    networks:
-      - mynetwork
-    depends_on:
-      - db
-    restart: always
-
-networks:
-  mynetwork:
-    driver: bridge
+      - "8081:80"
+    restart: unless-stopped
 
 volumes:
-  selftest_data:
-    name: selftest_data
+  pgdev-selftest:

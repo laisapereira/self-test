@@ -170,6 +170,8 @@ exports.Prisma.QuestionScalarFieldEnum = {
   content: 'content',
   correctAnswerIndex: 'correctAnswerIndex',
   alternatives: 'alternatives',
+  type: 'type',
+  evaluationCriteria: 'evaluationCriteria',
   requestId: 'requestId'
 };
 
@@ -180,11 +182,29 @@ exports.Prisma.AnswerScalarFieldEnum = {
   answerIndex: 'answerIndex',
   correct: 'correct',
   confidenceLevel: 'confidenceLevel',
+  openAnswer: 'openAnswer',
   createdAt: 'createdAt',
   flaggedIncorrect: 'flaggedIncorrect',
   flaggedProblematic: 'flaggedProblematic',
   flaggedExcellent: 'flaggedExcellent',
   observation: 'observation'
+};
+
+exports.Prisma.AutoEvaluationScalarFieldEnum = {
+  id: 'id',
+  answerId: 'answerId',
+  score: 'score',
+  justification: 'justification',
+  modelVersion: 'modelVersion',
+  evaluatedAt: 'evaluatedAt'
+};
+
+exports.Prisma.AutoEvaluationCriterionScalarFieldEnum = {
+  id: 'id',
+  autoEvaluationId: 'autoEvaluationId',
+  description: 'description',
+  weight: 'weight',
+  score: 'score'
 };
 
 exports.Prisma.SortOrder = {
@@ -210,7 +230,9 @@ exports.Prisma.ModelName = {
   QuestionRequestTemplate: 'QuestionRequestTemplate',
   QuestionRequest: 'QuestionRequest',
   Question: 'Question',
-  Answer: 'Answer'
+  Answer: 'Answer',
+  AutoEvaluation: 'AutoEvaluation',
+  AutoEvaluationCriterion: 'AutoEvaluationCriterion'
 };
 
 /**

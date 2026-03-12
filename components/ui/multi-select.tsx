@@ -58,7 +58,7 @@ const multiSelectVariants = cva(
  */
 interface MultiSelectProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof multiSelectVariants> {
+  VariantProps<typeof multiSelectVariants> {
   /**
    * An array of option objects to be displayed in the multi-select component.
    * Each option object has a label, value, and an optional icon.
@@ -217,7 +217,8 @@ export const MultiSelect = React.forwardRef<
                         key={value}
                         className={cn(
                           isAnimating ? "animate-bounce" : "",
-                          multiSelectVariants({ variant })
+                          multiSelectVariants({ variant }),
+                          "whitespace-normal h-auto text-left"
                         )}
                         style={{ animationDuration: `${animation}s` }}
                       >
@@ -345,7 +346,7 @@ export const MultiSelect = React.forwardRef<
                         onSelect={handleClear}
                         className="flex-1 justify-center cursor-pointer"
                       >
-                        Clear
+                        Limpar seleção
                       </CommandItem>
                       <Separator
                         orientation="vertical"
@@ -357,7 +358,7 @@ export const MultiSelect = React.forwardRef<
                     onSelect={() => setIsPopoverOpen(false)}
                     className="flex-1 justify-center cursor-pointer max-w-full"
                   >
-                    Close
+                    Fechar e Salvar
                   </CommandItem>
                 </div>
               </CommandGroup>
