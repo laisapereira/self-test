@@ -138,7 +138,7 @@ export default function QuestionRequestCreatePage() {
         <SelectValue placeholder="Selecione uma àrea geral" />
       </SelectTrigger>
       <SelectContent>
-        {templates.map((template: QuestionRequestTemplate) => (
+        {templates?.map((template: QuestionRequestTemplate) => (
           <SelectItem key={template.id} value={`${template.id}`}>
             {template.name}
           </SelectItem>

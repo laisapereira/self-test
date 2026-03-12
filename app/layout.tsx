@@ -133,7 +133,7 @@ function MenuItems(props: { onClick?: () => void }) {
           </Link>))}
       <Link href='/api/auth/signout' className="block px-4 py-2 hover:bg-gray-100">{session.user?.email}</Link>
     </Fragment>) : (
-    <Link href='/api/auth/signin' >Sign in</Link>
+    <Link href='/api/auth/signin' >Login</Link>
   );
 
 }
