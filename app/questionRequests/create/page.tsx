@@ -32,10 +32,21 @@ export default function QuestionRequestCreatePage() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+
+    if (status !== "authenticated") return;
+
     async function fetchTemplates() {
-      const response = await fetch("/api/templates");
-      const data = await response.json();
-      setTemplates(data);
+      try {
+        const response = await fetch("/api/templates");
+        const data = await response.json();
+        if (response.ok && Array.isArray(data)) {
+          setTemplates(data);
+        } else {
+          console.error("Failed to load templates:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching templates:", error);
+      }
     }
     fetchTemplates();
   }, []);
