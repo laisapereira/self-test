@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useEffect, useState } from "react";
@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
 
 export default function QuestionRequestCreatePage() {
   const { data: session, status } = useSession();
@@ -57,7 +56,10 @@ export default function QuestionRequestCreatePage() {
     }
   }, [template]);
 
-  function renderParameterInput(parameter: PrismaJson.QuestionRequestTemplateParameter, key: string): any {
+  function renderParameterInput(
+    parameter: PrismaJson.QuestionRequestTemplateParameter,
+    key: string
+  ): React.ReactNode {
     if (parameter.values && parameter.values.length > 0) {
       if (parameter.multipleSelect) {
         return <MultiSelect
@@ -158,10 +160,24 @@ export default function QuestionRequestCreatePage() {
     if (!template) return;
 
     // Validate that all parameters have values
-    const missingParameters = template.parameters.filter((parameter) => {
-      const paramValue = newRequest.parameterValues.find((param) => param.name === parameter.name);
-      return !paramValue || paramValue.values.length === 0 || paramValue.values[0] === "";
-    });
+    interface MissingParameter {
+      name: string;
+      values: string[];
+    }
+
+    const missingParameters: MissingParameter[] = template.parameters.filter(
+      (parameter: PrismaJson.QuestionRequestTemplateParameter) => {
+        const paramValue = newRequest.parameterValues.find(
+          (param: PrismaJson.QuestionRequestParameterValue) =>
+            param.name === parameter.name
+        );
+        return (
+          !paramValue ||
+          paramValue.values.length === 0 ||
+          paramValue.values[0] === ""
+        );
+      }
+    );
 
     if (missingParameters.length > 0) {
       alert(`Por favor, selecione um valor para os seguintes parâmetros: ${missingParameters.map((p) => p.name).join(", ")}`);
@@ -186,7 +202,7 @@ export default function QuestionRequestCreatePage() {
       const newQuestionRequest = await response.json();
       window.location.href = `/questions?questionRequestId=${newQuestionRequest.id}`;
     } else {
-      console.log('Response', response);
+      console.log("Response", response);
       alert("Failed to create request");
     }
   }
@@ -221,5 +237,4 @@ export default function QuestionRequestCreatePage() {
       </CardContent>
     </Card>
   );
-
 }
