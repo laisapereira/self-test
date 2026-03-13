@@ -206,45 +206,30 @@ function getParameterString(parameterValues: any) {
 }
 
 function getNumberOfCorrectAnswers(questions: any[]): { total: number; correct: number; answered: number } {
-
   if (!Array.isArray(questions) || questions.length === 0) return { total: 0, correct: 0, answered: 0 };
 
   const total = questions.length;
-
   let correct = 0;
   let answered = 0;
 
   for (const question of questions) {
-    console.log('Processing question:', question);
     if (question.type === "discursive") {
       const autoEvaluation = question.answers[0]?.autoEvaluation;
-      autoEvaluation ? console.log('Autoevaluation for discursive answer:', autoEvaluation) : 'no autoevaluation found';
-
       if (autoEvaluation) {
         answered++;
-        console.log('Autoavaliação da resposta discursiva:', autoEvaluation);
         const numericScore = Number(autoEvaluation.score);
         if (!isNaN(numericScore) && numericScore >= 5) {
           correct++;
-          console.log("correto dentro do if:", correct);
         }
-
-        console.log("Correto depois do if:", correct);
       }
-
-    }
-    // Questão múltipla escolha
-    else if (question.type === "multiple-choice") {
+    } else if (question.type === "multiple-choice") {
       const answerIndex = question.answers[0]?.answerIndex;
-      console.log('User answer index for question:', answerIndex);
       if (answerIndex !== undefined && answerIndex !== null) {
         answered++;
         if (answerIndex == question.correctAnswerIndex) {
           correct++;
-          console.log('Resposta correta para questão de múltipla escolha:', question);
         }
       }
-
     }
   }
 

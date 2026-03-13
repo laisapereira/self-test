@@ -54,15 +54,12 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
 
         const { answer, feedbackLLM, criteriaScores } = await response.json()
 
-        console.log("criterios", criteriaScores)
-
         setAnswer(answer);
         setCriteriaScores(criteriaScores ?? [])
 
         setFeedbackLLM(feedbackLLM ?? null)
-        console.log("feedback", feedbackLLM)
       } catch (error) {
-        console.log("o erro", error)
+        console.error("[QuestionCard] falha ao buscar resposta discursiva | questionId:", question.id, error);
       }
 
 
@@ -75,7 +72,6 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
       if (response.status === 404) return;
 
       const answer = await response.json();
-      console.log("a resposta", answer)
       setAnswer(answer);
 
 
@@ -110,15 +106,15 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
 
       if (!response.ok) {
         const text = await response.text();
-        console.error("Erro ao enviar resposta discursiva:", response.status, text);
+        console.error("[QuestionCard] falha ao enviar resposta | questionId:", question.id, "status:", response.status, text);
         throw new Error("Failed to submit discursive answer");
       }
 
       const data = await response.json();
       setAnswer(data);
-      console.log("Answer submitted successfully", data);
+      console.log("[QuestionCard] resposta enviada com sucesso | questionId:", question.id);
     } catch (error) {
-      console.error("Error submitting answer:", error);
+      console.error("[QuestionCard] erro no request de submissao de resposta | questionId:", question.id, error);
     } finally {
       setIsLoading(false);
     }
@@ -129,9 +125,6 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
 
     setIsLoading(true);
 
-    console.log("resposta", discursiveAnswer)
-
-
     try {
       const response = await fetch(`/api/questions/${question.id}/answers/discursiveAnswers`, {
         method: "POST",
@@ -140,23 +133,16 @@ export function QuestionCard(props: { question: Question, userId?: number, withA
       });
       if (!response.ok) {
         const text = await response.text();
-        console.error("Erro ao enviar resposta discursiva:", response.status, text);
+        console.error("[QuestionCard] falha ao enviar resposta discursiva | questionId:", question.id, "status:", response.status, text);
         throw new Error("Failed to submit discursive answer");
       }
       const { answer, feedbackLLM, criteriaScores } = await response.json();
-      console.log("resposta", answer, feedbackLLM)
-      console.log("feedback", feedbackLLM)
-      console.log("criterios", criteriaScores)
-
       setAnswer(answer);
       setFeedbackLLM(feedbackLLM)
-      console.log("o feedbck", feedbackLLM)
       setCriteriaScores(criteriaScores);
-      //console.log("Discursive answer submitted successfully",);
-
-      console.log("notas", criteriaScores)
+      console.log("[QuestionCard] resposta discursiva enviada com sucesso | questionId:", question.id);
     } catch (error) {
-      console.error("Error submitting discursive answer:", error);
+      console.error("[QuestionCard] erro no request de submissao de resposta discursiva | questionId:", question.id, error);
     } finally {
       setIsLoading(false);
     }
@@ -376,7 +362,7 @@ function QuestionFeedback(props: { question: Question, answer: Answer }) {
 
       const data = await response.json();
       toast.success("Feedback submitted successfully");
-      console.log("Feedback submitted successfully", data);
+      console.log("[QuestionCard] feedback de questao enviado com sucesso | questionId:", question.id);
     } catch (error) {
       toast.error("Error submitting feedback:" + error);
     }

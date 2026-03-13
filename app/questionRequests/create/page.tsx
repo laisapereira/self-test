@@ -37,10 +37,10 @@ export default function QuestionRequestCreatePage() {
         if (response.ok && Array.isArray(data)) {
           setTemplates(data);
         } else {
-          console.error("Failed to load templates:", data);
+          console.warn("[QuestionRequestCreatePage] falha ao carregar templates (resposta ok mas nao array) | data:", data);
         }
       } catch (error) {
-        console.error("Error fetching templates:", error);
+        console.error("[QuestionRequestCreatePage] falha no request de buscar templates", error);
       }
     }
     fetchTemplates();
@@ -114,7 +114,6 @@ export default function QuestionRequestCreatePage() {
       // using key as default value if no match found
       const replaced = matchValues.length > 1
         ? matchValues.join(", ") : matchValues?.[0] ?? `<${key}>`;
-      console.log("Replaced é assim:", replaced);
       return replaced;
     });
   }
@@ -136,7 +135,6 @@ export default function QuestionRequestCreatePage() {
     const generatedPrompt = generateFinalPrompt(template!, updatedValues);
 
     setFinalPrompt(generatedPrompt);
-    console.log("PROMPT GERADO:", generatedPrompt);
   }
 
   function renderSelectTemplate() {
@@ -202,7 +200,7 @@ export default function QuestionRequestCreatePage() {
       const newQuestionRequest = await response.json();
       window.location.href = `/questions?questionRequestId=${newQuestionRequest.id}`;
     } else {
-      console.log("Response", response);
+      console.error("[QuestionRequestCreatePage] falha ao criar request | status:", response.status, response);
       alert("Failed to create request");
     }
   }

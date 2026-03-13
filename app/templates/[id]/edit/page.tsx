@@ -9,8 +9,6 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
   const [template, setTemplate] = useState<any>(null);
   const id = use(params).id;
 
-  console.log('id', id);
-
   async function fetchTemplate(id: string) {
     const response = await fetch(`/api/templates/${id}`);
     if (!response.ok) {
@@ -18,10 +16,10 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
     }
     return response.json();
   }
-  
+
   async function updateTemplate(newTemplate: any) {
     if (!newTemplate.name || !newTemplate.promptTemplate) return;
-    console.log('Updating template:', newTemplate);
+    console.log("[TemplateEditPage] atualizando template | id:", id, "nome:", newTemplate.name);
     await fetch(`/api/templates/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -29,14 +27,14 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
     });
     router.push("/templates");
   }
-  
+
   useEffect(() => {
     async function loadTemplate() {
       try {
         const templateData = await fetchTemplate(id);
         setTemplate(templateData);
       } catch (error) {
-        console.error("Error fetching template:", error);
+        console.error("[TemplateEditPage] falha ao buscar template | id:", id, error);
       }
     }
     loadTemplate();
@@ -49,7 +47,7 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Edit Template</h1>
-      <TemplateForm onSubmit={updateTemplate} mode="edit" defaultValues={template}/>
+      <TemplateForm onSubmit={updateTemplate} mode="edit" defaultValues={template} />
     </div>
   );
 }

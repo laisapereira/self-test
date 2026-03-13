@@ -11,20 +11,20 @@ type EvaluationRequestBody = {
 };
 
 async function getParams(req: Request, params: Promise<{ id: string }>) {
-    const questionId = await getParamId({ params });
+  const questionId = await getParamId({ params });
 
-    const question = await prisma.question.findUnique({
-        where: { id: questionId },
-    });
-    if (!question) {
-        throw NextResponse.json({ error: "Question not found" }, { status: 404 });
-    }
+  const question = await prisma.question.findUnique({
+    where: { id: questionId },
+  });
+  if (!question) {
+    throw NextResponse.json({ error: "Question not found" }, { status: 404 });
+  }
 
-    const searchParams = new URL(req.url).searchParams;
-    const userIdStr = searchParams.get("userId") || null;
-    const userId = userIdStr === null || userIdStr == '' ? undefined : parseInt(userIdStr, 10);
+  const searchParams = new URL(req.url).searchParams;
+  const userIdStr = searchParams.get("userId") || null;
+  const userId = userIdStr === null || userIdStr == '' ? undefined : parseInt(userIdStr, 10);
 
-    return { question, userId };
+  return { question, userId };
 }
 
 
@@ -63,46 +63,46 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
 
 async function evaluateAnswer(openai: OpenAI, prompt: string) {
-    console.log('sending request to LLM');
-        const completion = await openai.chat.completions.create({
-            messages: [{ role: 'system', content: prompt }],
-            model: 'deepseek-chat',
-            response_format: {
-            type: 'json_object'
-            }
-        });
+  console.log('[DiscursiveAnswersAPI] request enviada para LLM | model: deepseek-chat');
+  const completion = await openai.chat.completions.create({
+    messages: [{ role: 'system', content: prompt }],
+    model: 'deepseek-chat',
+    response_format: {
+      type: 'json_object'
+    }
+  });
 
-        return completion.choices[0].message.content;
-        }
+  return completion.choices[0].message.content;
+}
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
-    try {
-        const user = await getCurrentUser();
-        const { question } = await getParams(req, params)
+  try {
+    const user = await getCurrentUser();
+    const { question } = await getParams(req, params)
 
-        // if an answer already exists for this question and user, return error
-        const existingAnswer = await prisma.answer.findFirst({
-            where: {
-                questionId: question.id,
-                userId: user.id,
-            },
-        });
+    // if an answer already exists for this question and user, return error
+    const existingAnswer = await prisma.answer.findFirst({
+      where: {
+        questionId: question.id,
+        userId: user.id,
+      },
+    });
 
-        // get question
-        if (existingAnswer) {
-            return NextResponse.json({ error: "Answer already exists" }, { status: 400 });
-        }
+    // get question
+    if (existingAnswer) {
+      return NextResponse.json({ error: "Answer already exists" }, { status: 400 });
+    }
 
-        const { openAnswer, confidenceLevel, evaluationCriteria} = await req.json() as EvaluationRequestBody;
+    const { openAnswer, confidenceLevel, evaluationCriteria } = await req.json() as EvaluationRequestBody;
 
-        console.log("CRITERIOS VINDO DO SUBMIT", evaluationCriteria)
-      
-        const destructCriteria = evaluationCriteria.map(({ weight, description }, index) => 
-        `Critério ${index + 1}: ${description} e seu peso ${weight}`).join('\n');
 
-        const formatedCriteria = JSON.stringify(evaluationCriteria, null, 2);
 
-       const prompt = `
+    const destructCriteria = evaluationCriteria.map(({ weight, description }, index) =>
+      `Critério ${index + 1}: ${description} e seu peso ${weight}`).join('\n');
+
+    const formatedCriteria = JSON.stringify(evaluationCriteria, null, 2);
+
+    const prompt = `
         Você é um especialista em avaliar respostas discursivas com base em critérios objetivos.
 
         ### Resposta do aluno
@@ -164,80 +164,81 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         `;
 
 
-            console.log(prompt)
 
-        const openai = new OpenAI({
-            apiKey: process.env.DEEPSEEK_API_KEY,
-            baseURL: process.env.DEEPSEEK_API_URL,
-        });
 
-        const llmResponse = await evaluateAnswer(openai, prompt)
+    const openai = new OpenAI({
+      apiKey: process.env.DEEPSEEK_API_KEY,
+      baseURL: process.env.DEEPSEEK_API_URL,
+    });
 
-        const llmText = typeof llmResponse === "string" ? llmResponse : JSON.stringify(llmResponse);
+    const llmResponse = await evaluateAnswer(openai, prompt)
 
-        let parsedResponse;
-        try {
-        parsedResponse = JSON.parse(llmText);
-        } catch (err) {
-        console.error("Falha ao fazer JSON.parse no retorno do LLM:", llmText, err);
-        return NextResponse.json(
-            { error: "LLM retornou uma resposta inválida (não é JSON puro)." },
-            { status: 500 }
-        );
-        }
+    const llmText = typeof llmResponse === "string" ? llmResponse : JSON.stringify(llmResponse);
 
-        const { autoEvaluation, finalScore, finalScoreFormula, justification } =
-            parsedResponse as {
-            autoEvaluation: { description: string; weight: number; score: number }[];
-            finalScore: number;
-            finalScoreFormula: string;
-            justification?: string;
-            };
+    let parsedResponse;
+    try {
+      parsedResponse = JSON.parse(llmText);
+    } catch (err) {
+      console.error("[DiscursiveAnswersAPI] falha ao fazer JSON.parse no retorno do LLM | texto:", llmText, err);
+      return NextResponse.json(
+        { error: "LLM retornou uma resposta inválida (não é JSON puro)." },
+        { status: 500 }
+      );
+    }
 
-        console.log(autoEvaluation, finalScore, finalScoreFormula)
+    const { autoEvaluation, finalScore, finalScoreFormula, justification } =
+      parsedResponse as {
+        autoEvaluation: { description: string; weight: number; score: number }[];
+        finalScore: number;
+        finalScoreFormula: string;
+        justification?: string;
+      };
 
-        const isCorrect = finalScore >= 5.0;
+    console.log("[DiscursiveAnswersAPI] avaliacao processada | score:", finalScore);
 
-        const answer = await prisma.answer.create({
-        data: {
-            questionId: question.id,
-            userId: user.id,
-            openAnswer,
-            confidenceLevel,
-            correct: isCorrect, // it's a boolean
+    const isCorrect = finalScore >= 5.0;
+
+    const answer = await prisma.answer.create({
+      data: {
+        questionId: question.id,
+        userId: user.id,
+        openAnswer,
+        confidenceLevel,
+        correct: isCorrect, // it's a boolean
+      },
+    });
+
+    const feedbackLLM = await prisma.autoEvaluation.create({
+      data: {
+        answerId: answer.id,
+        score: finalScore,
+        justification: justification ?? "",
+        modelVersion: "deepseek-chat",
+        criteria: {
+          create: autoEvaluation.map((c) => ({
+            description: c.description,
+            weight: c.weight,
+            score: c.score,
+          })),
         },
-        });
+      },
+      include: {
+        criteria: true,
+      },
+    });
 
-        const feedbackLLM = await prisma.autoEvaluation.create({
-        data: {
-            answerId: answer.id,
-            score: finalScore,
-            justification: justification ?? "",
-            modelVersion: "deepseek-chat",
-            criteria: {
-            create: autoEvaluation.map((c) => ({
-                description: c.description,
-                weight: c.weight,
-                score: c.score,
-            })),
-            },
-        },
-        include: {
-            criteria: true,
-        },
-        });
-
-        const criteriaScores = feedbackLLM.criteria
+    const criteriaScores = feedbackLLM.criteria
 
 
-    return NextResponse.json({answer, feedbackLLM, criteriaScores}, { status: 201 });
-} catch (error) {
-  console.error("Erro na rota de resposta discursiva:", error);
-  if (error instanceof NextResponse) {
-    return error;
+    return NextResponse.json({ answer, feedbackLLM, criteriaScores }, { status: 201 });
+  } catch (error) {
+    console.error("[DiscursiveAnswersAPI] erro na rota de resposta discursiva ao processar submissao", error);
+    if (error instanceof NextResponse) {
+      return error;
+    }
+    return NextResponse.json({ error: "Failed to create answer" }, { status: 500 });
   }
-  return NextResponse.json({ error: "Failed to create answer" }, { status: 500 });
-}}
+}
 
 
 

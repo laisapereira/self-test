@@ -262,7 +262,7 @@ async function main() {
     }
   }
 
-  console.log("✅ Templates de geração de questão seedados/atualizados.");
+  console.log("[Seed] Templates de geracao de questao seedados/atualizados com sucesso.");
 }
 
 main()
@@ -270,7 +270,7 @@ main()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e);
+    console.error("[Seed] Falha na execucao do seed", e);
     await prisma.$disconnect();
     process.exit(1);
   });

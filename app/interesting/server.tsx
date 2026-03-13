@@ -5,7 +5,6 @@ import prisma from "@/lib/prisma";
 
 async function requireAdmin() {
   const user = await getCurrentUser();
-  console.log('XXX user', user);
   if (!user || !user.admin) {
     throw new Error("Unauthorized");
   }

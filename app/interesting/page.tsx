@@ -33,33 +33,33 @@ export default function InterestingAnswers() {
       setAnswers(answers);
       setLoading(false);
     }).catch((error) => {
-      console.error("Error fetching answers:", error);
+      console.error("[InterestingAnswersPage] erro ao buscar questoes interessantes", error);
       setLoading(false);
     }
     );
   }, [type]);
-    
+
 
   return <div>
     <h1>Interesting Answers</h1>
     <div className="flex space-x-2">
       <button
-      onClick={() => setType(InterestingType.PROBLEMS)}
-      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        onClick={() => setType(InterestingType.PROBLEMS)}
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
-      Problems
+        Problems
       </button>
       <button
-      onClick={() => setType(InterestingType.SURPRISING)}
-      className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        onClick={() => setType(InterestingType.SURPRISING)}
+        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
       >
-      Surprising
+        Surprising
       </button>
       <button
-      onClick={() => setType(InterestingType.EXCELLENT)}
-      className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+        onClick={() => setType(InterestingType.EXCELLENT)}
+        className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
       >
-      Excellent
+        Excellent
       </button>
     </div>
 
@@ -70,7 +70,7 @@ export default function InterestingAnswers() {
     ) : (
       <ul>
         {answers.map((answer: any) => (
-          <QuestionCard key={answer.id} question={answer.question} withAnswer={answer} withEvaluation={answer.autoEvaluation}  />
+          <QuestionCard key={answer.id} question={answer.question} withAnswer={answer} withEvaluation={answer.autoEvaluation} />
           // <li key={answer.id}># {answer.question.content}</li>
         ))}
       </ul>

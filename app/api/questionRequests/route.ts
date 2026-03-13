@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newQuestionRequest, { status: 201 });
   } catch (error) {
-    console.log(error);
+    console.error("[QuestionRequestsAPI] falha ao criar request", error);
     return NextResponse.json({ error: "Failed to create template" }, { status: 500 });
   }
 }
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 async function generateQuestions(questionRequest: QuestionRequest) {
   const jsonString = await requestLLM(questionRequest);
 
-  console.log('JSON STRING', jsonString);
+
   if (!jsonString) {
     throw new Error("No response from LLM");
   }
@@ -59,14 +59,14 @@ async function generateQuestions(questionRequest: QuestionRequest) {
   const json: PrismaJson.MultipleChoiceQuestionResponse | PrismaJson.DiscursiveQuestionResponse = JSON.parse(jsonString);
   const questions = json.questions;
 
-  console.log("As questoes geradas", json.questions);
+  console.log("[QuestionRequestsAPI] questoes geradas com sucesso | qtd:", questions.length);
   // for each question, shuffle the alternatives, updating the correctAnswerIndex
   questions.forEach((question) => {
 
     //questão não tem o tipo. por isso a validação está frouxa,. preciso definir o tipo antes,
     // com uma espécie de flag mesmo, na hora de criar a questão no prompt template.
 
-    //console.log("Tipo da questão", question.type);
+
 
     if ('alternatives' in question) {
 
@@ -76,7 +76,7 @@ async function generateQuestions(questionRequest: QuestionRequest) {
       question.alternatives = indices.map((i) => question.alternatives[i]);
       question.correctAnswerIndex = indices.indexOf(question.correctAnswerIndex);
     } else {
-      console.log('Questão discursiva gerada:', question);
+      console.log('[QuestionRequestsAPI] questao discursiva formatada');
     }
 
   });
@@ -84,7 +84,7 @@ async function generateQuestions(questionRequest: QuestionRequest) {
   await prisma.question.createMany({
     data: questions.map((question) => {
 
-      console.log("Criação da questão", question.type);
+
       if ('alternatives' in question) {
         return {
           content: question.content,
@@ -137,14 +137,14 @@ async function requestLLM(questionRequest: QuestionRequest) {
   const prompt = await generatePrompt(questionRequest);
 
 
-  console.log(prompt);
+
 
   const openai = new OpenAI({
     apiKey: process.env.DEEPSEEK_API_KEY,
     baseURL: process.env.DEEPSEEK_API_URL,
   });
 
-  console.log('sending request to LLM');
+  console.log('[QuestionRequestsAPI] request enviada para LLM | model: deepseek-chat');
   const completion = await openai.chat.completions.create({
     messages: [{ role: 'system', content: prompt }],
     model: 'deepseek-chat',

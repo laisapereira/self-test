@@ -25,7 +25,7 @@ export const authOptions = {
   callbacks: {
     async signIn({ user }: { user: { email?: string | null; name?: string | null; image?: string | null } }) {
       if (user.email /*user.email?.endsWith("@ufba.br")*/) {
-        console.log('User:', user.email, user.name, user.image);
+        console.log("[Auth] usuario sendo upsertado | email:", user.email);
         const userCount = await prisma.user.count();
         const isAdmin = userCount === 0;
         await prisma.user.upsert({
