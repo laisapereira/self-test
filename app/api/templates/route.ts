@@ -1,10 +1,9 @@
 import prisma from "@/lib/prisma";
 import { PrismaJson } from "@/prisma/types";
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-import { getSession } from "next-auth/react";
+
 import { getServerSession } from "next-auth";
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 
 export async function GET(req: Request): Promise<NextResponse> {
   try {
@@ -23,8 +22,8 @@ export async function GET(req: Request): Promise<NextResponse> {
       });
       return NextResponse.json(templates);
     }
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch templates" }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: "Failed to fetch templates", error: error.message }, { status: 500 });
   }
 }
 export async function POST(req: Request) {
