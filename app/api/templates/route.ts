@@ -3,7 +3,7 @@ import { PrismaJson } from "@/prisma/types";
 import { NextResponse } from "next/server";
 
 import { getServerSession } from "next-auth";
-import { authOptions } from '@/lib/auth'
+import { authOptions } from "@/lib/auth";
 
 export async function GET(req: Request): Promise<NextResponse> {
   try {
@@ -22,23 +22,36 @@ export async function GET(req: Request): Promise<NextResponse> {
       });
       return NextResponse.json(templates);
     }
-  } catch (error: any) {
-    return NextResponse.json({ error: "Failed to fetch templates", error: error.message }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch templates" },
+      { status: 500 },
+    );
   }
 }
 export async function POST(req: Request) {
   const session = await getServerSession();
-  if (!session || !session.user || !session.user.email || !session.user.isAdmin) {
+  if (
+    !session ||
+    !session.user ||
+    !session.user.email ||
+    !session.user.isAdmin
+  ) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { name, promptTemplate, parameters } = await req.json();
   if (!name || !promptTemplate) {
-    return NextResponse.json({ error: "Name and promptTemplate are required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Name and promptTemplate are required" },
+      { status: 400 },
+    );
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: { email: session.user.email } });
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -53,6 +66,9 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(newTemplate, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to create template" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to create template" },
+      { status: 500 },
+    );
   }
 }
