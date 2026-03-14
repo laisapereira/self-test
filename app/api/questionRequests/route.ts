@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import OpenAI from "openai";
 import { QuestionRequest } from "@/prisma";
+import { authOptions } from "@/lib/auth";
 import { PrismaJson } from "@/prisma/types";
 
 export async function GET(req: Request) {
@@ -15,7 +16,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session || !session.user || !session.user.email) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -25,13 +26,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "templateId and parameterValues are required" }, { status: 400 });
   }
 
+  let newQuestionRequest;
+
   try {
     const user = await prisma.user.findUnique({ where: { email: session.user.email } });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const newQuestionRequest = await prisma.questionRequest.create({
+    newQuestionRequest = await prisma.questionRequest.create({
       data: {
         parameterValues,
         templateId,
@@ -39,17 +42,45 @@ export async function POST(req: Request) {
       },
     });
 
-    await generateQuestions(newQuestionRequest);
+    const signal = req.signal;
+    await generateQuestions(newQuestionRequest, signal);
+
+    // atualiza o status para completado
+    await prisma.questionRequest.update({
+       where: { id: newQuestionRequest.id },
+       data: { status: 'COMPLETED' }
+    });
 
     return NextResponse.json(newQuestionRequest, { status: 201 });
-  } catch (error) {
-    console.error("[QuestionRequestsAPI] falha ao criar request", error);
+  } catch (error: any) {
+    if (error.name === "AbortError" || error.message?.includes("abort")) {
+      console.log("[QuestionRequestsAPI] request cancelada pelo cliente, marcando como CANCELED...");
+      
+      if (newQuestionRequest?.id) {
+         await prisma.questionRequest.update({
+            where: { id: newQuestionRequest.id },
+            data: { status: 'CANCELED' }
+         });
+         console.log("[QuestionRequestsAPI] status atualizado para CANCELED.");
+      }
+
+      return NextResponse.json({ error: "Request aborted" }, { status: 499 });
+    }
+    
+    console.error("[QuestionRequestsAPI] falha ao gerar request, marcando como FAILED...", error);
+    if (newQuestionRequest?.id) {
+       await prisma.questionRequest.update({
+          where: { id: newQuestionRequest.id },
+          data: { status: 'FAILED' }
+       });
+    }
+
     return NextResponse.json({ error: "Failed to create template" }, { status: 500 });
   }
 }
 
-async function generateQuestions(questionRequest: QuestionRequest) {
-  const jsonString = await requestLLM(questionRequest);
+async function generateQuestions(questionRequest: QuestionRequest, signal: AbortSignal) {
+  const jsonString = await requestLLM(questionRequest, signal);
 
 
   if (!jsonString) {
@@ -133,7 +164,7 @@ async function generatePrompt(questionRequest: QuestionRequest) {
   return prompt;
 }
 
-async function requestLLM(questionRequest: QuestionRequest) {
+async function requestLLM(questionRequest: QuestionRequest, signal: AbortSignal) {
   const prompt = await generatePrompt(questionRequest);
 
 
@@ -151,7 +182,7 @@ async function requestLLM(questionRequest: QuestionRequest) {
     response_format: {
       type: 'json_object'
     }
-  });
+  }, { signal });
 
 
   return completion.choices[0].message.content;

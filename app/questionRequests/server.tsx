@@ -88,6 +88,7 @@ export async function fetchRequests(params: { userId?: number; page?: number; pa
 
   const normalizedData = data.map(r => ({
     ...r,
+    status: r.status,
     questions: r.questions.map(q => ({
       ...q,
       alternatives: q.alternatives as { content: string; feedback: string }[],

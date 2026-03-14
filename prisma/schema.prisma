@@ -69,8 +69,16 @@ model QuestionRequestTemplate {
   requests QuestionRequest[]
 }
 
+enum QuestionRequestStatus {
+  PENDING
+  COMPLETED
+  CANCELED
+  FAILED
+}
+
 model QuestionRequest {
   id              Int      @id @default(autoincrement())
+  status          QuestionRequestStatus @default(PENDING)
   /// [QuestionRequestParameterValue]
   parameterValues Json[]
   createdAt       DateTime @default(now())

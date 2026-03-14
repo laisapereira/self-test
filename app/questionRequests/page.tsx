@@ -132,12 +132,16 @@ function QuestionRequestsPageInner() {
 
                 const scoreColor = score.correct > 0 && score.correct === score.total ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-700";
 
+                const isCompleted = request.status === 'COMPLETED';
+                const isCanceled = request.status === 'CANCELED';
+                const isFailed = request.status === 'FAILED';
+
                 return (
                   <TableRow
                     key={request.id}
 
-                    className="cursor-pointer hover:bg-blue-50/50 transition-colors group"
-                    onClick={() => handleRowClick(request.id, request.userId)}
+                    className={`transition-colors ${isCompleted ? 'cursor-pointer hover:bg-blue-50/50 group' : 'opacity-60 bg-slate-50/50'}`}
+                    onClick={() => isCompleted && handleRowClick(request.id, request.userId)}
                   >
 
                     <TableCell className="align-top py-4">
@@ -160,9 +164,11 @@ function QuestionRequestsPageInner() {
 
                     <TableCell className="align-top py-4 max-w-[400px]">
                       <div className="flex flex-col gap-1">
-                        <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
-                          {request.template?.name}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className={`font-semibold text-slate-900 transition-colors ${isCompleted ? 'group-hover:text-blue-600' : ''}`}>
+                            {request.template?.name}
+                          </span>
+                        </div>
 
 
                         <span className="text-xs text-slate-500 truncate block w-full" title={getParameterString(request.parameterValues)}>
@@ -173,9 +179,17 @@ function QuestionRequestsPageInner() {
 
 
                     <TableCell className="text-right align-top py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${scoreColor}`}>
-                        {score.correct} / {score.total} acertos
-                      </span>
+                      {isCompleted ? (
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${scoreColor}`}>
+                          {score.correct} / {score.total} acertos
+                        </span>
+                      ) : isCanceled ? (
+                        <span className="text-xs text-slate-500 italic font-medium">Cancelado</span>
+                      ) : isFailed ? (
+                        <span className="text-xs text-red-500 italic font-medium">Falha</span>
+                      ) : (
+                        <span className="text-xs text-yellow-600 italic font-medium">Processando...</span>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

@@ -20,12 +20,18 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
   async function updateTemplate(newTemplate: any) {
     if (!newTemplate.name || !newTemplate.promptTemplate) return;
     console.log("[TemplateEditPage] atualizando template | id:", id, "nome:", newTemplate.name);
-    await fetch(`/api/templates/${id}`, {
+    const res = await fetch(`/api/templates/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTemplate),
     });
-    router.push("/templates");
+
+    if (res.ok) {
+      router.push("/templates");
+    } else {
+      const errorData = await res.json().catch(() => null);
+      alert(`Falha ao editar template: ${errorData?.error || res.statusText}`);
+    }
   }
 
   useEffect(() => {

@@ -1,9 +1,10 @@
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { authOptions } from "./auth";
 
 export async function getCurrentUser() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session || !session.user || !session.user.email) {
     throw NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

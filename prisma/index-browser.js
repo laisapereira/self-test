@@ -159,6 +159,7 @@ exports.Prisma.QuestionRequestTemplateScalarFieldEnum = {
 
 exports.Prisma.QuestionRequestScalarFieldEnum = {
   id: 'id',
+  status: 'status',
   parameterValues: 'parameterValues',
   createdAt: 'createdAt',
   templateId: 'templateId',
@@ -221,7 +222,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.QuestionRequestStatus = exports.$Enums.QuestionRequestStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  CANCELED: 'CANCELED',
+  FAILED: 'FAILED'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',

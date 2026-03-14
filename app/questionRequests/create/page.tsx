@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { QuestionRequestTemplate } from "@/prisma";
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select";
 import { PrismaJson } from "@/prisma/types";
@@ -11,12 +11,24 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function QuestionRequestCreatePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/api/auth/signin");
+    }
+  }, [status, router]);
 
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const [template, setTemplate] = useState<QuestionRequestTemplate | null>(null);
@@ -25,26 +37,79 @@ export default function QuestionRequestCreatePage() {
     parameterValues: [] as PrismaJson.QuestionRequestParameterValue[],
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
+  const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
+  const [pendingLeaveHref, setPendingLeaveHref] = useState<string | null>(null);
+  const [isCanceling, setIsCanceling] = useState(false);
+
+  const abortControllerFetchRef = useRef<AbortController | null>(null);
+  const abortControllerCreateRef = useRef<AbortController | null>(null);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      if (abortControllerCreateRef.current) {
+        abortControllerCreateRef.current.abort();
+      }
+    };
+  }, []);
 
+  useEffect(() => {
     if (status !== "authenticated") return;
 
+    abortControllerFetchRef.current = new AbortController();
+
     async function fetchTemplates() {
+      if (!isMountedRef.current) return;
+      setIsLoadingTemplates(true);
       try {
-        const response = await fetch("/api/templates");
+        const response = await fetch("/api/templates", {
+          signal: abortControllerFetchRef.current?.signal,
+        });
         const data = await response.json();
-        if (response.ok && Array.isArray(data)) {
-          setTemplates(data);
-        } else {
-          console.warn("[QuestionRequestCreatePage] falha ao carregar templates (resposta ok mas nao array) | data:", data);
+        if (isMountedRef.current) {
+          if (response.ok && Array.isArray(data)) {
+            setTemplates(data);
+          } else {
+            console.error("Failed to load templates:", data);
+          }
         }
-      } catch (error) {
-        console.error("[QuestionRequestCreatePage] falha no request de buscar templates", error);
+      } catch (error: any) {
+        if (error.name === "AbortError") {
+          console.log("Fetch templates aborted");
+        } else if (isMountedRef.current) {
+          console.error("Error fetching templates:", error);
+        }
+      } finally {
+        if (isMountedRef.current) {
+          setIsLoadingTemplates(false);
+        }
       }
     }
     fetchTemplates();
-  }, []);
+
+    return () => {
+      if (abortControllerFetchRef.current) {
+        abortControllerFetchRef.current.abort();
+      }
+    };
+  }, [status]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isLoading || isLoadingTemplates) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isLoading, isLoadingTemplates]);
 
   useEffect(() => {
     if (template) {
@@ -114,6 +179,7 @@ export default function QuestionRequestCreatePage() {
       // using key as default value if no match found
       const replaced = matchValues.length > 1
         ? matchValues.join(", ") : matchValues?.[0] ?? `<${key}>`;
+      console.log("Replaced é assim:", replaced);
       return replaced;
     });
   }
@@ -135,6 +201,7 @@ export default function QuestionRequestCreatePage() {
     const generatedPrompt = generateFinalPrompt(template!, updatedValues);
 
     setFinalPrompt(generatedPrompt);
+    console.log("PROMPT GERADO:", generatedPrompt);
   }
 
   function renderSelectTemplate() {
@@ -187,52 +254,144 @@ export default function QuestionRequestCreatePage() {
       parameterValues: newRequest.parameterValues,
       generatedPrompt: finalPrompt,
     };
+    
     setIsLoading(true);
-    const response = await fetch("/api/questionRequests", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    });
-    setIsLoading(false);
-    if (response.ok) {
-      const newQuestionRequest = await response.json();
-      window.location.href = `/questions?questionRequestId=${newQuestionRequest.id}`;
-    } else {
-      console.error("[QuestionRequestCreatePage] falha ao criar request | status:", response.status, response);
-      alert("Failed to create request");
+    abortControllerCreateRef.current = new AbortController();
+
+    try {
+      const response = await fetch("/api/questionRequests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+        signal: abortControllerCreateRef.current.signal,
+      });
+
+      if (!isMountedRef.current) return;
+
+      if (response.ok) {
+        const newQuestionRequest = await response.json();
+        router.push(`/questions?questionRequestId=${newQuestionRequest.id}`);
+      } else {
+        console.log("Response", response);
+        alert("Failed to create request");
+      }
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        console.log("Create request aborted");
+      } else {
+        console.error("Error creating request:", error);
+        alert("Failed to create request");
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setIsLoading(false);
+      }
     }
   }
 
+  useEffect(() => {
+    const handleCaptureClick = (e: MouseEvent) => {
+      if (!isLoading && !isLoadingTemplates) return;
+
+      const target = e.target as HTMLElement;
+      const anchor = target.closest("a");
+
+      if (anchor && anchor.href && !anchor.hasAttribute("download") && anchor.target !== "_blank") {
+        const url = new URL(anchor.href, window.location.origin);
+        if (url.origin === window.location.origin) {
+          e.preventDefault();
+          e.stopPropagation();
+          setPendingLeaveHref(url.pathname + url.search + url.hash);
+          setIsLeaveDialogOpen(true);
+        }
+      }
+    };
+
+    // Global listener to capture clicks on Navbar or any other Next.js <Link>
+    document.addEventListener("click", handleCaptureClick, true);
+
+    return () => {
+      document.removeEventListener("click", handleCaptureClick, true);
+    };
+  }, [isLoading, isLoadingTemplates]);
+
+  const handleConfirmLeave = () => {
+    setIsCanceling(true);
+    if (abortControllerFetchRef.current) {
+      abortControllerFetchRef.current.abort();
+    }
+    if (abortControllerCreateRef.current) {
+      abortControllerCreateRef.current.abort();
+    }
+
+    setTimeout(() => {
+      if (pendingLeaveHref) {
+        router.push(pendingLeaveHref);
+      }
+    }, 400);
+  };
+
   return (
-    <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex">
-      <CardHeader className="text-center">
-        <h1 className="text-4xl font-bold">Vamos testar seu conhecimento?</h1>
-        <p className="text-slate-500 py-3">
-          Configure abaixo os tópicos para gerar um desafio personalizado de perguntas!
-        </p>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2.5">
-        {renderSelectTemplate()}
-        {template && template.parameters?.length > 0 && <>
-          <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros que a IA deve priorizar</h2>
-          {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
-            renderParameterInput(parameter, `${parameter.name}`))}
-        </>
-        }
-        {template &&
-          (
-            isLoading
-              ? <Spinner>
-                O SelfTest está estruturando um desafio personalizado para você...
-              </Spinner>
-              : <Button onClick={createRequest} disabled={isLoading}>
-                {isLoading ? <span className="spinner" /> : "Gerar minhas questões"}
-              </Button>
-          )
-        }
-      </CardContent>
-    </Card>
+    <div>
+      <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex">
+        <CardHeader className="text-center">
+          <h1 className="text-4xl font-bold">Vamos testar seu conhecimento?</h1>
+          <p className="text-slate-500 py-3">
+            Configure abaixo os tópicos para gerar um desafio personalizado de perguntas!
+          </p>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2.5">
+          {renderSelectTemplate()}
+          {template && template.parameters?.length > 0 && <>
+            <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros que a IA deve priorizar</h2>
+            {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
+              renderParameterInput(parameter, `${parameter.name}`))}
+          </>
+          }
+          {template &&
+            (
+              isLoading
+                ? <Spinner>
+                  O SelfTest está estruturando um desafio personalizado para você...
+                </Spinner>
+                : <Button onClick={createRequest} disabled={isLoading || isLoadingTemplates}>
+                  {isLoading ? <span className="spinner" /> : "Gerar minhas questões"}
+                </Button>
+            )
+          }
+        </CardContent>
+      </Card>
+
+      <Dialog open={isLeaveDialogOpen} onOpenChange={setIsLeaveDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Requisição em processamento</DialogTitle>
+            <DialogDescription>
+              {!isCanceling 
+                 ? "A requisição ainda está em processamento. Tem certeza que deseja sair?"
+                 : "A requisição será cancelada..."}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsLeaveDialogOpen(false)}
+              disabled={isCanceling}
+            >
+              Permanecer
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleConfirmLeave}
+              disabled={isCanceling}
+            >
+              {isCanceling ? "Cancelando..." : "Sair e cancelar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

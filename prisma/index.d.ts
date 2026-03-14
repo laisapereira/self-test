@@ -243,6 +243,25 @@ export type AutoEvaluation = $Result.DefaultSelection<Prisma.$AutoEvaluationPayl
 export type AutoEvaluationCriterion = $Result.DefaultSelection<Prisma.$AutoEvaluationCriterionPayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const QuestionRequestStatus: {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  CANCELED: 'CANCELED',
+  FAILED: 'FAILED'
+};
+
+export type QuestionRequestStatus = (typeof QuestionRequestStatus)[keyof typeof QuestionRequestStatus]
+
+}
+
+export type QuestionRequestStatus = $Enums.QuestionRequestStatus
+
+export const QuestionRequestStatus: typeof $Enums.QuestionRequestStatus
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -6579,6 +6598,7 @@ export namespace Prisma {
 
   export type QuestionRequestMinAggregateOutputType = {
     id: number | null
+    status: $Enums.QuestionRequestStatus | null
     createdAt: Date | null
     templateId: number | null
     userId: number | null
@@ -6586,6 +6606,7 @@ export namespace Prisma {
 
   export type QuestionRequestMaxAggregateOutputType = {
     id: number | null
+    status: $Enums.QuestionRequestStatus | null
     createdAt: Date | null
     templateId: number | null
     userId: number | null
@@ -6593,6 +6614,7 @@ export namespace Prisma {
 
   export type QuestionRequestCountAggregateOutputType = {
     id: number
+    status: number
     parameterValues: number
     createdAt: number
     templateId: number
@@ -6615,6 +6637,7 @@ export namespace Prisma {
 
   export type QuestionRequestMinAggregateInputType = {
     id?: true
+    status?: true
     createdAt?: true
     templateId?: true
     userId?: true
@@ -6622,6 +6645,7 @@ export namespace Prisma {
 
   export type QuestionRequestMaxAggregateInputType = {
     id?: true
+    status?: true
     createdAt?: true
     templateId?: true
     userId?: true
@@ -6629,6 +6653,7 @@ export namespace Prisma {
 
   export type QuestionRequestCountAggregateInputType = {
     id?: true
+    status?: true
     parameterValues?: true
     createdAt?: true
     templateId?: true
@@ -6724,6 +6749,7 @@ export namespace Prisma {
 
   export type QuestionRequestGroupByOutputType = {
     id: number
+    status: $Enums.QuestionRequestStatus
     parameterValues: PrismaJson.QuestionRequestParameterValue[]
     createdAt: Date
     templateId: number | null
@@ -6751,6 +6777,7 @@ export namespace Prisma {
 
   export type QuestionRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    status?: boolean
     parameterValues?: boolean
     createdAt?: boolean
     templateId?: boolean
@@ -6763,6 +6790,7 @@ export namespace Prisma {
 
   export type QuestionRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    status?: boolean
     parameterValues?: boolean
     createdAt?: boolean
     templateId?: boolean
@@ -6773,6 +6801,7 @@ export namespace Prisma {
 
   export type QuestionRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    status?: boolean
     parameterValues?: boolean
     createdAt?: boolean
     templateId?: boolean
@@ -6783,13 +6812,14 @@ export namespace Prisma {
 
   export type QuestionRequestSelectScalar = {
     id?: boolean
+    status?: boolean
     parameterValues?: boolean
     createdAt?: boolean
     templateId?: boolean
     userId?: boolean
   }
 
-  export type QuestionRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "parameterValues" | "createdAt" | "templateId" | "userId", ExtArgs["result"]["questionRequest"]>
+  export type QuestionRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "parameterValues" | "createdAt" | "templateId" | "userId", ExtArgs["result"]["questionRequest"]>
   export type QuestionRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | QuestionRequest$templateArgs<ExtArgs>
@@ -6814,6 +6844,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      status: $Enums.QuestionRequestStatus
       /**
        * [QuestionRequestParameterValue]
        */
@@ -7248,6 +7279,7 @@ export namespace Prisma {
    */
   interface QuestionRequestFieldRefs {
     readonly id: FieldRef<"QuestionRequest", 'Int'>
+    readonly status: FieldRef<"QuestionRequest", 'QuestionRequestStatus'>
     readonly parameterValues: FieldRef<"QuestionRequest", 'Json[]'>
     readonly createdAt: FieldRef<"QuestionRequest", 'DateTime'>
     readonly templateId: FieldRef<"QuestionRequest", 'Int'>
@@ -12402,6 +12434,7 @@ export namespace Prisma {
 
   export const QuestionRequestScalarFieldEnum: {
     id: 'id',
+    status: 'status',
     parameterValues: 'parameterValues',
     createdAt: 'createdAt',
     templateId: 'templateId',
@@ -12554,6 +12587,20 @@ export namespace Prisma {
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QuestionRequestStatus'
+   */
+  export type EnumQuestionRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuestionRequestStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'QuestionRequestStatus[]'
+   */
+  export type ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuestionRequestStatus[]'>
     
 
 
@@ -12847,6 +12894,7 @@ export namespace Prisma {
     OR?: QuestionRequestWhereInput[]
     NOT?: QuestionRequestWhereInput | QuestionRequestWhereInput[]
     id?: IntFilter<"QuestionRequest"> | number
+    status?: EnumQuestionRequestStatusFilter<"QuestionRequest"> | $Enums.QuestionRequestStatus
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
     templateId?: IntNullableFilter<"QuestionRequest"> | number | null
@@ -12858,6 +12906,7 @@ export namespace Prisma {
 
   export type QuestionRequestOrderByWithRelationInput = {
     id?: SortOrder
+    status?: SortOrder
     parameterValues?: SortOrder
     createdAt?: SortOrder
     templateId?: SortOrderInput | SortOrder
@@ -12872,6 +12921,7 @@ export namespace Prisma {
     AND?: QuestionRequestWhereInput | QuestionRequestWhereInput[]
     OR?: QuestionRequestWhereInput[]
     NOT?: QuestionRequestWhereInput | QuestionRequestWhereInput[]
+    status?: EnumQuestionRequestStatusFilter<"QuestionRequest"> | $Enums.QuestionRequestStatus
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
     templateId?: IntNullableFilter<"QuestionRequest"> | number | null
@@ -12883,6 +12933,7 @@ export namespace Prisma {
 
   export type QuestionRequestOrderByWithAggregationInput = {
     id?: SortOrder
+    status?: SortOrder
     parameterValues?: SortOrder
     createdAt?: SortOrder
     templateId?: SortOrderInput | SortOrder
@@ -12899,6 +12950,7 @@ export namespace Prisma {
     OR?: QuestionRequestScalarWhereWithAggregatesInput[]
     NOT?: QuestionRequestScalarWhereWithAggregatesInput | QuestionRequestScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"QuestionRequest"> | number
+    status?: EnumQuestionRequestStatusWithAggregatesFilter<"QuestionRequest"> | $Enums.QuestionRequestStatus
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeWithAggregatesFilter<"QuestionRequest"> | Date | string
     templateId?: IntNullableWithAggregatesFilter<"QuestionRequest"> | number | null
@@ -13469,6 +13521,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestCreateInput = {
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
@@ -13478,6 +13531,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedCreateInput = {
     id?: number
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId?: number | null
@@ -13486,6 +13540,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestUpdateInput = {
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
@@ -13495,6 +13550,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -13504,6 +13560,7 @@ export namespace Prisma {
 
   export type QuestionRequestCreateManyInput = {
     id?: number
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId?: number | null
@@ -13511,12 +13568,14 @@ export namespace Prisma {
   }
 
   export type QuestionRequestUpdateManyMutationInput = {
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type QuestionRequestUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -14162,6 +14221,13 @@ export namespace Prisma {
     ownerId?: SortOrder
   }
 
+  export type EnumQuestionRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionRequestStatusFilter<$PrismaModel> | $Enums.QuestionRequestStatus
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -14190,6 +14256,7 @@ export namespace Prisma {
 
   export type QuestionRequestCountOrderByAggregateInput = {
     id?: SortOrder
+    status?: SortOrder
     parameterValues?: SortOrder
     createdAt?: SortOrder
     templateId?: SortOrder
@@ -14204,6 +14271,7 @@ export namespace Prisma {
 
   export type QuestionRequestMaxOrderByAggregateInput = {
     id?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     templateId?: SortOrder
     userId?: SortOrder
@@ -14211,6 +14279,7 @@ export namespace Prisma {
 
   export type QuestionRequestMinOrderByAggregateInput = {
     id?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     templateId?: SortOrder
     userId?: SortOrder
@@ -14220,6 +14289,16 @@ export namespace Prisma {
     id?: SortOrder
     templateId?: SortOrder
     userId?: SortOrder
+  }
+
+  export type EnumQuestionRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.QuestionRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -14853,6 +14932,10 @@ export namespace Prisma {
     connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
   }
 
+  export type EnumQuestionRequestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.QuestionRequestStatus
+  }
+
   export type QuestionRequestUpdateparameterValuesInput = {
     set?: InputJsonValue[]
     push?: InputJsonValue | InputJsonValue[]
@@ -15273,6 +15356,23 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumQuestionRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionRequestStatusFilter<$PrismaModel> | $Enums.QuestionRequestStatus
+  }
+
+  export type NestedEnumQuestionRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.QuestionRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -15399,6 +15499,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestCreateWithoutUserInput = {
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     template?: QuestionRequestTemplateCreateNestedOneWithoutRequestsInput
@@ -15407,6 +15508,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedCreateWithoutUserInput = {
     id?: number
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId?: number | null
@@ -15557,6 +15659,7 @@ export namespace Prisma {
     OR?: QuestionRequestScalarWhereInput[]
     NOT?: QuestionRequestScalarWhereInput | QuestionRequestScalarWhereInput[]
     id?: IntFilter<"QuestionRequest"> | number
+    status?: EnumQuestionRequestStatusFilter<"QuestionRequest"> | $Enums.QuestionRequestStatus
     parameterValues?: JsonNullableListFilter<"QuestionRequest">
     createdAt?: DateTimeFilter<"QuestionRequest"> | Date | string
     templateId?: IntNullableFilter<"QuestionRequest"> | number | null
@@ -15761,6 +15864,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestCreateWithoutTemplateInput = {
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
@@ -15769,6 +15873,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedCreateWithoutTemplateInput = {
     id?: number
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     userId: number
@@ -16022,6 +16127,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestCreateWithoutQuestionsInput = {
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutQuestionRequestsInput
@@ -16030,6 +16136,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedCreateWithoutQuestionsInput = {
     id?: number
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId?: number | null
@@ -16092,6 +16199,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestUpdateWithoutQuestionsInput = {
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
@@ -16100,6 +16208,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateWithoutQuestionsInput = {
     id?: IntFieldUpdateOperationsInput | number
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16490,6 +16599,7 @@ export namespace Prisma {
 
   export type QuestionRequestCreateManyUserInput = {
     id?: number
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     templateId?: number | null
@@ -16595,6 +16705,7 @@ export namespace Prisma {
   }
 
   export type QuestionRequestUpdateWithoutUserInput = {
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: QuestionRequestTemplateUpdateOneWithoutRequestsNestedInput
@@ -16603,6 +16714,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16611,6 +16723,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     templateId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16698,12 +16811,14 @@ export namespace Prisma {
 
   export type QuestionRequestCreateManyTemplateInput = {
     id?: number
+    status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     userId: number
   }
 
   export type QuestionRequestUpdateWithoutTemplateInput = {
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutQuestionRequestsNestedInput
@@ -16712,6 +16827,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateWithoutTemplateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
@@ -16720,6 +16836,7 @@ export namespace Prisma {
 
   export type QuestionRequestUncheckedUpdateManyWithoutTemplateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    status?: EnumQuestionRequestStatusFieldUpdateOperationsInput | $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number

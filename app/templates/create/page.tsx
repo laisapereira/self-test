@@ -8,12 +8,18 @@ export default function CreateTemplatePage() {
 
   async function createTemplate(newTemplate: any) {
     if (!newTemplate.name || !newTemplate.promptTemplate) return;
-    await fetch("/api/templates", {
+    const res = await fetch("/api/templates", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTemplate),
     });
-    router.push("/templates");
+    
+    if (res.ok) {
+      router.push("/templates");
+    } else {
+      const errorData = await res.json().catch(() => null);
+      alert(`Falha ao criar template: ${errorData?.error || res.statusText}`);
+    }
   }
 
   return (

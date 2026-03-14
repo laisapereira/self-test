@@ -30,13 +30,18 @@ export async function GET(req: Request): Promise<NextResponse> {
   }
 }
 export async function POST(req: Request) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (
     !session ||
     !session.user ||
     !session.user.email ||
     !session.user.isAdmin
   ) {
+    console.log("[POST /api/templates] Unauthorized reject:", {
+      hasSession: !!session,
+      email: session?.user?.email,
+      isAdmin: session?.user?.isAdmin
+    });
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -13,6 +13,7 @@ export function normalizeQuestionRequests(payload: any): QuestionRequest[] {
 
 
     id: Number(r.id),
+    status: r.status,
     userId: Number(r.userId),
     templateId: Number(r.templateId),
     createdAt: new Date(r.createdAt),
