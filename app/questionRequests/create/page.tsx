@@ -173,7 +173,7 @@ export default function QuestionRequestCreatePage() {
       // using key as default value if no match found
       const replaced = matchValues.length > 1
         ? matchValues.join(", ") : matchValues?.[0] ?? `<${key}>`;
-      console.log("Replaced é assim:", replaced);
+
       return replaced;
     });
   }
@@ -195,7 +195,7 @@ export default function QuestionRequestCreatePage() {
     const generatedPrompt = generateFinalPrompt(template!, updatedValues);
 
     setFinalPrompt(generatedPrompt);
-    console.log("PROMPT GERADO:", generatedPrompt);
+
   }
 
   function renderSelectTemplate() {
@@ -367,8 +367,8 @@ export default function QuestionRequestCreatePage() {
       {activeRequestId ? (
         <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex flex-col items-center gap-4">
           <Spinner>
-                  O SelfTest está gerando seu desafio personalizado... 
-                  Pode sair desta página e navegar pelo site tranquilamente, o progresso continuará em segundo plano e você poderá ver o resultado no seu histórico!
+            O SelfTest está gerando seu desafio personalizado...
+            Pode sair desta página e navegar pelo site tranquilamente, o progresso continuará em segundo plano e você poderá ver o resultado no seu histórico!
           </Spinner>
           <div className="flex flex-col w-full gap-2">
             <Button variant="outline" className="w-full" asChild>

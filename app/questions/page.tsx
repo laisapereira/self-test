@@ -11,6 +11,7 @@ import { Suspense } from "react";
 import 'highlight.js/styles/github.css';
 import { QuestionCard } from "@/components/questionCard";
 import { QuestionRequest } from "@/prisma";
+import { Spinner } from "@/components/spinner";
 
 const marked = new Marked(
   markedHighlight({
@@ -26,13 +27,12 @@ function QuestionsPageInner() {
   const searchParams = useSearchParams();
   const [questions, setQuestions] = useState<any[]>([]);
   const [requests, setRequests] = useState<QuestionRequest[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
 
   // Fetch questions from the server
   async function fetchQuestions(params: { templateId?: string, userId?: string, questionRequestId?: string }) {
     const { templateId, userId, questionRequestId } = params;
-
-
 
     const fetchSearchParams = new URLSearchParams();
 
@@ -47,9 +47,14 @@ function QuestionsPageInner() {
     }
 
     const url = `/api/questions?${fetchSearchParams.toString()}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    setQuestions(data.questions);
+    setIsLoading(true);
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setQuestions(data.questions);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -67,7 +72,9 @@ function QuestionsPageInner() {
       <h1 className="text-2xl font-bold">Questões</h1>
     </CardHeader>
     <CardContent>
-      {questions.length > 0 ? (
+      {isLoading ? (
+        <Spinner>Carregando questões...</Spinner>
+      ) : questions.length > 0 ? (
         questions.map((question: any, index: number) => (
           <div key={question.id} className="mb-4">
             <QuestionCard question={question} userId={userId} questionNumber={index + 1} />
