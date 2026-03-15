@@ -25,8 +25,8 @@ export async function POST(req: Request) {
   if (!templateId || !parameterValues) {
     return NextResponse.json({ error: "templateId and parameterValues are required" }, { status: 400 });
   }
-
-  let newQuestionRequest;
+ 
+  const signal = req.signal;
 
   try {
     const user = await prisma.user.findUnique({ where: { email: session.user.email } });
@@ -34,26 +34,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    newQuestionRequest = await prisma.questionRequest.create({
+   const newQuestionRequest = await prisma.questionRequest.create({
       data: {
         parameterValues,
         templateId,
         userId: user.id,
+        status: 'PENDING'
       },
     });
 
-    const signal = req.signal;
-    await generateQuestions(newQuestionRequest, signal);
+    backgroundProcessing(newQuestionRequest, signal);
+    return NextResponse.json(newQuestionRequest, { status: 202 });
 
-    // atualiza o status para completado
+ /*    // atualiza o status para completado
     await prisma.questionRequest.update({
        where: { id: newQuestionRequest.id },
        data: { status: 'COMPLETED' }
-    });
+    }); */
 
-    return NextResponse.json(newQuestionRequest, { status: 201 });
+    
   } catch (error: any) {
-    if (error.name === "AbortError" || error.message?.includes("abort")) {
+    /* if (error.name === "AbortError" || error.message?.includes("abort")) {
       console.log("[QuestionRequestsAPI] request cancelada pelo cliente, marcando como CANCELED...");
       
       if (newQuestionRequest?.id) {
@@ -73,9 +74,40 @@ export async function POST(req: Request) {
           where: { id: newQuestionRequest.id },
           data: { status: 'FAILED' }
        });
-    }
+    } */
+
+    console.error("[QuestionRequestsAPI] falha ao criar request", error);
 
     return NextResponse.json({ error: "Failed to create template" }, { status: 500 });
+  }
+}
+
+
+async function backgroundProcessing(questionRequest: QuestionRequest, signal: AbortSignal) {
+
+  try {
+
+    await generateQuestions(questionRequest, signal)
+
+    const currentRequest = await prisma.questionRequest.findUnique({
+      where: { id: questionRequest.id }
+    })
+
+    if (currentRequest?.status ==='CANCELED') return
+
+    await prisma.questionRequest.update({
+      where: { id: questionRequest.id },
+      data: { status: 'COMPLETED' }
+    })
+
+ console.log("[QuestionRequestsAPI] questões geradas com sucesso | id:", questionRequest.id)
+
+  } catch (error: any) {
+    console.error("[QuestionRequestsAPI] falha no background | id:", questionRequest.id, error)
+    await prisma.questionRequest.update({
+      where: { id: questionRequest.id },
+      data: { status: "FAILED" }
+    })
   }
 }
 
