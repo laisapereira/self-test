@@ -365,8 +365,6 @@ export default function QuestionRequestCreatePage() {
   return (
     <div>
       {activeRequestId ? (
-
-        
         <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex flex-col items-center gap-4">
           <Spinner>
                   O SelfTest está gerando seu desafio personalizado... 
