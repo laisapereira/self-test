@@ -2,15 +2,35 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import OpenAI from "openai";
-import { QuestionRequest } from "@/prisma";
+import { QuestionRequest, QuestionRequestStatus } from "@/prisma";
 import { authOptions } from "@/lib/auth";
 import { PrismaJson } from "@/prisma/types";
 
 export async function GET(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user || !session.user.email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url)
+  const status = searchParams.get("status")
+
   try {
-    const requests = await prisma.questionRequest.findMany();
+    const user = await prisma.user.findUnique({ where: { email: session.user.email } });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const requests = await prisma.questionRequest.findMany({
+      where: {
+        userId: user.id,
+        ...(status ? { status: status as QuestionRequestStatus } : {})
+      },
+      orderBy: { createdAt: 'desc' }
+    });
     return NextResponse.json(requests);
   } catch (error) {
+    console.error("[QuestionRequestsAPI] error in GET", error);
     return NextResponse.json({ error: "Failed to fetch requests" }, { status: 500 });
   }
 }
@@ -43,7 +63,7 @@ export async function POST(req: Request) {
       },
     });
 
-    backgroundProcessing(newQuestionRequest, signal);
+    backgroundProcessing(newQuestionRequest);
     return NextResponse.json(newQuestionRequest, { status: 202 });
 
  /*    // atualiza o status para completado
@@ -83,11 +103,11 @@ export async function POST(req: Request) {
 }
 
 
-async function backgroundProcessing(questionRequest: QuestionRequest, signal: AbortSignal) {
+async function backgroundProcessing(questionRequest: QuestionRequest) {
 
   try {
 
-    await generateQuestions(questionRequest, signal)
+    await generateQuestions(questionRequest)
 
     const currentRequest = await prisma.questionRequest.findUnique({
       where: { id: questionRequest.id }
@@ -111,8 +131,8 @@ async function backgroundProcessing(questionRequest: QuestionRequest, signal: Ab
   }
 }
 
-async function generateQuestions(questionRequest: QuestionRequest, signal: AbortSignal) {
-  const jsonString = await requestLLM(questionRequest, signal);
+async function generateQuestions(questionRequest: QuestionRequest) {
+  const jsonString = await requestLLM(questionRequest);
 
 
   if (!jsonString) {
@@ -196,7 +216,7 @@ async function generatePrompt(questionRequest: QuestionRequest) {
   return prompt;
 }
 
-async function requestLLM(questionRequest: QuestionRequest, signal: AbortSignal) {
+async function requestLLM(questionRequest: QuestionRequest) {
   const prompt = await generatePrompt(questionRequest);
 
 
@@ -214,7 +234,7 @@ async function requestLLM(questionRequest: QuestionRequest, signal: AbortSignal)
     response_format: {
       type: 'json_object'
     }
-  }, { signal });
+  });
 
 
   return completion.choices[0].message.content;

@@ -11,14 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 export default function QuestionRequestCreatePage() {
   const { data: session, status } = useSession();
@@ -38,11 +30,11 @@ export default function QuestionRequestCreatePage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
-  const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
-  const [pendingLeaveHref, setPendingLeaveHref] = useState<string | null>(null);
-  const [isCanceling, setIsCanceling] = useState(false);
+  const [activeRequestId, setActiveRequestId] = useState<number | null>(null)
 
-  const abortControllerFetchRef = useRef<AbortController | null>(null);
+
+  const [currentRequestId, setCurrentRequestId] = useState<string | null>(null)
+
   const abortControllerCreateRef = useRef<AbortController | null>(null);
   const isMountedRef = useRef(true);
 
@@ -59,15 +51,11 @@ export default function QuestionRequestCreatePage() {
   useEffect(() => {
     if (status !== "authenticated") return;
 
-    abortControllerFetchRef.current = new AbortController();
-
     async function fetchTemplates() {
       if (!isMountedRef.current) return;
       setIsLoadingTemplates(true);
       try {
-        const response = await fetch("/api/templates", {
-          signal: abortControllerFetchRef.current?.signal,
-        });
+        const response = await fetch("/api/templates");
         const data = await response.json();
         if (isMountedRef.current) {
           if (response.ok && Array.isArray(data)) {
@@ -77,9 +65,7 @@ export default function QuestionRequestCreatePage() {
           }
         }
       } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Fetch templates aborted");
-        } else if (isMountedRef.current) {
+        if (isMountedRef.current) {
           console.error("Error fetching templates:", error);
         }
       } finally {
@@ -89,27 +75,9 @@ export default function QuestionRequestCreatePage() {
       }
     }
     fetchTemplates();
-
-    return () => {
-      if (abortControllerFetchRef.current) {
-        abortControllerFetchRef.current.abort();
-      }
-    };
   }, [status]);
 
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (isLoading || isLoadingTemplates) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [isLoading, isLoadingTemplates]);
 
   useEffect(() => {
     if (template) {
@@ -121,10 +89,36 @@ export default function QuestionRequestCreatePage() {
     }
   }, [template]);
 
+
+
+  useEffect(() => {
+    async function checkPendingRequest() {
+      const response = await fetch("/api/questionRequests?status=PENDING")
+      const data = await response.json()
+
+      if (data.length > 0) {
+        const lastRequest = data[0];
+        const createdAt = new Date(lastRequest.createdAt).getTime();
+        const now = new Date().getTime();
+        const diffMinutes = (now - createdAt) / (1000 * 60);
+
+        // Só retoma o polling se a requisição for recente (menos de 5 minutos)
+        if (diffMinutes < 5) {
+          setActiveRequestId(lastRequest.id)
+          console.log("Retomando polling para requisição recente:", lastRequest.id)
+        } else {
+          console.log("Ignorando requisição pendente antiga (stale):", lastRequest.id)
+        }
+      }
+    }
+    checkPendingRequest()
+  }, [])
+
   function renderParameterInput(
     parameter: PrismaJson.QuestionRequestTemplateParameter,
     key: string
   ): React.ReactNode {
+
     if (parameter.values && parameter.values.length > 0) {
       if (parameter.multipleSelect) {
         return <MultiSelect
@@ -254,7 +248,7 @@ export default function QuestionRequestCreatePage() {
       parameterValues: newRequest.parameterValues,
       generatedPrompt: finalPrompt,
     };
-    
+
     setIsLoading(true);
     abortControllerCreateRef.current = new AbortController();
 
@@ -270,13 +264,16 @@ export default function QuestionRequestCreatePage() {
 
       if (!isMountedRef.current) return;
 
-      if (response.ok) {
-        const newQuestionRequest = await response.json();
-        router.push(`/questions?questionRequestId=${newQuestionRequest.id}`);
-      } else {
+      if (!response.ok) {
+        setIsLoading(false);
         console.log("Response", response);
         alert("Failed to create request");
+        return;
       }
+
+      const { id } = await response.json()
+      setActiveRequestId(id) // Sincroniza o estado para mostrar o card de progresso
+
     } catch (error: any) {
       if (error.name === "AbortError") {
         console.log("Create request aborted");
@@ -291,107 +288,126 @@ export default function QuestionRequestCreatePage() {
     }
   }
 
+  async function cancelRequest() {
+    if (!activeRequestId) return;
+
+    try {
+      await fetch(`/api/questionRequests/${activeRequestId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "CANCELED" }),
+      });
+      setActiveRequestId(null);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao cancelar requisição:", error);
+      alert("Não foi possível cancelar a geração.");
+    }
+  }
+
   useEffect(() => {
-    const handleCaptureClick = (e: MouseEvent) => {
-      if (!isLoading && !isLoadingTemplates) return;
+    if (!activeRequestId) return;
 
-      const target = e.target as HTMLElement;
-      const anchor = target.closest("a");
+    let stopped = false;
 
-      if (anchor && anchor.href && !anchor.hasAttribute("download") && anchor.target !== "_blank") {
-        const url = new URL(anchor.href, window.location.origin);
-        if (url.origin === window.location.origin) {
-          e.preventDefault();
-          e.stopPropagation();
-          setPendingLeaveHref(url.pathname + url.search + url.hash);
-          setIsLeaveDialogOpen(true);
+    async function poll() {
+      console.log("[POLLING] Iniciando polling para id:", activeRequestId);
+      while (!stopped) {
+        try {
+          const response = await fetch(`/api/questionRequests/${activeRequestId}`);
+          if (!response.ok) {
+            console.error("[POLLING] Erro ao buscar status:", response.statusText);
+            break;
+          }
+          const questionRequest = await response.json();
+
+          console.log("[POLLING] status atual:", questionRequest.status);
+
+          if (stopped) break;
+
+          if (questionRequest.status === "COMPLETED") {
+            console.log("[POLLING] redirecionando...");
+            window.location.href = `/questions?questionRequestId=${activeRequestId}`;
+            return;
+          }
+
+          if (questionRequest.status === "FAILED") {
+            setIsLoading(false);
+            setActiveRequestId(null);
+            alert("Falha ao gerar questões");
+            return;
+          }
+
+          if (questionRequest.status === "CANCELED") {
+            console.log("[POLLING] requisição cancelada pelo usuário ou sistema.");
+            setIsLoading(false);
+            setActiveRequestId(null);
+            return;
+          }
+        } catch (error) {
+          console.error("[POLLING] erro no fetch:", error);
         }
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        if (stopped) break;
       }
-    };
+    }
 
-    // Global listener to capture clicks on Navbar or any other Next.js <Link>
-    document.addEventListener("click", handleCaptureClick, true);
+    poll();
 
     return () => {
-      document.removeEventListener("click", handleCaptureClick, true);
+      console.log("[POLLING] Parando polling para id:", activeRequestId);
+      stopped = true;
     };
-  }, [isLoading, isLoadingTemplates]);
+  }, [activeRequestId]);
 
-  const handleConfirmLeave = () => {
-    setIsCanceling(true);
-    if (abortControllerFetchRef.current) {
-      abortControllerFetchRef.current.abort();
-    }
-    if (abortControllerCreateRef.current) {
-      abortControllerCreateRef.current.abort();
-    }
 
-    setTimeout(() => {
-      if (pendingLeaveHref) {
-        router.push(pendingLeaveHref);
-      }
-    }, 400);
-  };
 
   return (
     <div>
-      <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex">
-        <CardHeader className="text-center">
-          <h1 className="text-4xl font-bold">Vamos testar seu conhecimento?</h1>
-          <p className="text-slate-500 py-3">
-            Configure abaixo os tópicos para gerar um desafio personalizado de perguntas!
-          </p>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2.5">
-          {renderSelectTemplate()}
-          {template && template.parameters?.length > 0 && <>
-            <h2 className="text-[1.1rem] font-semibold mt-4">Defina os parâmetros que a IA deve priorizar</h2>
-            {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
-              renderParameterInput(parameter, `${parameter.name}`))}
-          </>
-          }
-          {template &&
-            (
-              isLoading
-                ? <Spinner>
-                  O SelfTest está estruturando um desafio personalizado para você...
-                </Spinner>
-                : <Button onClick={createRequest} disabled={isLoading || isLoadingTemplates}>
-                  {isLoading ? <span className="spinner" /> : "Gerar minhas questões"}
-                </Button>
-            )
-          }
-        </CardContent>
-      </Card>
+      {activeRequestId ? (
 
-      <Dialog open={isLeaveDialogOpen} onOpenChange={setIsLeaveDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Requisição em processamento</DialogTitle>
-            <DialogDescription>
-              {!isCanceling 
-                 ? "A requisição ainda está em processamento. Tem certeza que deseja sair?"
-                 : "A requisição será cancelada..."}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
-            <Button 
-              variant="outline" 
-              onClick={() => setIsLeaveDialogOpen(false)}
-              disabled={isCanceling}
-            >
-              Permanecer
+        
+        <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex flex-col items-center gap-4">
+          <Spinner>
+                  O SelfTest está gerando seu desafio personalizado... 
+                  Pode sair desta página e navegar pelo site tranquilamente, o progresso continuará em segundo plano e você poderá ver o resultado no seu histórico!
+          </Spinner>
+          <div className="flex flex-col w-full gap-2">
+            <Button variant="outline" className="w-full" asChild>
+              <a href="/questionRequests">Acompanhar no histórico</a>
             </Button>
-            <Button 
-              variant="destructive" 
-              onClick={handleConfirmLeave}
-              disabled={isCanceling}
-            >
-              {isCanceling ? "Cancelando..." : "Sair e cancelar"}
+            <Button variant="destructive" className="w-full" onClick={cancelRequest}>
+              Cancelar geração
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </div>
+        </Card>
+      ) : (
+        <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex">
+          <CardHeader className="text-center">
+            <h1 className="text-4xl font-bold">Vamos testar seu conhecimento?</h1>
+            <p className="text-slate-500 py-3">
+              Configure abaixo os tópicos para gerar um desafio personalizado de perguntas!
+            </p>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-2.5">
+            {renderSelectTemplate()}
+            {template &&
+              template.parameters?.length > 0 && (
+                <>
+                  <h2 className="text-[1.1rem] font-semibold mt-4"> Defina os parâmetros que a IA deve priorizar</h2>
+                  {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
+                    renderParameterInput(parameter, `${parameter.name}`)
+                  )}
+                </>
+              )}
+            {template && (
+              <Button onClick={createRequest} disabled={isLoading || isLoadingTemplates}>
+                {isLoading ? <span className="spinner" /> : "Gerar minhas questões"}
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
