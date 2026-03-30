@@ -1,11 +1,41 @@
 'use client';
 
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
 export default function LoginPage() {
+    const router = useRouter();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    async function handleCredentialsLogin(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        setError(null);
+        setLoading(true);
+
+        const result = await signIn("credentials", {
+            email,
+            password,
+            redirect: false,
+        });
+
+        setLoading(false);
+
+        if (result?.error) {
+            setError("E-mail ou senha inválidos.");
+            return;
+        }
+
+        router.push("/");
+        router.refresh();
+    }
+
     return (
         <div className="min-h-[70vh] flex items-center justify-center p-4">
             <Card className="w-full max-w-md shadow-lg border-slate-200">
@@ -17,10 +47,44 @@ export default function LoginPage() {
                         Acesso Restrito
                     </CardTitle>
                     <CardDescription className="text-base text-slate-600 font-medium">
-                        Você precisa estar logado para acessar esta página. Entre com sua conta Google para continuar.
+                        Você pode entrar com Google ou com e-mail e senha.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
+                    {error && (
+                        <div className="rounded border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleCredentialsLogin} className="flex flex-col gap-3">
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="E-mail"
+                            className="h-11 w-full rounded-md border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Senha"
+                            className="h-11 w-full rounded-md border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+                        <Button
+                            type="submit"
+                            className="w-full h-11 text-base"
+                            disabled={loading}
+                        >
+                            {loading ? "Entrando..." : "Entrar com e-mail"}
+                        </Button>
+                    </form>
+
+                    <div className="text-center text-xs text-slate-400">ou</div>
+
                     <Button
                         onClick={() => signIn("google", { callbackUrl: "/" })}
                         className="w-full h-12 text-lg gap-3 bg-white text-slate-700 border border-slate-300 shadow-sm hover:bg-slate-50 transition-colors"

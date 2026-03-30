@@ -1,19 +1,34 @@
-'use client';
+"use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useSearchParams } from "next/navigation";
 import { fetchRequests } from "./server";
 import { Suspense, useEffect, useState } from "react";
 import Pagination from "@/components/pagination";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { QuestionRequest, QuestionRequestTemplate } from "@/prisma";
 import { normalizeQuestionRequests } from "@/lib/utils";
 
 export default function QuestionRequestsPage() {
-  return <Suspense>
-    <QuestionRequestsPageInner />
-  </Suspense>
+  return (
+    <Suspense>
+      <QuestionRequestsPageInner />
+    </Suspense>
+  );
 }
 
 function QuestionRequestsPageInner() {
@@ -21,12 +36,13 @@ function QuestionRequestsPageInner() {
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const searchParams = useSearchParams();
   const userIdStr = searchParams?.get("userId") || null;
-  const userId = userIdStr === null || userIdStr == '' ? undefined : parseInt(userIdStr, 10);
+  const userId =
+    userIdStr === null || userIdStr == "" ? undefined : parseInt(userIdStr, 10);
   const templateIdStr = searchParams?.get("templateId") || null;
   const templateId = templateIdStr ? parseInt(templateIdStr, 10) : undefined;
 
-  const pageStr = searchParams?.get("page")
-  const page = pageStr ? parseInt(pageStr, 10) : 1
+  const pageStr = searchParams?.get("page");
+  const page = pageStr ? parseInt(pageStr, 10) : 1;
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,20 +59,26 @@ function QuestionRequestsPageInner() {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchRequests({ userId, page, pageSize: 6, templateId });
+      const result = await fetchRequests({
+        userId,
+        page,
+        pageSize: 6,
+        templateId,
+      });
       setRequests(normalizeQuestionRequests(result.data));
 
       setTotalPages(result.totalPages);
 
       setCurrentPage(result.currentPage);
-
     }
 
     fetchData();
   }, [userId, page, templateId]);
 
   const handleRowClick = (requestId: string, requestUserId: number) => {
-    router.push(`/questions?questionRequestId=${requestId}&userId=${requestUserId}`);
+    router.push(
+      `/questions?questionRequestId=${requestId}&userId=${requestUserId}`,
+    );
   };
 
   const handleTemplateChange = (value: string) => {
@@ -70,25 +92,31 @@ function QuestionRequestsPageInner() {
     router.push(`/questionRequests?${params.toString()}`);
   };
 
-
   return (
     <>
-
       <div className="w-full max-w-5xl mx-auto p-4 my-6">
-
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-          <h1 className="text-2xl font-bold text-slate-800 text-center">Histórico de Perguntas Geradas</h1>
+          <h1 className="text-2xl font-bold text-slate-800 text-center">
+            Histórico de Perguntas Geradas
+          </h1>
 
           <div className="flex items-center gap-4">
             <div className="w-64">
-              <Select onValueChange={handleTemplateChange} value={templateId ? templateId.toString() : "all"}>
+              <h3> Filtros</h3>
+              <Select
+                onValueChange={handleTemplateChange}
+                value={templateId ? templateId.toString() : "all"}
+              >
                 <SelectTrigger className="w-full bg-white">
                   <SelectValue placeholder="Filtrar por Template" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos os Templates</SelectItem>
                   {templates?.map((template) => (
-                    <SelectItem key={template.id} value={template.id.toString()}>
+                    <SelectItem
+                      key={template.id}
+                      value={template.id.toString()}
+                    >
                       {template.name}
                     </SelectItem>
                   ))}
@@ -97,11 +125,17 @@ function QuestionRequestsPageInner() {
             </div>
 
             {userId !== -1 ? (
-              <a href="/questionRequests?userId=-1" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+              <a
+                href="/questionRequests?userId=-1"
+                className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+              >
                 Ver de todos os usuários&rarr;
               </a>
             ) : (
-              <a href="/questionRequests" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+              <a
+                href="/questionRequests"
+                className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+              >
                 Ver minhas questões &rarr;
               </a>
             )}
@@ -112,11 +146,11 @@ function QuestionRequestsPageInner() {
           <Table>
             <TableHeader className="bg-slate-50">
               <TableRow>
-
                 <TableHead className="w-[100px]">Data de Geração</TableHead>
 
-                {userId === -1 && <TableHead className="w-[150px]">Usuário</TableHead>}
-
+                {userId === -1 && (
+                  <TableHead className="w-[150px]">Usuário</TableHead>
+                )}
 
                 <TableHead className="text-center">Tema e Parâmetros</TableHead>
 
@@ -124,85 +158,103 @@ function QuestionRequestsPageInner() {
                 <TableHead className="text-right">Desempenho</TableHead>
               </TableRow>
             </TableHeader>
-
             <TableBody>
               {requests?.map((request: any) => {
-
                 const score = getNumberOfCorrectAnswers(request.questions);
 
-                const scoreColor = score.correct > 0 && score.correct === score.total ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-700";
+                const scoreColor =
+                  score.correct > 0 && score.correct === score.total
+                    ? "bg-green-100 text-green-700"
+                    : "bg-slate-100 text-slate-700";
 
-                const isCompleted = request.status === 'COMPLETED';
-                const isCanceled = request.status === 'CANCELED';
-                const isFailed = request.status === 'FAILED';
+                const isCompleted = request.status === "COMPLETED";
+                const isCanceled = request.status === "CANCELED";
+                const isFailed = request.status === "FAILED";
 
                 return (
                   <TableRow
                     key={request.id}
-
-                    className={`transition-colors ${isCompleted ? 'cursor-pointer hover:bg-blue-50/50 group' : 'opacity-60 bg-slate-50/50'}`}
-                    onClick={() => isCompleted && handleRowClick(request.id, request.userId)}
+                    className={`transition-colors ${isCompleted ? "cursor-pointer hover:bg-blue-50/50 group" : "opacity-60 bg-slate-50/50"}`}
+                    onClick={() =>
+                      isCompleted && handleRowClick(request.id, request.userId)
+                    }
                   >
-
                     <TableCell className="align-top py-4">
                       <div className="text-sm font-medium text-slate-700">
-                        {new Date(request.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })}
+                        {new Date(request.createdAt).toLocaleDateString(
+                          "pt-BR",
+                          { day: "2-digit", month: "2-digit", year: "2-digit" },
+                        )}
                       </div>
                       <div className="text-xs text-slate-400 flex">
-
-                        Hora: {new Date(request.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                        Hora:{" "}
+                        {new Date(request.createdAt).toLocaleTimeString(
+                          "pt-BR",
+                          { hour: "2-digit", minute: "2-digit" },
+                        )}
                       </div>
                     </TableCell>
 
                     {/* USUÁRIO (Apenas se admin) */}
                     {userId === -1 && (
                       <TableCell className="align-top py-4">
-                        <div className="font-medium text-sm">{request.user.name}</div>
+                        <div className="font-medium text-sm">
+                          {request.user.name}
+                        </div>
                       </TableCell>
                     )}
-
 
                     <TableCell className="align-top py-4 max-w-[400px]">
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">
-                          <span className={`font-semibold text-slate-900 transition-colors ${isCompleted ? 'group-hover:text-blue-600' : ''}`}>
+                          <span
+                            className={`font-semibold text-slate-900 transition-colors ${isCompleted ? "group-hover:text-blue-600" : ""}`}
+                          >
                             {request.template?.name}
                           </span>
                         </div>
 
-
-                        <span className="text-xs text-slate-500 truncate block w-full" title={getParameterString(request.parameterValues)}>
+                        <span
+                          className="text-xs text-slate-500 truncate block w-full"
+                          title={getParameterString(request.parameterValues)}
+                        >
                           {getParameterString(request.parameterValues)}
                         </span>
                       </div>
                     </TableCell>
 
-
                     <TableCell className="text-right align-top py-4">
                       {isCompleted ? (
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${scoreColor}`}>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${scoreColor}`}
+                        >
                           {score.correct} / {score.total} acertos
                         </span>
                       ) : isCanceled ? (
-                        <span className="text-xs text-slate-500 italic font-medium">Cancelado</span>
+                        <span className="text-xs text-slate-500 italic font-medium">
+                          Cancelado
+                        </span>
                       ) : isFailed ? (
-                        <span className="text-xs text-red-500 italic font-medium">Falha</span>
+                        <span className="text-xs text-red-500 italic font-medium">
+                          Falha
+                        </span>
                       ) : (
-                        <span className="text-xs text-yellow-600 italic font-medium">Processando...</span>
+                        <span className="text-xs text-yellow-600 italic font-medium">
+                          Processando...
+                        </span>
                       )}
                     </TableCell>
                   </TableRow>
                 );
               })}
-            </TableBody>      </Table>
+            </TableBody>{" "}
+          </Table>
         </div>
         <div className="mt-4">
           <Pagination totalPages={totalPages} currentPage={currentPage} />
         </div>
       </div>
-
     </>
-
   );
 }
 
@@ -210,17 +262,24 @@ function getParameterString(parameterValues: any) {
   if (parameterValues.length === 0) {
     return "Sem parâmetros";
   }
-  return parameterValues.map((param: any) => {
-    if (param.values.length > 0) {
-      return `${param.name}: ${param.values.join(", ")}`;
-    } else {
-      return `${param.name}: No values`;
-    }
-  }).join(", ");
+  return parameterValues
+    .map((param: any) => {
+      if (param.values.length > 0) {
+        return `${param.name}: ${param.values.join(", ")}`;
+      } else {
+        return `${param.name}: No values`;
+      }
+    })
+    .join(", ");
 }
 
-function getNumberOfCorrectAnswers(questions: any[]): { total: number; correct: number; answered: number } {
-  if (!Array.isArray(questions) || questions.length === 0) return { total: 0, correct: 0, answered: 0 };
+function getNumberOfCorrectAnswers(questions: any[]): {
+  total: number;
+  correct: number;
+  answered: number;
+} {
+  if (!Array.isArray(questions) || questions.length === 0)
+    return { total: 0, correct: 0, answered: 0 };
 
   const total = questions.length;
   let correct = 0;

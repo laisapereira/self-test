@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import './globals.css'
-import { Inter } from 'next/font/google'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Fragment, ReactNode, useState } from 'react'
-import { Menu, X } from 'lucide-react'
-import { SessionProvider, signIn, signOut, useSession } from 'next-auth/react';
-import { Toaster } from '@/components/ui/sonner';
-import Footer from '@/components/footer';
+import "./globals.css";
+import { Inter } from "next/font/google";
+import Image from "next/image";
+import Link from "next/link";
+import { Fragment, ReactNode, useState } from "react";
+import { Menu, X } from "lucide-react";
+import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
+import { Toaster } from "@/components/ui/sonner";
+import Footer from "@/components/footer";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata = {
 //   title: 'My App',
@@ -18,60 +18,56 @@ const inter = Inter({ subsets: ['latin'] })
 // }
 
 const routes = [
-
-
   {
-    title: 'Gerar Questões',
-    href: '/',
+    title: "Gerar Questões",
+    href: "/",
   },
   {
-    title: 'Templates de Questões',
-    href: '/templates',
+    title: "Templates de Questões",
+    href: "/templates",
     requireAdmin: true,
   },
 
   {
-    title: 'Questões Geradas',
-    href: '/questionRequests',
+    title: "Questões Geradas",
+    href: "/questionRequests",
   },
 
   {
-    title: 'Usuários',
-    href: '/users',
+    title: "Usuários",
+    href: "/admin/users",
     requireAdmin: true,
   },
   {
-    title: 'Dashboard',
-    href: '/dashboard',
+    title: "Dashboard",
+    href: "/dashboard",
   },
+];
 
-
-]
-
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
         <title>SelfTest</title>
-        <meta name="description" content="O SelfTest permite estudantes de computação testarem seus conhecimentos utilizando perguntas personalizadas geradas por IA. Venha se testar!" />
+        <meta
+          name="description"
+          content="O SelfTest permite estudantes de computação testarem seus conhecimentos utilizando perguntas personalizadas geradas por IA. Venha se testar!"
+        />
         <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <SessionProvider>
           <Navbar />
-          <main className="p-4">
-            {children}
+          <main className="p-4">{children}</main>
 
-          </main>
-
-          <Link href="https://forms.gle/BLVawYyYqAWBM1Vd8" target="_blank" className="mt-4 text-xl text-blue-600 hover:underline text-center flex justify-center">
+          <Link
+            href="https://forms.gle/BLVawYyYqAWBM1Vd8"
+            target="_blank"
+            className="mt-4 text-xl text-blue-600 hover:underline text-center flex justify-center"
+          >
             O que você tem achado do SelfTest? Avalie aqui!
           </Link>
           <Footer />
@@ -79,18 +75,20 @@ export default function RootLayout({
         </SessionProvider>
       </body>
     </html>
-  )
+  );
 }
 
 function Navbar() {
-  const [open, setOpen] = useState(false)
-  const { data: session } = useSession()
+  const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <nav className="bg-white shadow-md px-4 py-3 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-
-        <Link href="/"> <Image src="/logo.png" alt="SelfTest Logo" width={200} height={150} /></Link>
+        <Link href="/">
+          {" "}
+          <Image src="/logo.png" alt="SelfTest Logo" width={200} height={150} />
+        </Link>
 
         {session && (
           <button
@@ -118,7 +116,7 @@ function Navbar() {
         </ul>
       )}
     </nav>
-  )
+  );
 }
 
 function MenuItems(props: { onClick?: () => void }) {
@@ -127,20 +125,30 @@ function MenuItems(props: { onClick?: () => void }) {
   const isUserAdmin = () => {
     if (!session || !session.user) return false;
     return session.user.isAdmin === true;
-  }
+  };
 
   return session ? (
     <Fragment>
       {routes
-        .filter((route => !route.requireAdmin || isUserAdmin()))
-        .map((route, index) =>
-        (
-          <Link key={index} href={route.href} onClick={onClick} className="block px-4 py-2 hover:bg-gray-100">
+        .filter((route) => !route.requireAdmin || isUserAdmin())
+        .map((route, index) => (
+          <Link
+            key={index}
+            href={route.href}
+            onClick={onClick}
+            className="block px-4 py-2 hover:bg-gray-100"
+          >
             {route.title}
-          </Link>))}
-      <Link href='/api/auth/signout' className="block px-4 py-2 hover:bg-gray-100">{session.user?.email}</Link>
-    </Fragment>) : (
-    <Link href='/login' >Login</Link>
+          </Link>
+        ))}
+      <Link
+        href="/api/auth/signout"
+        className="block px-4 py-2 hover:bg-gray-100"
+      >
+        {session.user?.email}
+      </Link>
+    </Fragment>
+  ) : (
+    <Link href="/login">Login</Link>
   );
-
 }

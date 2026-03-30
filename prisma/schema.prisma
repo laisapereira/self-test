@@ -19,13 +19,14 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  admin     Boolean  @default(false)
-  name      String?
-  email     String   @unique
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  admin        Boolean  @default(false)
+  name         String?
+  email        String   @unique
+  passwordHash String?
+  image        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   groups                   Group[]                   @relation("GroupUsers")
   ownedGroups              Group[]
@@ -77,11 +78,11 @@ enum QuestionRequestStatus {
 }
 
 model QuestionRequest {
-  id              Int      @id @default(autoincrement())
+  id              Int                   @id @default(autoincrement())
   status          QuestionRequestStatus @default(PENDING)
   /// [QuestionRequestParameterValue]
   parameterValues Json[]
-  createdAt       DateTime @default(now())
+  createdAt       DateTime              @default(now())
 
   templateId Int?
   userId     Int
