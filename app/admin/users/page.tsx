@@ -3,16 +3,27 @@ import { getCurrentUser } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import { UserSearch } from "@/components/admin/UserSearch";
 
 export default async function AdminUsersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; q?: string }>;
 }) {
   const params = await searchParams;
   const page = parseInt(params.page || "1", 10);
+  const query = (params.q || "").trim();
   const limit = 10;
   const skip = (page - 1) * limit;
+  const whereClause =
+    query.length > 0
+      ? {
+          OR: [
+            { name: { contains: query, mode: "insensitive" } },
+            { email: { contains: query, mode: "insensitive" } },
+          ],
+        }
+      : {};
 
   async function toggleAdmin(formData: FormData) {
     "use server";
@@ -56,6 +67,7 @@ export default async function AdminUsersPage({
     }
 
     return prisma.user.findMany({
+      where: whereClause,
       orderBy: {
         name: "asc",
       },
@@ -66,8 +78,10 @@ export default async function AdminUsersPage({
 
   const users = await fetchUsers();
   const totalUsers = await prisma.user.count();
-  const totalPages = Math.ceil(totalUsers / limit);
+  const filteredUsersCount = await prisma.user.count({ where: whereClause });
+  const totalPages = Math.max(1, Math.ceil(filteredUsersCount / limit));
   const adminsCount = await prisma.user.count({ where: { admin: true } });
+  const queryParam = query ? `&q=${encodeURIComponent(query)}` : "";
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
@@ -79,7 +93,8 @@ export default async function AdminUsersPage({
             </h1>
             <p className="text-slate-500">Gerenciamento de Administradores</p>
           </div>
-          <Link href="/admin/users/new"
+          <Link
+            href="/admin/users/new"
             className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
             + Novo Admin
@@ -104,9 +119,12 @@ export default async function AdminUsersPage({
         </div>
 
         <section className="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold text-slate-700">
-            Usuários do Sistema
-          </h2>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-xl font-semibold text-slate-700">
+              Usuários do Sistema
+            </h2>
+            <UserSearch initialQuery={query} />
+          </div>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader className="bg-slate-100">
@@ -168,12 +186,13 @@ export default async function AdminUsersPage({
           </div>
           <div className="mt-4 flex items-center justify-between">
             <p className="text-sm text-slate-500">
-              Página {page} de {totalPages}
+              Página {page} de {totalPages} • {filteredUsersCount} resultado(s)
+              {query && ` para "${query}"`}
             </p>
             <div className="flex gap-2">
               {page > 1 && (
                 <Link
-                  href={`/admin/users?page=${page - 1}`}
+                  href={`/admin/users?page=${page - 1}${queryParam}`}
                   className="rounded border border-slate-300 bg-white px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
                 >
                   Anterior
@@ -181,7 +200,7 @@ export default async function AdminUsersPage({
               )}
               {page < totalPages && (
                 <Link
-                  href={`/admin/users?page=${page + 1}`}
+                  href={`/admin/users?page=${page + 1}${queryParam}`}
                   className="rounded border border-slate-300 bg-white px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
                 >
                   Próxima

@@ -20,8 +20,52 @@ import { fetchRequests } from "./server";
 import { Suspense, useEffect, useState } from "react";
 import Pagination from "@/components/pagination";
 import { useRouter } from "next/navigation";
-import { QuestionRequest, QuestionRequestTemplate } from "@/prisma";
+import { Question, QuestionRequest, QuestionRequestTemplate } from "@/prisma";
 import { normalizeQuestionRequests } from "@/lib/utils";
+
+interface ParameterValue {
+  name: string;
+  values: string[];
+}
+
+interface AutoEvaluation {
+  score: number;
+  justification: string;
+  modelVersion: string | null;
+  evaluatedAt: string;
+  criteria: Array<{
+    description: string;
+    weight: number;
+    score: number;
+  }>;
+}
+
+interface Answer {
+  id: number;
+  answerIndex: number | null;
+  confidenceLevel: number;
+  correct: boolean;
+  content: string;
+  autoEvaluation: AutoEvaluation | null;
+}
+
+interface NormalizedQuestion extends Question {
+  answers: Answer[];
+}
+
+interface NormalizedQuestionRequest extends QuestionRequest {
+  user: { id: number; name: string | null };
+  template: { id: number; name: string } | null;
+  questions: NormalizedQuestion[];
+}
+
+interface ScoreResult {
+  total: number;
+  correct?: number;
+  answered?: number;
+  isDiscursive?: boolean;
+  average?: number;
+}
 
 export default function QuestionRequestsPage() {
   return (
@@ -32,7 +76,9 @@ export default function QuestionRequestsPage() {
 }
 
 function QuestionRequestsPageInner() {
-  const [requests, setRequests] = useState<QuestionRequest[] | null>(null);
+  const [requests, setRequests] = useState<NormalizedQuestionRequest[] | null>(
+    null,
+  );
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const searchParams = useSearchParams();
   const userIdStr = searchParams?.get("userId") || null;
@@ -65,7 +111,9 @@ function QuestionRequestsPageInner() {
         pageSize: 6,
         templateId,
       });
-      setRequests(normalizeQuestionRequests(result.data));
+      setRequests(
+        normalizeQuestionRequests(result.data) as NormalizedQuestionRequest[],
+      );
 
       setTotalPages(result.totalPages);
 
@@ -75,7 +123,7 @@ function QuestionRequestsPageInner() {
     fetchData();
   }, [userId, page, templateId]);
 
-  const handleRowClick = (requestId: string, requestUserId: number) => {
+  const handleRowClick = (requestId: number, requestUserId: number) => {
     router.push(
       `/questions?questionRequestId=${requestId}&userId=${requestUserId}`,
     );
@@ -159,11 +207,13 @@ function QuestionRequestsPageInner() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {requests?.map((request: any) => {
+              {requests?.map((request: NormalizedQuestionRequest) => {
                 const score = getNumberOfCorrectAnswers(request.questions);
 
                 const scoreColor =
-                  score.correct > 0 && score.correct === score.total
+                  score?.correct &&
+                  score.correct > 0 &&
+                  score.correct === score.total
                     ? "bg-green-100 text-green-700"
                     : "bg-slate-100 text-slate-700";
 
@@ -226,9 +276,15 @@ function QuestionRequestsPageInner() {
                     <TableCell className="text-right align-top py-4">
                       {isCompleted ? (
                         <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${scoreColor}`}
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            score.isDiscursive
+                              ? "bg-blue-100 text-blue-700"
+                              : scoreColor
+                          }`}
                         >
-                          {score.correct} / {score.total} acertos
+                          {score.isDiscursive
+                            ? `Média: ${score.average?.toFixed(2) || "0.00"}`
+                            : `${score.correct} / ${score.total} acertos`}
                         </span>
                       ) : isCanceled ? (
                         <span className="text-xs text-slate-500 italic font-medium">
@@ -258,12 +314,12 @@ function QuestionRequestsPageInner() {
   );
 }
 
-function getParameterString(parameterValues: any) {
+function getParameterString(parameterValues: ParameterValue[]): string {
   if (parameterValues.length === 0) {
     return "Sem parâmetros";
   }
   return parameterValues
-    .map((param: any) => {
+    .map((param: ParameterValue) => {
       if (param.values.length > 0) {
         return `${param.name}: ${param.values.join(", ")}`;
       } else {
@@ -273,38 +329,60 @@ function getParameterString(parameterValues: any) {
     .join(", ");
 }
 
-function getNumberOfCorrectAnswers(questions: any[]): {
-  total: number;
-  correct: number;
-  answered: number;
-} {
-  if (!Array.isArray(questions) || questions.length === 0)
-    return { total: 0, correct: 0, answered: 0 };
+function getNumberOfCorrectAnswers(
+  questions: NormalizedQuestion[],
+): ScoreResult {
+  const questionsArray = Array.isArray(questions) ? questions : [questions];
 
-  const total = questions.length;
+  if (!Array.isArray(questionsArray) || questionsArray.length === 0)
+    return {
+      total: 0,
+      correct: 0,
+      answered: 0,
+      isDiscursive: false,
+      average: 0,
+    };
+
+  const total = questionsArray.length;
+  const allDiscursive = questionsArray.every(
+    (q: NormalizedQuestion) => q.type === "discursive",
+  );
+
+  // Se todas as questões forem discursivas, calcula a média
+  if (allDiscursive) {
+    let sum = 0;
+    let count = 0;
+
+    for (const question of questionsArray) {
+      const autoEvaluation = question.answers[0]?.autoEvaluation;
+      if (autoEvaluation) {
+        const numericScore = Number(autoEvaluation.score);
+        if (!isNaN(numericScore)) {
+          sum += numericScore;
+          count++;
+        }
+      }
+    }
+
+    const average = count > 0 ? sum / count : 0;
+    return { total, isDiscursive: true, average };
+  }
+
+  // Lógica original para múltipla escolha
   let correct = 0;
   let answered = 0;
 
-  for (const question of questions) {
-    if (question.type === "discursive") {
-      const autoEvaluation = question.answers[0]?.autoEvaluation;
-      if (autoEvaluation) {
-        answered++;
-        const numericScore = Number(autoEvaluation.score);
-        if (!isNaN(numericScore) && numericScore >= 5) {
-          correct++;
-        }
-      }
-    } else if (question.type === "multiple-choice") {
+  for (const question of questionsArray) {
+    if (question.type === "multiple-choice") {
       const answerIndex = question.answers[0]?.answerIndex;
       if (answerIndex !== undefined && answerIndex !== null) {
         answered++;
-        if (answerIndex == question.correctAnswerIndex) {
+        if (answerIndex === question.correctAnswerIndex) {
           correct++;
         }
       }
     }
   }
 
-  return { total, correct, answered };
+  return { total, correct, answered, isDiscursive: false };
 }
