@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getCurrentUser } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { UserSearch } from "@/components/admin/UserSearch";
@@ -15,15 +16,15 @@ export default async function AdminUsersPage({
   const query = (params.q || "").trim();
   const limit = 10;
   const skip = (page - 1) * limit;
-  const whereClause =
+  const whereClause: Prisma.UserWhereInput | undefined =
     query.length > 0
       ? {
           OR: [
-            { name: { contains: query, mode: "insensitive" } },
-            { email: { contains: query, mode: "insensitive" } },
+            { name: { contains: query, mode: "insensitive" as const } },
+            { email: { contains: query, mode: "insensitive" as const } },
           ],
         }
-      : {};
+      : undefined;
 
   async function toggleAdmin(formData: FormData) {
     "use server";
