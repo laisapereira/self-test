@@ -72,18 +72,18 @@ function QuestionsPageInner() {
   const userId = userIdStr == undefined ? undefined : parseInt(userIdStr, 10);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full max-w-[90ch] mx-auto">
       <CardHeader>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-2xl font-bold">Questões</h1>
-          <p className="text-sm text-slate-500">Total: {questions.length}</p>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h1 className="text-xl font-semibold">Questões</h1>
+          <p className="text-xs text-slate-500">Total: {questions.length}</p>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-3 sm:p-4">
         {isLoading ? (
           <Spinner>Carregando questões...</Spinner>
         ) : questions.length > 0 ? (
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {questions.map((question: any, index: number) => (
               <QuestionCard
                 key={question.id}

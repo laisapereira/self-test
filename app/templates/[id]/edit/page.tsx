@@ -1,10 +1,14 @@
-'use client';
+"use client";
 
 import TemplateForm from "@/components/TemplateForm";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
-export default function EditTemplatePage({ params }: { params: Promise<{ id: string }> }) {
+export default function EditTemplatePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const router = useRouter();
   const [template, setTemplate] = useState<any>(null);
   const id = use(params).id;
@@ -19,7 +23,12 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
 
   async function updateTemplate(newTemplate: any) {
     if (!newTemplate.name || !newTemplate.promptTemplate) return;
-    console.log("[TemplateEditPage] atualizando template | id:", id, "nome:", newTemplate.name);
+    console.log(
+      "[TemplateEditPage] atualizando template | id:",
+      id,
+      "nome:",
+      newTemplate.name,
+    );
     const res = await fetch(`/api/templates/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -40,20 +49,28 @@ export default function EditTemplatePage({ params }: { params: Promise<{ id: str
         const templateData = await fetchTemplate(id);
         setTemplate(templateData);
       } catch (error) {
-        console.error("[TemplateEditPage] falha ao buscar template | id:", id, error);
+        console.error(
+          "[TemplateEditPage] falha ao buscar template | id:",
+          id,
+          error,
+        );
       }
     }
     loadTemplate();
   }, [id]);
 
   if (!template) {
-    return <div>Loading...</div>;
+    return <div>Carregando template...</div>;
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Edit Template</h1>
-      <TemplateForm onSubmit={updateTemplate} mode="edit" defaultValues={template} />
+    <div className="p-4 max-w-6xl mx-auto space-y-4">
+      <h1 className="text-2xl font-bold">Editar template</h1>
+      <TemplateForm
+        onSubmit={updateTemplate}
+        mode="edit"
+        defaultValues={template}
+      />
     </div>
   );
 }

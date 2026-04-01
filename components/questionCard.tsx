@@ -7,22 +7,25 @@ import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const CodeBlock = ({ node, inline, className, children, ...props }: any) => {
   const match = /language-(\w+)/.exec(className || "");
   return !inline && match ? (
     <SyntaxHighlighter
-      style={oneDark as any}
+      style={oneLight as any}
       language={match[1]}
       PreTag="div"
-      className="rounded-md my-2"
+      className="rounded-md my-2 border border-gray-200 bg-gray-50 p-2"
       {...props}
     >
       {String(children).replace(/\n$/, "")}
     </SyntaxHighlighter>
   ) : (
-    <code className={`${className || ""} bg-slate-100 text-slate-800 rounded px-1 py-0.5 font-mono text-sm`} {...props}>
+    <code
+      className={`${className || ""} bg-slate-100 text-slate-800 rounded px-1 py-0.5 font-mono text-xs`}
+      {...props}
+    >
       {children}
     </code>
   );
@@ -215,27 +218,33 @@ export function QuestionCard(props: {
   }
 
   function getAlternativeStyle(alternativeIdx: number) {
-    if (answer === null) return "border-gray-100 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"; 
-    
+    if (answer === null)
+      return "border-gray-100 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer";
+
     if (alternativeIdx === question.correctAnswerIndex) {
       return "border-green-200 bg-green-50 text-green-800";
     }
-    
-    if (alternative === alternativeIdx && alternativeIdx !== question.correctAnswerIndex) {
+
+    if (
+      alternative === alternativeIdx &&
+      alternativeIdx !== question.correctAnswerIndex
+    ) {
       return "border-red-200 bg-red-50 text-red-700";
     }
-    
+
     return "border-transparent bg-white text-gray-500 opacity-60";
   }
 
   return (
-    <Card className="w-full bg-white rounded-xl shadow-none overflow-hidden transition-all duration-200 border border-slate-200/70 p-0 sm:p-0">
-      <div className="bg-gray-50 border-b border-gray-200">
-        <CardHeader className="p-4 sm:p-5 pb-0">
+    <Card className="w-full bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-200 border border-gray-200/70">
+      <div className="bg-white border-b border-gray-200">
+        <CardHeader className="p-3 sm:p-4 pb-0">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-800">Questão {questionNumber}</h3>
-              <p className="text-sm text-slate-500">
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-800">
+                Questão {questionNumber}
+              </h3>
+              <p className="text-xs text-slate-500">
                 Tipo:{" "}
                 {question.type === "discursive"
                   ? "Discursiva"
@@ -244,7 +253,7 @@ export function QuestionCard(props: {
             </div>
             {answer && (
               <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${answer.correct ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}
+                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${answer.correct ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}
               >
                 {answer.correct ? "Correta" : "Incorreta"}
               </span>
@@ -252,9 +261,12 @@ export function QuestionCard(props: {
           </div>
         </CardHeader>
 
-        <div className="p-4 sm:p-5">
-          <div className="prose max-w-none text-slate-700 prose-headings:text-slate-800">
-            <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ code: CodeBlock }}>
+        <div className="p-3 sm:p-4">
+          <div className="prose prose-sm max-w-none text-slate-800 prose-headings:text-slate-900">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{ code: CodeBlock }}
+            >
               {question.content}
             </ReactMarkdown>
           </div>
@@ -306,7 +318,9 @@ export function QuestionCard(props: {
           ) : (
             <div>
               <div className="mb-6">
-                <div className="text-xs uppercase font-bold text-gray-500 mb-2 tracking-wider">Sua resposta</div>
+                <div className="text-xs uppercase font-bold text-gray-500 mb-2 tracking-wider">
+                  Sua resposta
+                </div>
                 <div className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 text-sm text-slate-800 leading-relaxed font-mono whitespace-pre-wrap">
                   {answer?.openAnswer}
                 </div>
@@ -318,16 +332,26 @@ export function QuestionCard(props: {
                     <thead className="bg-gray-50 text-xs uppercase text-gray-500">
                       <tr>
                         <th className="px-3 py-2 border-b">Critério</th>
-                        <th className="px-3 py-2 border-b text-center w-20">Peso</th>
-                        <th className="px-3 py-2 border-b text-center w-20">Nota</th>
+                        <th className="px-3 py-2 border-b text-center w-20">
+                          Peso
+                        </th>
+                        <th className="px-3 py-2 border-b text-center w-20">
+                          Nota
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {criteriaScores.map((c, index) => (
                         <tr key={index} className="bg-white">
-                          <td className="px-3 py-2 font-medium text-gray-700">{c.description}</td>
-                          <td className="px-3 py-2 text-center text-gray-500">{c.weight}</td>
-                          <td className="px-3 py-2 text-center font-bold text-slate-800">{c.score}</td>
+                          <td className="px-3 py-2 font-medium text-gray-700">
+                            {c.description}
+                          </td>
+                          <td className="px-3 py-2 text-center text-gray-500">
+                            {c.weight}
+                          </td>
+                          <td className="px-3 py-2 text-center font-bold text-slate-800">
+                            {c.score}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -337,10 +361,16 @@ export function QuestionCard(props: {
 
               {feedbackLLM && (
                 <div className="mt-4 border border-gray-200 bg-gray-50 rounded-lg p-4 sm:p-5 mb-4">
-                  <div className="text-xs uppercase font-bold text-gray-500 mb-3 tracking-wider">Feedback do modelo</div>
+                  <div className="text-xs uppercase font-bold text-gray-500 mb-3 tracking-wider">
+                    Feedback do modelo
+                  </div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="font-medium text-slate-700 text-sm">Nota:</span>
-                    <span className="bg-white px-2 py-0.5 rounded border border-gray-200 font-bold text-slate-800 shadow-sm">{feedbackLLM.score}</span>
+                    <span className="font-medium text-slate-700 text-sm">
+                      Nota:
+                    </span>
+                    <span className="bg-white px-2 py-0.5 rounded border border-gray-200 font-bold text-slate-800 shadow-sm">
+                      {feedbackLLM.score}
+                    </span>
                   </div>
                   <p className="text-sm text-slate-700 leading-relaxed">
                     {feedbackLLM.justification}
@@ -364,9 +394,12 @@ export function QuestionCard(props: {
                 }>
               ).map((alternativeObj, alternativeIdx: number) => {
                 const isSelected = alternative === alternativeIdx;
-                
+
                 return (
-                  <div key={alternativeIdx} className={`flex flex-col space-y-2 p-3 sm:p-4 rounded-xl border transition-all ${getAlternativeStyle(alternativeIdx)}`}>
+                  <div
+                    key={alternativeIdx}
+                    className={`flex flex-col space-y-2 p-3 sm:p-4 rounded-xl border transition-all ${getAlternativeStyle(alternativeIdx)}`}
+                  >
                     <div className="flex items-start space-x-3">
                       <RadioGroupItem
                         id={`question-${question.id}-${alternativeIdx}`}
@@ -375,14 +408,17 @@ export function QuestionCard(props: {
                       />
                       <Label
                         htmlFor={`question-${question.id}-${alternativeIdx}`}
-                        className={`font-medium cursor-pointer flex-1 leading-relaxed ${isSelected ? 'opacity-100' : 'opacity-90'}`}
+                        className={`font-medium cursor-pointer flex-1 leading-relaxed ${isSelected ? "opacity-100" : "opacity-90"}`}
                       >
                         <div className="flex items-start gap-2">
                           <span className="font-bold shrink-0">
                             {String.fromCharCode(65 + alternativeIdx)}.
                           </span>
                           <span className="prose prose-sm max-w-none w-full">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ code: CodeBlock, p: "span" }}>
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={{ code: CodeBlock, p: "span" }}
+                            >
                               {alternativeObj.content}
                             </ReactMarkdown>
                           </span>
@@ -416,7 +452,9 @@ export function QuestionCard(props: {
                   ) : (
                     <Button
                       variant="default"
-                      disabled={alternative === null || confidenceLevel === null}
+                      disabled={
+                        alternative === null || confidenceLevel === null
+                      }
                       onClick={() => submitAnswer()}
                     >
                       Enviar

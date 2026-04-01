@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import TemplateForm from "@/components/TemplateForm";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ export default function CreateTemplatePage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTemplate),
     });
-    
+
     if (res.ok) {
       router.push("/templates");
     } else {
@@ -23,8 +23,8 @@ export default function CreateTemplatePage() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Create Template</h1>
+    <div className="p-4 max-w-6xl mx-auto space-y-4">
+      <h1 className="text-2xl font-bold">Criar template</h1>
       <TemplateForm onSubmit={createTemplate} mode="create" />
     </div>
   );

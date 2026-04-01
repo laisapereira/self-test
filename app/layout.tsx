@@ -58,18 +58,24 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
+      <body
+        className={`${inter.className} min-h-screen flex flex-col`}
+        suppressHydrationWarning
+      >
         <SessionProvider>
           <Navbar />
-          <main className="p-4">{children}</main>
+          <main className="flex-1 p-4">{children}</main>
 
-          <Link
-            href="https://forms.gle/BLVawYyYqAWBM1Vd8"
-            target="_blank"
-            className="mt-4 text-xl text-blue-600 hover:underline text-center flex justify-center"
-          >
-            O que você tem achado do SelfTest? Avalie aqui!
-          </Link>
+          <div className="px-4">
+            <Link
+              href="https://forms.gle/BLVawYyYqAWBM1Vd8"
+              target="_blank"
+              className="mb-4 block text-center text-xl text-blue-600 hover:underline"
+            >
+              O que você tem achado do SelfTest? Avalie aqui!
+            </Link>
+          </div>
+
           <Footer />
           <Toaster />
         </SessionProvider>
@@ -80,39 +86,69 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   return (
-    <nav className="bg-white shadow-md px-4 py-3 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/">
-          {" "}
-          <Image src="/logo.png" alt="SelfTest Logo" width={200} height={150} />
+    <nav className="bg-white shadow-sm border-b border-gray-200 px-4 py-3 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="SelfTest Logo" width={160} height={80} />
         </Link>
 
-        {session && (
-          <button
-            className="md:hidden text-gray-800"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle Menu"
-          >
-            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {status === "loading" ? null : session ? (
+            <button
+              onClick={() => setOpen(!open)}
+              className="md:hidden text-gray-800"
+              aria-label="Toggle menu"
+            >
+              {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          ) : null}
 
-        <ul className="hidden md:flex gap-6 text-gray-700 font-medium items-center">
-          <MenuItems />
-        </ul>
-
-        {!session && (
-          <ul className="flex md:hidden gap-6 text-gray-700 font-medium items-center">
+          <ul className="hidden md:flex gap-4 text-gray-700 font-medium items-center">
             <MenuItems />
           </ul>
-        )}
+        </div>
+
+        <div className="hidden md:flex items-center gap-2">
+          {session ? (
+            <>
+              <span className="text-sm text-gray-600">
+                {session.user?.email}
+              </span>
+              <button
+                onClick={() => signOut()}
+                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              >
+                Sair
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => signIn("google")}
+              className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+            >
+              Entrar
+            </button>
+          )}
+        </div>
       </div>
+
       {open && session && (
-        <ul className="md:hidden mt-2 space-y-2 text-gray-700 font-medium pb-2">
+        <ul className="md:hidden mt-2 space-y-1 text-gray-700 font-medium">
           <MenuItems onClick={() => setOpen(false)} />
+          <li>
+            <button
+              onClick={() => {
+                signOut();
+                setOpen(false);
+              }}
+              className="w-full text-left block px-4 py-2 hover:bg-gray-100 rounded"
+            >
+              Sair
+            </button>
+          </li>
         </ul>
       )}
     </nav>
@@ -127,28 +163,25 @@ function MenuItems(props: { onClick?: () => void }) {
     return session.user.isAdmin === true;
   };
 
-  return session ? (
+  if (!session) {
+    return <></>;
+  }
+
+  return (
     <Fragment>
       {routes
         .filter((route) => !route.requireAdmin || isUserAdmin())
         .map((route, index) => (
-          <Link
-            key={index}
-            href={route.href}
-            onClick={onClick}
-            className="block px-4 py-2 hover:bg-gray-100"
-          >
-            {route.title}
-          </Link>
+          <li key={index}>
+            <Link
+              href={route.href}
+              onClick={onClick}
+              className="block px-4 py-2 rounded hover:bg-gray-100"
+            >
+              {route.title}
+            </Link>
+          </li>
         ))}
-      <Link
-        href="/api/auth/signout"
-        className="block px-4 py-2 hover:bg-gray-100"
-      >
-        {session.user?.email}
-      </Link>
     </Fragment>
-  ) : (
-    <Link href="/login">Login</Link>
   );
 }
