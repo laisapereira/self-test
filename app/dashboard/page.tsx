@@ -13,7 +13,6 @@ import {
   fetchRequestsForTemplate,
   fetchTemplate,
   fetchUsersWhoUsedTemplate,
-  fetchTemplates,
 } from "./server";
 import { QuestionRequestTemplate, User } from "../../prisma";
 import { PrismaJson } from "@/prisma/types";
@@ -27,7 +26,11 @@ import {
 
 interface DashboardQuestion {
   id: number;
-  answers: Array<{ correct: boolean }>;
+  type: string;
+  answers: Array<{
+    correct: boolean;
+    autoEvaluation?: { score: number } | null;
+  }>;
 }
 
 interface DashboardQuestionRequest {
@@ -35,6 +38,42 @@ interface DashboardQuestionRequest {
   userId: number;
   parameterValues: PrismaJson.QuestionRequestParameterValue[];
   questions: DashboardQuestion[];
+}
+
+interface RequestScore {
+  value: number;
+  isDiscursive: boolean;
+  tooltip?: string;
+}
+
+function getRequestScore(request: DashboardQuestionRequest): RequestScore | null {
+  const questions = request.questions || [];
+  if (questions.length === 0) return null;
+
+  const allDiscursive = questions.every((q) => q.type === "discursive");
+  if (allDiscursive) {
+    let sum = 0;
+    let count = 0;
+    for (const q of questions) {
+      const score = q.answers?.[0]?.autoEvaluation?.score;
+      if (typeof score === "number" && !Number.isNaN(score)) {
+        sum += score;
+        count += 1;
+      }
+    }
+    if (count === 0) return null;
+    return {
+      value: sum / count,
+      isDiscursive: true,
+      tooltip: `Média baseada em ${count} questão(ões) avaliadas (de ${questions.length})`,
+    };
+  }
+
+  const correctCount = questions
+    .map((q) => (q.answers?.some((a) => a.correct) ? 1 : 0))
+    .reduce((acc, v) => acc + v, 0);
+
+  return { value: correctCount, isDiscursive: false };
 }
 export default function Dashboard() {
   return (
@@ -46,7 +85,7 @@ export default function Dashboard() {
 
 function DashboardInner() {
   const { data: session, status } = useSession();
-  const parameterName = "topico";
+  const [parameterName, setParameterName] = useState("topico");
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(
     null,
@@ -65,22 +104,30 @@ function DashboardInner() {
   // Fetch templates
   useEffect(() => {
     (async () => {
-      const templates = await fetchTemplates();
-      setTemplates(templates);
+      const response = await fetch("/api/templates");
+      if (!response.ok) {
+        setTemplates([]);
+        return;
+      }
+      const data = await response.json();
+      setTemplates(data);
     })();
   }, []);
 
   // Fetch users and requests for selected template
   useEffect(() => {
+    if (status !== "authenticated") return;
     if (selectedTemplateId === null) return;
 
     (async () => {
       const template = await fetchTemplate(selectedTemplateId);
-      const param = template.parameters.find(
-        (p: PrismaJson.QuestionRequestTemplateParameter) =>
-          p.name === parameterName,
-      );
-      setParameterValues(param?.values || []);
+      const params = Array.isArray(template.parameters)
+        ? (template.parameters as PrismaJson.QuestionRequestTemplateParameter[])
+        : [];
+      const preferred =
+        params.find((p) => p.name === "topico") ?? params[0];
+      setParameterName(preferred?.name || "topico");
+      setParameterValues(preferred?.values || []);
 
       const result = await fetchUsersWhoUsedTemplate(
         selectedTemplateId,
@@ -103,7 +150,14 @@ function DashboardInner() {
       }
       setQuestionRequests(allRequests);
     })();
-  }, [selectedTemplateId, page]);
+  }, [selectedTemplateId, page, status]);
+
+  // Auto-select first template when list loads
+  useEffect(() => {
+    if (selectedTemplateId !== null) return;
+    if (!templates || templates.length === 0) return;
+    setSelectedTemplateId(templates[0].id);
+  }, [templates, selectedTemplateId]);
 
   return (
     <div className="p-4">
@@ -176,24 +230,57 @@ function DashboardInner() {
             <TableHeader>
               <TableRow>
                 <TableHead className="text-left">Usuário</TableHead>
-                {parameterValues.map((v) => (
-                  <React.Fragment key={v}>
-                    <TableHead className="text-center">
-                      {v.substring(0, 7)}
-                    </TableHead>
-                  </React.Fragment>
-                ))}
+                <TableHead className="text-center">Resumo</TableHead>
+                {parameterValues.length > 0 &&
+                  parameterValues.map((v) => (
+                    <React.Fragment key={v}>
+                      <TableHead className="text-center">
+                        {v.substring(0, 7)}
+                      </TableHead>
+                    </React.Fragment>
+                  ))}
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.map((user) => (
                 <TableRow key={`u${user.id}`}>
                   <TableCell className="font-medium">{user.name}</TableCell>
-                  {parameterValues.map((value: string) => (
-                    <React.Fragment key={value}>
-                      {(() => {
-                        const x = Math.max(
-                          ...questionRequests
+                  {(() => {
+                    const scores = questionRequests
+                      .filter(
+                        (r: DashboardQuestionRequest) => r.userId === user.id,
+                      )
+                      .map(getRequestScore)
+                      .filter(Boolean) as RequestScore[];
+
+                    const best =
+                      scores.length > 0
+                        ? scores.reduce((max, cur) =>
+                            cur.value > max.value ? cur : max,
+                          )
+                        : null;
+
+                    const displayValue = best
+                      ? best.isDiscursive
+                        ? best.value.toFixed(1)
+                        : String(best.value)
+                      : "";
+
+                    const numericValue = best ? best.value : -Infinity;
+                    return (
+                      <TableCell
+                        className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
+                        title={best?.isDiscursive ? best.tooltip : undefined}
+                      >
+                        {displayValue}
+                      </TableCell>
+                    );
+                  })()}
+                  {parameterValues.length > 0 &&
+                    parameterValues.map((value: string) => (
+                      <React.Fragment key={value}>
+                        {(() => {
+                          const scores = questionRequests
                             .filter(
                               (r: DashboardQuestionRequest) =>
                                 r.userId === user.id,
@@ -205,23 +292,36 @@ function DashboardInner() {
                                   p.values.includes(value),
                               ),
                             )
-                            .map(
-                              (r: DashboardQuestionRequest) =>
-                                r.questions.filter((q: DashboardQuestion) =>
-                                  q.answers.find((a) => a.correct),
-                                ).length,
-                            ),
-                        );
-                        return (
-                          <TableCell
-                            className={`text-center ${x !== 0 && x !== -Infinity ? "bg-gray-200" : ""}`}
-                          >
-                            {x === -Infinity ? "" : x}
-                          </TableCell>
-                        );
-                      })()}
-                    </React.Fragment>
-                  ))}
+                            .map(getRequestScore)
+                            .filter(Boolean) as RequestScore[];
+
+                          const best =
+                            scores.length > 0
+                              ? scores.reduce((max, cur) =>
+                                  cur.value > max.value ? cur : max,
+                                )
+                              : null;
+
+                          const displayValue = best
+                            ? best.isDiscursive
+                              ? best.value.toFixed(1)
+                              : String(best.value)
+                            : "";
+
+                          const numericValue = best ? best.value : -Infinity;
+                          return (
+                            <TableCell
+                              className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
+                              title={
+                                best?.isDiscursive ? best.tooltip : undefined
+                              }
+                            >
+                              {displayValue}
+                            </TableCell>
+                          );
+                        })()}
+                      </React.Fragment>
+                    ))}
                 </TableRow>
               ))}
             </TableBody>

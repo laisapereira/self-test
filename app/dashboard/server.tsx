@@ -48,6 +48,7 @@ export async function fetchUsersWhoUsedTemplate(
           template: {
             id: templateId,
           },
+          status: "COMPLETED",
         },
       },
     },
@@ -60,6 +61,7 @@ export async function fetchUsersWhoUsedTemplate(
           template: {
             id: templateId,
           },
+          status: "COMPLETED",
         },
       },
     },
@@ -91,14 +93,27 @@ export async function fetchRequestsForTemplate(
   return await prisma.questionRequest.findMany({
     where: {
       templateId: templateId,
+      status: "COMPLETED",
       ...(userId && { userId }),
     },
     include: {
       questions: {
-        include: {
+        select: {
+          id: true,
+          type: true,
           answers: {
+            ...(userId && {
+              where: {
+                userId,
+              },
+            }),
             select: {
               correct: true,
+              autoEvaluation: {
+                select: {
+                  score: true,
+                },
+              },
             },
           },
         },
