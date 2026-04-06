@@ -71,7 +71,7 @@ function getRequestScore(request: DashboardQuestionRequest): RequestScore | null
 
   const correctCount = questions
     .map((q) => (q.answers?.some((a) => a.correct) ? 1 : 0))
-    .reduce((acc, v) => acc + v, 0);
+    .reduce((acc, v) => acc + v, 0 as number);
 
   return { value: correctCount, isDiscursive: false };
 }
