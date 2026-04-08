@@ -46,7 +46,9 @@ interface RequestScore {
   tooltip?: string;
 }
 
-function getRequestScore(request: DashboardQuestionRequest): RequestScore | null {
+function getRequestScore(
+  request: DashboardQuestionRequest,
+): RequestScore | null {
   const questions = request.questions || [];
   if (questions.length === 0) return null;
 
@@ -85,7 +87,7 @@ export default function Dashboard() {
 
 function DashboardInner() {
   const { data: session, status } = useSession();
-  const [parameterName, setParameterName] = useState("topico");
+  const [parameterName, setParameterName] = useState("subtopico");
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(
     null,
@@ -125,7 +127,9 @@ function DashboardInner() {
         ? (template.parameters as PrismaJson.QuestionRequestTemplateParameter[])
         : [];
       const preferred =
-        params.find((p) => p.name === "topico") ?? params[0];
+        params.find((p) => p.name === "subtopico") ??
+        params.find((p) => p.name !== "linguagem") ??
+        params[0];
       setParameterName(preferred?.name || "topico");
       setParameterValues(preferred?.values || []);
 
@@ -226,106 +230,110 @@ function DashboardInner() {
 
       {selectedTemplateId && (
         <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-left">Usuário</TableHead>
-                <TableHead className="text-center">Resumo</TableHead>
-                {parameterValues.length > 0 &&
-                  parameterValues.map((v) => (
-                    <React.Fragment key={v}>
-                      <TableHead className="text-center">
-                        {v.substring(0, 7)}
-                      </TableHead>
-                    </React.Fragment>
-                  ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={`u${user.id}`}>
-                  <TableCell className="font-medium">{user.name}</TableCell>
-                  {(() => {
-                    const scores = questionRequests
-                      .filter(
-                        (r: DashboardQuestionRequest) => r.userId === user.id,
-                      )
-                      .map(getRequestScore)
-                      .filter(Boolean) as RequestScore[];
-
-                    const best =
-                      scores.length > 0
-                        ? scores.reduce((max, cur) =>
-                            cur.value > max.value ? cur : max,
-                          )
-                        : null;
-
-                    const displayValue = best
-                      ? best.isDiscursive
-                        ? best.value.toFixed(1)
-                        : String(best.value)
-                      : "";
-
-                    const numericValue = best ? best.value : -Infinity;
-                    return (
-                      <TableCell
-                        className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
-                        title={best?.isDiscursive ? best.tooltip : undefined}
-                      >
-                        {displayValue}
-                      </TableCell>
-                    );
-                  })()}
+          <div className="overflow-x-auto border border-gray-200 rounded-xl bg-white">
+            <Table className="w-full min-w-[720px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-left">Usuário</TableHead>
+                  <TableHead className="text-center">Resumo</TableHead>
                   {parameterValues.length > 0 &&
-                    parameterValues.map((value: string) => (
-                      <React.Fragment key={value}>
-                        {(() => {
-                          const scores = questionRequests
-                            .filter(
-                              (r: DashboardQuestionRequest) =>
-                                r.userId === user.id,
-                            )
-                            .filter((r: DashboardQuestionRequest) =>
-                              r.parameterValues.find(
-                                (p: PrismaJson.QuestionRequestParameterValue) =>
-                                  p.name === parameterName &&
-                                  p.values.includes(value),
-                              ),
-                            )
-                            .map(getRequestScore)
-                            .filter(Boolean) as RequestScore[];
-
-                          const best =
-                            scores.length > 0
-                              ? scores.reduce((max, cur) =>
-                                  cur.value > max.value ? cur : max,
-                                )
-                              : null;
-
-                          const displayValue = best
-                            ? best.isDiscursive
-                              ? best.value.toFixed(1)
-                              : String(best.value)
-                            : "";
-
-                          const numericValue = best ? best.value : -Infinity;
-                          return (
-                            <TableCell
-                              className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
-                              title={
-                                best?.isDiscursive ? best.tooltip : undefined
-                              }
-                            >
-                              {displayValue}
-                            </TableCell>
-                          );
-                        })()}
+                    parameterValues.map((v) => (
+                      <React.Fragment key={v}>
+                        <TableHead className="text-center">
+                          {v.substring(0, 7)}
+                        </TableHead>
                       </React.Fragment>
                     ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow key={`u${user.id}`}>
+                    <TableCell className="font-medium">{user.name}</TableCell>
+                    {(() => {
+                      const scores = questionRequests
+                        .filter(
+                          (r: DashboardQuestionRequest) => r.userId === user.id,
+                        )
+                        .map(getRequestScore)
+                        .filter(Boolean) as RequestScore[];
+
+                      const best =
+                        scores.length > 0
+                          ? scores.reduce((max, cur) =>
+                              cur.value > max.value ? cur : max,
+                            )
+                          : null;
+
+                      const displayValue = best
+                        ? best.isDiscursive
+                          ? best.value.toFixed(1)
+                          : String(best.value)
+                        : "";
+
+                      const numericValue = best ? best.value : -Infinity;
+                      return (
+                        <TableCell
+                          className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
+                          title={best?.isDiscursive ? best.tooltip : undefined}
+                        >
+                          {displayValue}
+                        </TableCell>
+                      );
+                    })()}
+                    {parameterValues.length > 0 &&
+                      parameterValues.map((value: string) => (
+                        <React.Fragment key={value}>
+                          {(() => {
+                            const scores = questionRequests
+                              .filter(
+                                (r: DashboardQuestionRequest) =>
+                                  r.userId === user.id,
+                              )
+                              .filter((r: DashboardQuestionRequest) =>
+                                r.parameterValues.find(
+                                  (
+                                    p: PrismaJson.QuestionRequestParameterValue,
+                                  ) =>
+                                    p.name === parameterName &&
+                                    p.values.includes(value),
+                                ),
+                              )
+                              .map(getRequestScore)
+                              .filter(Boolean) as RequestScore[];
+
+                            const best =
+                              scores.length > 0
+                                ? scores.reduce((max, cur) =>
+                                    cur.value > max.value ? cur : max,
+                                  )
+                                : null;
+
+                            const displayValue = best
+                              ? best.isDiscursive
+                                ? best.value.toFixed(1)
+                                : String(best.value)
+                              : "";
+
+                            const numericValue = best ? best.value : -Infinity;
+                            return (
+                              <TableCell
+                                className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
+                                title={
+                                  best?.isDiscursive ? best.tooltip : undefined
+                                }
+                              >
+                                {displayValue}
+                              </TableCell>
+                            );
+                          })()}
+                        </React.Fragment>
+                      ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
           {/* Pagination - only show for admin */}
           {isAdmin && totalPages > 1 && (
