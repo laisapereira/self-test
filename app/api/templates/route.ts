@@ -18,6 +18,7 @@ export async function GET(req: Request): Promise<NextResponse> {
       return NextResponse.json(templates);
     } else {
       const templates = await prisma.questionRequestTemplate.findMany({
+        where: { visible: true },
         select: { id: true, name: true, promptTemplate: true, parameters: true },
       });
       return NextResponse.json(templates);

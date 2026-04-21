@@ -59,6 +59,7 @@ model QuestionRequestTemplate {
   id             Int      @id @default(autoincrement())
   name           String
   promptTemplate String
+  visible        Boolean  @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   /// [QuestionRequestTemplateParameter]

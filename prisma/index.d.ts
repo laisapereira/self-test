@@ -5460,6 +5460,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     promptTemplate: string | null
+    visible: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     ownerId: number | null
@@ -5469,6 +5470,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     promptTemplate: string | null
+    visible: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     ownerId: number | null
@@ -5478,6 +5480,7 @@ export namespace Prisma {
     id: number
     name: number
     promptTemplate: number
+    visible: number
     createdAt: number
     updatedAt: number
     parameters: number
@@ -5500,6 +5503,7 @@ export namespace Prisma {
     id?: true
     name?: true
     promptTemplate?: true
+    visible?: true
     createdAt?: true
     updatedAt?: true
     ownerId?: true
@@ -5509,6 +5513,7 @@ export namespace Prisma {
     id?: true
     name?: true
     promptTemplate?: true
+    visible?: true
     createdAt?: true
     updatedAt?: true
     ownerId?: true
@@ -5518,6 +5523,7 @@ export namespace Prisma {
     id?: true
     name?: true
     promptTemplate?: true
+    visible?: true
     createdAt?: true
     updatedAt?: true
     parameters?: true
@@ -5615,6 +5621,7 @@ export namespace Prisma {
     id: number
     name: string
     promptTemplate: string
+    visible: boolean
     createdAt: Date
     updatedAt: Date
     parameters: PrismaJson.QuestionRequestTemplateParameter[]
@@ -5644,6 +5651,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     promptTemplate?: boolean
+    visible?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     parameters?: boolean
@@ -5657,6 +5665,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     promptTemplate?: boolean
+    visible?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     parameters?: boolean
@@ -5668,6 +5677,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     promptTemplate?: boolean
+    visible?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     parameters?: boolean
@@ -5679,13 +5689,14 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     promptTemplate?: boolean
+    visible?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     parameters?: boolean
     ownerId?: boolean
   }
 
-  export type QuestionRequestTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "promptTemplate" | "createdAt" | "updatedAt" | "parameters" | "ownerId", ExtArgs["result"]["questionRequestTemplate"]>
+  export type QuestionRequestTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "promptTemplate" | "visible" | "createdAt" | "updatedAt" | "parameters" | "ownerId", ExtArgs["result"]["questionRequestTemplate"]>
   export type QuestionRequestTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     requests?: boolean | QuestionRequestTemplate$requestsArgs<ExtArgs>
@@ -5708,6 +5719,7 @@ export namespace Prisma {
       id: number
       name: string
       promptTemplate: string
+      visible: boolean
       createdAt: Date
       updatedAt: Date
       /**
@@ -6143,6 +6155,7 @@ export namespace Prisma {
     readonly id: FieldRef<"QuestionRequestTemplate", 'Int'>
     readonly name: FieldRef<"QuestionRequestTemplate", 'String'>
     readonly promptTemplate: FieldRef<"QuestionRequestTemplate", 'String'>
+    readonly visible: FieldRef<"QuestionRequestTemplate", 'Boolean'>
     readonly createdAt: FieldRef<"QuestionRequestTemplate", 'DateTime'>
     readonly updatedAt: FieldRef<"QuestionRequestTemplate", 'DateTime'>
     readonly parameters: FieldRef<"QuestionRequestTemplate", 'Json[]'>
@@ -12437,6 +12450,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     promptTemplate: 'promptTemplate',
+    visible: 'visible',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     parameters: 'parameters',
@@ -12845,6 +12859,7 @@ export namespace Prisma {
     id?: IntFilter<"QuestionRequestTemplate"> | number
     name?: StringFilter<"QuestionRequestTemplate"> | string
     promptTemplate?: StringFilter<"QuestionRequestTemplate"> | string
+    visible?: BoolFilter<"QuestionRequestTemplate"> | boolean
     createdAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
@@ -12857,6 +12872,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     promptTemplate?: SortOrder
+    visible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     parameters?: SortOrder
@@ -12872,6 +12888,7 @@ export namespace Prisma {
     NOT?: QuestionRequestTemplateWhereInput | QuestionRequestTemplateWhereInput[]
     name?: StringFilter<"QuestionRequestTemplate"> | string
     promptTemplate?: StringFilter<"QuestionRequestTemplate"> | string
+    visible?: BoolFilter<"QuestionRequestTemplate"> | boolean
     createdAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
@@ -12884,6 +12901,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     promptTemplate?: SortOrder
+    visible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     parameters?: SortOrder
@@ -12902,6 +12920,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"QuestionRequestTemplate"> | number
     name?: StringWithAggregatesFilter<"QuestionRequestTemplate"> | string
     promptTemplate?: StringWithAggregatesFilter<"QuestionRequestTemplate"> | string
+    visible?: BoolWithAggregatesFilter<"QuestionRequestTemplate"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"QuestionRequestTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"QuestionRequestTemplate"> | Date | string
     parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
@@ -13479,6 +13498,7 @@ export namespace Prisma {
   export type QuestionRequestTemplateCreateInput = {
     name: string
     promptTemplate: string
+    visible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
@@ -13490,6 +13510,7 @@ export namespace Prisma {
     id?: number
     name: string
     promptTemplate: string
+    visible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
@@ -13500,6 +13521,7 @@ export namespace Prisma {
   export type QuestionRequestTemplateUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
@@ -13511,6 +13533,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
@@ -13522,6 +13545,7 @@ export namespace Prisma {
     id?: number
     name: string
     promptTemplate: string
+    visible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
@@ -13531,6 +13555,7 @@ export namespace Prisma {
   export type QuestionRequestTemplateUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
@@ -13540,6 +13565,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
@@ -14216,6 +14242,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     promptTemplate?: SortOrder
+    visible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     parameters?: SortOrder
@@ -14231,6 +14258,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     promptTemplate?: SortOrder
+    visible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ownerId?: SortOrder
@@ -14240,6 +14268,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     promptTemplate?: SortOrder
+    visible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ownerId?: SortOrder
@@ -15501,6 +15530,7 @@ export namespace Prisma {
   export type QuestionRequestTemplateCreateWithoutOwnerInput = {
     name: string
     promptTemplate: string
+    visible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
@@ -15511,6 +15541,7 @@ export namespace Prisma {
     id?: number
     name: string
     promptTemplate: string
+    visible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
@@ -15661,6 +15692,7 @@ export namespace Prisma {
     id?: IntFilter<"QuestionRequestTemplate"> | number
     name?: StringFilter<"QuestionRequestTemplate"> | string
     promptTemplate?: StringFilter<"QuestionRequestTemplate"> | string
+    visible?: BoolFilter<"QuestionRequestTemplate"> | boolean
     createdAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
@@ -16021,6 +16053,7 @@ export namespace Prisma {
   export type QuestionRequestTemplateCreateWithoutRequestsInput = {
     name: string
     promptTemplate: string
+    visible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
@@ -16031,6 +16064,7 @@ export namespace Prisma {
     id?: number
     name: string
     promptTemplate: string
+    visible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
@@ -16125,6 +16159,7 @@ export namespace Prisma {
   export type QuestionRequestTemplateUpdateWithoutRequestsInput = {
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
@@ -16135,6 +16170,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
@@ -16640,6 +16676,7 @@ export namespace Prisma {
     id?: number
     name: string
     promptTemplate: string
+    visible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
@@ -16727,6 +16764,7 @@ export namespace Prisma {
   export type QuestionRequestTemplateUpdateWithoutOwnerInput = {
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
@@ -16737,6 +16775,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
@@ -16747,6 +16786,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]

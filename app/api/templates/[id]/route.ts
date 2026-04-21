@@ -52,6 +52,34 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   }
 }
 
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user || !session.user.isAdmin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const numericId = parseInt(id, 10);
+  if (isNaN(numericId)) {
+    return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
+  }
+
+  const { visible } = await req.json();
+  if (typeof visible !== "boolean") {
+    return NextResponse.json({ error: "visible must be a boolean" }, { status: 400 });
+  }
+
+  try {
+    const updated = await prisma.questionRequestTemplate.update({
+      where: { id: numericId },
+      data: { visible },
+    });
+    return NextResponse.json(updated);
+  } catch {
+    return NextResponse.json({ error: "Failed to update template" }, { status: 500 });
+  }
+}
+
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user || !session.user.email || !session.user.isAdmin) {

@@ -152,6 +152,7 @@ exports.Prisma.QuestionRequestTemplateScalarFieldEnum = {
   id: 'id',
   name: 'name',
   promptTemplate: 'promptTemplate',
+  visible: 'visible',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   parameters: 'parameters',

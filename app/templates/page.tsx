@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Forbidden from "@/components/forbidden";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function QuestionRequestTemplates() {
   const { data: session, status } = useSession();
@@ -50,6 +51,15 @@ export default function QuestionRequestTemplates() {
     fetchTemplates();
   }
 
+  async function toggleVisibility(id: number, current: boolean) {
+    await fetch(`/api/templates/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ visible: !current }),
+    });
+    fetchTemplates();
+  }
+
   if (status === "loading") {
     return <div className="p-8 text-center text-slate-500">Carregando...</div>;
   }
@@ -76,7 +86,7 @@ export default function QuestionRequestTemplates() {
         </Button>
       </div>
       <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-        <TemplateList templates={templates} removeTemplate={removeTemplate} />
+        <TemplateList templates={templates} removeTemplate={removeTemplate} toggleVisibility={toggleVisibility} />
       </div>
     </div>
   );
@@ -85,8 +95,9 @@ export default function QuestionRequestTemplates() {
 function TemplateList(props: {
   templates: QuestionRequestTemplate[];
   removeTemplate: (id: number) => void;
+  toggleVisibility: (id: number, current: boolean) => void;
 }) {
-  const { templates, removeTemplate } = props;
+  const { templates, removeTemplate, toggleVisibility } = props;
   const router = useRouter();
   const [expanded, setExpanded] = useState<number[]>([]);
 
@@ -107,13 +118,36 @@ function TemplateList(props: {
             const needsMore = template.promptTemplate?.length > 240;
 
             return (
-              <Card key={template.id} className="border-gray-200">
+              <Card
+                key={template.id}
+                className={`border-gray-200 transition-opacity ${!template.visible ? "opacity-50 grayscale" : ""}`}
+              >
                 <CardHeader>
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h3 className="text-lg font-semibold">{template.name}</h3>
-                    <span className="text-xs text-gray-500">
-                      {template.parameters?.length ?? 0} parâmetro(s)
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold">{template.name}</h3>
+                      {!template.visible && (
+                        <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
+                          <EyeOff className="h-3 w-3" />
+                          Oculto
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-gray-500">
+                        {template.parameters?.length ?? 0} parâmetro(s)
+                      </span>
+                      <button
+                        title={template.visible ? "Ocultar dos alunos" : "Publicar para alunos"}
+                        onClick={() => toggleVisibility(template.id, template.visible)}
+                        className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+                      >
+                        {template.visible
+                          ? <Eye className="h-4 w-4" />
+                          : <EyeOff className="h-4 w-4" />
+                        }
+                      </button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -151,9 +185,7 @@ function TemplateList(props: {
 
                   <div className="flex flex-wrap gap-2">
                     <Button
-                      onClick={() =>
-                        router.push(`/templates/${template.id}/edit`)
-                      }
+                      onClick={() => router.push(`/templates/${template.id}/edit`)}
                       variant="secondary"
                     >
                       Editar
