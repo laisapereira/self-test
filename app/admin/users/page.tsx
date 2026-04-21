@@ -70,7 +70,10 @@ export default async function AdminUsersPage({
   const totalUsers = await prisma.user.count();
   const adminsCount = await prisma.user.count({ where: { admin: true } });
 
-  const grouped = groupBySemester(users, (u) => u.createdAt);
+  const adminUsers = users.filter((u) => u.admin);
+  const regularUsers = users.filter((u) => !u.admin);
+
+  const grouped = groupBySemester(regularUsers, (u) => u.createdAt);
   const semesterKeys = sortedSemesters(Object.keys(grouped));
 
   return (
@@ -111,12 +114,23 @@ export default async function AdminUsersPage({
         <section className="mt-8">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-xl font-semibold text-slate-700">
-              Usuários por Semestre
+              Usuários do Sistema
             </h2>
             <UserSearch initialQuery={query} />
           </div>
 
-          {semesterKeys.length === 0 && (
+          {adminUsers.length > 0 && (
+            <SemesterUsersSection
+              semester="Administradores"
+              users={adminUsers}
+              defaultOpen
+              showCreatedAt
+              toggleAdmin={toggleAdmin}
+              revalidationPath="/admin/users"
+            />
+          )}
+
+          {semesterKeys.length === 0 && regularUsers.length === 0 && (
             <p className="text-sm text-slate-500">
               Nenhum usuário encontrado{query ? ` para "${query}"` : ""}.
             </p>
@@ -127,7 +141,7 @@ export default async function AdminUsersPage({
               key={semester}
               semester={semester}
               users={grouped[semester]}
-              defaultOpen={idx === 0}
+              defaultOpen={idx === 0 && adminUsers.length === 0}
               toggleAdmin={toggleAdmin}
               revalidationPath="/admin/users"
             />

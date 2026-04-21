@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SemesterAccordion } from "@/components/SemesterAccordion";
+import { getSemester } from "@/lib/semester";
 import Link from "next/link";
 
 interface User {
@@ -16,6 +17,7 @@ interface User {
   name: string | null;
   email: string;
   admin: boolean;
+  createdAt: Date;
 }
 
 interface Props {
@@ -23,6 +25,7 @@ interface Props {
   users: User[];
   defaultOpen?: boolean;
   pageSize?: number;
+  showCreatedAt?: boolean;
   toggleAdmin: (formData: FormData) => Promise<void>;
   revalidationPath: "/admin/users" | "/users";
 }
@@ -32,6 +35,7 @@ export function SemesterUsersSection({
   users,
   defaultOpen = false,
   pageSize = 10,
+  showCreatedAt = false,
   toggleAdmin,
 }: Props) {
   const [page, setPage] = useState(1);
@@ -53,6 +57,7 @@ export function SemesterUsersSection({
               <TableHead>Nome</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Admin</TableHead>
+              {showCreatedAt && <TableHead>Semestre / Cadastro</TableHead>}
               <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -73,6 +78,16 @@ export function SemesterUsersSection({
                     {user.admin ? "ADMIN" : "USER"}
                   </span>
                 </TableCell>
+                {showCreatedAt && (
+                  <TableCell className="text-sm text-slate-500">
+                    <span className="font-medium text-slate-700">
+                      {getSemester(new Date(user.createdAt))}
+                    </span>
+                    <span className="ml-2 text-xs">
+                      ({new Date(user.createdAt).toLocaleDateString("pt-BR")})
+                    </span>
+                  </TableCell>
+                )}
                 <TableCell className="flex gap-2">
                   <form action={toggleAdmin} className="inline">
                     <input type="hidden" name="userId" value={user.id} />
