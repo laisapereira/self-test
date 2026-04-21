@@ -190,8 +190,8 @@ function QuestionRequestsPageInner() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
-          <Table>
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-x-auto">
+          <Table className="w-full min-w-[720px]">
             <TableHeader className="bg-slate-50">
               <TableRow>
                 <TableHead className="w-[100px]">Data de Geração</TableHead>

@@ -133,7 +133,7 @@ export default async function AdminUsersPage({
             <UserSearch initialQuery={query} />
           </div>
           <div className="overflow-x-auto">
-            <Table>
+            <Table className="w-full min-w-[720px]">
               <TableHeader className="bg-slate-100">
                 <TableRow>
                   <TableHead>ID</TableHead>

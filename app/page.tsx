@@ -8,6 +8,8 @@ import QuestionRequestCreatePage from "./questionRequests/create/page";
 export default function Home() {
   const { data: session, status } = useSession();
 
+  const firstName = session?.user?.name?.split(" ")[0] || "Usuário";
+
   if (status === "loading") {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-4">
@@ -67,7 +69,7 @@ export default function Home() {
         <section className="space-y-4">
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <h1 className="text-2xl font-bold text-gray-900">
-              Bem-vindo de volta!
+              Oi, {firstName}!
             </h1>
             <p className="text-sm text-gray-500">
               Use o formulário abaixo para gerar ou revisar suas questões.

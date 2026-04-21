@@ -59,7 +59,8 @@ export default async function UsersPage() {
   return (
     <div>
       <h1>Users</h1>
-      <Table>
+      <div className="overflow-x-auto border border-gray-200 rounded-xl bg-white">
+        <Table className="w-full min-w-[720px]">
         <TableHeader>
           <TableRow>
             <TableHead className="text-left">ID</TableHead>
@@ -98,7 +99,8 @@ export default async function UsersPage() {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+        </Table>
+      </div>
     </div>
   );
 }
