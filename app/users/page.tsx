@@ -1,13 +1,21 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { getCurrentUser } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
+import { groupBySemester, sortedSemesters } from "@/lib/semester";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import { SemesterAccordion } from "@/components/SemesterAccordion";
 
 export default async function UsersPage() {
-
   async function toggleAdmin(formData: FormData) {
-    'use server';
+    "use server";
 
     const currentUser = await getCurrentUser();
     if (!currentUser.admin) {
@@ -40,66 +48,91 @@ export default async function UsersPage() {
     revalidatePath("/users");
   }
 
-  async function fetchUsers() {
-    'use server';
-    const currentUser = await getCurrentUser();
-    if (!currentUser.admin) {
-      throw new Error("Unauthorized");
-    }
-
-    return prisma.user.findMany({
-      orderBy: {
-        name: 'asc',
-      },
-    });
+  const currentUser = await getCurrentUser();
+  if (!currentUser.admin) {
+    throw new Error("Unauthorized");
   }
 
-  const users = await fetchUsers();
+  const users = await prisma.user.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+
+  const grouped = groupBySemester(users, (u) => u.createdAt);
+  const semesterKeys = sortedSemesters(Object.keys(grouped));
 
   return (
-    <div>
-      <h1>Users</h1>
-      <div className="overflow-x-auto border border-gray-200 rounded-xl bg-white">
-        <Table className="w-full min-w-[720px]">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-left">ID</TableHead>
-            <TableHead className="text-left">Name</TableHead>
-            <TableHead className="text-left">Email</TableHead>
-            <TableHead className="text-left">Is Admin</TableHead>
-            <TableHead className="text-left">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell>{user.id}</TableCell>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.admin ? "Sim" : "Não"}</TableCell>
-              <TableCell className="space-x-2">
-                <Link href={`/questions?userId=${user.id}`} className="text-blue-500 hover:underline">
-                  View Questions
-                </Link>
-                <span>|</span>
-                <Link href={`/questionRequests?userId=${user.id}`} className="text-blue-500 hover:underline">
-                  View Requests
-                </Link>
-                <form action={toggleAdmin} className="inline">
-                  <input type="hidden" name="userId" value={user.id} />
-                  <input type="hidden" name="admin" value={!user.admin ? "true" : "false"} />
-                  <button
-                    type="submit"
-                    className="rounded bg-blue-600 px-2 py-1 text-white hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    {user.admin ? "Remover admin" : "Dar admin"}
-                  </button>
-                </form>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        </Table>
+    <div className="min-h-screen bg-slate-50 p-6">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="mb-6 text-3xl font-bold text-slate-800">Usuários</h1>
+
+        {semesterKeys.map((semester, idx) => {
+          const semesterUsers = grouped[semester];
+          return (
+            <SemesterAccordion
+              key={semester}
+              title={semester}
+              count={semesterUsers.length}
+              defaultOpen={idx === 0}
+            >
+              <div className="overflow-x-auto bg-white">
+                <Table className="w-full min-w-[720px]">
+                  <TableHeader className="bg-slate-100">
+                    <TableRow>
+                      <TableHead>ID</TableHead>
+                      <TableHead>Nome</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Admin</TableHead>
+                      <TableHead>Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {semesterUsers.map((user) => (
+                      <TableRow key={user.id} className="hover:bg-slate-50">
+                        <TableCell>{user.id}</TableCell>
+                        <TableCell>{user.name}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.admin ? "Sim" : "Não"}</TableCell>
+                        <TableCell className="space-x-2">
+                          <Link
+                            href={`/questions?userId=${user.id}`}
+                            className="text-blue-500 hover:underline"
+                          >
+                            View Questions
+                          </Link>
+                          <span>|</span>
+                          <Link
+                            href={`/questionRequests?userId=${user.id}`}
+                            className="text-blue-500 hover:underline"
+                          >
+                            View Requests
+                          </Link>
+                          <form action={toggleAdmin} className="inline">
+                            <input
+                              type="hidden"
+                              name="userId"
+                              value={user.id}
+                            />
+                            <input
+                              type="hidden"
+                              name="admin"
+                              value={!user.admin ? "true" : "false"}
+                            />
+                            <button
+                              type="submit"
+                              className="rounded bg-blue-600 px-2 py-1 text-white hover:bg-blue-700 disabled:opacity-50"
+                            >
+                              {user.admin ? "Remover admin" : "Dar admin"}
+                            </button>
+                          </form>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </SemesterAccordion>
+          );
+        })}
       </div>
     </div>
   );

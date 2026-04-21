@@ -80,6 +80,29 @@ export async function fetchUsersWhoUsedTemplate(
   };
 }
 
+export async function fetchAllUsersForTemplate(templateId: number) {
+  const currentUser = await getCurrentUser();
+  const isAdmin = currentUser?.admin || false;
+
+  if (!isAdmin) {
+    return currentUser
+      ? [await prisma.user.findUniqueOrThrow({ where: { id: currentUser.id } })]
+      : [];
+  }
+
+  return prisma.user.findMany({
+    where: {
+      questionRequests: {
+        some: {
+          template: { id: templateId },
+          status: "COMPLETED",
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export async function fetchRequestsForTemplate(
   templateId: number,
   userIdFilter?: number,

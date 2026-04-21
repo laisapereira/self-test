@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 import { NewUserForm, NewUserFormValues } from "@/components/users/NewUserForm";
+import Forbidden from "@/components/forbidden";
 
-async function createUser(data: NewUserFormValues) {
+export async function createUser(dataForm: NewUserFormValues) {
   const response = await fetch("/api/admin/users", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify(dataForm),
   });
 
   if (!response.ok) {
@@ -21,8 +23,22 @@ async function createUser(data: NewUserFormValues) {
 }
 
 export default function NewAdminUserPage() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+
+  const isForbidden =
+    status === "unauthenticated" || session?.user?.isAdmin === false;
+
+  if (isForbidden) {
+    return (
+      <Forbidden
+        message="Apenas administradores podem criar outros usuários administradores."
+        redirectTo="/login"
+        redirectDelay={5}
+      />
+    );
+  }
 
   async function handleSubmit(formData: NewUserFormValues) {
     setError(null);
@@ -51,9 +67,11 @@ export default function NewAdminUserPage() {
             {error}
           </p>
         )}
+
         <NewUserForm onSubmit={handleSubmit} defaultRole="ADMIN" />
         <p className="mt-4 text-xs text-slate-500">
-          Observação: este projeto usa login via Google; o usuário também poderá entrar com e-mail e senha.
+          Observação: este projeto usa login via Google; o usuário também poderá
+          entrar com e-mail e senha.
         </p>
       </div>
     </div>

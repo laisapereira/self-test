@@ -10,9 +10,9 @@ import {
 import React, { Suspense, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
+  fetchAllUsersForTemplate,
   fetchRequestsForTemplate,
   fetchTemplate,
-  fetchUsersWhoUsedTemplate,
 } from "./server";
 import { QuestionRequestTemplate, User } from "../../prisma";
 import { PrismaJson } from "@/prisma/types";
@@ -23,6 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SemesterAccordion } from "@/components/SemesterAccordion";
+import { groupBySemester, sortedSemesters } from "@/lib/semester";
 
 interface DashboardQuestion {
   id: number;
@@ -77,6 +79,100 @@ function getRequestScore(
 
   return { value: correctCount, isDiscursive: false };
 }
+
+function ScoreCell({
+  requests,
+  userId,
+  parameterName,
+  parameterValue,
+}: {
+  requests: DashboardQuestionRequest[];
+  userId: number;
+  parameterName?: string;
+  parameterValue?: string;
+}) {
+  const filtered = requests
+    .filter((r) => r.userId === userId)
+    .filter((r) =>
+      parameterName && parameterValue
+        ? r.parameterValues.find(
+            (p: PrismaJson.QuestionRequestParameterValue) =>
+              p.name === parameterName && p.values.includes(parameterValue),
+          )
+        : true,
+    );
+
+  const scores = filtered.map(getRequestScore).filter(Boolean) as RequestScore[];
+  const best =
+    scores.length > 0
+      ? scores.reduce((max, cur) => (cur.value > max.value ? cur : max))
+      : null;
+
+  const displayValue = best
+    ? best.isDiscursive
+      ? best.value.toFixed(1)
+      : String(best.value)
+    : "";
+
+  const numericValue = best ? best.value : -Infinity;
+
+  return (
+    <TableCell
+      className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
+      title={best?.isDiscursive ? best.tooltip : undefined}
+    >
+      {displayValue}
+    </TableCell>
+  );
+}
+
+function SemesterTable({
+  users,
+  requests,
+  parameterName,
+  parameterValues,
+}: {
+  users: User[];
+  requests: DashboardQuestionRequest[];
+  parameterName: string;
+  parameterValues: string[];
+}) {
+  return (
+    <div className="overflow-x-auto bg-white">
+      <Table className="w-full min-w-[720px]">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-left">Usuário</TableHead>
+            <TableHead className="text-center">Resumo</TableHead>
+            {parameterValues.map((v) => (
+              <TableHead key={v} className="text-center">
+                {v.substring(0, 7)}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users.map((user) => (
+            <TableRow key={`u${user.id}`}>
+              <TableCell className="font-medium">{user.name}</TableCell>
+              <ScoreCell requests={requests} userId={user.id} />
+              {parameterValues.map((value) => (
+                <ScoreCell
+                  key={value}
+                  requests={requests}
+                  userId={user.id}
+                  parameterName={parameterName}
+                  parameterValue={value}
+                />
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
+
 export default function Dashboard() {
   return (
     <Suspense>
@@ -97,13 +193,9 @@ function DashboardInner() {
   const [questionRequests, setQuestionRequests] = useState<
     DashboardQuestionRequest[]
   >([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 10;
 
   const isAdmin = session?.user?.isAdmin || false;
 
-  // Fetch templates
   useEffect(() => {
     (async () => {
       const response = await fetch("/api/templates");
@@ -116,7 +208,6 @@ function DashboardInner() {
     })();
   }, []);
 
-  // Fetch users and requests for selected template
   useEffect(() => {
     if (status !== "authenticated") return;
     if (selectedTemplateId === null) return;
@@ -133,17 +224,11 @@ function DashboardInner() {
       setParameterName(preferred?.name || "topico");
       setParameterValues(preferred?.values || []);
 
-      const result = await fetchUsersWhoUsedTemplate(
-        selectedTemplateId,
-        page,
-        pageSize,
-      );
-      setUsers(result.users);
-      setTotalPages(result.totalPages);
+      const allUsers = await fetchAllUsersForTemplate(selectedTemplateId);
+      setUsers(allUsers);
 
-      // Fetch requests for all users on this page (for admin) or just current user (for regular user)
       let allRequests: DashboardQuestionRequest[] = [];
-      for (const user of result.users) {
+      for (const user of allUsers) {
         const requests = await fetchRequestsForTemplate(
           selectedTemplateId,
           user.id,
@@ -154,25 +239,27 @@ function DashboardInner() {
       }
       setQuestionRequests(allRequests);
     })();
-  }, [selectedTemplateId, page, status]);
+  }, [selectedTemplateId, status]);
 
-  // Auto-select first template when list loads
   useEffect(() => {
     if (selectedTemplateId !== null) return;
     if (!templates || templates.length === 0) return;
     setSelectedTemplateId(templates[0].id);
   }, [templates, selectedTemplateId]);
 
+  const grouped = groupBySemester(users, (u) => new Date(u.createdAt));
+  const semesterKeys = sortedSemesters(Object.keys(grouped));
+
   return (
     <div className="p-4">
       {status === "loading" && (
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex min-h-screen items-center justify-center">
           <p className="text-sm text-slate-500">Carregando...</p>
         </div>
       )}
 
       {status === "unauthenticated" && (
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex min-h-screen items-center justify-center">
           <p className="text-sm text-red-600">
             Você precisa estar logado para acessar o dashboard
           </p>
@@ -182,29 +269,28 @@ function DashboardInner() {
       {status === "authenticated" && (
         <>
           <div className="mb-6">
-            <h1 className="text-2xl font-bold mb-4">Dashboard de Desempenho</h1>
+            <h1 className="mb-4 text-2xl font-bold">Dashboard de Desempenho</h1>
 
             {!isAdmin && (
-              <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4 text-sm text-blue-700">
+              <div className="mb-4 rounded border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
                 Você está visualizando apenas suas próprias notas
               </div>
             )}
 
             {isAdmin && (
-              <div className="bg-amber-50 border border-amber-200 rounded p-3 mb-4 text-sm text-amber-700">
+              <div className="mb-4 rounded border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
                 Você está visualizando as notas de todos os alunos (Modo Admin)
               </div>
             )}
 
             <div className="mb-4">
-              <label className="text-sm font-medium block mb-2">
+              <label className="mb-2 block text-sm font-medium">
                 Selecione um template de questão:
               </label>
               <Select
                 key="mysel"
                 onValueChange={(value) => {
                   setSelectedTemplateId(Number(value));
-                  setPage(1); // Reset page when template changes
                 }}
               >
                 <SelectTrigger className="w-full max-w-xs">
@@ -228,139 +314,33 @@ function DashboardInner() {
         </>
       )}
 
-      {selectedTemplateId && (
-        <>
-          <div className="overflow-x-auto border border-gray-200 rounded-xl bg-white">
-            <Table className="w-full min-w-[720px]">
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-left">Usuário</TableHead>
-                  <TableHead className="text-center">Resumo</TableHead>
-                  {parameterValues.length > 0 &&
-                    parameterValues.map((v) => (
-                      <React.Fragment key={v}>
-                        <TableHead className="text-center">
-                          {v.substring(0, 7)}
-                        </TableHead>
-                      </React.Fragment>
-                    ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow key={`u${user.id}`}>
-                    <TableCell className="font-medium">{user.name}</TableCell>
-                    {(() => {
-                      const scores = questionRequests
-                        .filter(
-                          (r: DashboardQuestionRequest) => r.userId === user.id,
-                        )
-                        .map(getRequestScore)
-                        .filter(Boolean) as RequestScore[];
+      {selectedTemplateId !== null && semesterKeys.length > 0 && (
+        <div>
+          {semesterKeys.map((semester, idx) => {
+            const semesterUsers = grouped[semester];
+            return (
+              <SemesterAccordion
+                key={semester}
+                title={semester}
+                count={semesterUsers.length}
+                defaultOpen={idx === 0}
+              >
+                <SemesterTable
+                  users={semesterUsers}
+                  requests={questionRequests}
+                  parameterName={parameterName}
+                  parameterValues={parameterValues}
+                />
+              </SemesterAccordion>
+            );
+          })}
+        </div>
+      )}
 
-                      const best =
-                        scores.length > 0
-                          ? scores.reduce((max, cur) =>
-                              cur.value > max.value ? cur : max,
-                            )
-                          : null;
-
-                      const displayValue = best
-                        ? best.isDiscursive
-                          ? best.value.toFixed(1)
-                          : String(best.value)
-                        : "";
-
-                      const numericValue = best ? best.value : -Infinity;
-                      return (
-                        <TableCell
-                          className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
-                          title={best?.isDiscursive ? best.tooltip : undefined}
-                        >
-                          {displayValue}
-                        </TableCell>
-                      );
-                    })()}
-                    {parameterValues.length > 0 &&
-                      parameterValues.map((value: string) => (
-                        <React.Fragment key={value}>
-                          {(() => {
-                            const scores = questionRequests
-                              .filter(
-                                (r: DashboardQuestionRequest) =>
-                                  r.userId === user.id,
-                              )
-                              .filter((r: DashboardQuestionRequest) =>
-                                r.parameterValues.find(
-                                  (
-                                    p: PrismaJson.QuestionRequestParameterValue,
-                                  ) =>
-                                    p.name === parameterName &&
-                                    p.values.includes(value),
-                                ),
-                              )
-                              .map(getRequestScore)
-                              .filter(Boolean) as RequestScore[];
-
-                            const best =
-                              scores.length > 0
-                                ? scores.reduce((max, cur) =>
-                                    cur.value > max.value ? cur : max,
-                                  )
-                                : null;
-
-                            const displayValue = best
-                              ? best.isDiscursive
-                                ? best.value.toFixed(1)
-                                : String(best.value)
-                              : "";
-
-                            const numericValue = best ? best.value : -Infinity;
-                            return (
-                              <TableCell
-                                className={`text-center ${numericValue !== 0 && numericValue !== -Infinity ? "bg-gray-200" : ""}`}
-                                title={
-                                  best?.isDiscursive ? best.tooltip : undefined
-                                }
-                              >
-                                {displayValue}
-                              </TableCell>
-                            );
-                          })()}
-                        </React.Fragment>
-                      ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination - only show for admin */}
-          {isAdmin && totalPages > 1 && (
-            <div className="mt-6 flex items-center justify-between">
-              <div className="text-sm text-slate-600">
-                Página {page} de {totalPages} ({users.length} usuários nesta
-                página)
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="px-3 py-2 border border-slate-300 rounded hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                >
-                  ← Anterior
-                </button>
-                <button
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page >= totalPages}
-                  className="px-3 py-2 border border-slate-300 rounded hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                >
-                  Próxima →
-                </button>
-              </div>
-            </div>
-          )}
-        </>
+      {selectedTemplateId !== null && semesterKeys.length === 0 && users.length === 0 && (
+        <p className="text-sm text-slate-500">
+          Nenhum aluno encontrado para este template.
+        </p>
       )}
     </div>
   );
