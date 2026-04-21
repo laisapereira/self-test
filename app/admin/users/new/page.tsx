@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { NewUserForm, NewUserFormValues } from "@/components/users/NewUserForm";
 import Forbidden from "@/components/forbidden";
 
-export async function createUser(dataForm: NewUserFormValues) {
+async function createUser(dataForm: NewUserFormValues) {
   const response = await fetch("/api/admin/users", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
