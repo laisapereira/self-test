@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 90" width="520" height="180">
+  <g transform="translate(45, 45)">
+    <!-- Gear shape -->
+    <g fill="none" stroke="#1a1a2e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0,-42 L5,-42 L7,-36 A36,36 0 0,1 18,-31.2 L23,-35 L27,-31 L23.5,-25.5 A36,36 0 0,1 31.2,-18 L36,-20 L39,-15 L33.5,-11.5 A36,36 0 0,1 36,0 L42,0 L42,6 L36,6.5 A36,36 0 0,1 31.2,18 L36,22 L33,27 L27,23 A36,36 0 0,1 18,31.2 L20,37 L15,39 L11.5,33 A36,36 0 0,1 0,36 L0,42 L-6,42 L-6.5,36 A36,36 0 0,1 -18,31.2 L-22,37 L-27,33 L-23,27 A36,36 0 0,1 -31.2,18 L-37,20 L-39,15 L-33,11.5 A36,36 0 0,1 -36,0 L-42,0 L-42,-6 L-36,-6.5 A36,36 0 0,1 -31.2,-18 L-37,-22 L-33,-27 L-27,-23 A36,36 0 0,1 -18,-31.2 L-20,-37 L-15,-39 L-11.5,-33 A36,36 0 0,1 0,-36 Z"/>
+    </g>
+    <!-- Checkmark -->
+    <polyline points="-12,2 -4,10 14,-10" fill="none" stroke="#e94560" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Text -->
+    <text x="60" y="5" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="26" fill="#1a1a2e" letter-spacing="1">Self</text>
+    <text x="108" y="5" font-family="'Segoe UI', sans-serif" font-weight="300" font-size="26" fill="#1a1a2e" letter-spacing="1">Test</text>
+  </g>
+</svg>

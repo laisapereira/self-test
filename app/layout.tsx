@@ -49,13 +49,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" />
+        <link rel="icon" href="/selftest-logo.svg" />
         <title>SelfTest</title>
         <meta
           name="description"
           content="O SelfTest permite estudantes de computação testarem seus conhecimentos utilizando perguntas personalizadas geradas por IA. Venha se testar!"
         />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/selftest-logo.svg" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
@@ -92,7 +92,12 @@ function Navbar() {
     <nav className="bg-white shadow-sm border-b border-gray-200 px-4 py-3 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.png" alt="SelfTest Logo" width={160} height={80} />
+          <Image
+            src="/selftest-logo.svg"
+            alt="SelfTest Logo"
+            width={160}
+            height={80}
+          />
         </Link>
 
         <div className="flex items-center gap-3">

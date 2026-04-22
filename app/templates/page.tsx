@@ -16,15 +16,8 @@ export default function QuestionRequestTemplates() {
   const router = useRouter();
 
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
-  const [newTemplate, setNewTemplate] = useState<any>({
-    name: "",
-    promptTemplate: "",
-    parameters: [] as PrismaJson.QuestionRequestTemplateParameter[],
-  });
-  const [newParameter, setNewParameter] = useState({
-    name: "",
-    values: "",
-    multipleSelect: false,
+  const [newTemplate, setNewTemplate] = useState<any>({name: "", promptTemplate: "", parameters: [] as PrismaJson.QuestionRequestTemplateParameter[],});
+  const [newParameter, setNewParameter] = useState<any>({ name: "", values: "",multipleSelect: false,
   });
 
   const isForbidden =

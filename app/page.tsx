@@ -27,8 +27,8 @@ export default function Home() {
           </h1>
           <p className="text-base text-gray-600 mb-6 leading-relaxed max-w-3xl">
             Configure abaixo os tópicos para gerar um desafio personalizado de
-            perguntas. O SelfTest ajuda você a estudar melhor e acompanhar seu
-            progresso com feedback inteligente.
+            perguntas. O SelfTest, usando Inteligência Artificial, ajuda você a
+            estudar melhor e acompanhar seu progresso com feedback inteligente
           </p>
 
           <button
