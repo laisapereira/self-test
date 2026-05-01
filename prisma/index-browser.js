@@ -156,7 +156,8 @@ exports.Prisma.QuestionRequestTemplateScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   parameters: 'parameters',
-  ownerId: 'ownerId'
+  ownerId: 'ownerId',
+  evaluationTemplateId: 'evaluationTemplateId'
 };
 
 exports.Prisma.QuestionRequestScalarFieldEnum = {
@@ -176,6 +177,32 @@ exports.Prisma.QuestionScalarFieldEnum = {
   type: 'type',
   evaluationCriteria: 'evaluationCriteria',
   requestId: 'requestId'
+};
+
+exports.Prisma.EvaluationTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  evaluationPrompt: 'evaluationPrompt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  ownerId: 'ownerId'
+};
+
+exports.Prisma.EvaluationTemplateCriterionScalarFieldEnum = {
+  id: 'id',
+  weight: 'weight',
+  order: 'order',
+  criterionId: 'criterionId',
+  templateId: 'templateId'
+};
+
+exports.Prisma.EvaluationCriterionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  ownerId: 'ownerId'
 };
 
 exports.Prisma.AnswerScalarFieldEnum = {
@@ -205,6 +232,7 @@ exports.Prisma.AutoEvaluationScalarFieldEnum = {
 exports.Prisma.AutoEvaluationCriterionScalarFieldEnum = {
   id: 'id',
   autoEvaluationId: 'autoEvaluationId',
+  templateCriterionId: 'templateCriterionId',
   description: 'description',
   weight: 'weight',
   score: 'score'
@@ -238,6 +266,9 @@ exports.Prisma.ModelName = {
   QuestionRequestTemplate: 'QuestionRequestTemplate',
   QuestionRequest: 'QuestionRequest',
   Question: 'Question',
+  EvaluationTemplate: 'EvaluationTemplate',
+  EvaluationTemplateCriterion: 'EvaluationTemplateCriterion',
+  EvaluationCriterion: 'EvaluationCriterion',
   Answer: 'Answer',
   AutoEvaluation: 'AutoEvaluation',
   AutoEvaluationCriterion: 'AutoEvaluationCriterion'

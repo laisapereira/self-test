@@ -28,6 +28,23 @@ async function getParams(req: Request, params: Promise<{ id: string }>) {
   return { question, userId };
 }
 
+async function getEvaluationPreamble(requestId: number): Promise<string | null> {
+  const request = await prisma.questionRequest.findUnique({
+    where: { id: requestId },
+  });
+  if (!request?.templateId) return null;
+
+  const template = await prisma.questionRequestTemplate.findUnique({
+    where: { id: request.templateId },
+  });
+  if (!template?.evaluationTemplateId) return null;
+
+  const evalTemplate = (await prisma.evaluationTemplate.findUnique({
+    where: { id: template.evaluationTemplateId },
+  })) as unknown as { evaluationPrompt: string | null } | null;
+  return evalTemplate?.evaluationPrompt ?? null;
+}
+
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -105,6 +122,26 @@ export async function POST(
     const { openAnswer, confidenceLevel, evaluationCriteria } =
       (await req.json()) as EvaluationRequestBody;
 
+    const preamble =
+      (await getEvaluationPreamble(question.requestId)) ??
+      `Você é um professor universitário de Ciência da Computação avaliando a resposta de um aluno de graduação. Seu objetivo é ser justo, construtivo e considerar o nível esperado para o contexto acadêmico.
+
+### Referência de pontuação (use como guia)
+
+- **0 a 3**: resposta incorreta, irrelevante ou ausente
+- **4 a 6**: resposta parcialmente correta, com lacunas importantes
+- **7 a 8**: resposta correta e suficiente, com pequenas imprecisões
+- **9 a 10**: resposta correta, clara e completa dentro do que foi pedido
+
+### Regras de avaliação
+
+- Avalie o aluno pelo que foi **explicitamente pedido no enunciado**. Não penalize por omissão de conteúdo que não foi solicitado.
+- Se a questão usar palavras como "simples", "básico" ou "exemplo", isso é uma restrição explícita de escopo. Não penalize por ausência de conteúdo que vai além dessa restrição.
+- Para **clareza**: avalie a qualidade da explicação textual, não a legibilidade do código (se houver).
+- Para corretude: considere se o aluno demonstrou compreensão do conceito central. Erros menores de sintaxe ou digitação não devem penalizar mais do que 1-2 pontos desde que o raciocínio esteja correto.
+- Na dúvida, interprete a resposta do aluno de forma favorável.
+- Se a resposta atender completamente ao que foi pedido, o score máximo (10) deve ser atribuído. Não reserve o 10 para uma resposta hipotética ideal.`;
+
     const destructCriteria = evaluationCriteria
       .map(
         ({ weight, description }, index) =>
@@ -114,80 +151,54 @@ export async function POST(
 
     const formatedCriteria = JSON.stringify(evaluationCriteria, null, 2);
 
-    const prompt = `
-    Você é um professor universitário de Ciência da Computação avaliando a resposta de um aluno de graduação. Seu objetivo é ser justo, construtivo e considerar o nível esperado para o contexto acadêmico.
+    const prompt = `${preamble}
 
-    ### Enunciado da questão
-    """${question.content}"""
+### Enunciado da questão
+"""${question.content}"""
 
-    ### Resposta do aluno
-    """${openAnswer}"""
+### Resposta do aluno
+"""${openAnswer}"""
 
-    ### Critérios de avaliação
+### Critérios de avaliação
 
-    Use EXATAMENTE os critérios abaixo, na ordem em que são apresentados e com os pesos definidos:
+Use EXATAMENTE os critérios abaixo, na ordem em que são apresentados e com os pesos definidos:
 
-    Resumo dos critérios (apenas para leitura):
-    ${destructCriteria}
+Resumo dos critérios (apenas para leitura):
+${destructCriteria}
 
-    Estrutura JSON exata dos critérios (NÃO altere nada aqui, apenas use):
-    \`\`\`json
-    ${formatedCriteria}
-    \`\`\`
+Estrutura JSON exata dos critérios (NÃO altere nada aqui, apenas use):
+\`\`\`json
+${formatedCriteria}
+\`\`\`
 
-    ### Referência de pontuação (use como guia)
+### Sua tarefa
 
-    - **0 a 3**: resposta incorreta, irrelevante ou ausente
-    - **4 a 6**: resposta parcialmente correta, com lacunas importantes
-    - **7 a 8**: resposta correta e suficiente, com pequenas imprecisões
-    - **9 a 10**: resposta correta, clara e completa dentro do que foi pedido
+1. Para **cada critério** do array \`evaluationCriteria\`:
+  - Leia "description" e "weight";
+  - Atribua um "score" de **0 a 10** com base na resposta do aluno;
+  - Use apenas números inteiros ou com uma casa decimal.
 
-    ### Sua tarefa
+2. Calcule "finalScore" como **média ponderada**:
+  \`finalScore = (sum(score_i × weight_i)) ÷ (sum(weight_i))\`
 
-    1. Para **cada critério** do array \`evaluationCriteria\`:
-      - Leia "description" e "weight";
-      - Atribua um "score" de **0 a 10** com base na resposta do aluno e na referência acima;
-      - Use apenas números inteiros ou com uma casa decimal.
+3. Retorne um JSON com o seguinte formato:
 
-    2. Calcule "finalScore" como **média ponderada**:
-      \`finalScore = (sum(score_i × weight_i)) ÷ (sum(weight_i))\`
+{
+  "autoEvaluation": [
+    { "description": "texto EXATO de description do critério 1", "weight": 2, "score": 9 },
+    { "description": "texto EXATO de description do critério 2", "weight": 1, "score": 8 }
+  ],
+  "finalScore": 8.67,
+  "finalScoreFormula": "finalScore = (9×2 + 8×1) ÷ (2 + 1) = 26 ÷ 3 ≈ 8.67",
+  "justification": "Resumo textual explicando o desempenho geral. Seja construtivo."
+}
 
-    3. Retorne um JSON com o seguinte formato:
+### Regras do formato
 
-    {
-      "autoEvaluation": [
-        {
-          "description": "texto EXATO de description do critério 1",
-          "weight": 2,
-          "score": 9
-        },
-        {
-          "description": "texto EXATO de description do critério 2",
-          "weight": 1,
-          "score": 8
-        }
-      ],
-      "finalScore": 8.67,
-      "finalScoreFormula": "finalScore = (9×2 + 8×1) ÷ (2 + 1) = 26 ÷ 3 ≈ 8.67",
-      "justification": "Resumo textual explicando o desempenho geral, destacando o que o aluno acertou e, se houver, o que poderia melhorar. Seja construtivo."
-    }
-
-    ### Regras importantes
-
-    - Avalie o aluno pelo que foi **explicitamente pedido no enunciado**. Não penalize por omissão de conteúdo que não foi solicitado.
-    - Para completude: releia o enunciado da questão antes de avaliar. Se a questão usar palavras como "simples", "básico" ou "exemplo", isso é uma restrição explícita de escopo. Não penalize por ausência de conteúdo que vai além dessa restrição.
-    - Para **clareza**: avalie a qualidade da explicação textual, não a legibilidade do código (se houver).
-    - Para corretude: considere se o aluno demonstrou compreensão do conceito central. Erros menores de sintaxe, nomes de variáveis ou digitação não devem penalizar mais do que 1-2 pontos, desde que o raciocínio esteja correto.
-    - Na dúvida, interprete a resposta do aluno de forma favorável.
-    - NÃO crie nem remova critérios.
-    - NÃO altere a ordem dos critérios.
-    - Se a resposta atender completamente ao que foi pedido no enunciado, 
-o score máximo (10) deve ser atribuído. Não reserve o 10 para uma 
-resposta hipotética ideal — avalie o que está na resposta contra 
-o que foi pedido.
-    - NÃO modifique o texto de "description": apenas copie o valor recebido.
-    - Retorne **apenas** o JSON final, sem comentários, sem texto extra e sem blocos de código (\`\`\`).
-    `;
+- NÃO crie nem remova critérios.
+- NÃO altere a ordem dos critérios.
+- NÃO modifique o texto de "description": apenas copie o valor recebido.
+- Retorne **apenas** o JSON final, sem comentários, sem texto extra e sem blocos de código (\`\`\`).`;
 
     const openai = new OpenAI({
       apiKey: process.env.DEEPSEEK_API_KEY,

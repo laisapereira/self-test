@@ -7,15 +7,29 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Forbidden from "./forbidden";
+
+type EvaluationTemplateSummary = {
+  id: number;
+  name: string;
+  description: string | null;
+};
 
 type Template = {
   id?: number;
   name: string;
   promptTemplate: string;
   parameters: PrismaJson.QuestionRequestTemplateParameter[];
+  evaluationTemplateId?: number | null;
 };
 
 type ParameterInput = {
@@ -41,22 +55,26 @@ export default function TemplateForm({
     name: defaultValues?.name || "",
     promptTemplate: defaultValues?.promptTemplate || "",
     parameters: defaultValues?.parameters || [],
+    evaluationTemplateId: defaultValues?.evaluationTemplateId ?? null,
   });
   const [newParameter, setNewParameter] = useState<ParameterInput>({
     name: "",
     values: "",
     multipleSelect: false,
   });
+  const [evaluationTemplates, setEvaluationTemplates] = useState<
+    EvaluationTemplateSummary[]
+  >([]);
+
+  useEffect(() => {
+    fetch("/api/templates/evaluation")
+      .then((r) => (r.ok ? r.json() : []))
+      .then(setEvaluationTemplates)
+      .catch(() => {});
+  }, []);
 
   const isForbidden =
     status === "authenticated" && session?.user?.isAdmin === false;
-
-  /* useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/api/auth/signin");
-    }
-  }, [status, router]);
- */
 
   if (status === "loading") {
     return <div className="p-8 text-center text-slate-500">Carregando...</div>;
@@ -128,6 +146,43 @@ export default function TemplateForm({
             className="mb-4"
             rows={6}
           />
+
+          <div className="mb-4">
+            <h3 className="text-lg font-medium mb-1">Template de avaliação</h3>
+            <p className="text-sm text-gray-500 mb-2">
+              Opcional. Se selecionado, a IA usará estes critérios ao avaliar
+              respostas discursivas geradas por este template.
+            </p>
+            <Select
+              value={newTemplate.evaluationTemplateId?.toString() ?? "none"}
+              onValueChange={(v) =>
+                setNewTemplate({
+                  ...newTemplate,
+                  evaluationTemplateId: v === "none" ? null : parseInt(v, 10),
+                })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Nenhum (a IA define livremente)" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">
+                  Nenhum (a IA define livremente)
+                </SelectItem>
+                {evaluationTemplates.map((et) => (
+                  <SelectItem key={et.id} value={et.id.toString()}>
+                    {et.name}
+                    {et.description && (
+                      <span className="ml-2 text-xs text-gray-400">
+                        — {et.description}
+                      </span>
+                    )}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           <h3 className="text-lg font-medium">Parâmetros</h3>
           <ul className="mt-4 space-y-2">
             {newTemplate.parameters.map((param, index) => (

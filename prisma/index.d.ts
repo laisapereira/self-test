@@ -227,6 +227,21 @@ export type QuestionRequest = $Result.DefaultSelection<Prisma.$QuestionRequestPa
  */
 export type Question = $Result.DefaultSelection<Prisma.$QuestionPayload>
 /**
+ * Model EvaluationTemplate
+ * 
+ */
+export type EvaluationTemplate = $Result.DefaultSelection<Prisma.$EvaluationTemplatePayload>
+/**
+ * Model EvaluationTemplateCriterion
+ * 
+ */
+export type EvaluationTemplateCriterion = $Result.DefaultSelection<Prisma.$EvaluationTemplateCriterionPayload>
+/**
+ * Model EvaluationCriterion
+ * 
+ */
+export type EvaluationCriterion = $Result.DefaultSelection<Prisma.$EvaluationCriterionPayload>
+/**
  * Model Answer
  * 
  */
@@ -438,6 +453,36 @@ export class PrismaClient<
     * ```
     */
   get question(): Prisma.QuestionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.evaluationTemplate`: Exposes CRUD operations for the **EvaluationTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EvaluationTemplates
+    * const evaluationTemplates = await prisma.evaluationTemplate.findMany()
+    * ```
+    */
+  get evaluationTemplate(): Prisma.EvaluationTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.evaluationTemplateCriterion`: Exposes CRUD operations for the **EvaluationTemplateCriterion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EvaluationTemplateCriteria
+    * const evaluationTemplateCriteria = await prisma.evaluationTemplateCriterion.findMany()
+    * ```
+    */
+  get evaluationTemplateCriterion(): Prisma.EvaluationTemplateCriterionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.evaluationCriterion`: Exposes CRUD operations for the **EvaluationCriterion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EvaluationCriteria
+    * const evaluationCriteria = await prisma.evaluationCriterion.findMany()
+    * ```
+    */
+  get evaluationCriterion(): Prisma.EvaluationCriterionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.answer`: Exposes CRUD operations for the **Answer** model.
@@ -914,6 +959,9 @@ export namespace Prisma {
     QuestionRequestTemplate: 'QuestionRequestTemplate',
     QuestionRequest: 'QuestionRequest',
     Question: 'Question',
+    EvaluationTemplate: 'EvaluationTemplate',
+    EvaluationTemplateCriterion: 'EvaluationTemplateCriterion',
+    EvaluationCriterion: 'EvaluationCriterion',
     Answer: 'Answer',
     AutoEvaluation: 'AutoEvaluation',
     AutoEvaluationCriterion: 'AutoEvaluationCriterion'
@@ -935,7 +983,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "group" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "answer" | "autoEvaluation" | "autoEvaluationCriterion"
+      modelProps: "user" | "group" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "evaluationTemplate" | "evaluationTemplateCriterion" | "evaluationCriterion" | "answer" | "autoEvaluation" | "autoEvaluationCriterion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1383,6 +1431,228 @@ export namespace Prisma {
           }
         }
       }
+      EvaluationTemplate: {
+        payload: Prisma.$EvaluationTemplatePayload<ExtArgs>
+        fields: Prisma.EvaluationTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EvaluationTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EvaluationTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.EvaluationTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EvaluationTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.EvaluationTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.EvaluationTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.EvaluationTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EvaluationTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.EvaluationTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>
+          }
+          update: {
+            args: Prisma.EvaluationTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.EvaluationTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EvaluationTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EvaluationTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.EvaluationTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.EvaluationTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEvaluationTemplate>
+          }
+          groupBy: {
+            args: Prisma.EvaluationTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EvaluationTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      EvaluationTemplateCriterion: {
+        payload: Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>
+        fields: Prisma.EvaluationTemplateCriterionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EvaluationTemplateCriterionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EvaluationTemplateCriterionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>
+          }
+          findFirst: {
+            args: Prisma.EvaluationTemplateCriterionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EvaluationTemplateCriterionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>
+          }
+          findMany: {
+            args: Prisma.EvaluationTemplateCriterionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>[]
+          }
+          create: {
+            args: Prisma.EvaluationTemplateCriterionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>
+          }
+          createMany: {
+            args: Prisma.EvaluationTemplateCriterionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EvaluationTemplateCriterionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>[]
+          }
+          delete: {
+            args: Prisma.EvaluationTemplateCriterionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>
+          }
+          update: {
+            args: Prisma.EvaluationTemplateCriterionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>
+          }
+          deleteMany: {
+            args: Prisma.EvaluationTemplateCriterionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EvaluationTemplateCriterionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EvaluationTemplateCriterionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>[]
+          }
+          upsert: {
+            args: Prisma.EvaluationTemplateCriterionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationTemplateCriterionPayload>
+          }
+          aggregate: {
+            args: Prisma.EvaluationTemplateCriterionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEvaluationTemplateCriterion>
+          }
+          groupBy: {
+            args: Prisma.EvaluationTemplateCriterionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationTemplateCriterionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EvaluationTemplateCriterionCountArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationTemplateCriterionCountAggregateOutputType> | number
+          }
+        }
+      }
+      EvaluationCriterion: {
+        payload: Prisma.$EvaluationCriterionPayload<ExtArgs>
+        fields: Prisma.EvaluationCriterionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EvaluationCriterionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EvaluationCriterionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>
+          }
+          findFirst: {
+            args: Prisma.EvaluationCriterionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EvaluationCriterionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>
+          }
+          findMany: {
+            args: Prisma.EvaluationCriterionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>[]
+          }
+          create: {
+            args: Prisma.EvaluationCriterionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>
+          }
+          createMany: {
+            args: Prisma.EvaluationCriterionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EvaluationCriterionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>[]
+          }
+          delete: {
+            args: Prisma.EvaluationCriterionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>
+          }
+          update: {
+            args: Prisma.EvaluationCriterionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>
+          }
+          deleteMany: {
+            args: Prisma.EvaluationCriterionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EvaluationCriterionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EvaluationCriterionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>[]
+          }
+          upsert: {
+            args: Prisma.EvaluationCriterionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EvaluationCriterionPayload>
+          }
+          aggregate: {
+            args: Prisma.EvaluationCriterionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEvaluationCriterion>
+          }
+          groupBy: {
+            args: Prisma.EvaluationCriterionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationCriterionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EvaluationCriterionCountArgs<ExtArgs>
+            result: $Utils.Optional<EvaluationCriterionCountAggregateOutputType> | number
+          }
+        }
+      }
       Answer: {
         payload: Prisma.$AnswerPayload<ExtArgs>
         fields: Prisma.AnswerFieldRefs
@@ -1707,6 +1977,9 @@ export namespace Prisma {
     questionRequestTemplate?: QuestionRequestTemplateOmit
     questionRequest?: QuestionRequestOmit
     question?: QuestionOmit
+    evaluationTemplate?: EvaluationTemplateOmit
+    evaluationTemplateCriterion?: EvaluationTemplateCriterionOmit
+    evaluationCriterion?: EvaluationCriterionOmit
     answer?: AnswerOmit
     autoEvaluation?: AutoEvaluationOmit
     autoEvaluationCriterion?: AutoEvaluationCriterionOmit
@@ -1795,6 +2068,8 @@ export namespace Prisma {
     questionRequestTemplates: number
     questionRequests: number
     answers: number
+    evaluationTemplates: number
+    evaluationCriterions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1803,6 +2078,8 @@ export namespace Prisma {
     questionRequestTemplates?: boolean | UserCountOutputTypeCountQuestionRequestTemplatesArgs
     questionRequests?: boolean | UserCountOutputTypeCountQuestionRequestsArgs
     answers?: boolean | UserCountOutputTypeCountAnswersArgs
+    evaluationTemplates?: boolean | UserCountOutputTypeCountEvaluationTemplatesArgs
+    evaluationCriterions?: boolean | UserCountOutputTypeCountEvaluationCriterionsArgs
   }
 
   // Custom InputTypes
@@ -1849,6 +2126,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnswerWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEvaluationTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationTemplateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEvaluationCriterionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationCriterionWhereInput
   }
 
 
@@ -1973,6 +2264,108 @@ export namespace Prisma {
    */
   export type QuestionCountOutputTypeCountAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnswerWhereInput
+  }
+
+
+  /**
+   * Count Type EvaluationTemplateCountOutputType
+   */
+
+  export type EvaluationTemplateCountOutputType = {
+    criteria: number
+    questionRequestTemplates: number
+  }
+
+  export type EvaluationTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    criteria?: boolean | EvaluationTemplateCountOutputTypeCountCriteriaArgs
+    questionRequestTemplates?: boolean | EvaluationTemplateCountOutputTypeCountQuestionRequestTemplatesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EvaluationTemplateCountOutputType without action
+   */
+  export type EvaluationTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCountOutputType
+     */
+    select?: EvaluationTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationTemplateCountOutputType without action
+   */
+  export type EvaluationTemplateCountOutputTypeCountCriteriaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationTemplateCriterionWhereInput
+  }
+
+  /**
+   * EvaluationTemplateCountOutputType without action
+   */
+  export type EvaluationTemplateCountOutputTypeCountQuestionRequestTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuestionRequestTemplateWhereInput
+  }
+
+
+  /**
+   * Count Type EvaluationTemplateCriterionCountOutputType
+   */
+
+  export type EvaluationTemplateCriterionCountOutputType = {
+    autoEvaluationCriteria: number
+  }
+
+  export type EvaluationTemplateCriterionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    autoEvaluationCriteria?: boolean | EvaluationTemplateCriterionCountOutputTypeCountAutoEvaluationCriteriaArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EvaluationTemplateCriterionCountOutputType without action
+   */
+  export type EvaluationTemplateCriterionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterionCountOutputType
+     */
+    select?: EvaluationTemplateCriterionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationTemplateCriterionCountOutputType without action
+   */
+  export type EvaluationTemplateCriterionCountOutputTypeCountAutoEvaluationCriteriaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AutoEvaluationCriterionWhereInput
+  }
+
+
+  /**
+   * Count Type EvaluationCriterionCountOutputType
+   */
+
+  export type EvaluationCriterionCountOutputType = {
+    templates: number
+  }
+
+  export type EvaluationCriterionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    templates?: boolean | EvaluationCriterionCountOutputTypeCountTemplatesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EvaluationCriterionCountOutputType without action
+   */
+  export type EvaluationCriterionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterionCountOutputType
+     */
+    select?: EvaluationCriterionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationCriterionCountOutputType without action
+   */
+  export type EvaluationCriterionCountOutputTypeCountTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationTemplateCriterionWhereInput
   }
 
 
@@ -2238,6 +2631,8 @@ export namespace Prisma {
     questionRequestTemplates?: boolean | User$questionRequestTemplatesArgs<ExtArgs>
     questionRequests?: boolean | User$questionRequestsArgs<ExtArgs>
     answers?: boolean | User$answersArgs<ExtArgs>
+    evaluationTemplates?: boolean | User$evaluationTemplatesArgs<ExtArgs>
+    evaluationCriterions?: boolean | User$evaluationCriterionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2281,6 +2676,8 @@ export namespace Prisma {
     questionRequestTemplates?: boolean | User$questionRequestTemplatesArgs<ExtArgs>
     questionRequests?: boolean | User$questionRequestsArgs<ExtArgs>
     answers?: boolean | User$answersArgs<ExtArgs>
+    evaluationTemplates?: boolean | User$evaluationTemplatesArgs<ExtArgs>
+    evaluationCriterions?: boolean | User$evaluationCriterionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2294,6 +2691,8 @@ export namespace Prisma {
       questionRequestTemplates: Prisma.$QuestionRequestTemplatePayload<ExtArgs>[]
       questionRequests: Prisma.$QuestionRequestPayload<ExtArgs>[]
       answers: Prisma.$AnswerPayload<ExtArgs>[]
+      evaluationTemplates: Prisma.$EvaluationTemplatePayload<ExtArgs>[]
+      evaluationCriterions: Prisma.$EvaluationCriterionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2703,6 +3102,8 @@ export namespace Prisma {
     questionRequestTemplates<T extends User$questionRequestTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$questionRequestTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questionRequests<T extends User$questionRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$questionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     answers<T extends User$answersArgs<ExtArgs> = {}>(args?: Subset<T, User$answersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    evaluationTemplates<T extends User$evaluationTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$evaluationTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    evaluationCriterions<T extends User$evaluationCriterionsArgs<ExtArgs> = {}>(args?: Subset<T, User$evaluationCriterionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3245,6 +3646,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AnswerScalarFieldEnum | AnswerScalarFieldEnum[]
+  }
+
+  /**
+   * User.evaluationTemplates
+   */
+  export type User$evaluationTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    where?: EvaluationTemplateWhereInput
+    orderBy?: EvaluationTemplateOrderByWithRelationInput | EvaluationTemplateOrderByWithRelationInput[]
+    cursor?: EvaluationTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvaluationTemplateScalarFieldEnum | EvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.evaluationCriterions
+   */
+  export type User$evaluationCriterionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    where?: EvaluationCriterionWhereInput
+    orderBy?: EvaluationCriterionOrderByWithRelationInput | EvaluationCriterionOrderByWithRelationInput[]
+    cursor?: EvaluationCriterionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvaluationCriterionScalarFieldEnum | EvaluationCriterionScalarFieldEnum[]
   }
 
   /**
@@ -5449,11 +5898,13 @@ export namespace Prisma {
   export type QuestionRequestTemplateAvgAggregateOutputType = {
     id: number | null
     ownerId: number | null
+    evaluationTemplateId: number | null
   }
 
   export type QuestionRequestTemplateSumAggregateOutputType = {
     id: number | null
     ownerId: number | null
+    evaluationTemplateId: number | null
   }
 
   export type QuestionRequestTemplateMinAggregateOutputType = {
@@ -5464,6 +5915,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     ownerId: number | null
+    evaluationTemplateId: number | null
   }
 
   export type QuestionRequestTemplateMaxAggregateOutputType = {
@@ -5474,6 +5926,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     ownerId: number | null
+    evaluationTemplateId: number | null
   }
 
   export type QuestionRequestTemplateCountAggregateOutputType = {
@@ -5485,6 +5938,7 @@ export namespace Prisma {
     updatedAt: number
     parameters: number
     ownerId: number
+    evaluationTemplateId: number
     _all: number
   }
 
@@ -5492,11 +5946,13 @@ export namespace Prisma {
   export type QuestionRequestTemplateAvgAggregateInputType = {
     id?: true
     ownerId?: true
+    evaluationTemplateId?: true
   }
 
   export type QuestionRequestTemplateSumAggregateInputType = {
     id?: true
     ownerId?: true
+    evaluationTemplateId?: true
   }
 
   export type QuestionRequestTemplateMinAggregateInputType = {
@@ -5507,6 +5963,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     ownerId?: true
+    evaluationTemplateId?: true
   }
 
   export type QuestionRequestTemplateMaxAggregateInputType = {
@@ -5517,6 +5974,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     ownerId?: true
+    evaluationTemplateId?: true
   }
 
   export type QuestionRequestTemplateCountAggregateInputType = {
@@ -5528,6 +5986,7 @@ export namespace Prisma {
     updatedAt?: true
     parameters?: true
     ownerId?: true
+    evaluationTemplateId?: true
     _all?: true
   }
 
@@ -5626,6 +6085,7 @@ export namespace Prisma {
     updatedAt: Date
     parameters: PrismaJson.QuestionRequestTemplateParameter[]
     ownerId: number
+    evaluationTemplateId: number | null
     _count: QuestionRequestTemplateCountAggregateOutputType | null
     _avg: QuestionRequestTemplateAvgAggregateOutputType | null
     _sum: QuestionRequestTemplateSumAggregateOutputType | null
@@ -5656,8 +6116,10 @@ export namespace Prisma {
     updatedAt?: boolean
     parameters?: boolean
     ownerId?: boolean
+    evaluationTemplateId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
     requests?: boolean | QuestionRequestTemplate$requestsArgs<ExtArgs>
+    evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
     _count?: boolean | QuestionRequestTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["questionRequestTemplate"]>
 
@@ -5670,7 +6132,9 @@ export namespace Prisma {
     updatedAt?: boolean
     parameters?: boolean
     ownerId?: boolean
+    evaluationTemplateId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
+    evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
   }, ExtArgs["result"]["questionRequestTemplate"]>
 
   export type QuestionRequestTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5682,7 +6146,9 @@ export namespace Prisma {
     updatedAt?: boolean
     parameters?: boolean
     ownerId?: boolean
+    evaluationTemplateId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
+    evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
   }, ExtArgs["result"]["questionRequestTemplate"]>
 
   export type QuestionRequestTemplateSelectScalar = {
@@ -5694,19 +6160,23 @@ export namespace Prisma {
     updatedAt?: boolean
     parameters?: boolean
     ownerId?: boolean
+    evaluationTemplateId?: boolean
   }
 
-  export type QuestionRequestTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "promptTemplate" | "visible" | "createdAt" | "updatedAt" | "parameters" | "ownerId", ExtArgs["result"]["questionRequestTemplate"]>
+  export type QuestionRequestTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "promptTemplate" | "visible" | "createdAt" | "updatedAt" | "parameters" | "ownerId" | "evaluationTemplateId", ExtArgs["result"]["questionRequestTemplate"]>
   export type QuestionRequestTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     requests?: boolean | QuestionRequestTemplate$requestsArgs<ExtArgs>
+    evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
     _count?: boolean | QuestionRequestTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type QuestionRequestTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
+    evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
   }
   export type QuestionRequestTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
+    evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
   }
 
   export type $QuestionRequestTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5714,6 +6184,7 @@ export namespace Prisma {
     objects: {
       owner: Prisma.$UserPayload<ExtArgs>
       requests: Prisma.$QuestionRequestPayload<ExtArgs>[]
+      evaluationTemplate: Prisma.$EvaluationTemplatePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5727,6 +6198,7 @@ export namespace Prisma {
        */
       parameters: PrismaJson.QuestionRequestTemplateParameter[]
       ownerId: number
+      evaluationTemplateId: number | null
     }, ExtArgs["result"]["questionRequestTemplate"]>
     composites: {}
   }
@@ -6123,6 +6595,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     requests<T extends QuestionRequestTemplate$requestsArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    evaluationTemplate<T extends QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6160,6 +6633,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"QuestionRequestTemplate", 'DateTime'>
     readonly parameters: FieldRef<"QuestionRequestTemplate", 'Json[]'>
     readonly ownerId: FieldRef<"QuestionRequestTemplate", 'Int'>
+    readonly evaluationTemplateId: FieldRef<"QuestionRequestTemplate", 'Int'>
   }
     
 
@@ -6577,6 +7051,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: QuestionRequestScalarFieldEnum | QuestionRequestScalarFieldEnum[]
+  }
+
+  /**
+   * QuestionRequestTemplate.evaluationTemplate
+   */
+  export type QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    where?: EvaluationTemplateWhereInput
   }
 
   /**
@@ -8915,6 +9408,3458 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: QuestionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EvaluationTemplate
+   */
+
+  export type AggregateEvaluationTemplate = {
+    _count: EvaluationTemplateCountAggregateOutputType | null
+    _avg: EvaluationTemplateAvgAggregateOutputType | null
+    _sum: EvaluationTemplateSumAggregateOutputType | null
+    _min: EvaluationTemplateMinAggregateOutputType | null
+    _max: EvaluationTemplateMaxAggregateOutputType | null
+  }
+
+  export type EvaluationTemplateAvgAggregateOutputType = {
+    id: number | null
+    ownerId: number | null
+  }
+
+  export type EvaluationTemplateSumAggregateOutputType = {
+    id: number | null
+    ownerId: number | null
+  }
+
+  export type EvaluationTemplateMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    description: string | null
+    evaluationPrompt: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    ownerId: number | null
+  }
+
+  export type EvaluationTemplateMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    description: string | null
+    evaluationPrompt: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    ownerId: number | null
+  }
+
+  export type EvaluationTemplateCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    evaluationPrompt: number
+    createdAt: number
+    updatedAt: number
+    ownerId: number
+    _all: number
+  }
+
+
+  export type EvaluationTemplateAvgAggregateInputType = {
+    id?: true
+    ownerId?: true
+  }
+
+  export type EvaluationTemplateSumAggregateInputType = {
+    id?: true
+    ownerId?: true
+  }
+
+  export type EvaluationTemplateMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    evaluationPrompt?: true
+    createdAt?: true
+    updatedAt?: true
+    ownerId?: true
+  }
+
+  export type EvaluationTemplateMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    evaluationPrompt?: true
+    createdAt?: true
+    updatedAt?: true
+    ownerId?: true
+  }
+
+  export type EvaluationTemplateCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    evaluationPrompt?: true
+    createdAt?: true
+    updatedAt?: true
+    ownerId?: true
+    _all?: true
+  }
+
+  export type EvaluationTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationTemplate to aggregate.
+     */
+    where?: EvaluationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationTemplates to fetch.
+     */
+    orderBy?: EvaluationTemplateOrderByWithRelationInput | EvaluationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EvaluationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EvaluationTemplates
+    **/
+    _count?: true | EvaluationTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EvaluationTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EvaluationTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EvaluationTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EvaluationTemplateMaxAggregateInputType
+  }
+
+  export type GetEvaluationTemplateAggregateType<T extends EvaluationTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateEvaluationTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEvaluationTemplate[P]>
+      : GetScalarType<T[P], AggregateEvaluationTemplate[P]>
+  }
+
+
+
+
+  export type EvaluationTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationTemplateWhereInput
+    orderBy?: EvaluationTemplateOrderByWithAggregationInput | EvaluationTemplateOrderByWithAggregationInput[]
+    by: EvaluationTemplateScalarFieldEnum[] | EvaluationTemplateScalarFieldEnum
+    having?: EvaluationTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EvaluationTemplateCountAggregateInputType | true
+    _avg?: EvaluationTemplateAvgAggregateInputType
+    _sum?: EvaluationTemplateSumAggregateInputType
+    _min?: EvaluationTemplateMinAggregateInputType
+    _max?: EvaluationTemplateMaxAggregateInputType
+  }
+
+  export type EvaluationTemplateGroupByOutputType = {
+    id: number
+    name: string
+    description: string | null
+    evaluationPrompt: string | null
+    createdAt: Date
+    updatedAt: Date
+    ownerId: number
+    _count: EvaluationTemplateCountAggregateOutputType | null
+    _avg: EvaluationTemplateAvgAggregateOutputType | null
+    _sum: EvaluationTemplateSumAggregateOutputType | null
+    _min: EvaluationTemplateMinAggregateOutputType | null
+    _max: EvaluationTemplateMaxAggregateOutputType | null
+  }
+
+  type GetEvaluationTemplateGroupByPayload<T extends EvaluationTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EvaluationTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EvaluationTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EvaluationTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], EvaluationTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EvaluationTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    evaluationPrompt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    criteria?: boolean | EvaluationTemplate$criteriaArgs<ExtArgs>
+    questionRequestTemplates?: boolean | EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs>
+    _count?: boolean | EvaluationTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationTemplate"]>
+
+  export type EvaluationTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    evaluationPrompt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationTemplate"]>
+
+  export type EvaluationTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    evaluationPrompt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationTemplate"]>
+
+  export type EvaluationTemplateSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    evaluationPrompt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ownerId?: boolean
+  }
+
+  export type EvaluationTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "evaluationPrompt" | "createdAt" | "updatedAt" | "ownerId", ExtArgs["result"]["evaluationTemplate"]>
+  export type EvaluationTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    criteria?: boolean | EvaluationTemplate$criteriaArgs<ExtArgs>
+    questionRequestTemplates?: boolean | EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs>
+    _count?: boolean | EvaluationTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type EvaluationTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type EvaluationTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $EvaluationTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EvaluationTemplate"
+    objects: {
+      owner: Prisma.$UserPayload<ExtArgs>
+      criteria: Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>[]
+      questionRequestTemplates: Prisma.$QuestionRequestTemplatePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      description: string | null
+      evaluationPrompt: string | null
+      createdAt: Date
+      updatedAt: Date
+      ownerId: number
+    }, ExtArgs["result"]["evaluationTemplate"]>
+    composites: {}
+  }
+
+  type EvaluationTemplateGetPayload<S extends boolean | null | undefined | EvaluationTemplateDefaultArgs> = $Result.GetResult<Prisma.$EvaluationTemplatePayload, S>
+
+  type EvaluationTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EvaluationTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EvaluationTemplateCountAggregateInputType | true
+    }
+
+  export interface EvaluationTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EvaluationTemplate'], meta: { name: 'EvaluationTemplate' } }
+    /**
+     * Find zero or one EvaluationTemplate that matches the filter.
+     * @param {EvaluationTemplateFindUniqueArgs} args - Arguments to find a EvaluationTemplate
+     * @example
+     * // Get one EvaluationTemplate
+     * const evaluationTemplate = await prisma.evaluationTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EvaluationTemplateFindUniqueArgs>(args: SelectSubset<T, EvaluationTemplateFindUniqueArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EvaluationTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EvaluationTemplateFindUniqueOrThrowArgs} args - Arguments to find a EvaluationTemplate
+     * @example
+     * // Get one EvaluationTemplate
+     * const evaluationTemplate = await prisma.evaluationTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EvaluationTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, EvaluationTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateFindFirstArgs} args - Arguments to find a EvaluationTemplate
+     * @example
+     * // Get one EvaluationTemplate
+     * const evaluationTemplate = await prisma.evaluationTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EvaluationTemplateFindFirstArgs>(args?: SelectSubset<T, EvaluationTemplateFindFirstArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateFindFirstOrThrowArgs} args - Arguments to find a EvaluationTemplate
+     * @example
+     * // Get one EvaluationTemplate
+     * const evaluationTemplate = await prisma.evaluationTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EvaluationTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, EvaluationTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EvaluationTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EvaluationTemplates
+     * const evaluationTemplates = await prisma.evaluationTemplate.findMany()
+     * 
+     * // Get first 10 EvaluationTemplates
+     * const evaluationTemplates = await prisma.evaluationTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const evaluationTemplateWithIdOnly = await prisma.evaluationTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EvaluationTemplateFindManyArgs>(args?: SelectSubset<T, EvaluationTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EvaluationTemplate.
+     * @param {EvaluationTemplateCreateArgs} args - Arguments to create a EvaluationTemplate.
+     * @example
+     * // Create one EvaluationTemplate
+     * const EvaluationTemplate = await prisma.evaluationTemplate.create({
+     *   data: {
+     *     // ... data to create a EvaluationTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends EvaluationTemplateCreateArgs>(args: SelectSubset<T, EvaluationTemplateCreateArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EvaluationTemplates.
+     * @param {EvaluationTemplateCreateManyArgs} args - Arguments to create many EvaluationTemplates.
+     * @example
+     * // Create many EvaluationTemplates
+     * const evaluationTemplate = await prisma.evaluationTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EvaluationTemplateCreateManyArgs>(args?: SelectSubset<T, EvaluationTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EvaluationTemplates and returns the data saved in the database.
+     * @param {EvaluationTemplateCreateManyAndReturnArgs} args - Arguments to create many EvaluationTemplates.
+     * @example
+     * // Create many EvaluationTemplates
+     * const evaluationTemplate = await prisma.evaluationTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EvaluationTemplates and only return the `id`
+     * const evaluationTemplateWithIdOnly = await prisma.evaluationTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EvaluationTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, EvaluationTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EvaluationTemplate.
+     * @param {EvaluationTemplateDeleteArgs} args - Arguments to delete one EvaluationTemplate.
+     * @example
+     * // Delete one EvaluationTemplate
+     * const EvaluationTemplate = await prisma.evaluationTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one EvaluationTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EvaluationTemplateDeleteArgs>(args: SelectSubset<T, EvaluationTemplateDeleteArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EvaluationTemplate.
+     * @param {EvaluationTemplateUpdateArgs} args - Arguments to update one EvaluationTemplate.
+     * @example
+     * // Update one EvaluationTemplate
+     * const evaluationTemplate = await prisma.evaluationTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EvaluationTemplateUpdateArgs>(args: SelectSubset<T, EvaluationTemplateUpdateArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EvaluationTemplates.
+     * @param {EvaluationTemplateDeleteManyArgs} args - Arguments to filter EvaluationTemplates to delete.
+     * @example
+     * // Delete a few EvaluationTemplates
+     * const { count } = await prisma.evaluationTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EvaluationTemplateDeleteManyArgs>(args?: SelectSubset<T, EvaluationTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EvaluationTemplates
+     * const evaluationTemplate = await prisma.evaluationTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EvaluationTemplateUpdateManyArgs>(args: SelectSubset<T, EvaluationTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationTemplates and returns the data updated in the database.
+     * @param {EvaluationTemplateUpdateManyAndReturnArgs} args - Arguments to update many EvaluationTemplates.
+     * @example
+     * // Update many EvaluationTemplates
+     * const evaluationTemplate = await prisma.evaluationTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EvaluationTemplates and only return the `id`
+     * const evaluationTemplateWithIdOnly = await prisma.evaluationTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EvaluationTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, EvaluationTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EvaluationTemplate.
+     * @param {EvaluationTemplateUpsertArgs} args - Arguments to update or create a EvaluationTemplate.
+     * @example
+     * // Update or create a EvaluationTemplate
+     * const evaluationTemplate = await prisma.evaluationTemplate.upsert({
+     *   create: {
+     *     // ... data to create a EvaluationTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EvaluationTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EvaluationTemplateUpsertArgs>(args: SelectSubset<T, EvaluationTemplateUpsertArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EvaluationTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateCountArgs} args - Arguments to filter EvaluationTemplates to count.
+     * @example
+     * // Count the number of EvaluationTemplates
+     * const count = await prisma.evaluationTemplate.count({
+     *   where: {
+     *     // ... the filter for the EvaluationTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends EvaluationTemplateCountArgs>(
+      args?: Subset<T, EvaluationTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EvaluationTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EvaluationTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EvaluationTemplateAggregateArgs>(args: Subset<T, EvaluationTemplateAggregateArgs>): Prisma.PrismaPromise<GetEvaluationTemplateAggregateType<T>>
+
+    /**
+     * Group by EvaluationTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EvaluationTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EvaluationTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: EvaluationTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EvaluationTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEvaluationTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EvaluationTemplate model
+   */
+  readonly fields: EvaluationTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EvaluationTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EvaluationTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    criteria<T extends EvaluationTemplate$criteriaArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationTemplate$criteriaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    questionRequestTemplates<T extends EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EvaluationTemplate model
+   */
+  interface EvaluationTemplateFieldRefs {
+    readonly id: FieldRef<"EvaluationTemplate", 'Int'>
+    readonly name: FieldRef<"EvaluationTemplate", 'String'>
+    readonly description: FieldRef<"EvaluationTemplate", 'String'>
+    readonly evaluationPrompt: FieldRef<"EvaluationTemplate", 'String'>
+    readonly createdAt: FieldRef<"EvaluationTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"EvaluationTemplate", 'DateTime'>
+    readonly ownerId: FieldRef<"EvaluationTemplate", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EvaluationTemplate findUnique
+   */
+  export type EvaluationTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplate to fetch.
+     */
+    where: EvaluationTemplateWhereUniqueInput
+  }
+
+  /**
+   * EvaluationTemplate findUniqueOrThrow
+   */
+  export type EvaluationTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplate to fetch.
+     */
+    where: EvaluationTemplateWhereUniqueInput
+  }
+
+  /**
+   * EvaluationTemplate findFirst
+   */
+  export type EvaluationTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplate to fetch.
+     */
+    where?: EvaluationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationTemplates to fetch.
+     */
+    orderBy?: EvaluationTemplateOrderByWithRelationInput | EvaluationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationTemplates.
+     */
+    cursor?: EvaluationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationTemplates.
+     */
+    distinct?: EvaluationTemplateScalarFieldEnum | EvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplate findFirstOrThrow
+   */
+  export type EvaluationTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplate to fetch.
+     */
+    where?: EvaluationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationTemplates to fetch.
+     */
+    orderBy?: EvaluationTemplateOrderByWithRelationInput | EvaluationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationTemplates.
+     */
+    cursor?: EvaluationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationTemplates.
+     */
+    distinct?: EvaluationTemplateScalarFieldEnum | EvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplate findMany
+   */
+  export type EvaluationTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplates to fetch.
+     */
+    where?: EvaluationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationTemplates to fetch.
+     */
+    orderBy?: EvaluationTemplateOrderByWithRelationInput | EvaluationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EvaluationTemplates.
+     */
+    cursor?: EvaluationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationTemplates.
+     */
+    skip?: number
+    distinct?: EvaluationTemplateScalarFieldEnum | EvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplate create
+   */
+  export type EvaluationTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EvaluationTemplate.
+     */
+    data: XOR<EvaluationTemplateCreateInput, EvaluationTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * EvaluationTemplate createMany
+   */
+  export type EvaluationTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EvaluationTemplates.
+     */
+    data: EvaluationTemplateCreateManyInput | EvaluationTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EvaluationTemplate createManyAndReturn
+   */
+  export type EvaluationTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many EvaluationTemplates.
+     */
+    data: EvaluationTemplateCreateManyInput | EvaluationTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationTemplate update
+   */
+  export type EvaluationTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EvaluationTemplate.
+     */
+    data: XOR<EvaluationTemplateUpdateInput, EvaluationTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which EvaluationTemplate to update.
+     */
+    where: EvaluationTemplateWhereUniqueInput
+  }
+
+  /**
+   * EvaluationTemplate updateMany
+   */
+  export type EvaluationTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EvaluationTemplates.
+     */
+    data: XOR<EvaluationTemplateUpdateManyMutationInput, EvaluationTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationTemplates to update
+     */
+    where?: EvaluationTemplateWhereInput
+    /**
+     * Limit how many EvaluationTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationTemplate updateManyAndReturn
+   */
+  export type EvaluationTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update EvaluationTemplates.
+     */
+    data: XOR<EvaluationTemplateUpdateManyMutationInput, EvaluationTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationTemplates to update
+     */
+    where?: EvaluationTemplateWhereInput
+    /**
+     * Limit how many EvaluationTemplates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationTemplate upsert
+   */
+  export type EvaluationTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EvaluationTemplate to update in case it exists.
+     */
+    where: EvaluationTemplateWhereUniqueInput
+    /**
+     * In case the EvaluationTemplate found by the `where` argument doesn't exist, create a new EvaluationTemplate with this data.
+     */
+    create: XOR<EvaluationTemplateCreateInput, EvaluationTemplateUncheckedCreateInput>
+    /**
+     * In case the EvaluationTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EvaluationTemplateUpdateInput, EvaluationTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * EvaluationTemplate delete
+   */
+  export type EvaluationTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which EvaluationTemplate to delete.
+     */
+    where: EvaluationTemplateWhereUniqueInput
+  }
+
+  /**
+   * EvaluationTemplate deleteMany
+   */
+  export type EvaluationTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationTemplates to delete
+     */
+    where?: EvaluationTemplateWhereInput
+    /**
+     * Limit how many EvaluationTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationTemplate.criteria
+   */
+  export type EvaluationTemplate$criteriaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    where?: EvaluationTemplateCriterionWhereInput
+    orderBy?: EvaluationTemplateCriterionOrderByWithRelationInput | EvaluationTemplateCriterionOrderByWithRelationInput[]
+    cursor?: EvaluationTemplateCriterionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvaluationTemplateCriterionScalarFieldEnum | EvaluationTemplateCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplate.questionRequestTemplates
+   */
+  export type EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuestionRequestTemplate
+     */
+    select?: QuestionRequestTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuestionRequestTemplate
+     */
+    omit?: QuestionRequestTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionRequestTemplateInclude<ExtArgs> | null
+    where?: QuestionRequestTemplateWhereInput
+    orderBy?: QuestionRequestTemplateOrderByWithRelationInput | QuestionRequestTemplateOrderByWithRelationInput[]
+    cursor?: QuestionRequestTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuestionRequestTemplateScalarFieldEnum | QuestionRequestTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplate without action
+   */
+  export type EvaluationTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EvaluationTemplateCriterion
+   */
+
+  export type AggregateEvaluationTemplateCriterion = {
+    _count: EvaluationTemplateCriterionCountAggregateOutputType | null
+    _avg: EvaluationTemplateCriterionAvgAggregateOutputType | null
+    _sum: EvaluationTemplateCriterionSumAggregateOutputType | null
+    _min: EvaluationTemplateCriterionMinAggregateOutputType | null
+    _max: EvaluationTemplateCriterionMaxAggregateOutputType | null
+  }
+
+  export type EvaluationTemplateCriterionAvgAggregateOutputType = {
+    id: number | null
+    weight: number | null
+    order: number | null
+    criterionId: number | null
+    templateId: number | null
+  }
+
+  export type EvaluationTemplateCriterionSumAggregateOutputType = {
+    id: number | null
+    weight: number | null
+    order: number | null
+    criterionId: number | null
+    templateId: number | null
+  }
+
+  export type EvaluationTemplateCriterionMinAggregateOutputType = {
+    id: number | null
+    weight: number | null
+    order: number | null
+    criterionId: number | null
+    templateId: number | null
+  }
+
+  export type EvaluationTemplateCriterionMaxAggregateOutputType = {
+    id: number | null
+    weight: number | null
+    order: number | null
+    criterionId: number | null
+    templateId: number | null
+  }
+
+  export type EvaluationTemplateCriterionCountAggregateOutputType = {
+    id: number
+    weight: number
+    order: number
+    criterionId: number
+    templateId: number
+    _all: number
+  }
+
+
+  export type EvaluationTemplateCriterionAvgAggregateInputType = {
+    id?: true
+    weight?: true
+    order?: true
+    criterionId?: true
+    templateId?: true
+  }
+
+  export type EvaluationTemplateCriterionSumAggregateInputType = {
+    id?: true
+    weight?: true
+    order?: true
+    criterionId?: true
+    templateId?: true
+  }
+
+  export type EvaluationTemplateCriterionMinAggregateInputType = {
+    id?: true
+    weight?: true
+    order?: true
+    criterionId?: true
+    templateId?: true
+  }
+
+  export type EvaluationTemplateCriterionMaxAggregateInputType = {
+    id?: true
+    weight?: true
+    order?: true
+    criterionId?: true
+    templateId?: true
+  }
+
+  export type EvaluationTemplateCriterionCountAggregateInputType = {
+    id?: true
+    weight?: true
+    order?: true
+    criterionId?: true
+    templateId?: true
+    _all?: true
+  }
+
+  export type EvaluationTemplateCriterionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationTemplateCriterion to aggregate.
+     */
+    where?: EvaluationTemplateCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationTemplateCriteria to fetch.
+     */
+    orderBy?: EvaluationTemplateCriterionOrderByWithRelationInput | EvaluationTemplateCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EvaluationTemplateCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationTemplateCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationTemplateCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EvaluationTemplateCriteria
+    **/
+    _count?: true | EvaluationTemplateCriterionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EvaluationTemplateCriterionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EvaluationTemplateCriterionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EvaluationTemplateCriterionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EvaluationTemplateCriterionMaxAggregateInputType
+  }
+
+  export type GetEvaluationTemplateCriterionAggregateType<T extends EvaluationTemplateCriterionAggregateArgs> = {
+        [P in keyof T & keyof AggregateEvaluationTemplateCriterion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEvaluationTemplateCriterion[P]>
+      : GetScalarType<T[P], AggregateEvaluationTemplateCriterion[P]>
+  }
+
+
+
+
+  export type EvaluationTemplateCriterionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationTemplateCriterionWhereInput
+    orderBy?: EvaluationTemplateCriterionOrderByWithAggregationInput | EvaluationTemplateCriterionOrderByWithAggregationInput[]
+    by: EvaluationTemplateCriterionScalarFieldEnum[] | EvaluationTemplateCriterionScalarFieldEnum
+    having?: EvaluationTemplateCriterionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EvaluationTemplateCriterionCountAggregateInputType | true
+    _avg?: EvaluationTemplateCriterionAvgAggregateInputType
+    _sum?: EvaluationTemplateCriterionSumAggregateInputType
+    _min?: EvaluationTemplateCriterionMinAggregateInputType
+    _max?: EvaluationTemplateCriterionMaxAggregateInputType
+  }
+
+  export type EvaluationTemplateCriterionGroupByOutputType = {
+    id: number
+    weight: number
+    order: number
+    criterionId: number
+    templateId: number
+    _count: EvaluationTemplateCriterionCountAggregateOutputType | null
+    _avg: EvaluationTemplateCriterionAvgAggregateOutputType | null
+    _sum: EvaluationTemplateCriterionSumAggregateOutputType | null
+    _min: EvaluationTemplateCriterionMinAggregateOutputType | null
+    _max: EvaluationTemplateCriterionMaxAggregateOutputType | null
+  }
+
+  type GetEvaluationTemplateCriterionGroupByPayload<T extends EvaluationTemplateCriterionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EvaluationTemplateCriterionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EvaluationTemplateCriterionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EvaluationTemplateCriterionGroupByOutputType[P]>
+            : GetScalarType<T[P], EvaluationTemplateCriterionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EvaluationTemplateCriterionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    weight?: boolean
+    order?: boolean
+    criterionId?: boolean
+    templateId?: boolean
+    criterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+    template?: boolean | EvaluationTemplateDefaultArgs<ExtArgs>
+    autoEvaluationCriteria?: boolean | EvaluationTemplateCriterion$autoEvaluationCriteriaArgs<ExtArgs>
+    _count?: boolean | EvaluationTemplateCriterionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationTemplateCriterion"]>
+
+  export type EvaluationTemplateCriterionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    weight?: boolean
+    order?: boolean
+    criterionId?: boolean
+    templateId?: boolean
+    criterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+    template?: boolean | EvaluationTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationTemplateCriterion"]>
+
+  export type EvaluationTemplateCriterionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    weight?: boolean
+    order?: boolean
+    criterionId?: boolean
+    templateId?: boolean
+    criterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+    template?: boolean | EvaluationTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationTemplateCriterion"]>
+
+  export type EvaluationTemplateCriterionSelectScalar = {
+    id?: boolean
+    weight?: boolean
+    order?: boolean
+    criterionId?: boolean
+    templateId?: boolean
+  }
+
+  export type EvaluationTemplateCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "weight" | "order" | "criterionId" | "templateId", ExtArgs["result"]["evaluationTemplateCriterion"]>
+  export type EvaluationTemplateCriterionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    criterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+    template?: boolean | EvaluationTemplateDefaultArgs<ExtArgs>
+    autoEvaluationCriteria?: boolean | EvaluationTemplateCriterion$autoEvaluationCriteriaArgs<ExtArgs>
+    _count?: boolean | EvaluationTemplateCriterionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type EvaluationTemplateCriterionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    criterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+    template?: boolean | EvaluationTemplateDefaultArgs<ExtArgs>
+  }
+  export type EvaluationTemplateCriterionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    criterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+    template?: boolean | EvaluationTemplateDefaultArgs<ExtArgs>
+  }
+
+  export type $EvaluationTemplateCriterionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EvaluationTemplateCriterion"
+    objects: {
+      criterion: Prisma.$EvaluationCriterionPayload<ExtArgs>
+      template: Prisma.$EvaluationTemplatePayload<ExtArgs>
+      autoEvaluationCriteria: Prisma.$AutoEvaluationCriterionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      weight: number
+      order: number
+      criterionId: number
+      templateId: number
+    }, ExtArgs["result"]["evaluationTemplateCriterion"]>
+    composites: {}
+  }
+
+  type EvaluationTemplateCriterionGetPayload<S extends boolean | null | undefined | EvaluationTemplateCriterionDefaultArgs> = $Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload, S>
+
+  type EvaluationTemplateCriterionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EvaluationTemplateCriterionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EvaluationTemplateCriterionCountAggregateInputType | true
+    }
+
+  export interface EvaluationTemplateCriterionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EvaluationTemplateCriterion'], meta: { name: 'EvaluationTemplateCriterion' } }
+    /**
+     * Find zero or one EvaluationTemplateCriterion that matches the filter.
+     * @param {EvaluationTemplateCriterionFindUniqueArgs} args - Arguments to find a EvaluationTemplateCriterion
+     * @example
+     * // Get one EvaluationTemplateCriterion
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EvaluationTemplateCriterionFindUniqueArgs>(args: SelectSubset<T, EvaluationTemplateCriterionFindUniqueArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EvaluationTemplateCriterion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EvaluationTemplateCriterionFindUniqueOrThrowArgs} args - Arguments to find a EvaluationTemplateCriterion
+     * @example
+     * // Get one EvaluationTemplateCriterion
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EvaluationTemplateCriterionFindUniqueOrThrowArgs>(args: SelectSubset<T, EvaluationTemplateCriterionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationTemplateCriterion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateCriterionFindFirstArgs} args - Arguments to find a EvaluationTemplateCriterion
+     * @example
+     * // Get one EvaluationTemplateCriterion
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EvaluationTemplateCriterionFindFirstArgs>(args?: SelectSubset<T, EvaluationTemplateCriterionFindFirstArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationTemplateCriterion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateCriterionFindFirstOrThrowArgs} args - Arguments to find a EvaluationTemplateCriterion
+     * @example
+     * // Get one EvaluationTemplateCriterion
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EvaluationTemplateCriterionFindFirstOrThrowArgs>(args?: SelectSubset<T, EvaluationTemplateCriterionFindFirstOrThrowArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EvaluationTemplateCriteria that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateCriterionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EvaluationTemplateCriteria
+     * const evaluationTemplateCriteria = await prisma.evaluationTemplateCriterion.findMany()
+     * 
+     * // Get first 10 EvaluationTemplateCriteria
+     * const evaluationTemplateCriteria = await prisma.evaluationTemplateCriterion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const evaluationTemplateCriterionWithIdOnly = await prisma.evaluationTemplateCriterion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EvaluationTemplateCriterionFindManyArgs>(args?: SelectSubset<T, EvaluationTemplateCriterionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EvaluationTemplateCriterion.
+     * @param {EvaluationTemplateCriterionCreateArgs} args - Arguments to create a EvaluationTemplateCriterion.
+     * @example
+     * // Create one EvaluationTemplateCriterion
+     * const EvaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.create({
+     *   data: {
+     *     // ... data to create a EvaluationTemplateCriterion
+     *   }
+     * })
+     * 
+     */
+    create<T extends EvaluationTemplateCriterionCreateArgs>(args: SelectSubset<T, EvaluationTemplateCriterionCreateArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EvaluationTemplateCriteria.
+     * @param {EvaluationTemplateCriterionCreateManyArgs} args - Arguments to create many EvaluationTemplateCriteria.
+     * @example
+     * // Create many EvaluationTemplateCriteria
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EvaluationTemplateCriterionCreateManyArgs>(args?: SelectSubset<T, EvaluationTemplateCriterionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EvaluationTemplateCriteria and returns the data saved in the database.
+     * @param {EvaluationTemplateCriterionCreateManyAndReturnArgs} args - Arguments to create many EvaluationTemplateCriteria.
+     * @example
+     * // Create many EvaluationTemplateCriteria
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EvaluationTemplateCriteria and only return the `id`
+     * const evaluationTemplateCriterionWithIdOnly = await prisma.evaluationTemplateCriterion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EvaluationTemplateCriterionCreateManyAndReturnArgs>(args?: SelectSubset<T, EvaluationTemplateCriterionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EvaluationTemplateCriterion.
+     * @param {EvaluationTemplateCriterionDeleteArgs} args - Arguments to delete one EvaluationTemplateCriterion.
+     * @example
+     * // Delete one EvaluationTemplateCriterion
+     * const EvaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.delete({
+     *   where: {
+     *     // ... filter to delete one EvaluationTemplateCriterion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EvaluationTemplateCriterionDeleteArgs>(args: SelectSubset<T, EvaluationTemplateCriterionDeleteArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EvaluationTemplateCriterion.
+     * @param {EvaluationTemplateCriterionUpdateArgs} args - Arguments to update one EvaluationTemplateCriterion.
+     * @example
+     * // Update one EvaluationTemplateCriterion
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EvaluationTemplateCriterionUpdateArgs>(args: SelectSubset<T, EvaluationTemplateCriterionUpdateArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EvaluationTemplateCriteria.
+     * @param {EvaluationTemplateCriterionDeleteManyArgs} args - Arguments to filter EvaluationTemplateCriteria to delete.
+     * @example
+     * // Delete a few EvaluationTemplateCriteria
+     * const { count } = await prisma.evaluationTemplateCriterion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EvaluationTemplateCriterionDeleteManyArgs>(args?: SelectSubset<T, EvaluationTemplateCriterionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationTemplateCriteria.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateCriterionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EvaluationTemplateCriteria
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EvaluationTemplateCriterionUpdateManyArgs>(args: SelectSubset<T, EvaluationTemplateCriterionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationTemplateCriteria and returns the data updated in the database.
+     * @param {EvaluationTemplateCriterionUpdateManyAndReturnArgs} args - Arguments to update many EvaluationTemplateCriteria.
+     * @example
+     * // Update many EvaluationTemplateCriteria
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EvaluationTemplateCriteria and only return the `id`
+     * const evaluationTemplateCriterionWithIdOnly = await prisma.evaluationTemplateCriterion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EvaluationTemplateCriterionUpdateManyAndReturnArgs>(args: SelectSubset<T, EvaluationTemplateCriterionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EvaluationTemplateCriterion.
+     * @param {EvaluationTemplateCriterionUpsertArgs} args - Arguments to update or create a EvaluationTemplateCriterion.
+     * @example
+     * // Update or create a EvaluationTemplateCriterion
+     * const evaluationTemplateCriterion = await prisma.evaluationTemplateCriterion.upsert({
+     *   create: {
+     *     // ... data to create a EvaluationTemplateCriterion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EvaluationTemplateCriterion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EvaluationTemplateCriterionUpsertArgs>(args: SelectSubset<T, EvaluationTemplateCriterionUpsertArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EvaluationTemplateCriteria.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateCriterionCountArgs} args - Arguments to filter EvaluationTemplateCriteria to count.
+     * @example
+     * // Count the number of EvaluationTemplateCriteria
+     * const count = await prisma.evaluationTemplateCriterion.count({
+     *   where: {
+     *     // ... the filter for the EvaluationTemplateCriteria we want to count
+     *   }
+     * })
+    **/
+    count<T extends EvaluationTemplateCriterionCountArgs>(
+      args?: Subset<T, EvaluationTemplateCriterionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EvaluationTemplateCriterionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EvaluationTemplateCriterion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateCriterionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EvaluationTemplateCriterionAggregateArgs>(args: Subset<T, EvaluationTemplateCriterionAggregateArgs>): Prisma.PrismaPromise<GetEvaluationTemplateCriterionAggregateType<T>>
+
+    /**
+     * Group by EvaluationTemplateCriterion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationTemplateCriterionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EvaluationTemplateCriterionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EvaluationTemplateCriterionGroupByArgs['orderBy'] }
+        : { orderBy?: EvaluationTemplateCriterionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EvaluationTemplateCriterionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEvaluationTemplateCriterionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EvaluationTemplateCriterion model
+   */
+  readonly fields: EvaluationTemplateCriterionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EvaluationTemplateCriterion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EvaluationTemplateCriterionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    criterion<T extends EvaluationCriterionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterionDefaultArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    template<T extends EvaluationTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationTemplateDefaultArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    autoEvaluationCriteria<T extends EvaluationTemplateCriterion$autoEvaluationCriteriaArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationTemplateCriterion$autoEvaluationCriteriaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoEvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EvaluationTemplateCriterion model
+   */
+  interface EvaluationTemplateCriterionFieldRefs {
+    readonly id: FieldRef<"EvaluationTemplateCriterion", 'Int'>
+    readonly weight: FieldRef<"EvaluationTemplateCriterion", 'Float'>
+    readonly order: FieldRef<"EvaluationTemplateCriterion", 'Int'>
+    readonly criterionId: FieldRef<"EvaluationTemplateCriterion", 'Int'>
+    readonly templateId: FieldRef<"EvaluationTemplateCriterion", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EvaluationTemplateCriterion findUnique
+   */
+  export type EvaluationTemplateCriterionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplateCriterion to fetch.
+     */
+    where: EvaluationTemplateCriterionWhereUniqueInput
+  }
+
+  /**
+   * EvaluationTemplateCriterion findUniqueOrThrow
+   */
+  export type EvaluationTemplateCriterionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplateCriterion to fetch.
+     */
+    where: EvaluationTemplateCriterionWhereUniqueInput
+  }
+
+  /**
+   * EvaluationTemplateCriterion findFirst
+   */
+  export type EvaluationTemplateCriterionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplateCriterion to fetch.
+     */
+    where?: EvaluationTemplateCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationTemplateCriteria to fetch.
+     */
+    orderBy?: EvaluationTemplateCriterionOrderByWithRelationInput | EvaluationTemplateCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationTemplateCriteria.
+     */
+    cursor?: EvaluationTemplateCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationTemplateCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationTemplateCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationTemplateCriteria.
+     */
+    distinct?: EvaluationTemplateCriterionScalarFieldEnum | EvaluationTemplateCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplateCriterion findFirstOrThrow
+   */
+  export type EvaluationTemplateCriterionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplateCriterion to fetch.
+     */
+    where?: EvaluationTemplateCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationTemplateCriteria to fetch.
+     */
+    orderBy?: EvaluationTemplateCriterionOrderByWithRelationInput | EvaluationTemplateCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationTemplateCriteria.
+     */
+    cursor?: EvaluationTemplateCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationTemplateCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationTemplateCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationTemplateCriteria.
+     */
+    distinct?: EvaluationTemplateCriterionScalarFieldEnum | EvaluationTemplateCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplateCriterion findMany
+   */
+  export type EvaluationTemplateCriterionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationTemplateCriteria to fetch.
+     */
+    where?: EvaluationTemplateCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationTemplateCriteria to fetch.
+     */
+    orderBy?: EvaluationTemplateCriterionOrderByWithRelationInput | EvaluationTemplateCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EvaluationTemplateCriteria.
+     */
+    cursor?: EvaluationTemplateCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationTemplateCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationTemplateCriteria.
+     */
+    skip?: number
+    distinct?: EvaluationTemplateCriterionScalarFieldEnum | EvaluationTemplateCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplateCriterion create
+   */
+  export type EvaluationTemplateCriterionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EvaluationTemplateCriterion.
+     */
+    data: XOR<EvaluationTemplateCriterionCreateInput, EvaluationTemplateCriterionUncheckedCreateInput>
+  }
+
+  /**
+   * EvaluationTemplateCriterion createMany
+   */
+  export type EvaluationTemplateCriterionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EvaluationTemplateCriteria.
+     */
+    data: EvaluationTemplateCriterionCreateManyInput | EvaluationTemplateCriterionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EvaluationTemplateCriterion createManyAndReturn
+   */
+  export type EvaluationTemplateCriterionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * The data used to create many EvaluationTemplateCriteria.
+     */
+    data: EvaluationTemplateCriterionCreateManyInput | EvaluationTemplateCriterionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationTemplateCriterion update
+   */
+  export type EvaluationTemplateCriterionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EvaluationTemplateCriterion.
+     */
+    data: XOR<EvaluationTemplateCriterionUpdateInput, EvaluationTemplateCriterionUncheckedUpdateInput>
+    /**
+     * Choose, which EvaluationTemplateCriterion to update.
+     */
+    where: EvaluationTemplateCriterionWhereUniqueInput
+  }
+
+  /**
+   * EvaluationTemplateCriterion updateMany
+   */
+  export type EvaluationTemplateCriterionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EvaluationTemplateCriteria.
+     */
+    data: XOR<EvaluationTemplateCriterionUpdateManyMutationInput, EvaluationTemplateCriterionUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationTemplateCriteria to update
+     */
+    where?: EvaluationTemplateCriterionWhereInput
+    /**
+     * Limit how many EvaluationTemplateCriteria to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationTemplateCriterion updateManyAndReturn
+   */
+  export type EvaluationTemplateCriterionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * The data used to update EvaluationTemplateCriteria.
+     */
+    data: XOR<EvaluationTemplateCriterionUpdateManyMutationInput, EvaluationTemplateCriterionUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationTemplateCriteria to update
+     */
+    where?: EvaluationTemplateCriterionWhereInput
+    /**
+     * Limit how many EvaluationTemplateCriteria to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationTemplateCriterion upsert
+   */
+  export type EvaluationTemplateCriterionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EvaluationTemplateCriterion to update in case it exists.
+     */
+    where: EvaluationTemplateCriterionWhereUniqueInput
+    /**
+     * In case the EvaluationTemplateCriterion found by the `where` argument doesn't exist, create a new EvaluationTemplateCriterion with this data.
+     */
+    create: XOR<EvaluationTemplateCriterionCreateInput, EvaluationTemplateCriterionUncheckedCreateInput>
+    /**
+     * In case the EvaluationTemplateCriterion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EvaluationTemplateCriterionUpdateInput, EvaluationTemplateCriterionUncheckedUpdateInput>
+  }
+
+  /**
+   * EvaluationTemplateCriterion delete
+   */
+  export type EvaluationTemplateCriterionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    /**
+     * Filter which EvaluationTemplateCriterion to delete.
+     */
+    where: EvaluationTemplateCriterionWhereUniqueInput
+  }
+
+  /**
+   * EvaluationTemplateCriterion deleteMany
+   */
+  export type EvaluationTemplateCriterionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationTemplateCriteria to delete
+     */
+    where?: EvaluationTemplateCriterionWhereInput
+    /**
+     * Limit how many EvaluationTemplateCriteria to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationTemplateCriterion.autoEvaluationCriteria
+   */
+  export type EvaluationTemplateCriterion$autoEvaluationCriteriaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoEvaluationCriterion
+     */
+    select?: AutoEvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoEvaluationCriterion
+     */
+    omit?: AutoEvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoEvaluationCriterionInclude<ExtArgs> | null
+    where?: AutoEvaluationCriterionWhereInput
+    orderBy?: AutoEvaluationCriterionOrderByWithRelationInput | AutoEvaluationCriterionOrderByWithRelationInput[]
+    cursor?: AutoEvaluationCriterionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AutoEvaluationCriterionScalarFieldEnum | AutoEvaluationCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplateCriterion without action
+   */
+  export type EvaluationTemplateCriterionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EvaluationCriterion
+   */
+
+  export type AggregateEvaluationCriterion = {
+    _count: EvaluationCriterionCountAggregateOutputType | null
+    _avg: EvaluationCriterionAvgAggregateOutputType | null
+    _sum: EvaluationCriterionSumAggregateOutputType | null
+    _min: EvaluationCriterionMinAggregateOutputType | null
+    _max: EvaluationCriterionMaxAggregateOutputType | null
+  }
+
+  export type EvaluationCriterionAvgAggregateOutputType = {
+    id: number | null
+    ownerId: number | null
+  }
+
+  export type EvaluationCriterionSumAggregateOutputType = {
+    id: number | null
+    ownerId: number | null
+  }
+
+  export type EvaluationCriterionMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    description: string | null
+    createdAt: Date | null
+    ownerId: number | null
+  }
+
+  export type EvaluationCriterionMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    description: string | null
+    createdAt: Date | null
+    ownerId: number | null
+  }
+
+  export type EvaluationCriterionCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    createdAt: number
+    ownerId: number
+    _all: number
+  }
+
+
+  export type EvaluationCriterionAvgAggregateInputType = {
+    id?: true
+    ownerId?: true
+  }
+
+  export type EvaluationCriterionSumAggregateInputType = {
+    id?: true
+    ownerId?: true
+  }
+
+  export type EvaluationCriterionMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    ownerId?: true
+  }
+
+  export type EvaluationCriterionMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    ownerId?: true
+  }
+
+  export type EvaluationCriterionCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    ownerId?: true
+    _all?: true
+  }
+
+  export type EvaluationCriterionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationCriterion to aggregate.
+     */
+    where?: EvaluationCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationCriteria to fetch.
+     */
+    orderBy?: EvaluationCriterionOrderByWithRelationInput | EvaluationCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EvaluationCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EvaluationCriteria
+    **/
+    _count?: true | EvaluationCriterionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EvaluationCriterionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EvaluationCriterionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EvaluationCriterionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EvaluationCriterionMaxAggregateInputType
+  }
+
+  export type GetEvaluationCriterionAggregateType<T extends EvaluationCriterionAggregateArgs> = {
+        [P in keyof T & keyof AggregateEvaluationCriterion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEvaluationCriterion[P]>
+      : GetScalarType<T[P], AggregateEvaluationCriterion[P]>
+  }
+
+
+
+
+  export type EvaluationCriterionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationCriterionWhereInput
+    orderBy?: EvaluationCriterionOrderByWithAggregationInput | EvaluationCriterionOrderByWithAggregationInput[]
+    by: EvaluationCriterionScalarFieldEnum[] | EvaluationCriterionScalarFieldEnum
+    having?: EvaluationCriterionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EvaluationCriterionCountAggregateInputType | true
+    _avg?: EvaluationCriterionAvgAggregateInputType
+    _sum?: EvaluationCriterionSumAggregateInputType
+    _min?: EvaluationCriterionMinAggregateInputType
+    _max?: EvaluationCriterionMaxAggregateInputType
+  }
+
+  export type EvaluationCriterionGroupByOutputType = {
+    id: number
+    name: string
+    description: string
+    createdAt: Date
+    ownerId: number
+    _count: EvaluationCriterionCountAggregateOutputType | null
+    _avg: EvaluationCriterionAvgAggregateOutputType | null
+    _sum: EvaluationCriterionSumAggregateOutputType | null
+    _min: EvaluationCriterionMinAggregateOutputType | null
+    _max: EvaluationCriterionMaxAggregateOutputType | null
+  }
+
+  type GetEvaluationCriterionGroupByPayload<T extends EvaluationCriterionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EvaluationCriterionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EvaluationCriterionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EvaluationCriterionGroupByOutputType[P]>
+            : GetScalarType<T[P], EvaluationCriterionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EvaluationCriterionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    templates?: boolean | EvaluationCriterion$templatesArgs<ExtArgs>
+    _count?: boolean | EvaluationCriterionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationCriterion"]>
+
+  export type EvaluationCriterionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationCriterion"]>
+
+  export type EvaluationCriterionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    ownerId?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["evaluationCriterion"]>
+
+  export type EvaluationCriterionSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    ownerId?: boolean
+  }
+
+  export type EvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "ownerId", ExtArgs["result"]["evaluationCriterion"]>
+  export type EvaluationCriterionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    templates?: boolean | EvaluationCriterion$templatesArgs<ExtArgs>
+    _count?: boolean | EvaluationCriterionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type EvaluationCriterionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type EvaluationCriterionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $EvaluationCriterionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EvaluationCriterion"
+    objects: {
+      owner: Prisma.$UserPayload<ExtArgs>
+      templates: Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      description: string
+      createdAt: Date
+      ownerId: number
+    }, ExtArgs["result"]["evaluationCriterion"]>
+    composites: {}
+  }
+
+  type EvaluationCriterionGetPayload<S extends boolean | null | undefined | EvaluationCriterionDefaultArgs> = $Result.GetResult<Prisma.$EvaluationCriterionPayload, S>
+
+  type EvaluationCriterionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EvaluationCriterionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EvaluationCriterionCountAggregateInputType | true
+    }
+
+  export interface EvaluationCriterionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EvaluationCriterion'], meta: { name: 'EvaluationCriterion' } }
+    /**
+     * Find zero or one EvaluationCriterion that matches the filter.
+     * @param {EvaluationCriterionFindUniqueArgs} args - Arguments to find a EvaluationCriterion
+     * @example
+     * // Get one EvaluationCriterion
+     * const evaluationCriterion = await prisma.evaluationCriterion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EvaluationCriterionFindUniqueArgs>(args: SelectSubset<T, EvaluationCriterionFindUniqueArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EvaluationCriterion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EvaluationCriterionFindUniqueOrThrowArgs} args - Arguments to find a EvaluationCriterion
+     * @example
+     * // Get one EvaluationCriterion
+     * const evaluationCriterion = await prisma.evaluationCriterion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EvaluationCriterionFindUniqueOrThrowArgs>(args: SelectSubset<T, EvaluationCriterionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationCriterion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationCriterionFindFirstArgs} args - Arguments to find a EvaluationCriterion
+     * @example
+     * // Get one EvaluationCriterion
+     * const evaluationCriterion = await prisma.evaluationCriterion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EvaluationCriterionFindFirstArgs>(args?: SelectSubset<T, EvaluationCriterionFindFirstArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EvaluationCriterion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationCriterionFindFirstOrThrowArgs} args - Arguments to find a EvaluationCriterion
+     * @example
+     * // Get one EvaluationCriterion
+     * const evaluationCriterion = await prisma.evaluationCriterion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EvaluationCriterionFindFirstOrThrowArgs>(args?: SelectSubset<T, EvaluationCriterionFindFirstOrThrowArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EvaluationCriteria that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationCriterionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EvaluationCriteria
+     * const evaluationCriteria = await prisma.evaluationCriterion.findMany()
+     * 
+     * // Get first 10 EvaluationCriteria
+     * const evaluationCriteria = await prisma.evaluationCriterion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const evaluationCriterionWithIdOnly = await prisma.evaluationCriterion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EvaluationCriterionFindManyArgs>(args?: SelectSubset<T, EvaluationCriterionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EvaluationCriterion.
+     * @param {EvaluationCriterionCreateArgs} args - Arguments to create a EvaluationCriterion.
+     * @example
+     * // Create one EvaluationCriterion
+     * const EvaluationCriterion = await prisma.evaluationCriterion.create({
+     *   data: {
+     *     // ... data to create a EvaluationCriterion
+     *   }
+     * })
+     * 
+     */
+    create<T extends EvaluationCriterionCreateArgs>(args: SelectSubset<T, EvaluationCriterionCreateArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EvaluationCriteria.
+     * @param {EvaluationCriterionCreateManyArgs} args - Arguments to create many EvaluationCriteria.
+     * @example
+     * // Create many EvaluationCriteria
+     * const evaluationCriterion = await prisma.evaluationCriterion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EvaluationCriterionCreateManyArgs>(args?: SelectSubset<T, EvaluationCriterionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EvaluationCriteria and returns the data saved in the database.
+     * @param {EvaluationCriterionCreateManyAndReturnArgs} args - Arguments to create many EvaluationCriteria.
+     * @example
+     * // Create many EvaluationCriteria
+     * const evaluationCriterion = await prisma.evaluationCriterion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EvaluationCriteria and only return the `id`
+     * const evaluationCriterionWithIdOnly = await prisma.evaluationCriterion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EvaluationCriterionCreateManyAndReturnArgs>(args?: SelectSubset<T, EvaluationCriterionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EvaluationCriterion.
+     * @param {EvaluationCriterionDeleteArgs} args - Arguments to delete one EvaluationCriterion.
+     * @example
+     * // Delete one EvaluationCriterion
+     * const EvaluationCriterion = await prisma.evaluationCriterion.delete({
+     *   where: {
+     *     // ... filter to delete one EvaluationCriterion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EvaluationCriterionDeleteArgs>(args: SelectSubset<T, EvaluationCriterionDeleteArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EvaluationCriterion.
+     * @param {EvaluationCriterionUpdateArgs} args - Arguments to update one EvaluationCriterion.
+     * @example
+     * // Update one EvaluationCriterion
+     * const evaluationCriterion = await prisma.evaluationCriterion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EvaluationCriterionUpdateArgs>(args: SelectSubset<T, EvaluationCriterionUpdateArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EvaluationCriteria.
+     * @param {EvaluationCriterionDeleteManyArgs} args - Arguments to filter EvaluationCriteria to delete.
+     * @example
+     * // Delete a few EvaluationCriteria
+     * const { count } = await prisma.evaluationCriterion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EvaluationCriterionDeleteManyArgs>(args?: SelectSubset<T, EvaluationCriterionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationCriteria.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationCriterionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EvaluationCriteria
+     * const evaluationCriterion = await prisma.evaluationCriterion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EvaluationCriterionUpdateManyArgs>(args: SelectSubset<T, EvaluationCriterionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EvaluationCriteria and returns the data updated in the database.
+     * @param {EvaluationCriterionUpdateManyAndReturnArgs} args - Arguments to update many EvaluationCriteria.
+     * @example
+     * // Update many EvaluationCriteria
+     * const evaluationCriterion = await prisma.evaluationCriterion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EvaluationCriteria and only return the `id`
+     * const evaluationCriterionWithIdOnly = await prisma.evaluationCriterion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EvaluationCriterionUpdateManyAndReturnArgs>(args: SelectSubset<T, EvaluationCriterionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EvaluationCriterion.
+     * @param {EvaluationCriterionUpsertArgs} args - Arguments to update or create a EvaluationCriterion.
+     * @example
+     * // Update or create a EvaluationCriterion
+     * const evaluationCriterion = await prisma.evaluationCriterion.upsert({
+     *   create: {
+     *     // ... data to create a EvaluationCriterion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EvaluationCriterion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EvaluationCriterionUpsertArgs>(args: SelectSubset<T, EvaluationCriterionUpsertArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EvaluationCriteria.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationCriterionCountArgs} args - Arguments to filter EvaluationCriteria to count.
+     * @example
+     * // Count the number of EvaluationCriteria
+     * const count = await prisma.evaluationCriterion.count({
+     *   where: {
+     *     // ... the filter for the EvaluationCriteria we want to count
+     *   }
+     * })
+    **/
+    count<T extends EvaluationCriterionCountArgs>(
+      args?: Subset<T, EvaluationCriterionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EvaluationCriterionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EvaluationCriterion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationCriterionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EvaluationCriterionAggregateArgs>(args: Subset<T, EvaluationCriterionAggregateArgs>): Prisma.PrismaPromise<GetEvaluationCriterionAggregateType<T>>
+
+    /**
+     * Group by EvaluationCriterion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EvaluationCriterionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EvaluationCriterionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EvaluationCriterionGroupByArgs['orderBy'] }
+        : { orderBy?: EvaluationCriterionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EvaluationCriterionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEvaluationCriterionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EvaluationCriterion model
+   */
+  readonly fields: EvaluationCriterionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EvaluationCriterion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EvaluationCriterionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    templates<T extends EvaluationCriterion$templatesArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterion$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EvaluationCriterion model
+   */
+  interface EvaluationCriterionFieldRefs {
+    readonly id: FieldRef<"EvaluationCriterion", 'Int'>
+    readonly name: FieldRef<"EvaluationCriterion", 'String'>
+    readonly description: FieldRef<"EvaluationCriterion", 'String'>
+    readonly createdAt: FieldRef<"EvaluationCriterion", 'DateTime'>
+    readonly ownerId: FieldRef<"EvaluationCriterion", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EvaluationCriterion findUnique
+   */
+  export type EvaluationCriterionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationCriterion to fetch.
+     */
+    where: EvaluationCriterionWhereUniqueInput
+  }
+
+  /**
+   * EvaluationCriterion findUniqueOrThrow
+   */
+  export type EvaluationCriterionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationCriterion to fetch.
+     */
+    where: EvaluationCriterionWhereUniqueInput
+  }
+
+  /**
+   * EvaluationCriterion findFirst
+   */
+  export type EvaluationCriterionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationCriterion to fetch.
+     */
+    where?: EvaluationCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationCriteria to fetch.
+     */
+    orderBy?: EvaluationCriterionOrderByWithRelationInput | EvaluationCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationCriteria.
+     */
+    cursor?: EvaluationCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationCriteria.
+     */
+    distinct?: EvaluationCriterionScalarFieldEnum | EvaluationCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationCriterion findFirstOrThrow
+   */
+  export type EvaluationCriterionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationCriterion to fetch.
+     */
+    where?: EvaluationCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationCriteria to fetch.
+     */
+    orderBy?: EvaluationCriterionOrderByWithRelationInput | EvaluationCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EvaluationCriteria.
+     */
+    cursor?: EvaluationCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationCriteria.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EvaluationCriteria.
+     */
+    distinct?: EvaluationCriterionScalarFieldEnum | EvaluationCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationCriterion findMany
+   */
+  export type EvaluationCriterionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter, which EvaluationCriteria to fetch.
+     */
+    where?: EvaluationCriterionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EvaluationCriteria to fetch.
+     */
+    orderBy?: EvaluationCriterionOrderByWithRelationInput | EvaluationCriterionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EvaluationCriteria.
+     */
+    cursor?: EvaluationCriterionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EvaluationCriteria from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EvaluationCriteria.
+     */
+    skip?: number
+    distinct?: EvaluationCriterionScalarFieldEnum | EvaluationCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationCriterion create
+   */
+  export type EvaluationCriterionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EvaluationCriterion.
+     */
+    data: XOR<EvaluationCriterionCreateInput, EvaluationCriterionUncheckedCreateInput>
+  }
+
+  /**
+   * EvaluationCriterion createMany
+   */
+  export type EvaluationCriterionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EvaluationCriteria.
+     */
+    data: EvaluationCriterionCreateManyInput | EvaluationCriterionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EvaluationCriterion createManyAndReturn
+   */
+  export type EvaluationCriterionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * The data used to create many EvaluationCriteria.
+     */
+    data: EvaluationCriterionCreateManyInput | EvaluationCriterionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationCriterion update
+   */
+  export type EvaluationCriterionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EvaluationCriterion.
+     */
+    data: XOR<EvaluationCriterionUpdateInput, EvaluationCriterionUncheckedUpdateInput>
+    /**
+     * Choose, which EvaluationCriterion to update.
+     */
+    where: EvaluationCriterionWhereUniqueInput
+  }
+
+  /**
+   * EvaluationCriterion updateMany
+   */
+  export type EvaluationCriterionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EvaluationCriteria.
+     */
+    data: XOR<EvaluationCriterionUpdateManyMutationInput, EvaluationCriterionUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationCriteria to update
+     */
+    where?: EvaluationCriterionWhereInput
+    /**
+     * Limit how many EvaluationCriteria to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationCriterion updateManyAndReturn
+   */
+  export type EvaluationCriterionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * The data used to update EvaluationCriteria.
+     */
+    data: XOR<EvaluationCriterionUpdateManyMutationInput, EvaluationCriterionUncheckedUpdateManyInput>
+    /**
+     * Filter which EvaluationCriteria to update
+     */
+    where?: EvaluationCriterionWhereInput
+    /**
+     * Limit how many EvaluationCriteria to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationCriterion upsert
+   */
+  export type EvaluationCriterionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EvaluationCriterion to update in case it exists.
+     */
+    where: EvaluationCriterionWhereUniqueInput
+    /**
+     * In case the EvaluationCriterion found by the `where` argument doesn't exist, create a new EvaluationCriterion with this data.
+     */
+    create: XOR<EvaluationCriterionCreateInput, EvaluationCriterionUncheckedCreateInput>
+    /**
+     * In case the EvaluationCriterion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EvaluationCriterionUpdateInput, EvaluationCriterionUncheckedUpdateInput>
+  }
+
+  /**
+   * EvaluationCriterion delete
+   */
+  export type EvaluationCriterionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    /**
+     * Filter which EvaluationCriterion to delete.
+     */
+    where: EvaluationCriterionWhereUniqueInput
+  }
+
+  /**
+   * EvaluationCriterion deleteMany
+   */
+  export type EvaluationCriterionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EvaluationCriteria to delete
+     */
+    where?: EvaluationCriterionWhereInput
+    /**
+     * Limit how many EvaluationCriteria to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EvaluationCriterion.templates
+   */
+  export type EvaluationCriterion$templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    where?: EvaluationTemplateCriterionWhereInput
+    orderBy?: EvaluationTemplateCriterionOrderByWithRelationInput | EvaluationTemplateCriterionOrderByWithRelationInput[]
+    cursor?: EvaluationTemplateCriterionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvaluationTemplateCriterionScalarFieldEnum | EvaluationTemplateCriterionScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationCriterion without action
+   */
+  export type EvaluationCriterionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
   }
 
 
@@ -11306,6 +15251,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionAvgAggregateOutputType = {
     id: number | null
     autoEvaluationId: number | null
+    templateCriterionId: number | null
     weight: number | null
     score: number | null
   }
@@ -11313,6 +15259,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionSumAggregateOutputType = {
     id: number | null
     autoEvaluationId: number | null
+    templateCriterionId: number | null
     weight: number | null
     score: number | null
   }
@@ -11320,6 +15267,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionMinAggregateOutputType = {
     id: number | null
     autoEvaluationId: number | null
+    templateCriterionId: number | null
     description: string | null
     weight: number | null
     score: number | null
@@ -11328,6 +15276,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionMaxAggregateOutputType = {
     id: number | null
     autoEvaluationId: number | null
+    templateCriterionId: number | null
     description: string | null
     weight: number | null
     score: number | null
@@ -11336,6 +15285,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionCountAggregateOutputType = {
     id: number
     autoEvaluationId: number
+    templateCriterionId: number
     description: number
     weight: number
     score: number
@@ -11346,6 +15296,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionAvgAggregateInputType = {
     id?: true
     autoEvaluationId?: true
+    templateCriterionId?: true
     weight?: true
     score?: true
   }
@@ -11353,6 +15304,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionSumAggregateInputType = {
     id?: true
     autoEvaluationId?: true
+    templateCriterionId?: true
     weight?: true
     score?: true
   }
@@ -11360,6 +15312,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionMinAggregateInputType = {
     id?: true
     autoEvaluationId?: true
+    templateCriterionId?: true
     description?: true
     weight?: true
     score?: true
@@ -11368,6 +15321,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionMaxAggregateInputType = {
     id?: true
     autoEvaluationId?: true
+    templateCriterionId?: true
     description?: true
     weight?: true
     score?: true
@@ -11376,6 +15330,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionCountAggregateInputType = {
     id?: true
     autoEvaluationId?: true
+    templateCriterionId?: true
     description?: true
     weight?: true
     score?: true
@@ -11471,6 +15426,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionGroupByOutputType = {
     id: number
     autoEvaluationId: number
+    templateCriterionId: number | null
     description: string
     weight: number
     score: number
@@ -11498,57 +15454,69 @@ export namespace Prisma {
   export type AutoEvaluationCriterionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     autoEvaluationId?: boolean
+    templateCriterionId?: boolean
     description?: boolean
     weight?: boolean
     score?: boolean
     autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+    templateCriterion?: boolean | AutoEvaluationCriterion$templateCriterionArgs<ExtArgs>
   }, ExtArgs["result"]["autoEvaluationCriterion"]>
 
   export type AutoEvaluationCriterionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     autoEvaluationId?: boolean
+    templateCriterionId?: boolean
     description?: boolean
     weight?: boolean
     score?: boolean
     autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+    templateCriterion?: boolean | AutoEvaluationCriterion$templateCriterionArgs<ExtArgs>
   }, ExtArgs["result"]["autoEvaluationCriterion"]>
 
   export type AutoEvaluationCriterionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     autoEvaluationId?: boolean
+    templateCriterionId?: boolean
     description?: boolean
     weight?: boolean
     score?: boolean
     autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+    templateCriterion?: boolean | AutoEvaluationCriterion$templateCriterionArgs<ExtArgs>
   }, ExtArgs["result"]["autoEvaluationCriterion"]>
 
   export type AutoEvaluationCriterionSelectScalar = {
     id?: boolean
     autoEvaluationId?: boolean
+    templateCriterionId?: boolean
     description?: boolean
     weight?: boolean
     score?: boolean
   }
 
-  export type AutoEvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "autoEvaluationId" | "description" | "weight" | "score", ExtArgs["result"]["autoEvaluationCriterion"]>
+  export type AutoEvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "autoEvaluationId" | "templateCriterionId" | "description" | "weight" | "score", ExtArgs["result"]["autoEvaluationCriterion"]>
   export type AutoEvaluationCriterionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+    templateCriterion?: boolean | AutoEvaluationCriterion$templateCriterionArgs<ExtArgs>
   }
   export type AutoEvaluationCriterionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+    templateCriterion?: boolean | AutoEvaluationCriterion$templateCriterionArgs<ExtArgs>
   }
   export type AutoEvaluationCriterionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     autoEvaluation?: boolean | AutoEvaluationDefaultArgs<ExtArgs>
+    templateCriterion?: boolean | AutoEvaluationCriterion$templateCriterionArgs<ExtArgs>
   }
 
   export type $AutoEvaluationCriterionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AutoEvaluationCriterion"
     objects: {
       autoEvaluation: Prisma.$AutoEvaluationPayload<ExtArgs>
+      templateCriterion: Prisma.$EvaluationTemplateCriterionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       autoEvaluationId: number
+      templateCriterionId: number | null
       description: string
       weight: number
       score: number
@@ -11947,6 +15915,7 @@ export namespace Prisma {
   export interface Prisma__AutoEvaluationCriterionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     autoEvaluation<T extends AutoEvaluationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AutoEvaluationDefaultArgs<ExtArgs>>): Prisma__AutoEvaluationClient<$Result.GetResult<Prisma.$AutoEvaluationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    templateCriterion<T extends AutoEvaluationCriterion$templateCriterionArgs<ExtArgs> = {}>(args?: Subset<T, AutoEvaluationCriterion$templateCriterionArgs<ExtArgs>>): Prisma__EvaluationTemplateCriterionClient<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11978,6 +15947,7 @@ export namespace Prisma {
   interface AutoEvaluationCriterionFieldRefs {
     readonly id: FieldRef<"AutoEvaluationCriterion", 'Int'>
     readonly autoEvaluationId: FieldRef<"AutoEvaluationCriterion", 'Int'>
+    readonly templateCriterionId: FieldRef<"AutoEvaluationCriterion", 'Int'>
     readonly description: FieldRef<"AutoEvaluationCriterion", 'String'>
     readonly weight: FieldRef<"AutoEvaluationCriterion", 'Float'>
     readonly score: FieldRef<"AutoEvaluationCriterion", 'Float'>
@@ -12377,6 +16347,25 @@ export namespace Prisma {
   }
 
   /**
+   * AutoEvaluationCriterion.templateCriterion
+   */
+  export type AutoEvaluationCriterion$templateCriterionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplateCriterion
+     */
+    select?: EvaluationTemplateCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplateCriterion
+     */
+    omit?: EvaluationTemplateCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateCriterionInclude<ExtArgs> | null
+    where?: EvaluationTemplateCriterionWhereInput
+  }
+
+  /**
    * AutoEvaluationCriterion without action
    */
   export type AutoEvaluationCriterionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12454,7 +16443,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     parameters: 'parameters',
-    ownerId: 'ownerId'
+    ownerId: 'ownerId',
+    evaluationTemplateId: 'evaluationTemplateId'
   };
 
   export type QuestionRequestTemplateScalarFieldEnum = (typeof QuestionRequestTemplateScalarFieldEnum)[keyof typeof QuestionRequestTemplateScalarFieldEnum]
@@ -12483,6 +16473,41 @@ export namespace Prisma {
   };
 
   export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+  export const EvaluationTemplateScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    evaluationPrompt: 'evaluationPrompt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    ownerId: 'ownerId'
+  };
+
+  export type EvaluationTemplateScalarFieldEnum = (typeof EvaluationTemplateScalarFieldEnum)[keyof typeof EvaluationTemplateScalarFieldEnum]
+
+
+  export const EvaluationTemplateCriterionScalarFieldEnum: {
+    id: 'id',
+    weight: 'weight',
+    order: 'order',
+    criterionId: 'criterionId',
+    templateId: 'templateId'
+  };
+
+  export type EvaluationTemplateCriterionScalarFieldEnum = (typeof EvaluationTemplateCriterionScalarFieldEnum)[keyof typeof EvaluationTemplateCriterionScalarFieldEnum]
+
+
+  export const EvaluationCriterionScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    createdAt: 'createdAt',
+    ownerId: 'ownerId'
+  };
+
+  export type EvaluationCriterionScalarFieldEnum = (typeof EvaluationCriterionScalarFieldEnum)[keyof typeof EvaluationCriterionScalarFieldEnum]
 
 
   export const AnswerScalarFieldEnum: {
@@ -12518,6 +16543,7 @@ export namespace Prisma {
   export const AutoEvaluationCriterionScalarFieldEnum: {
     id: 'id',
     autoEvaluationId: 'autoEvaluationId',
+    templateCriterionId: 'templateCriterionId',
     description: 'description',
     weight: 'weight',
     score: 'score'
@@ -12666,6 +16692,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
     questionRequests?: QuestionRequestListRelationFilter
     answers?: AnswerListRelationFilter
+    evaluationTemplates?: EvaluationTemplateListRelationFilter
+    evaluationCriterions?: EvaluationCriterionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -12682,6 +16710,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateOrderByRelationAggregateInput
     questionRequests?: QuestionRequestOrderByRelationAggregateInput
     answers?: AnswerOrderByRelationAggregateInput
+    evaluationTemplates?: EvaluationTemplateOrderByRelationAggregateInput
+    evaluationCriterions?: EvaluationCriterionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -12701,6 +16731,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
     questionRequests?: QuestionRequestListRelationFilter
     answers?: AnswerListRelationFilter
+    evaluationTemplates?: EvaluationTemplateListRelationFilter
+    evaluationCriterions?: EvaluationCriterionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -12864,8 +16896,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
     ownerId?: IntFilter<"QuestionRequestTemplate"> | number
+    evaluationTemplateId?: IntNullableFilter<"QuestionRequestTemplate"> | number | null
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     requests?: QuestionRequestListRelationFilter
+    evaluationTemplate?: XOR<EvaluationTemplateNullableScalarRelationFilter, EvaluationTemplateWhereInput> | null
   }
 
   export type QuestionRequestTemplateOrderByWithRelationInput = {
@@ -12877,8 +16911,10 @@ export namespace Prisma {
     updatedAt?: SortOrder
     parameters?: SortOrder
     ownerId?: SortOrder
+    evaluationTemplateId?: SortOrderInput | SortOrder
     owner?: UserOrderByWithRelationInput
     requests?: QuestionRequestOrderByRelationAggregateInput
+    evaluationTemplate?: EvaluationTemplateOrderByWithRelationInput
   }
 
   export type QuestionRequestTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -12893,8 +16929,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
     ownerId?: IntFilter<"QuestionRequestTemplate"> | number
+    evaluationTemplateId?: IntNullableFilter<"QuestionRequestTemplate"> | number | null
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     requests?: QuestionRequestListRelationFilter
+    evaluationTemplate?: XOR<EvaluationTemplateNullableScalarRelationFilter, EvaluationTemplateWhereInput> | null
   }, "id">
 
   export type QuestionRequestTemplateOrderByWithAggregationInput = {
@@ -12906,6 +16944,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     parameters?: SortOrder
     ownerId?: SortOrder
+    evaluationTemplateId?: SortOrderInput | SortOrder
     _count?: QuestionRequestTemplateCountOrderByAggregateInput
     _avg?: QuestionRequestTemplateAvgOrderByAggregateInput
     _max?: QuestionRequestTemplateMaxOrderByAggregateInput
@@ -12925,6 +16964,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"QuestionRequestTemplate"> | Date | string
     parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
     ownerId?: IntWithAggregatesFilter<"QuestionRequestTemplate"> | number
+    evaluationTemplateId?: IntNullableWithAggregatesFilter<"QuestionRequestTemplate"> | number | null
   }
 
   export type QuestionRequestWhereInput = {
@@ -13063,6 +17103,203 @@ export namespace Prisma {
     type?: StringWithAggregatesFilter<"Question"> | string
     evaluationCriteria?: JsonNullableListFilter<"Question">
     requestId?: IntWithAggregatesFilter<"Question"> | number
+  }
+
+  export type EvaluationTemplateWhereInput = {
+    AND?: EvaluationTemplateWhereInput | EvaluationTemplateWhereInput[]
+    OR?: EvaluationTemplateWhereInput[]
+    NOT?: EvaluationTemplateWhereInput | EvaluationTemplateWhereInput[]
+    id?: IntFilter<"EvaluationTemplate"> | number
+    name?: StringFilter<"EvaluationTemplate"> | string
+    description?: StringNullableFilter<"EvaluationTemplate"> | string | null
+    evaluationPrompt?: StringNullableFilter<"EvaluationTemplate"> | string | null
+    createdAt?: DateTimeFilter<"EvaluationTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"EvaluationTemplate"> | Date | string
+    ownerId?: IntFilter<"EvaluationTemplate"> | number
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    criteria?: EvaluationTemplateCriterionListRelationFilter
+    questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
+  }
+
+  export type EvaluationTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    evaluationPrompt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+    owner?: UserOrderByWithRelationInput
+    criteria?: EvaluationTemplateCriterionOrderByRelationAggregateInput
+    questionRequestTemplates?: QuestionRequestTemplateOrderByRelationAggregateInput
+  }
+
+  export type EvaluationTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: EvaluationTemplateWhereInput | EvaluationTemplateWhereInput[]
+    OR?: EvaluationTemplateWhereInput[]
+    NOT?: EvaluationTemplateWhereInput | EvaluationTemplateWhereInput[]
+    name?: StringFilter<"EvaluationTemplate"> | string
+    description?: StringNullableFilter<"EvaluationTemplate"> | string | null
+    evaluationPrompt?: StringNullableFilter<"EvaluationTemplate"> | string | null
+    createdAt?: DateTimeFilter<"EvaluationTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"EvaluationTemplate"> | Date | string
+    ownerId?: IntFilter<"EvaluationTemplate"> | number
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    criteria?: EvaluationTemplateCriterionListRelationFilter
+    questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
+  }, "id">
+
+  export type EvaluationTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    evaluationPrompt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+    _count?: EvaluationTemplateCountOrderByAggregateInput
+    _avg?: EvaluationTemplateAvgOrderByAggregateInput
+    _max?: EvaluationTemplateMaxOrderByAggregateInput
+    _min?: EvaluationTemplateMinOrderByAggregateInput
+    _sum?: EvaluationTemplateSumOrderByAggregateInput
+  }
+
+  export type EvaluationTemplateScalarWhereWithAggregatesInput = {
+    AND?: EvaluationTemplateScalarWhereWithAggregatesInput | EvaluationTemplateScalarWhereWithAggregatesInput[]
+    OR?: EvaluationTemplateScalarWhereWithAggregatesInput[]
+    NOT?: EvaluationTemplateScalarWhereWithAggregatesInput | EvaluationTemplateScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"EvaluationTemplate"> | number
+    name?: StringWithAggregatesFilter<"EvaluationTemplate"> | string
+    description?: StringNullableWithAggregatesFilter<"EvaluationTemplate"> | string | null
+    evaluationPrompt?: StringNullableWithAggregatesFilter<"EvaluationTemplate"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EvaluationTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EvaluationTemplate"> | Date | string
+    ownerId?: IntWithAggregatesFilter<"EvaluationTemplate"> | number
+  }
+
+  export type EvaluationTemplateCriterionWhereInput = {
+    AND?: EvaluationTemplateCriterionWhereInput | EvaluationTemplateCriterionWhereInput[]
+    OR?: EvaluationTemplateCriterionWhereInput[]
+    NOT?: EvaluationTemplateCriterionWhereInput | EvaluationTemplateCriterionWhereInput[]
+    id?: IntFilter<"EvaluationTemplateCriterion"> | number
+    weight?: FloatFilter<"EvaluationTemplateCriterion"> | number
+    order?: IntFilter<"EvaluationTemplateCriterion"> | number
+    criterionId?: IntFilter<"EvaluationTemplateCriterion"> | number
+    templateId?: IntFilter<"EvaluationTemplateCriterion"> | number
+    criterion?: XOR<EvaluationCriterionScalarRelationFilter, EvaluationCriterionWhereInput>
+    template?: XOR<EvaluationTemplateScalarRelationFilter, EvaluationTemplateWhereInput>
+    autoEvaluationCriteria?: AutoEvaluationCriterionListRelationFilter
+  }
+
+  export type EvaluationTemplateCriterionOrderByWithRelationInput = {
+    id?: SortOrder
+    weight?: SortOrder
+    order?: SortOrder
+    criterionId?: SortOrder
+    templateId?: SortOrder
+    criterion?: EvaluationCriterionOrderByWithRelationInput
+    template?: EvaluationTemplateOrderByWithRelationInput
+    autoEvaluationCriteria?: AutoEvaluationCriterionOrderByRelationAggregateInput
+  }
+
+  export type EvaluationTemplateCriterionWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    templateId_criterionId?: EvaluationTemplateCriterionTemplateIdCriterionIdCompoundUniqueInput
+    AND?: EvaluationTemplateCriterionWhereInput | EvaluationTemplateCriterionWhereInput[]
+    OR?: EvaluationTemplateCriterionWhereInput[]
+    NOT?: EvaluationTemplateCriterionWhereInput | EvaluationTemplateCriterionWhereInput[]
+    weight?: FloatFilter<"EvaluationTemplateCriterion"> | number
+    order?: IntFilter<"EvaluationTemplateCriterion"> | number
+    criterionId?: IntFilter<"EvaluationTemplateCriterion"> | number
+    templateId?: IntFilter<"EvaluationTemplateCriterion"> | number
+    criterion?: XOR<EvaluationCriterionScalarRelationFilter, EvaluationCriterionWhereInput>
+    template?: XOR<EvaluationTemplateScalarRelationFilter, EvaluationTemplateWhereInput>
+    autoEvaluationCriteria?: AutoEvaluationCriterionListRelationFilter
+  }, "id" | "templateId_criterionId">
+
+  export type EvaluationTemplateCriterionOrderByWithAggregationInput = {
+    id?: SortOrder
+    weight?: SortOrder
+    order?: SortOrder
+    criterionId?: SortOrder
+    templateId?: SortOrder
+    _count?: EvaluationTemplateCriterionCountOrderByAggregateInput
+    _avg?: EvaluationTemplateCriterionAvgOrderByAggregateInput
+    _max?: EvaluationTemplateCriterionMaxOrderByAggregateInput
+    _min?: EvaluationTemplateCriterionMinOrderByAggregateInput
+    _sum?: EvaluationTemplateCriterionSumOrderByAggregateInput
+  }
+
+  export type EvaluationTemplateCriterionScalarWhereWithAggregatesInput = {
+    AND?: EvaluationTemplateCriterionScalarWhereWithAggregatesInput | EvaluationTemplateCriterionScalarWhereWithAggregatesInput[]
+    OR?: EvaluationTemplateCriterionScalarWhereWithAggregatesInput[]
+    NOT?: EvaluationTemplateCriterionScalarWhereWithAggregatesInput | EvaluationTemplateCriterionScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"EvaluationTemplateCriterion"> | number
+    weight?: FloatWithAggregatesFilter<"EvaluationTemplateCriterion"> | number
+    order?: IntWithAggregatesFilter<"EvaluationTemplateCriterion"> | number
+    criterionId?: IntWithAggregatesFilter<"EvaluationTemplateCriterion"> | number
+    templateId?: IntWithAggregatesFilter<"EvaluationTemplateCriterion"> | number
+  }
+
+  export type EvaluationCriterionWhereInput = {
+    AND?: EvaluationCriterionWhereInput | EvaluationCriterionWhereInput[]
+    OR?: EvaluationCriterionWhereInput[]
+    NOT?: EvaluationCriterionWhereInput | EvaluationCriterionWhereInput[]
+    id?: IntFilter<"EvaluationCriterion"> | number
+    name?: StringFilter<"EvaluationCriterion"> | string
+    description?: StringFilter<"EvaluationCriterion"> | string
+    createdAt?: DateTimeFilter<"EvaluationCriterion"> | Date | string
+    ownerId?: IntFilter<"EvaluationCriterion"> | number
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    templates?: EvaluationTemplateCriterionListRelationFilter
+  }
+
+  export type EvaluationCriterionOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    ownerId?: SortOrder
+    owner?: UserOrderByWithRelationInput
+    templates?: EvaluationTemplateCriterionOrderByRelationAggregateInput
+  }
+
+  export type EvaluationCriterionWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: EvaluationCriterionWhereInput | EvaluationCriterionWhereInput[]
+    OR?: EvaluationCriterionWhereInput[]
+    NOT?: EvaluationCriterionWhereInput | EvaluationCriterionWhereInput[]
+    name?: StringFilter<"EvaluationCriterion"> | string
+    description?: StringFilter<"EvaluationCriterion"> | string
+    createdAt?: DateTimeFilter<"EvaluationCriterion"> | Date | string
+    ownerId?: IntFilter<"EvaluationCriterion"> | number
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    templates?: EvaluationTemplateCriterionListRelationFilter
+  }, "id">
+
+  export type EvaluationCriterionOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    ownerId?: SortOrder
+    _count?: EvaluationCriterionCountOrderByAggregateInput
+    _avg?: EvaluationCriterionAvgOrderByAggregateInput
+    _max?: EvaluationCriterionMaxOrderByAggregateInput
+    _min?: EvaluationCriterionMinOrderByAggregateInput
+    _sum?: EvaluationCriterionSumOrderByAggregateInput
+  }
+
+  export type EvaluationCriterionScalarWhereWithAggregatesInput = {
+    AND?: EvaluationCriterionScalarWhereWithAggregatesInput | EvaluationCriterionScalarWhereWithAggregatesInput[]
+    OR?: EvaluationCriterionScalarWhereWithAggregatesInput[]
+    NOT?: EvaluationCriterionScalarWhereWithAggregatesInput | EvaluationCriterionScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"EvaluationCriterion"> | number
+    name?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
+    description?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"EvaluationCriterion"> | Date | string
+    ownerId?: IntWithAggregatesFilter<"EvaluationCriterion"> | number
   }
 
   export type AnswerWhereInput = {
@@ -13234,19 +17471,23 @@ export namespace Prisma {
     NOT?: AutoEvaluationCriterionWhereInput | AutoEvaluationCriterionWhereInput[]
     id?: IntFilter<"AutoEvaluationCriterion"> | number
     autoEvaluationId?: IntFilter<"AutoEvaluationCriterion"> | number
+    templateCriterionId?: IntNullableFilter<"AutoEvaluationCriterion"> | number | null
     description?: StringFilter<"AutoEvaluationCriterion"> | string
     weight?: FloatFilter<"AutoEvaluationCriterion"> | number
     score?: FloatFilter<"AutoEvaluationCriterion"> | number
     autoEvaluation?: XOR<AutoEvaluationScalarRelationFilter, AutoEvaluationWhereInput>
+    templateCriterion?: XOR<EvaluationTemplateCriterionNullableScalarRelationFilter, EvaluationTemplateCriterionWhereInput> | null
   }
 
   export type AutoEvaluationCriterionOrderByWithRelationInput = {
     id?: SortOrder
     autoEvaluationId?: SortOrder
+    templateCriterionId?: SortOrderInput | SortOrder
     description?: SortOrder
     weight?: SortOrder
     score?: SortOrder
     autoEvaluation?: AutoEvaluationOrderByWithRelationInput
+    templateCriterion?: EvaluationTemplateCriterionOrderByWithRelationInput
   }
 
   export type AutoEvaluationCriterionWhereUniqueInput = Prisma.AtLeast<{
@@ -13255,15 +17496,18 @@ export namespace Prisma {
     OR?: AutoEvaluationCriterionWhereInput[]
     NOT?: AutoEvaluationCriterionWhereInput | AutoEvaluationCriterionWhereInput[]
     autoEvaluationId?: IntFilter<"AutoEvaluationCriterion"> | number
+    templateCriterionId?: IntNullableFilter<"AutoEvaluationCriterion"> | number | null
     description?: StringFilter<"AutoEvaluationCriterion"> | string
     weight?: FloatFilter<"AutoEvaluationCriterion"> | number
     score?: FloatFilter<"AutoEvaluationCriterion"> | number
     autoEvaluation?: XOR<AutoEvaluationScalarRelationFilter, AutoEvaluationWhereInput>
+    templateCriterion?: XOR<EvaluationTemplateCriterionNullableScalarRelationFilter, EvaluationTemplateCriterionWhereInput> | null
   }, "id">
 
   export type AutoEvaluationCriterionOrderByWithAggregationInput = {
     id?: SortOrder
     autoEvaluationId?: SortOrder
+    templateCriterionId?: SortOrderInput | SortOrder
     description?: SortOrder
     weight?: SortOrder
     score?: SortOrder
@@ -13280,6 +17524,7 @@ export namespace Prisma {
     NOT?: AutoEvaluationCriterionScalarWhereWithAggregatesInput | AutoEvaluationCriterionScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"AutoEvaluationCriterion"> | number
     autoEvaluationId?: IntWithAggregatesFilter<"AutoEvaluationCriterion"> | number
+    templateCriterionId?: IntNullableWithAggregatesFilter<"AutoEvaluationCriterion"> | number | null
     description?: StringWithAggregatesFilter<"AutoEvaluationCriterion"> | string
     weight?: FloatWithAggregatesFilter<"AutoEvaluationCriterion"> | number
     score?: FloatWithAggregatesFilter<"AutoEvaluationCriterion"> | number
@@ -13298,6 +17543,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13314,6 +17561,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUpdateInput = {
@@ -13329,6 +17578,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13345,6 +17596,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -13504,6 +17757,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
+    evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateInput = {
@@ -13515,6 +17769,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     ownerId: number
+    evaluationTemplateId?: number | null
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
   }
 
@@ -13527,6 +17782,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
+    evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateInput = {
@@ -13538,6 +17794,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
@@ -13550,6 +17807,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     ownerId: number
+    evaluationTemplateId?: number | null
   }
 
   export type QuestionRequestTemplateUpdateManyMutationInput = {
@@ -13570,6 +17828,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type QuestionRequestCreateInput = {
@@ -13702,6 +17961,191 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     evaluationCriteria?: QuestionUpdateevaluationCriteriaInput | InputJsonValue[]
     requestId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EvaluationTemplateCreateInput = {
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutEvaluationTemplatesInput
+    criteria?: EvaluationTemplateCriterionCreateNestedManyWithoutTemplateInput
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutEvaluationTemplateInput
+  }
+
+  export type EvaluationTemplateUncheckedCreateInput = {
+    id?: number
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    criteria?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutEvaluationTemplateInput
+  }
+
+  export type EvaluationTemplateUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput
+    criteria?: EvaluationTemplateCriterionUpdateManyWithoutTemplateNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutEvaluationTemplateNestedInput
+  }
+
+  export type EvaluationTemplateUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    criteria?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateNestedInput
+  }
+
+  export type EvaluationTemplateCreateManyInput = {
+    id?: number
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+  }
+
+  export type EvaluationTemplateUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EvaluationTemplateUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EvaluationTemplateCriterionCreateInput = {
+    weight: number
+    order?: number
+    criterion: EvaluationCriterionCreateNestedOneWithoutTemplatesInput
+    template: EvaluationTemplateCreateNestedOneWithoutCriteriaInput
+    autoEvaluationCriteria?: AutoEvaluationCriterionCreateNestedManyWithoutTemplateCriterionInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedCreateInput = {
+    id?: number
+    weight: number
+    order?: number
+    criterionId: number
+    templateId: number
+    autoEvaluationCriteria?: AutoEvaluationCriterionUncheckedCreateNestedManyWithoutTemplateCriterionInput
+  }
+
+  export type EvaluationTemplateCriterionUpdateInput = {
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    criterion?: EvaluationCriterionUpdateOneRequiredWithoutTemplatesNestedInput
+    template?: EvaluationTemplateUpdateOneRequiredWithoutCriteriaNestedInput
+    autoEvaluationCriteria?: AutoEvaluationCriterionUpdateManyWithoutTemplateCriterionNestedInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    criterionId?: IntFieldUpdateOperationsInput | number
+    templateId?: IntFieldUpdateOperationsInput | number
+    autoEvaluationCriteria?: AutoEvaluationCriterionUncheckedUpdateManyWithoutTemplateCriterionNestedInput
+  }
+
+  export type EvaluationTemplateCriterionCreateManyInput = {
+    id?: number
+    weight: number
+    order?: number
+    criterionId: number
+    templateId: number
+  }
+
+  export type EvaluationTemplateCriterionUpdateManyMutationInput = {
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    criterionId?: IntFieldUpdateOperationsInput | number
+    templateId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EvaluationCriterionCreateInput = {
+    name?: string
+    description: string
+    createdAt?: Date | string
+    owner: UserCreateNestedOneWithoutEvaluationCriterionsInput
+    templates?: EvaluationTemplateCriterionCreateNestedManyWithoutCriterionInput
+  }
+
+  export type EvaluationCriterionUncheckedCreateInput = {
+    id?: number
+    name?: string
+    description: string
+    createdAt?: Date | string
+    ownerId: number
+    templates?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutCriterionInput
+  }
+
+  export type EvaluationCriterionUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutEvaluationCriterionsNestedInput
+    templates?: EvaluationTemplateCriterionUpdateManyWithoutCriterionNestedInput
+  }
+
+  export type EvaluationCriterionUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    templates?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutCriterionNestedInput
+  }
+
+  export type EvaluationCriterionCreateManyInput = {
+    id?: number
+    name?: string
+    description: string
+    createdAt?: Date | string
+    ownerId: number
+  }
+
+  export type EvaluationCriterionUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EvaluationCriterionUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
   }
 
   export type AnswerCreateInput = {
@@ -13876,11 +18320,13 @@ export namespace Prisma {
     weight: number
     score: number
     autoEvaluation: AutoEvaluationCreateNestedOneWithoutCriteriaInput
+    templateCriterion?: EvaluationTemplateCriterionCreateNestedOneWithoutAutoEvaluationCriteriaInput
   }
 
   export type AutoEvaluationCriterionUncheckedCreateInput = {
     id?: number
     autoEvaluationId: number
+    templateCriterionId?: number | null
     description: string
     weight: number
     score: number
@@ -13891,11 +18337,13 @@ export namespace Prisma {
     weight?: FloatFieldUpdateOperationsInput | number
     score?: FloatFieldUpdateOperationsInput | number
     autoEvaluation?: AutoEvaluationUpdateOneRequiredWithoutCriteriaNestedInput
+    templateCriterion?: EvaluationTemplateCriterionUpdateOneWithoutAutoEvaluationCriteriaNestedInput
   }
 
   export type AutoEvaluationCriterionUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     autoEvaluationId?: IntFieldUpdateOperationsInput | number
+    templateCriterionId?: NullableIntFieldUpdateOperationsInput | number | null
     description?: StringFieldUpdateOperationsInput | string
     weight?: FloatFieldUpdateOperationsInput | number
     score?: FloatFieldUpdateOperationsInput | number
@@ -13904,6 +18352,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionCreateManyInput = {
     id?: number
     autoEvaluationId: number
+    templateCriterionId?: number | null
     description: string
     weight: number
     score: number
@@ -13918,6 +18367,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     autoEvaluationId?: IntFieldUpdateOperationsInput | number
+    templateCriterionId?: NullableIntFieldUpdateOperationsInput | number | null
     description?: StringFieldUpdateOperationsInput | string
     weight?: FloatFieldUpdateOperationsInput | number
     score?: FloatFieldUpdateOperationsInput | number
@@ -14004,6 +18454,18 @@ export namespace Prisma {
     none?: AnswerWhereInput
   }
 
+  export type EvaluationTemplateListRelationFilter = {
+    every?: EvaluationTemplateWhereInput
+    some?: EvaluationTemplateWhereInput
+    none?: EvaluationTemplateWhereInput
+  }
+
+  export type EvaluationCriterionListRelationFilter = {
+    every?: EvaluationCriterionWhereInput
+    some?: EvaluationCriterionWhereInput
+    none?: EvaluationCriterionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14022,6 +18484,14 @@ export namespace Prisma {
   }
 
   export type AnswerOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EvaluationTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EvaluationCriterionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14238,6 +18708,22 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type EvaluationTemplateNullableScalarRelationFilter = {
+    is?: EvaluationTemplateWhereInput | null
+    isNot?: EvaluationTemplateWhereInput | null
+  }
+
   export type QuestionRequestTemplateCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -14247,11 +18733,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
     parameters?: SortOrder
     ownerId?: SortOrder
+    evaluationTemplateId?: SortOrder
   }
 
   export type QuestionRequestTemplateAvgOrderByAggregateInput = {
     id?: SortOrder
     ownerId?: SortOrder
+    evaluationTemplateId?: SortOrder
   }
 
   export type QuestionRequestTemplateMaxOrderByAggregateInput = {
@@ -14262,6 +18750,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ownerId?: SortOrder
+    evaluationTemplateId?: SortOrder
   }
 
   export type QuestionRequestTemplateMinOrderByAggregateInput = {
@@ -14272,21 +18761,16 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ownerId?: SortOrder
+    evaluationTemplateId?: SortOrder
   }
 
   export type QuestionRequestTemplateSumOrderByAggregateInput = {
     id?: SortOrder
     ownerId?: SortOrder
+    evaluationTemplateId?: SortOrder
   }
 
-  export type EnumQuestionRequestStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumQuestionRequestStatusFilter<$PrismaModel> | $Enums.QuestionRequestStatus
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -14294,7 +18778,19 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumQuestionRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionRequestStatusFilter<$PrismaModel> | $Enums.QuestionRequestStatus
   }
 
   export type QuestionRequestTemplateNullableScalarRelationFilter = {
@@ -14359,22 +18855,6 @@ export namespace Prisma {
     _max?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
   export type QuestionRequestScalarRelationFilter = {
     is?: QuestionRequestWhereInput
     isNot?: QuestionRequestWhereInput
@@ -14416,6 +18896,182 @@ export namespace Prisma {
     id?: SortOrder
     correctAnswerIndex?: SortOrder
     requestId?: SortOrder
+  }
+
+  export type EvaluationTemplateCriterionListRelationFilter = {
+    every?: EvaluationTemplateCriterionWhereInput
+    some?: EvaluationTemplateCriterionWhereInput
+    none?: EvaluationTemplateCriterionWhereInput
+  }
+
+  export type EvaluationTemplateCriterionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EvaluationTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    evaluationPrompt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type EvaluationTemplateAvgOrderByAggregateInput = {
+    id?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type EvaluationTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    evaluationPrompt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type EvaluationTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    evaluationPrompt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type EvaluationTemplateSumOrderByAggregateInput = {
+    id?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type EvaluationCriterionScalarRelationFilter = {
+    is?: EvaluationCriterionWhereInput
+    isNot?: EvaluationCriterionWhereInput
+  }
+
+  export type EvaluationTemplateScalarRelationFilter = {
+    is?: EvaluationTemplateWhereInput
+    isNot?: EvaluationTemplateWhereInput
+  }
+
+  export type AutoEvaluationCriterionListRelationFilter = {
+    every?: AutoEvaluationCriterionWhereInput
+    some?: AutoEvaluationCriterionWhereInput
+    none?: AutoEvaluationCriterionWhereInput
+  }
+
+  export type AutoEvaluationCriterionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EvaluationTemplateCriterionTemplateIdCriterionIdCompoundUniqueInput = {
+    templateId: number
+    criterionId: number
+  }
+
+  export type EvaluationTemplateCriterionCountOrderByAggregateInput = {
+    id?: SortOrder
+    weight?: SortOrder
+    order?: SortOrder
+    criterionId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type EvaluationTemplateCriterionAvgOrderByAggregateInput = {
+    id?: SortOrder
+    weight?: SortOrder
+    order?: SortOrder
+    criterionId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type EvaluationTemplateCriterionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    weight?: SortOrder
+    order?: SortOrder
+    criterionId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type EvaluationTemplateCriterionMinOrderByAggregateInput = {
+    id?: SortOrder
+    weight?: SortOrder
+    order?: SortOrder
+    criterionId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type EvaluationTemplateCriterionSumOrderByAggregateInput = {
+    id?: SortOrder
+    weight?: SortOrder
+    order?: SortOrder
+    criterionId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type EvaluationCriterionCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type EvaluationCriterionAvgOrderByAggregateInput = {
+    id?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type EvaluationCriterionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type EvaluationCriterionMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type EvaluationCriterionSumOrderByAggregateInput = {
+    id?: SortOrder
+    ownerId?: SortOrder
   }
 
   export type QuestionScalarRelationFilter = {
@@ -14489,30 +19145,9 @@ export namespace Prisma {
     confidenceLevel?: SortOrder
   }
 
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
   export type AnswerScalarRelationFilter = {
     is?: AnswerWhereInput
     isNot?: AnswerWhereInput
-  }
-
-  export type AutoEvaluationCriterionListRelationFilter = {
-    every?: AutoEvaluationCriterionWhereInput
-    some?: AutoEvaluationCriterionWhereInput
-    none?: AutoEvaluationCriterionWhereInput
-  }
-
-  export type AutoEvaluationCriterionOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type AutoEvaluationCountOrderByAggregateInput = {
@@ -14554,30 +19189,20 @@ export namespace Prisma {
     score?: SortOrder
   }
 
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-
   export type AutoEvaluationScalarRelationFilter = {
     is?: AutoEvaluationWhereInput
     isNot?: AutoEvaluationWhereInput
   }
 
+  export type EvaluationTemplateCriterionNullableScalarRelationFilter = {
+    is?: EvaluationTemplateCriterionWhereInput | null
+    isNot?: EvaluationTemplateCriterionWhereInput | null
+  }
+
   export type AutoEvaluationCriterionCountOrderByAggregateInput = {
     id?: SortOrder
     autoEvaluationId?: SortOrder
+    templateCriterionId?: SortOrder
     description?: SortOrder
     weight?: SortOrder
     score?: SortOrder
@@ -14586,6 +19211,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionAvgOrderByAggregateInput = {
     id?: SortOrder
     autoEvaluationId?: SortOrder
+    templateCriterionId?: SortOrder
     weight?: SortOrder
     score?: SortOrder
   }
@@ -14593,6 +19219,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionMaxOrderByAggregateInput = {
     id?: SortOrder
     autoEvaluationId?: SortOrder
+    templateCriterionId?: SortOrder
     description?: SortOrder
     weight?: SortOrder
     score?: SortOrder
@@ -14601,6 +19228,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionMinOrderByAggregateInput = {
     id?: SortOrder
     autoEvaluationId?: SortOrder
+    templateCriterionId?: SortOrder
     description?: SortOrder
     weight?: SortOrder
     score?: SortOrder
@@ -14609,6 +19237,7 @@ export namespace Prisma {
   export type AutoEvaluationCriterionSumOrderByAggregateInput = {
     id?: SortOrder
     autoEvaluationId?: SortOrder
+    templateCriterionId?: SortOrder
     weight?: SortOrder
     score?: SortOrder
   }
@@ -14647,6 +19276,20 @@ export namespace Prisma {
     connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
   }
 
+  export type EvaluationTemplateCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutOwnerInput, EvaluationTemplateUncheckedCreateWithoutOwnerInput> | EvaluationTemplateCreateWithoutOwnerInput[] | EvaluationTemplateUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutOwnerInput | EvaluationTemplateCreateOrConnectWithoutOwnerInput[]
+    createMany?: EvaluationTemplateCreateManyOwnerInputEnvelope
+    connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+  }
+
+  export type EvaluationCriterionCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutOwnerInput, EvaluationCriterionUncheckedCreateWithoutOwnerInput> | EvaluationCriterionCreateWithoutOwnerInput[] | EvaluationCriterionUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutOwnerInput | EvaluationCriterionCreateOrConnectWithoutOwnerInput[]
+    createMany?: EvaluationCriterionCreateManyOwnerInputEnvelope
+    connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+  }
+
   export type GroupUncheckedCreateNestedManyWithoutUsersInput = {
     create?: XOR<GroupCreateWithoutUsersInput, GroupUncheckedCreateWithoutUsersInput> | GroupCreateWithoutUsersInput[] | GroupUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: GroupCreateOrConnectWithoutUsersInput | GroupCreateOrConnectWithoutUsersInput[]
@@ -14679,6 +19322,20 @@ export namespace Prisma {
     connectOrCreate?: AnswerCreateOrConnectWithoutUserInput | AnswerCreateOrConnectWithoutUserInput[]
     createMany?: AnswerCreateManyUserInputEnvelope
     connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
+  }
+
+  export type EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutOwnerInput, EvaluationTemplateUncheckedCreateWithoutOwnerInput> | EvaluationTemplateCreateWithoutOwnerInput[] | EvaluationTemplateUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutOwnerInput | EvaluationTemplateCreateOrConnectWithoutOwnerInput[]
+    createMany?: EvaluationTemplateCreateManyOwnerInputEnvelope
+    connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+  }
+
+  export type EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutOwnerInput, EvaluationCriterionUncheckedCreateWithoutOwnerInput> | EvaluationCriterionCreateWithoutOwnerInput[] | EvaluationCriterionUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutOwnerInput | EvaluationCriterionCreateOrConnectWithoutOwnerInput[]
+    createMany?: EvaluationCriterionCreateManyOwnerInputEnvelope
+    connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -14766,6 +19423,34 @@ export namespace Prisma {
     deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
   }
 
+  export type EvaluationTemplateUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutOwnerInput, EvaluationTemplateUncheckedCreateWithoutOwnerInput> | EvaluationTemplateCreateWithoutOwnerInput[] | EvaluationTemplateUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutOwnerInput | EvaluationTemplateCreateOrConnectWithoutOwnerInput[]
+    upsert?: EvaluationTemplateUpsertWithWhereUniqueWithoutOwnerInput | EvaluationTemplateUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: EvaluationTemplateCreateManyOwnerInputEnvelope
+    set?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    disconnect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    delete?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    update?: EvaluationTemplateUpdateWithWhereUniqueWithoutOwnerInput | EvaluationTemplateUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: EvaluationTemplateUpdateManyWithWhereWithoutOwnerInput | EvaluationTemplateUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: EvaluationTemplateScalarWhereInput | EvaluationTemplateScalarWhereInput[]
+  }
+
+  export type EvaluationCriterionUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutOwnerInput, EvaluationCriterionUncheckedCreateWithoutOwnerInput> | EvaluationCriterionCreateWithoutOwnerInput[] | EvaluationCriterionUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutOwnerInput | EvaluationCriterionCreateOrConnectWithoutOwnerInput[]
+    upsert?: EvaluationCriterionUpsertWithWhereUniqueWithoutOwnerInput | EvaluationCriterionUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: EvaluationCriterionCreateManyOwnerInputEnvelope
+    set?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    disconnect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    delete?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    update?: EvaluationCriterionUpdateWithWhereUniqueWithoutOwnerInput | EvaluationCriterionUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: EvaluationCriterionUpdateManyWithWhereWithoutOwnerInput | EvaluationCriterionUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -14843,6 +19528,34 @@ export namespace Prisma {
     deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
   }
 
+  export type EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutOwnerInput, EvaluationTemplateUncheckedCreateWithoutOwnerInput> | EvaluationTemplateCreateWithoutOwnerInput[] | EvaluationTemplateUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutOwnerInput | EvaluationTemplateCreateOrConnectWithoutOwnerInput[]
+    upsert?: EvaluationTemplateUpsertWithWhereUniqueWithoutOwnerInput | EvaluationTemplateUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: EvaluationTemplateCreateManyOwnerInputEnvelope
+    set?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    disconnect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    delete?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    update?: EvaluationTemplateUpdateWithWhereUniqueWithoutOwnerInput | EvaluationTemplateUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: EvaluationTemplateUpdateManyWithWhereWithoutOwnerInput | EvaluationTemplateUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: EvaluationTemplateScalarWhereInput | EvaluationTemplateScalarWhereInput[]
+  }
+
+  export type EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutOwnerInput, EvaluationCriterionUncheckedCreateWithoutOwnerInput> | EvaluationCriterionCreateWithoutOwnerInput[] | EvaluationCriterionUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutOwnerInput | EvaluationCriterionCreateOrConnectWithoutOwnerInput[]
+    upsert?: EvaluationCriterionUpsertWithWhereUniqueWithoutOwnerInput | EvaluationCriterionUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: EvaluationCriterionCreateManyOwnerInputEnvelope
+    set?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    disconnect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    delete?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    update?: EvaluationCriterionUpdateWithWhereUniqueWithoutOwnerInput | EvaluationCriterionUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: EvaluationCriterionUpdateManyWithWhereWithoutOwnerInput | EvaluationCriterionUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutOwnedGroupsInput = {
     create?: XOR<UserCreateWithoutOwnedGroupsInput, UserUncheckedCreateWithoutOwnedGroupsInput>
     connectOrCreate?: UserCreateOrConnectWithoutOwnedGroupsInput
@@ -14912,6 +19625,12 @@ export namespace Prisma {
     connect?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
   }
 
+  export type EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutQuestionRequestTemplatesInput, EvaluationTemplateUncheckedCreateWithoutQuestionRequestTemplatesInput>
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutQuestionRequestTemplatesInput
+    connect?: EvaluationTemplateWhereUniqueInput
+  }
+
   export type QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput = {
     create?: XOR<QuestionRequestCreateWithoutTemplateInput, QuestionRequestUncheckedCreateWithoutTemplateInput> | QuestionRequestCreateWithoutTemplateInput[] | QuestionRequestUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: QuestionRequestCreateOrConnectWithoutTemplateInput | QuestionRequestCreateOrConnectWithoutTemplateInput[]
@@ -14944,6 +19663,24 @@ export namespace Prisma {
     update?: QuestionRequestUpdateWithWhereUniqueWithoutTemplateInput | QuestionRequestUpdateWithWhereUniqueWithoutTemplateInput[]
     updateMany?: QuestionRequestUpdateManyWithWhereWithoutTemplateInput | QuestionRequestUpdateManyWithWhereWithoutTemplateInput[]
     deleteMany?: QuestionRequestScalarWhereInput | QuestionRequestScalarWhereInput[]
+  }
+
+  export type EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutQuestionRequestTemplatesInput, EvaluationTemplateUncheckedCreateWithoutQuestionRequestTemplatesInput>
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutQuestionRequestTemplatesInput
+    upsert?: EvaluationTemplateUpsertWithoutQuestionRequestTemplatesInput
+    disconnect?: EvaluationTemplateWhereInput | boolean
+    delete?: EvaluationTemplateWhereInput | boolean
+    connect?: EvaluationTemplateWhereUniqueInput
+    update?: XOR<XOR<EvaluationTemplateUpdateToOneWithWhereWithoutQuestionRequestTemplatesInput, EvaluationTemplateUpdateWithoutQuestionRequestTemplatesInput>, EvaluationTemplateUncheckedUpdateWithoutQuestionRequestTemplatesInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput = {
@@ -15029,14 +19766,6 @@ export namespace Prisma {
     update?: QuestionUpdateWithWhereUniqueWithoutRequestInput | QuestionUpdateWithWhereUniqueWithoutRequestInput[]
     updateMany?: QuestionUpdateManyWithWhereWithoutRequestInput | QuestionUpdateManyWithWhereWithoutRequestInput[]
     deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type QuestionUncheckedUpdateManyWithoutRequestNestedInput = {
@@ -15127,6 +19856,238 @@ export namespace Prisma {
     deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
   }
 
+  export type UserCreateNestedOneWithoutEvaluationTemplatesInput = {
+    create?: XOR<UserCreateWithoutEvaluationTemplatesInput, UserUncheckedCreateWithoutEvaluationTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEvaluationTemplatesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EvaluationTemplateCriterionCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput> | EvaluationTemplateCriterionCreateWithoutTemplateInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput | EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput[]
+    createMany?: EvaluationTemplateCriterionCreateManyTemplateInputEnvelope
+    connect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+  }
+
+  export type QuestionRequestTemplateCreateNestedManyWithoutEvaluationTemplateInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutEvaluationTemplateInput, QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput> | QuestionRequestTemplateCreateWithoutEvaluationTemplateInput[] | QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput[]
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput | QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput[]
+    createMany?: QuestionRequestTemplateCreateManyEvaluationTemplateInputEnvelope
+    connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+  }
+
+  export type EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput> | EvaluationTemplateCriterionCreateWithoutTemplateInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput | EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput[]
+    createMany?: EvaluationTemplateCriterionCreateManyTemplateInputEnvelope
+    connect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+  }
+
+  export type QuestionRequestTemplateUncheckedCreateNestedManyWithoutEvaluationTemplateInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutEvaluationTemplateInput, QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput> | QuestionRequestTemplateCreateWithoutEvaluationTemplateInput[] | QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput[]
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput | QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput[]
+    createMany?: QuestionRequestTemplateCreateManyEvaluationTemplateInputEnvelope
+    connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput = {
+    create?: XOR<UserCreateWithoutEvaluationTemplatesInput, UserUncheckedCreateWithoutEvaluationTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEvaluationTemplatesInput
+    upsert?: UserUpsertWithoutEvaluationTemplatesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEvaluationTemplatesInput, UserUpdateWithoutEvaluationTemplatesInput>, UserUncheckedUpdateWithoutEvaluationTemplatesInput>
+  }
+
+  export type EvaluationTemplateCriterionUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput> | EvaluationTemplateCriterionCreateWithoutTemplateInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput | EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput[]
+    upsert?: EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutTemplateInput | EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: EvaluationTemplateCriterionCreateManyTemplateInputEnvelope
+    set?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    disconnect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    delete?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    connect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    update?: EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutTemplateInput | EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: EvaluationTemplateCriterionUpdateManyWithWhereWithoutTemplateInput | EvaluationTemplateCriterionUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: EvaluationTemplateCriterionScalarWhereInput | EvaluationTemplateCriterionScalarWhereInput[]
+  }
+
+  export type QuestionRequestTemplateUpdateManyWithoutEvaluationTemplateNestedInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutEvaluationTemplateInput, QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput> | QuestionRequestTemplateCreateWithoutEvaluationTemplateInput[] | QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput[]
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput | QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput[]
+    upsert?: QuestionRequestTemplateUpsertWithWhereUniqueWithoutEvaluationTemplateInput | QuestionRequestTemplateUpsertWithWhereUniqueWithoutEvaluationTemplateInput[]
+    createMany?: QuestionRequestTemplateCreateManyEvaluationTemplateInputEnvelope
+    set?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    disconnect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    delete?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    update?: QuestionRequestTemplateUpdateWithWhereUniqueWithoutEvaluationTemplateInput | QuestionRequestTemplateUpdateWithWhereUniqueWithoutEvaluationTemplateInput[]
+    updateMany?: QuestionRequestTemplateUpdateManyWithWhereWithoutEvaluationTemplateInput | QuestionRequestTemplateUpdateManyWithWhereWithoutEvaluationTemplateInput[]
+    deleteMany?: QuestionRequestTemplateScalarWhereInput | QuestionRequestTemplateScalarWhereInput[]
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput> | EvaluationTemplateCriterionCreateWithoutTemplateInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput | EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput[]
+    upsert?: EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutTemplateInput | EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: EvaluationTemplateCriterionCreateManyTemplateInputEnvelope
+    set?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    disconnect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    delete?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    connect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    update?: EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutTemplateInput | EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: EvaluationTemplateCriterionUpdateManyWithWhereWithoutTemplateInput | EvaluationTemplateCriterionUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: EvaluationTemplateCriterionScalarWhereInput | EvaluationTemplateCriterionScalarWhereInput[]
+  }
+
+  export type QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateNestedInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutEvaluationTemplateInput, QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput> | QuestionRequestTemplateCreateWithoutEvaluationTemplateInput[] | QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput[]
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput | QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput[]
+    upsert?: QuestionRequestTemplateUpsertWithWhereUniqueWithoutEvaluationTemplateInput | QuestionRequestTemplateUpsertWithWhereUniqueWithoutEvaluationTemplateInput[]
+    createMany?: QuestionRequestTemplateCreateManyEvaluationTemplateInputEnvelope
+    set?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    disconnect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    delete?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    update?: QuestionRequestTemplateUpdateWithWhereUniqueWithoutEvaluationTemplateInput | QuestionRequestTemplateUpdateWithWhereUniqueWithoutEvaluationTemplateInput[]
+    updateMany?: QuestionRequestTemplateUpdateManyWithWhereWithoutEvaluationTemplateInput | QuestionRequestTemplateUpdateManyWithWhereWithoutEvaluationTemplateInput[]
+    deleteMany?: QuestionRequestTemplateScalarWhereInput | QuestionRequestTemplateScalarWhereInput[]
+  }
+
+  export type EvaluationCriterionCreateNestedOneWithoutTemplatesInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutTemplatesInput, EvaluationCriterionUncheckedCreateWithoutTemplatesInput>
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutTemplatesInput
+    connect?: EvaluationCriterionWhereUniqueInput
+  }
+
+  export type EvaluationTemplateCreateNestedOneWithoutCriteriaInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutCriteriaInput, EvaluationTemplateUncheckedCreateWithoutCriteriaInput>
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutCriteriaInput
+    connect?: EvaluationTemplateWhereUniqueInput
+  }
+
+  export type AutoEvaluationCriterionCreateNestedManyWithoutTemplateCriterionInput = {
+    create?: XOR<AutoEvaluationCriterionCreateWithoutTemplateCriterionInput, AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput> | AutoEvaluationCriterionCreateWithoutTemplateCriterionInput[] | AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput[]
+    connectOrCreate?: AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput | AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput[]
+    createMany?: AutoEvaluationCriterionCreateManyTemplateCriterionInputEnvelope
+    connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+  }
+
+  export type AutoEvaluationCriterionUncheckedCreateNestedManyWithoutTemplateCriterionInput = {
+    create?: XOR<AutoEvaluationCriterionCreateWithoutTemplateCriterionInput, AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput> | AutoEvaluationCriterionCreateWithoutTemplateCriterionInput[] | AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput[]
+    connectOrCreate?: AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput | AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput[]
+    createMany?: AutoEvaluationCriterionCreateManyTemplateCriterionInputEnvelope
+    connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EvaluationCriterionUpdateOneRequiredWithoutTemplatesNestedInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutTemplatesInput, EvaluationCriterionUncheckedCreateWithoutTemplatesInput>
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutTemplatesInput
+    upsert?: EvaluationCriterionUpsertWithoutTemplatesInput
+    connect?: EvaluationCriterionWhereUniqueInput
+    update?: XOR<XOR<EvaluationCriterionUpdateToOneWithWhereWithoutTemplatesInput, EvaluationCriterionUpdateWithoutTemplatesInput>, EvaluationCriterionUncheckedUpdateWithoutTemplatesInput>
+  }
+
+  export type EvaluationTemplateUpdateOneRequiredWithoutCriteriaNestedInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutCriteriaInput, EvaluationTemplateUncheckedCreateWithoutCriteriaInput>
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutCriteriaInput
+    upsert?: EvaluationTemplateUpsertWithoutCriteriaInput
+    connect?: EvaluationTemplateWhereUniqueInput
+    update?: XOR<XOR<EvaluationTemplateUpdateToOneWithWhereWithoutCriteriaInput, EvaluationTemplateUpdateWithoutCriteriaInput>, EvaluationTemplateUncheckedUpdateWithoutCriteriaInput>
+  }
+
+  export type AutoEvaluationCriterionUpdateManyWithoutTemplateCriterionNestedInput = {
+    create?: XOR<AutoEvaluationCriterionCreateWithoutTemplateCriterionInput, AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput> | AutoEvaluationCriterionCreateWithoutTemplateCriterionInput[] | AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput[]
+    connectOrCreate?: AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput | AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput[]
+    upsert?: AutoEvaluationCriterionUpsertWithWhereUniqueWithoutTemplateCriterionInput | AutoEvaluationCriterionUpsertWithWhereUniqueWithoutTemplateCriterionInput[]
+    createMany?: AutoEvaluationCriterionCreateManyTemplateCriterionInputEnvelope
+    set?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    disconnect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    delete?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    update?: AutoEvaluationCriterionUpdateWithWhereUniqueWithoutTemplateCriterionInput | AutoEvaluationCriterionUpdateWithWhereUniqueWithoutTemplateCriterionInput[]
+    updateMany?: AutoEvaluationCriterionUpdateManyWithWhereWithoutTemplateCriterionInput | AutoEvaluationCriterionUpdateManyWithWhereWithoutTemplateCriterionInput[]
+    deleteMany?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
+  }
+
+  export type AutoEvaluationCriterionUncheckedUpdateManyWithoutTemplateCriterionNestedInput = {
+    create?: XOR<AutoEvaluationCriterionCreateWithoutTemplateCriterionInput, AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput> | AutoEvaluationCriterionCreateWithoutTemplateCriterionInput[] | AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput[]
+    connectOrCreate?: AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput | AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput[]
+    upsert?: AutoEvaluationCriterionUpsertWithWhereUniqueWithoutTemplateCriterionInput | AutoEvaluationCriterionUpsertWithWhereUniqueWithoutTemplateCriterionInput[]
+    createMany?: AutoEvaluationCriterionCreateManyTemplateCriterionInputEnvelope
+    set?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    disconnect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    delete?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
+    update?: AutoEvaluationCriterionUpdateWithWhereUniqueWithoutTemplateCriterionInput | AutoEvaluationCriterionUpdateWithWhereUniqueWithoutTemplateCriterionInput[]
+    updateMany?: AutoEvaluationCriterionUpdateManyWithWhereWithoutTemplateCriterionInput | AutoEvaluationCriterionUpdateManyWithWhereWithoutTemplateCriterionInput[]
+    deleteMany?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutEvaluationCriterionsInput = {
+    create?: XOR<UserCreateWithoutEvaluationCriterionsInput, UserUncheckedCreateWithoutEvaluationCriterionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEvaluationCriterionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EvaluationTemplateCriterionCreateNestedManyWithoutCriterionInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutCriterionInput, EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput> | EvaluationTemplateCriterionCreateWithoutCriterionInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput[]
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput | EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput[]
+    createMany?: EvaluationTemplateCriterionCreateManyCriterionInputEnvelope
+    connect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+  }
+
+  export type EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutCriterionInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutCriterionInput, EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput> | EvaluationTemplateCriterionCreateWithoutCriterionInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput[]
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput | EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput[]
+    createMany?: EvaluationTemplateCriterionCreateManyCriterionInputEnvelope
+    connect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutEvaluationCriterionsNestedInput = {
+    create?: XOR<UserCreateWithoutEvaluationCriterionsInput, UserUncheckedCreateWithoutEvaluationCriterionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEvaluationCriterionsInput
+    upsert?: UserUpsertWithoutEvaluationCriterionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEvaluationCriterionsInput, UserUpdateWithoutEvaluationCriterionsInput>, UserUncheckedUpdateWithoutEvaluationCriterionsInput>
+  }
+
+  export type EvaluationTemplateCriterionUpdateManyWithoutCriterionNestedInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutCriterionInput, EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput> | EvaluationTemplateCriterionCreateWithoutCriterionInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput[]
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput | EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput[]
+    upsert?: EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutCriterionInput | EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutCriterionInput[]
+    createMany?: EvaluationTemplateCriterionCreateManyCriterionInputEnvelope
+    set?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    disconnect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    delete?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    connect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    update?: EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutCriterionInput | EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutCriterionInput[]
+    updateMany?: EvaluationTemplateCriterionUpdateManyWithWhereWithoutCriterionInput | EvaluationTemplateCriterionUpdateManyWithWhereWithoutCriterionInput[]
+    deleteMany?: EvaluationTemplateCriterionScalarWhereInput | EvaluationTemplateCriterionScalarWhereInput[]
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateManyWithoutCriterionNestedInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutCriterionInput, EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput> | EvaluationTemplateCriterionCreateWithoutCriterionInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput[]
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput | EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput[]
+    upsert?: EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutCriterionInput | EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutCriterionInput[]
+    createMany?: EvaluationTemplateCriterionCreateManyCriterionInputEnvelope
+    set?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    disconnect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    delete?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    connect?: EvaluationTemplateCriterionWhereUniqueInput | EvaluationTemplateCriterionWhereUniqueInput[]
+    update?: EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutCriterionInput | EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutCriterionInput[]
+    updateMany?: EvaluationTemplateCriterionUpdateManyWithWhereWithoutCriterionInput | EvaluationTemplateCriterionUpdateManyWithWhereWithoutCriterionInput[]
+    deleteMany?: EvaluationTemplateCriterionScalarWhereInput | EvaluationTemplateCriterionScalarWhereInput[]
+  }
+
   export type QuestionCreateNestedOneWithoutAnswersInput = {
     create?: XOR<QuestionCreateWithoutAnswersInput, QuestionUncheckedCreateWithoutAnswersInput>
     connectOrCreate?: QuestionCreateOrConnectWithoutAnswersInput
@@ -15207,14 +20168,6 @@ export namespace Prisma {
     connect?: AutoEvaluationCriterionWhereUniqueInput | AutoEvaluationCriterionWhereUniqueInput[]
   }
 
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type AnswerUpdateOneRequiredWithoutAutoEvaluationNestedInput = {
     create?: XOR<AnswerCreateWithoutAutoEvaluationInput, AnswerUncheckedCreateWithoutAutoEvaluationInput>
     connectOrCreate?: AnswerCreateOrConnectWithoutAutoEvaluationInput
@@ -15257,12 +20210,28 @@ export namespace Prisma {
     connect?: AutoEvaluationWhereUniqueInput
   }
 
+  export type EvaluationTemplateCriterionCreateNestedOneWithoutAutoEvaluationCriteriaInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutAutoEvaluationCriteriaInput, EvaluationTemplateCriterionUncheckedCreateWithoutAutoEvaluationCriteriaInput>
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutAutoEvaluationCriteriaInput
+    connect?: EvaluationTemplateCriterionWhereUniqueInput
+  }
+
   export type AutoEvaluationUpdateOneRequiredWithoutCriteriaNestedInput = {
     create?: XOR<AutoEvaluationCreateWithoutCriteriaInput, AutoEvaluationUncheckedCreateWithoutCriteriaInput>
     connectOrCreate?: AutoEvaluationCreateOrConnectWithoutCriteriaInput
     upsert?: AutoEvaluationUpsertWithoutCriteriaInput
     connect?: AutoEvaluationWhereUniqueInput
     update?: XOR<XOR<AutoEvaluationUpdateToOneWithWhereWithoutCriteriaInput, AutoEvaluationUpdateWithoutCriteriaInput>, AutoEvaluationUncheckedUpdateWithoutCriteriaInput>
+  }
+
+  export type EvaluationTemplateCriterionUpdateOneWithoutAutoEvaluationCriteriaNestedInput = {
+    create?: XOR<EvaluationTemplateCriterionCreateWithoutAutoEvaluationCriteriaInput, EvaluationTemplateCriterionUncheckedCreateWithoutAutoEvaluationCriteriaInput>
+    connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutAutoEvaluationCriteriaInput
+    upsert?: EvaluationTemplateCriterionUpsertWithoutAutoEvaluationCriteriaInput
+    disconnect?: EvaluationTemplateCriterionWhereInput | boolean
+    delete?: EvaluationTemplateCriterionWhereInput | boolean
+    connect?: EvaluationTemplateCriterionWhereUniqueInput
+    update?: XOR<XOR<EvaluationTemplateCriterionUpdateToOneWithWhereWithoutAutoEvaluationCriteriaInput, EvaluationTemplateCriterionUpdateWithoutAutoEvaluationCriteriaInput>, EvaluationTemplateCriterionUncheckedUpdateWithoutAutoEvaluationCriteriaInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -15414,23 +20383,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumQuestionRequestStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumQuestionRequestStatusFilter<$PrismaModel> | $Enums.QuestionRequestStatus
-  }
-
-  export type NestedEnumQuestionRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumQuestionRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.QuestionRequestStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
-    _max?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
-  }
-
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -15456,6 +20408,23 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumQuestionRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionRequestStatusFilter<$PrismaModel> | $Enums.QuestionRequestStatus
+  }
+
+  export type NestedEnumQuestionRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionRequestStatus | EnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionRequestStatus[] | ListEnumQuestionRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.QuestionRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumQuestionRequestStatusFilter<$PrismaModel>
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -15535,6 +20504,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
+    evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutOwnerInput = {
@@ -15545,6 +20515,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    evaluationTemplateId?: number | null
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
   }
 
@@ -15624,6 +20595,62 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EvaluationTemplateCreateWithoutOwnerInput = {
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    criteria?: EvaluationTemplateCriterionCreateNestedManyWithoutTemplateInput
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutEvaluationTemplateInput
+  }
+
+  export type EvaluationTemplateUncheckedCreateWithoutOwnerInput = {
+    id?: number
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    criteria?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutEvaluationTemplateInput
+  }
+
+  export type EvaluationTemplateCreateOrConnectWithoutOwnerInput = {
+    where: EvaluationTemplateWhereUniqueInput
+    create: XOR<EvaluationTemplateCreateWithoutOwnerInput, EvaluationTemplateUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type EvaluationTemplateCreateManyOwnerInputEnvelope = {
+    data: EvaluationTemplateCreateManyOwnerInput | EvaluationTemplateCreateManyOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EvaluationCriterionCreateWithoutOwnerInput = {
+    name?: string
+    description: string
+    createdAt?: Date | string
+    templates?: EvaluationTemplateCriterionCreateNestedManyWithoutCriterionInput
+  }
+
+  export type EvaluationCriterionUncheckedCreateWithoutOwnerInput = {
+    id?: number
+    name?: string
+    description: string
+    createdAt?: Date | string
+    templates?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutCriterionInput
+  }
+
+  export type EvaluationCriterionCreateOrConnectWithoutOwnerInput = {
+    where: EvaluationCriterionWhereUniqueInput
+    create: XOR<EvaluationCriterionCreateWithoutOwnerInput, EvaluationCriterionUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type EvaluationCriterionCreateManyOwnerInputEnvelope = {
+    data: EvaluationCriterionCreateManyOwnerInput | EvaluationCriterionCreateManyOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GroupUpsertWithWhereUniqueWithoutUsersInput = {
     where: GroupWhereUniqueInput
     update: XOR<GroupUpdateWithoutUsersInput, GroupUncheckedUpdateWithoutUsersInput>
@@ -15697,6 +20724,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"QuestionRequestTemplate"> | Date | string
     parameters?: JsonNullableListFilter<"QuestionRequestTemplate">
     ownerId?: IntFilter<"QuestionRequestTemplate"> | number
+    evaluationTemplateId?: IntNullableFilter<"QuestionRequestTemplate"> | number | null
   }
 
   export type QuestionRequestUpsertWithWhereUniqueWithoutUserInput = {
@@ -15761,6 +20789,62 @@ export namespace Prisma {
     observation?: StringFilter<"Answer"> | string
   }
 
+  export type EvaluationTemplateUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: EvaluationTemplateWhereUniqueInput
+    update: XOR<EvaluationTemplateUpdateWithoutOwnerInput, EvaluationTemplateUncheckedUpdateWithoutOwnerInput>
+    create: XOR<EvaluationTemplateCreateWithoutOwnerInput, EvaluationTemplateUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type EvaluationTemplateUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: EvaluationTemplateWhereUniqueInput
+    data: XOR<EvaluationTemplateUpdateWithoutOwnerInput, EvaluationTemplateUncheckedUpdateWithoutOwnerInput>
+  }
+
+  export type EvaluationTemplateUpdateManyWithWhereWithoutOwnerInput = {
+    where: EvaluationTemplateScalarWhereInput
+    data: XOR<EvaluationTemplateUpdateManyMutationInput, EvaluationTemplateUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type EvaluationTemplateScalarWhereInput = {
+    AND?: EvaluationTemplateScalarWhereInput | EvaluationTemplateScalarWhereInput[]
+    OR?: EvaluationTemplateScalarWhereInput[]
+    NOT?: EvaluationTemplateScalarWhereInput | EvaluationTemplateScalarWhereInput[]
+    id?: IntFilter<"EvaluationTemplate"> | number
+    name?: StringFilter<"EvaluationTemplate"> | string
+    description?: StringNullableFilter<"EvaluationTemplate"> | string | null
+    evaluationPrompt?: StringNullableFilter<"EvaluationTemplate"> | string | null
+    createdAt?: DateTimeFilter<"EvaluationTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"EvaluationTemplate"> | Date | string
+    ownerId?: IntFilter<"EvaluationTemplate"> | number
+  }
+
+  export type EvaluationCriterionUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: EvaluationCriterionWhereUniqueInput
+    update: XOR<EvaluationCriterionUpdateWithoutOwnerInput, EvaluationCriterionUncheckedUpdateWithoutOwnerInput>
+    create: XOR<EvaluationCriterionCreateWithoutOwnerInput, EvaluationCriterionUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type EvaluationCriterionUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: EvaluationCriterionWhereUniqueInput
+    data: XOR<EvaluationCriterionUpdateWithoutOwnerInput, EvaluationCriterionUncheckedUpdateWithoutOwnerInput>
+  }
+
+  export type EvaluationCriterionUpdateManyWithWhereWithoutOwnerInput = {
+    where: EvaluationCriterionScalarWhereInput
+    data: XOR<EvaluationCriterionUpdateManyMutationInput, EvaluationCriterionUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type EvaluationCriterionScalarWhereInput = {
+    AND?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
+    OR?: EvaluationCriterionScalarWhereInput[]
+    NOT?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
+    id?: IntFilter<"EvaluationCriterion"> | number
+    name?: StringFilter<"EvaluationCriterion"> | string
+    description?: StringFilter<"EvaluationCriterion"> | string
+    createdAt?: DateTimeFilter<"EvaluationCriterion"> | Date | string
+    ownerId?: IntFilter<"EvaluationCriterion"> | number
+  }
+
   export type UserCreateWithoutOwnedGroupsInput = {
     admin?: boolean
     name?: string | null
@@ -15773,6 +20857,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutOwnedGroupsInput = {
@@ -15788,6 +20874,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutOwnedGroupsInput = {
@@ -15807,6 +20895,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutGroupsInput = {
@@ -15822,6 +20912,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutGroupsInput = {
@@ -15852,6 +20944,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedGroupsInput = {
@@ -15867,6 +20961,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutGroupsInput = {
@@ -15911,6 +21007,8 @@ export namespace Prisma {
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutQuestionRequestTemplatesInput = {
@@ -15926,6 +21024,8 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutQuestionRequestTemplatesInput = {
@@ -15960,6 +21060,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EvaluationTemplateCreateWithoutQuestionRequestTemplatesInput = {
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutEvaluationTemplatesInput
+    criteria?: EvaluationTemplateCriterionCreateNestedManyWithoutTemplateInput
+  }
+
+  export type EvaluationTemplateUncheckedCreateWithoutQuestionRequestTemplatesInput = {
+    id?: number
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    criteria?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type EvaluationTemplateCreateOrConnectWithoutQuestionRequestTemplatesInput = {
+    where: EvaluationTemplateWhereUniqueInput
+    create: XOR<EvaluationTemplateCreateWithoutQuestionRequestTemplatesInput, EvaluationTemplateUncheckedCreateWithoutQuestionRequestTemplatesInput>
+  }
+
   export type UserUpsertWithoutQuestionRequestTemplatesInput = {
     update: XOR<UserUpdateWithoutQuestionRequestTemplatesInput, UserUncheckedUpdateWithoutQuestionRequestTemplatesInput>
     create: XOR<UserCreateWithoutQuestionRequestTemplatesInput, UserUncheckedCreateWithoutQuestionRequestTemplatesInput>
@@ -15983,6 +21109,8 @@ export namespace Prisma {
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuestionRequestTemplatesInput = {
@@ -15998,6 +21126,8 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type QuestionRequestUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -16016,6 +21146,38 @@ export namespace Prisma {
     data: XOR<QuestionRequestUpdateManyMutationInput, QuestionRequestUncheckedUpdateManyWithoutTemplateInput>
   }
 
+  export type EvaluationTemplateUpsertWithoutQuestionRequestTemplatesInput = {
+    update: XOR<EvaluationTemplateUpdateWithoutQuestionRequestTemplatesInput, EvaluationTemplateUncheckedUpdateWithoutQuestionRequestTemplatesInput>
+    create: XOR<EvaluationTemplateCreateWithoutQuestionRequestTemplatesInput, EvaluationTemplateUncheckedCreateWithoutQuestionRequestTemplatesInput>
+    where?: EvaluationTemplateWhereInput
+  }
+
+  export type EvaluationTemplateUpdateToOneWithWhereWithoutQuestionRequestTemplatesInput = {
+    where?: EvaluationTemplateWhereInput
+    data: XOR<EvaluationTemplateUpdateWithoutQuestionRequestTemplatesInput, EvaluationTemplateUncheckedUpdateWithoutQuestionRequestTemplatesInput>
+  }
+
+  export type EvaluationTemplateUpdateWithoutQuestionRequestTemplatesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput
+    criteria?: EvaluationTemplateCriterionUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type EvaluationTemplateUncheckedUpdateWithoutQuestionRequestTemplatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    criteria?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
   export type UserCreateWithoutQuestionRequestsInput = {
     admin?: boolean
     name?: string | null
@@ -16028,6 +21190,8 @@ export namespace Prisma {
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutQuestionRequestsInput = {
@@ -16043,6 +21207,8 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutQuestionRequestsInput = {
@@ -16058,6 +21224,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
+    evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutRequestsInput = {
@@ -16069,6 +21236,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     ownerId: number
+    evaluationTemplateId?: number | null
   }
 
   export type QuestionRequestTemplateCreateOrConnectWithoutRequestsInput = {
@@ -16128,6 +21296,8 @@ export namespace Prisma {
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuestionRequestsInput = {
@@ -16143,6 +21313,8 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type QuestionRequestTemplateUpsertWithoutRequestsInput = {
@@ -16164,6 +21336,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
+    evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutRequestsInput = {
@@ -16175,6 +21348,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type QuestionUpsertWithWhereUniqueWithoutRequestInput = {
@@ -16311,6 +21485,469 @@ export namespace Prisma {
     data: XOR<AnswerUpdateManyMutationInput, AnswerUncheckedUpdateManyWithoutQuestionInput>
   }
 
+  export type UserCreateWithoutEvaluationTemplatesInput = {
+    admin?: boolean
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groups?: GroupCreateNestedManyWithoutUsersInput
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserUncheckedCreateWithoutEvaluationTemplatesInput = {
+    id?: number
+    admin?: boolean
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserCreateOrConnectWithoutEvaluationTemplatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEvaluationTemplatesInput, UserUncheckedCreateWithoutEvaluationTemplatesInput>
+  }
+
+  export type EvaluationTemplateCriterionCreateWithoutTemplateInput = {
+    weight: number
+    order?: number
+    criterion: EvaluationCriterionCreateNestedOneWithoutTemplatesInput
+    autoEvaluationCriteria?: AutoEvaluationCriterionCreateNestedManyWithoutTemplateCriterionInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput = {
+    id?: number
+    weight: number
+    order?: number
+    criterionId: number
+    autoEvaluationCriteria?: AutoEvaluationCriterionUncheckedCreateNestedManyWithoutTemplateCriterionInput
+  }
+
+  export type EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput = {
+    where: EvaluationTemplateCriterionWhereUniqueInput
+    create: XOR<EvaluationTemplateCriterionCreateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type EvaluationTemplateCriterionCreateManyTemplateInputEnvelope = {
+    data: EvaluationTemplateCriterionCreateManyTemplateInput | EvaluationTemplateCriterionCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type QuestionRequestTemplateCreateWithoutEvaluationTemplateInput = {
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
+    requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
+  }
+
+  export type QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput = {
+    id?: number
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    ownerId: number
+    requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput = {
+    where: QuestionRequestTemplateWhereUniqueInput
+    create: XOR<QuestionRequestTemplateCreateWithoutEvaluationTemplateInput, QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput>
+  }
+
+  export type QuestionRequestTemplateCreateManyEvaluationTemplateInputEnvelope = {
+    data: QuestionRequestTemplateCreateManyEvaluationTemplateInput | QuestionRequestTemplateCreateManyEvaluationTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutEvaluationTemplatesInput = {
+    update: XOR<UserUpdateWithoutEvaluationTemplatesInput, UserUncheckedUpdateWithoutEvaluationTemplatesInput>
+    create: XOR<UserCreateWithoutEvaluationTemplatesInput, UserUncheckedCreateWithoutEvaluationTemplatesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEvaluationTemplatesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEvaluationTemplatesInput, UserUncheckedUpdateWithoutEvaluationTemplatesInput>
+  }
+
+  export type UserUpdateWithoutEvaluationTemplatesInput = {
+    admin?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groups?: GroupUpdateManyWithoutUsersNestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEvaluationTemplatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    admin?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: EvaluationTemplateCriterionWhereUniqueInput
+    update: XOR<EvaluationTemplateCriterionUpdateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedUpdateWithoutTemplateInput>
+    create: XOR<EvaluationTemplateCriterionCreateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: EvaluationTemplateCriterionWhereUniqueInput
+    data: XOR<EvaluationTemplateCriterionUpdateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type EvaluationTemplateCriterionUpdateManyWithWhereWithoutTemplateInput = {
+    where: EvaluationTemplateCriterionScalarWhereInput
+    data: XOR<EvaluationTemplateCriterionUpdateManyMutationInput, EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type EvaluationTemplateCriterionScalarWhereInput = {
+    AND?: EvaluationTemplateCriterionScalarWhereInput | EvaluationTemplateCriterionScalarWhereInput[]
+    OR?: EvaluationTemplateCriterionScalarWhereInput[]
+    NOT?: EvaluationTemplateCriterionScalarWhereInput | EvaluationTemplateCriterionScalarWhereInput[]
+    id?: IntFilter<"EvaluationTemplateCriterion"> | number
+    weight?: FloatFilter<"EvaluationTemplateCriterion"> | number
+    order?: IntFilter<"EvaluationTemplateCriterion"> | number
+    criterionId?: IntFilter<"EvaluationTemplateCriterion"> | number
+    templateId?: IntFilter<"EvaluationTemplateCriterion"> | number
+  }
+
+  export type QuestionRequestTemplateUpsertWithWhereUniqueWithoutEvaluationTemplateInput = {
+    where: QuestionRequestTemplateWhereUniqueInput
+    update: XOR<QuestionRequestTemplateUpdateWithoutEvaluationTemplateInput, QuestionRequestTemplateUncheckedUpdateWithoutEvaluationTemplateInput>
+    create: XOR<QuestionRequestTemplateCreateWithoutEvaluationTemplateInput, QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput>
+  }
+
+  export type QuestionRequestTemplateUpdateWithWhereUniqueWithoutEvaluationTemplateInput = {
+    where: QuestionRequestTemplateWhereUniqueInput
+    data: XOR<QuestionRequestTemplateUpdateWithoutEvaluationTemplateInput, QuestionRequestTemplateUncheckedUpdateWithoutEvaluationTemplateInput>
+  }
+
+  export type QuestionRequestTemplateUpdateManyWithWhereWithoutEvaluationTemplateInput = {
+    where: QuestionRequestTemplateScalarWhereInput
+    data: XOR<QuestionRequestTemplateUpdateManyMutationInput, QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateInput>
+  }
+
+  export type EvaluationCriterionCreateWithoutTemplatesInput = {
+    name?: string
+    description: string
+    createdAt?: Date | string
+    owner: UserCreateNestedOneWithoutEvaluationCriterionsInput
+  }
+
+  export type EvaluationCriterionUncheckedCreateWithoutTemplatesInput = {
+    id?: number
+    name?: string
+    description: string
+    createdAt?: Date | string
+    ownerId: number
+  }
+
+  export type EvaluationCriterionCreateOrConnectWithoutTemplatesInput = {
+    where: EvaluationCriterionWhereUniqueInput
+    create: XOR<EvaluationCriterionCreateWithoutTemplatesInput, EvaluationCriterionUncheckedCreateWithoutTemplatesInput>
+  }
+
+  export type EvaluationTemplateCreateWithoutCriteriaInput = {
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutEvaluationTemplatesInput
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutEvaluationTemplateInput
+  }
+
+  export type EvaluationTemplateUncheckedCreateWithoutCriteriaInput = {
+    id?: number
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutEvaluationTemplateInput
+  }
+
+  export type EvaluationTemplateCreateOrConnectWithoutCriteriaInput = {
+    where: EvaluationTemplateWhereUniqueInput
+    create: XOR<EvaluationTemplateCreateWithoutCriteriaInput, EvaluationTemplateUncheckedCreateWithoutCriteriaInput>
+  }
+
+  export type AutoEvaluationCriterionCreateWithoutTemplateCriterionInput = {
+    description: string
+    weight: number
+    score: number
+    autoEvaluation: AutoEvaluationCreateNestedOneWithoutCriteriaInput
+  }
+
+  export type AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput = {
+    id?: number
+    autoEvaluationId: number
+    description: string
+    weight: number
+    score: number
+  }
+
+  export type AutoEvaluationCriterionCreateOrConnectWithoutTemplateCriterionInput = {
+    where: AutoEvaluationCriterionWhereUniqueInput
+    create: XOR<AutoEvaluationCriterionCreateWithoutTemplateCriterionInput, AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput>
+  }
+
+  export type AutoEvaluationCriterionCreateManyTemplateCriterionInputEnvelope = {
+    data: AutoEvaluationCriterionCreateManyTemplateCriterionInput | AutoEvaluationCriterionCreateManyTemplateCriterionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EvaluationCriterionUpsertWithoutTemplatesInput = {
+    update: XOR<EvaluationCriterionUpdateWithoutTemplatesInput, EvaluationCriterionUncheckedUpdateWithoutTemplatesInput>
+    create: XOR<EvaluationCriterionCreateWithoutTemplatesInput, EvaluationCriterionUncheckedCreateWithoutTemplatesInput>
+    where?: EvaluationCriterionWhereInput
+  }
+
+  export type EvaluationCriterionUpdateToOneWithWhereWithoutTemplatesInput = {
+    where?: EvaluationCriterionWhereInput
+    data: XOR<EvaluationCriterionUpdateWithoutTemplatesInput, EvaluationCriterionUncheckedUpdateWithoutTemplatesInput>
+  }
+
+  export type EvaluationCriterionUpdateWithoutTemplatesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutEvaluationCriterionsNestedInput
+  }
+
+  export type EvaluationCriterionUncheckedUpdateWithoutTemplatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EvaluationTemplateUpsertWithoutCriteriaInput = {
+    update: XOR<EvaluationTemplateUpdateWithoutCriteriaInput, EvaluationTemplateUncheckedUpdateWithoutCriteriaInput>
+    create: XOR<EvaluationTemplateCreateWithoutCriteriaInput, EvaluationTemplateUncheckedCreateWithoutCriteriaInput>
+    where?: EvaluationTemplateWhereInput
+  }
+
+  export type EvaluationTemplateUpdateToOneWithWhereWithoutCriteriaInput = {
+    where?: EvaluationTemplateWhereInput
+    data: XOR<EvaluationTemplateUpdateWithoutCriteriaInput, EvaluationTemplateUncheckedUpdateWithoutCriteriaInput>
+  }
+
+  export type EvaluationTemplateUpdateWithoutCriteriaInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutEvaluationTemplateNestedInput
+  }
+
+  export type EvaluationTemplateUncheckedUpdateWithoutCriteriaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateNestedInput
+  }
+
+  export type AutoEvaluationCriterionUpsertWithWhereUniqueWithoutTemplateCriterionInput = {
+    where: AutoEvaluationCriterionWhereUniqueInput
+    update: XOR<AutoEvaluationCriterionUpdateWithoutTemplateCriterionInput, AutoEvaluationCriterionUncheckedUpdateWithoutTemplateCriterionInput>
+    create: XOR<AutoEvaluationCriterionCreateWithoutTemplateCriterionInput, AutoEvaluationCriterionUncheckedCreateWithoutTemplateCriterionInput>
+  }
+
+  export type AutoEvaluationCriterionUpdateWithWhereUniqueWithoutTemplateCriterionInput = {
+    where: AutoEvaluationCriterionWhereUniqueInput
+    data: XOR<AutoEvaluationCriterionUpdateWithoutTemplateCriterionInput, AutoEvaluationCriterionUncheckedUpdateWithoutTemplateCriterionInput>
+  }
+
+  export type AutoEvaluationCriterionUpdateManyWithWhereWithoutTemplateCriterionInput = {
+    where: AutoEvaluationCriterionScalarWhereInput
+    data: XOR<AutoEvaluationCriterionUpdateManyMutationInput, AutoEvaluationCriterionUncheckedUpdateManyWithoutTemplateCriterionInput>
+  }
+
+  export type AutoEvaluationCriterionScalarWhereInput = {
+    AND?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
+    OR?: AutoEvaluationCriterionScalarWhereInput[]
+    NOT?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
+    id?: IntFilter<"AutoEvaluationCriterion"> | number
+    autoEvaluationId?: IntFilter<"AutoEvaluationCriterion"> | number
+    templateCriterionId?: IntNullableFilter<"AutoEvaluationCriterion"> | number | null
+    description?: StringFilter<"AutoEvaluationCriterion"> | string
+    weight?: FloatFilter<"AutoEvaluationCriterion"> | number
+    score?: FloatFilter<"AutoEvaluationCriterion"> | number
+  }
+
+  export type UserCreateWithoutEvaluationCriterionsInput = {
+    admin?: boolean
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groups?: GroupCreateNestedManyWithoutUsersInput
+    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserUncheckedCreateWithoutEvaluationCriterionsInput = {
+    id?: number
+    admin?: boolean
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
+    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserCreateOrConnectWithoutEvaluationCriterionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEvaluationCriterionsInput, UserUncheckedCreateWithoutEvaluationCriterionsInput>
+  }
+
+  export type EvaluationTemplateCriterionCreateWithoutCriterionInput = {
+    weight: number
+    order?: number
+    template: EvaluationTemplateCreateNestedOneWithoutCriteriaInput
+    autoEvaluationCriteria?: AutoEvaluationCriterionCreateNestedManyWithoutTemplateCriterionInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput = {
+    id?: number
+    weight: number
+    order?: number
+    templateId: number
+    autoEvaluationCriteria?: AutoEvaluationCriterionUncheckedCreateNestedManyWithoutTemplateCriterionInput
+  }
+
+  export type EvaluationTemplateCriterionCreateOrConnectWithoutCriterionInput = {
+    where: EvaluationTemplateCriterionWhereUniqueInput
+    create: XOR<EvaluationTemplateCriterionCreateWithoutCriterionInput, EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput>
+  }
+
+  export type EvaluationTemplateCriterionCreateManyCriterionInputEnvelope = {
+    data: EvaluationTemplateCriterionCreateManyCriterionInput | EvaluationTemplateCriterionCreateManyCriterionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutEvaluationCriterionsInput = {
+    update: XOR<UserUpdateWithoutEvaluationCriterionsInput, UserUncheckedUpdateWithoutEvaluationCriterionsInput>
+    create: XOR<UserCreateWithoutEvaluationCriterionsInput, UserUncheckedCreateWithoutEvaluationCriterionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEvaluationCriterionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEvaluationCriterionsInput, UserUncheckedUpdateWithoutEvaluationCriterionsInput>
+  }
+
+  export type UserUpdateWithoutEvaluationCriterionsInput = {
+    admin?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groups?: GroupUpdateManyWithoutUsersNestedInput
+    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEvaluationCriterionsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    admin?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
+    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutCriterionInput = {
+    where: EvaluationTemplateCriterionWhereUniqueInput
+    update: XOR<EvaluationTemplateCriterionUpdateWithoutCriterionInput, EvaluationTemplateCriterionUncheckedUpdateWithoutCriterionInput>
+    create: XOR<EvaluationTemplateCriterionCreateWithoutCriterionInput, EvaluationTemplateCriterionUncheckedCreateWithoutCriterionInput>
+  }
+
+  export type EvaluationTemplateCriterionUpdateWithWhereUniqueWithoutCriterionInput = {
+    where: EvaluationTemplateCriterionWhereUniqueInput
+    data: XOR<EvaluationTemplateCriterionUpdateWithoutCriterionInput, EvaluationTemplateCriterionUncheckedUpdateWithoutCriterionInput>
+  }
+
+  export type EvaluationTemplateCriterionUpdateManyWithWhereWithoutCriterionInput = {
+    where: EvaluationTemplateCriterionScalarWhereInput
+    data: XOR<EvaluationTemplateCriterionUpdateManyMutationInput, EvaluationTemplateCriterionUncheckedUpdateManyWithoutCriterionInput>
+  }
+
   export type QuestionCreateWithoutAnswersInput = {
     content: string
     correctAnswerIndex?: number | null
@@ -16347,6 +21984,8 @@ export namespace Prisma {
     ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutAnswersInput = {
@@ -16362,6 +22001,8 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutAnswersInput = {
@@ -16444,6 +22085,8 @@ export namespace Prisma {
     ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnswersInput = {
@@ -16459,6 +22102,8 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type AutoEvaluationUpsertWithoutAnswerInput = {
@@ -16527,10 +22172,12 @@ export namespace Prisma {
     description: string
     weight: number
     score: number
+    templateCriterion?: EvaluationTemplateCriterionCreateNestedOneWithoutAutoEvaluationCriteriaInput
   }
 
   export type AutoEvaluationCriterionUncheckedCreateWithoutAutoEvaluationInput = {
     id?: number
+    templateCriterionId?: number | null
     description: string
     weight: number
     score: number
@@ -16602,17 +22249,6 @@ export namespace Prisma {
     data: XOR<AutoEvaluationCriterionUpdateManyMutationInput, AutoEvaluationCriterionUncheckedUpdateManyWithoutAutoEvaluationInput>
   }
 
-  export type AutoEvaluationCriterionScalarWhereInput = {
-    AND?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
-    OR?: AutoEvaluationCriterionScalarWhereInput[]
-    NOT?: AutoEvaluationCriterionScalarWhereInput | AutoEvaluationCriterionScalarWhereInput[]
-    id?: IntFilter<"AutoEvaluationCriterion"> | number
-    autoEvaluationId?: IntFilter<"AutoEvaluationCriterion"> | number
-    description?: StringFilter<"AutoEvaluationCriterion"> | string
-    weight?: FloatFilter<"AutoEvaluationCriterion"> | number
-    score?: FloatFilter<"AutoEvaluationCriterion"> | number
-  }
-
   export type AutoEvaluationCreateWithoutCriteriaInput = {
     score: number
     justification: string
@@ -16633,6 +22269,26 @@ export namespace Prisma {
   export type AutoEvaluationCreateOrConnectWithoutCriteriaInput = {
     where: AutoEvaluationWhereUniqueInput
     create: XOR<AutoEvaluationCreateWithoutCriteriaInput, AutoEvaluationUncheckedCreateWithoutCriteriaInput>
+  }
+
+  export type EvaluationTemplateCriterionCreateWithoutAutoEvaluationCriteriaInput = {
+    weight: number
+    order?: number
+    criterion: EvaluationCriterionCreateNestedOneWithoutTemplatesInput
+    template: EvaluationTemplateCreateNestedOneWithoutCriteriaInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedCreateWithoutAutoEvaluationCriteriaInput = {
+    id?: number
+    weight: number
+    order?: number
+    criterionId: number
+    templateId: number
+  }
+
+  export type EvaluationTemplateCriterionCreateOrConnectWithoutAutoEvaluationCriteriaInput = {
+    where: EvaluationTemplateCriterionWhereUniqueInput
+    create: XOR<EvaluationTemplateCriterionCreateWithoutAutoEvaluationCriteriaInput, EvaluationTemplateCriterionUncheckedCreateWithoutAutoEvaluationCriteriaInput>
   }
 
   export type AutoEvaluationUpsertWithoutCriteriaInput = {
@@ -16663,6 +22319,32 @@ export namespace Prisma {
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EvaluationTemplateCriterionUpsertWithoutAutoEvaluationCriteriaInput = {
+    update: XOR<EvaluationTemplateCriterionUpdateWithoutAutoEvaluationCriteriaInput, EvaluationTemplateCriterionUncheckedUpdateWithoutAutoEvaluationCriteriaInput>
+    create: XOR<EvaluationTemplateCriterionCreateWithoutAutoEvaluationCriteriaInput, EvaluationTemplateCriterionUncheckedCreateWithoutAutoEvaluationCriteriaInput>
+    where?: EvaluationTemplateCriterionWhereInput
+  }
+
+  export type EvaluationTemplateCriterionUpdateToOneWithWhereWithoutAutoEvaluationCriteriaInput = {
+    where?: EvaluationTemplateCriterionWhereInput
+    data: XOR<EvaluationTemplateCriterionUpdateWithoutAutoEvaluationCriteriaInput, EvaluationTemplateCriterionUncheckedUpdateWithoutAutoEvaluationCriteriaInput>
+  }
+
+  export type EvaluationTemplateCriterionUpdateWithoutAutoEvaluationCriteriaInput = {
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    criterion?: EvaluationCriterionUpdateOneRequiredWithoutTemplatesNestedInput
+    template?: EvaluationTemplateUpdateOneRequiredWithoutCriteriaNestedInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateWithoutAutoEvaluationCriteriaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    criterionId?: IntFieldUpdateOperationsInput | number
+    templateId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type GroupCreateManyOwnerInput = {
     id?: number
     name: string
@@ -16680,6 +22362,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    evaluationTemplateId?: number | null
   }
 
   export type QuestionRequestCreateManyUserInput = {
@@ -16702,6 +22385,22 @@ export namespace Prisma {
     flaggedProblematic?: boolean
     flaggedExcellent?: boolean
     observation?: string
+  }
+
+  export type EvaluationTemplateCreateManyOwnerInput = {
+    id?: number
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EvaluationCriterionCreateManyOwnerInput = {
+    id?: number
+    name?: string
+    description: string
+    createdAt?: Date | string
   }
 
   export type GroupUpdateWithoutUsersInput = {
@@ -16769,6 +22468,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
+    evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutOwnerInput = {
@@ -16779,6 +22479,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
@@ -16790,6 +22491,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type QuestionRequestUpdateWithoutUserInput = {
@@ -16860,6 +22562,58 @@ export namespace Prisma {
     observation?: StringFieldUpdateOperationsInput | string
   }
 
+  export type EvaluationTemplateUpdateWithoutOwnerInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    criteria?: EvaluationTemplateCriterionUpdateManyWithoutTemplateNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutEvaluationTemplateNestedInput
+  }
+
+  export type EvaluationTemplateUncheckedUpdateWithoutOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    criteria?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateNestedInput
+  }
+
+  export type EvaluationTemplateUncheckedUpdateManyWithoutOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EvaluationCriterionUpdateWithoutOwnerInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: EvaluationTemplateCriterionUpdateManyWithoutCriterionNestedInput
+  }
+
+  export type EvaluationCriterionUncheckedUpdateWithoutOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutCriterionNestedInput
+  }
+
+  export type EvaluationCriterionUncheckedUpdateManyWithoutOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserUpdateWithoutGroupsInput = {
     admin?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16872,6 +22626,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGroupsInput = {
@@ -16887,6 +22643,8 @@ export namespace Prisma {
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutGroupsInput = {
@@ -17027,8 +22785,143 @@ export namespace Prisma {
     observation?: StringFieldUpdateOperationsInput | string
   }
 
+  export type EvaluationTemplateCriterionCreateManyTemplateInput = {
+    id?: number
+    weight: number
+    order?: number
+    criterionId: number
+  }
+
+  export type QuestionRequestTemplateCreateManyEvaluationTemplateInput = {
+    id?: number
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    ownerId: number
+  }
+
+  export type EvaluationTemplateCriterionUpdateWithoutTemplateInput = {
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    criterion?: EvaluationCriterionUpdateOneRequiredWithoutTemplatesNestedInput
+    autoEvaluationCriteria?: AutoEvaluationCriterionUpdateManyWithoutTemplateCriterionNestedInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateWithoutTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    criterionId?: IntFieldUpdateOperationsInput | number
+    autoEvaluationCriteria?: AutoEvaluationCriterionUncheckedUpdateManyWithoutTemplateCriterionNestedInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    criterionId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type QuestionRequestTemplateUpdateWithoutEvaluationTemplateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
+    requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type QuestionRequestTemplateUncheckedUpdateWithoutEvaluationTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    ownerId?: IntFieldUpdateOperationsInput | number
+    requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    ownerId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type AutoEvaluationCriterionCreateManyTemplateCriterionInput = {
+    id?: number
+    autoEvaluationId: number
+    description: string
+    weight: number
+    score: number
+  }
+
+  export type AutoEvaluationCriterionUpdateWithoutTemplateCriterionInput = {
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+    autoEvaluation?: AutoEvaluationUpdateOneRequiredWithoutCriteriaNestedInput
+  }
+
+  export type AutoEvaluationCriterionUncheckedUpdateWithoutTemplateCriterionInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    autoEvaluationId?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type AutoEvaluationCriterionUncheckedUpdateManyWithoutTemplateCriterionInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    autoEvaluationId?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type EvaluationTemplateCriterionCreateManyCriterionInput = {
+    id?: number
+    weight: number
+    order?: number
+    templateId: number
+  }
+
+  export type EvaluationTemplateCriterionUpdateWithoutCriterionInput = {
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    template?: EvaluationTemplateUpdateOneRequiredWithoutCriteriaNestedInput
+    autoEvaluationCriteria?: AutoEvaluationCriterionUpdateManyWithoutTemplateCriterionNestedInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateWithoutCriterionInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    templateId?: IntFieldUpdateOperationsInput | number
+    autoEvaluationCriteria?: AutoEvaluationCriterionUncheckedUpdateManyWithoutTemplateCriterionNestedInput
+  }
+
+  export type EvaluationTemplateCriterionUncheckedUpdateManyWithoutCriterionInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    weight?: FloatFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    templateId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type AutoEvaluationCriterionCreateManyAutoEvaluationInput = {
     id?: number
+    templateCriterionId?: number | null
     description: string
     weight: number
     score: number
@@ -17038,10 +22931,12 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     weight?: FloatFieldUpdateOperationsInput | number
     score?: FloatFieldUpdateOperationsInput | number
+    templateCriterion?: EvaluationTemplateCriterionUpdateOneWithoutAutoEvaluationCriteriaNestedInput
   }
 
   export type AutoEvaluationCriterionUncheckedUpdateWithoutAutoEvaluationInput = {
     id?: IntFieldUpdateOperationsInput | number
+    templateCriterionId?: NullableIntFieldUpdateOperationsInput | number | null
     description?: StringFieldUpdateOperationsInput | string
     weight?: FloatFieldUpdateOperationsInput | number
     score?: FloatFieldUpdateOperationsInput | number
@@ -17049,6 +22944,7 @@ export namespace Prisma {
 
   export type AutoEvaluationCriterionUncheckedUpdateManyWithoutAutoEvaluationInput = {
     id?: IntFieldUpdateOperationsInput | number
+    templateCriterionId?: NullableIntFieldUpdateOperationsInput | number | null
     description?: StringFieldUpdateOperationsInput | string
     weight?: FloatFieldUpdateOperationsInput | number
     score?: FloatFieldUpdateOperationsInput | number

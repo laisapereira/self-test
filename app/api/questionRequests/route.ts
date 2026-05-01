@@ -201,18 +201,44 @@ async function generatePrompt(questionRequest: QuestionRequest) {
 
   const template = await prisma.questionRequestTemplate.findUnique({
     where: { id: questionRequest.templateId },
+    include: {
+      evaluationTemplate: {
+        include: {
+          criteria: {
+            include: { criterion: true },
+            orderBy: { order: "asc" },
+          },
+        },
+      },
+    },
   });
 
   if (!template) {
     throw new Error("Template not found");
   }
 
-  const promptTemplate = template.promptTemplate;
   const parameterValues = questionRequest.parameterValues;
-  const prompt = promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
+  let prompt = template.promptTemplate.replace(/\<(\w+)\>/g, (_, key) => {
     const value = parameterValues.find((param) => param.name === key);
     return value ? value.values[0] : "";
   });
+
+  if (template.evaluationTemplate?.criteria?.length) {
+    const criteriaJson = JSON.stringify(
+      template.evaluationTemplate.criteria.map((tc) => ({
+        description: tc.criterion.description,
+        weight: tc.weight,
+      })),
+      null,
+      2,
+    );
+
+    prompt +=
+      `\n\nPara questões discursivas, use EXATAMENTE os seguintes critérios` +
+      ` no campo "evaluationCriteria" de cada questão discursiva.` +
+      ` NÃO altere as descrições nem os pesos:\n${criteriaJson}`;
+  }
+
   return prompt;
 }
 

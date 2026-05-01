@@ -33,6 +33,8 @@ model User {
   questionRequestTemplates QuestionRequestTemplate[]
   questionRequests         QuestionRequest[]
   answers                  Answer[]
+  evaluationTemplates      EvaluationTemplate[]
+  evaluationCriterions     EvaluationCriterion[]
 }
 
 model Group {
@@ -68,7 +70,9 @@ model QuestionRequestTemplate {
 
   owner User @relation(fields: [ownerId], references: [id])
 
-  requests QuestionRequest[]
+  requests             QuestionRequest[]
+  evaluationTemplate   EvaluationTemplate? @relation(fields: [evaluationTemplateId], references: [id])
+  evaluationTemplateId Int?
 }
 
 enum QuestionRequestStatus {
@@ -105,6 +109,49 @@ model Question {
   request   QuestionRequest @relation(fields: [requestId], references: [id])
 
   answers Answer[]
+}
+
+model EvaluationTemplate {
+  id               Int      @id @default(autoincrement())
+  name             String
+  description      String?
+  evaluationPrompt String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id])
+
+  criteria                 EvaluationTemplateCriterion[]
+  questionRequestTemplates QuestionRequestTemplate[]
+}
+
+model EvaluationTemplateCriterion {
+  id     Int   @id @default(autoincrement())
+  weight Float
+  order  Int   @default(0)
+
+  criterionId Int
+  criterion   EvaluationCriterion @relation(fields: [criterionId], references: [id])
+
+  templateId Int
+  template   EvaluationTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  autoEvaluationCriteria AutoEvaluationCriterion[]
+
+  @@unique([templateId, criterionId])
+}
+
+model EvaluationCriterion {
+  id          Int      @id @default(autoincrement())
+  name        String   @default("")
+  description String
+  createdAt   DateTime @default(now())
+
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id])
+
+  templates EvaluationTemplateCriterion[]
 }
 
 model Answer {
@@ -148,6 +195,9 @@ model AutoEvaluationCriterion {
   id               Int            @id @default(autoincrement())
   autoEvaluation   AutoEvaluation @relation(fields: [autoEvaluationId], references: [id])
   autoEvaluationId Int
+
+  templateCriterion   EvaluationTemplateCriterion? @relation(fields: [templateCriterionId], references: [id])
+  templateCriterionId Int?
 
   description String
   weight      Float

@@ -283,7 +283,7 @@ function QuestionRequestsPageInner() {
                           }`}
                         >
                           {score.isDiscursive
-                            ? `Média: ${score.average?.toFixed(2) || "0.00"}`
+                            ? `Média: ${score.average?.toFixed(2) || "0.00"} (${score.answered ?? 0}/${score.total})`
                             : `${score.correct} / ${score.total} acertos`}
                         </span>
                       ) : isCanceled ? (
@@ -364,8 +364,8 @@ function getNumberOfCorrectAnswers(
       }
     }
 
-    const average = count > 0 ? sum / count : 0;
-    return { total, isDiscursive: true, average };
+    const average = sum / total;
+    return { total, isDiscursive: true, average, answered: count };
   }
 
   // Lógica original para múltipla escolha

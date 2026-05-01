@@ -27,6 +27,11 @@ const routes = [
     href: "/templates",
     requireAdmin: true,
   },
+  {
+    title: "Templates de Avaliação",
+    href: "/templates/evaluation",
+    requireAdmin: true,
+  },
 
   {
     title: "Questões Geradas",
