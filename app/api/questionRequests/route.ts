@@ -224,19 +224,22 @@ async function generatePrompt(questionRequest: QuestionRequest) {
   });
 
   if (template.evaluationTemplate?.criteria?.length) {
-    const criteriaJson = JSON.stringify(
-      template.evaluationTemplate.criteria.map((tc) => ({
-        description: tc.criterion.description,
-        weight: tc.weight,
-      })),
-      null,
-      2,
-    );
+    const criteriaBase = template.evaluationTemplate.criteria.map((tc) => ({
+      name: tc.criterion.name || tc.criterion.description,
+      description: tc.criterion.description,
+      weight: tc.weight,
+    }));
+
+    const criteriaJson = JSON.stringify(criteriaBase, null, 2);
 
     prompt +=
-      `\n\nPara questões discursivas, use EXATAMENTE os seguintes critérios` +
-      ` no campo "evaluationCriteria" de cada questão discursiva.` +
-      ` NÃO altere as descrições nem os pesos:\n${criteriaJson}`;
+      `\n\nPara questões discursivas, preencha o campo "evaluationCriteria" de cada questão` +
+      ` usando os critérios base abaixo. Para cada critério:\n` +
+      `- Mantenha o "weight" exatamente como especificado.\n` +
+      `- Reescreva o "description" de forma específica para o conteúdo da questão gerada,` +
+      ` mencionando explicitamente o que será avaliado naquele critério para aquela questão em particular.` +
+      ` Não copie a descrição genérica — adapte-a ao enunciado.\n\n` +
+      `Critérios base:\n${criteriaJson}`;
   }
 
   return prompt;
