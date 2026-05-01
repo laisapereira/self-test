@@ -28,7 +28,9 @@ async function getParams(req: Request, params: Promise<{ id: string }>) {
   return { question, userId };
 }
 
-async function getEvaluationPreamble(requestId: number): Promise<string | null> {
+async function getEvaluationPreamble(
+  requestId: number,
+): Promise<string | null> {
   const request = await prisma.questionRequest.findUnique({
     where: { id: requestId },
   });
@@ -125,22 +127,64 @@ export async function POST(
     const preamble =
       (await getEvaluationPreamble(question.requestId)) ??
       `Você é um professor universitário de Ciência da Computação avaliando a resposta de um aluno de graduação. Seu objetivo é ser justo, construtivo e considerar o nível esperado para o contexto acadêmico.
+Enunciado da questão
+"""<enunciado>"""
+Resposta do aluno
+"""<resposta>"""
+Critérios de avaliação
+Avalie a resposta usando exatamente os critérios abaixo, na ordem apresentada:
+<criterios>
 
-### Referência de pontuação (use como guia)
+Rubrica analítica
 
-- **0 a 3**: resposta incorreta, irrelevante ou ausente
-- **4 a 6**: resposta parcialmente correta, com lacunas importantes
-- **7 a 8**: resposta correta e suficiente, com pequenas imprecisões
-- **9 a 10**: resposta correta, clara e completa dentro do que foi pedido
+Para cada critério, atribua um nível de 1 a 4 e converta para a escala 0–10 conforme descrito abaixo:
+O nível 4 (Excelente) corresponde a notas de 9 a 10 e deve ser atribuído quando a resposta atende plenamente ao critério, demonstrando domínio completo e sem erros relevantes. A resposta é precisa, completa e clara no que diz respeito a este critério.
+O nível 3 (Satisfatório) corresponde a notas de 7 a 8 e deve ser atribuído quando a resposta atende ao critério de forma adequada. Há compreensão sólida, com pequenas imprecisões ou omissões que não comprometem o entendimento geral.
+O nível 2 (Parcial) corresponde a notas de 4 a 6 e deve ser atribuído quando a resposta atende parcialmente ao critério. Há tentativa válida, mas com lacunas importantes, erros conceituais ou falta de clareza que comprometem parte da resposta.
+O nível 1 (Insuficiente) corresponde a notas de 0 a 3 e deve ser atribuído quando a resposta não atende ao critério. A resposta é incorreta, irrelevante, ausente ou demonstra incompreensão fundamental do que foi pedido.
 
-### Regras de avaliação
+Sua tarefa:
 
-- Avalie o aluno pelo que foi **explicitamente pedido no enunciado**. Não penalize por omissão de conteúdo que não foi solicitado.
-- Se a questão usar palavras como "simples", "básico" ou "exemplo", isso é uma restrição explícita de escopo. Não penalize por ausência de conteúdo que vai além dessa restrição.
-- Para **clareza**: avalie a qualidade da explicação textual, não a legibilidade do código (se houver).
-- Para corretude: considere se o aluno demonstrou compreensão do conceito central. Erros menores de sintaxe ou digitação não devem penalizar mais do que 1-2 pontos desde que o raciocínio esteja correto.
-- Na dúvida, interprete a resposta do aluno de forma favorável.
-- Se a resposta atender completamente ao que foi pedido, o score máximo (10) deve ser atribuído. Não reserve o 10 para uma resposta hipotética ideal.`;
+Para cada critério recebido:
+
+Leia a descrição e o peso;
+Atribua um nível (1 a 4) com base na rubrica acima;
+Converta para um score de 0 a 10 dentro da faixa do nível;
+Justifique brevemente a escolha do nível.
+
+
+Calcule a nota final como média ponderada:
+notaFinal = (Σ score_i × peso_i) ÷ (Σ peso_i)
+Retorne o JSON abaixo:
+
+json{
+  "autoEvaluation": [
+    {
+      "templateCriterionId": "<id do critério>",
+      "description": "texto EXATO da descrição do critério",
+      "weight": 2,
+      "level": 4,
+      "score": 9,
+      "levelJustification": "Breve justificativa do nível atribuído"
+    }
+  ],
+  "finalScore": 8.67,
+  "finalScoreFormula": "notaFinal = (9×2 + 8×1) ÷ (2 + 1) = 26 ÷ 3 ≈ 8.67",
+  "justification": "Resumo geral do desempenho, destacando acertos e pontos de melhoria. Seja construtivo."
+}
+
+Regras importantes
+
+Avalie pelo que foi explicitamente pedido no enunciado. Não penalize por conteúdo além do escopo.
+Se a questão usar palavras como "simples", "básico" ou "exemplo", isso restringe o escopo. Não penalize por ausência de profundidade além dessa restrição.
+Para clareza: avalie a qualidade da explicação textual, não a legibilidade do código-fonte.
+Para corretude: erros menores de sintaxe ou digitação não devem penalizar mais do que 1–2 pontos se o raciocínio estiver correto.
+Se a resposta atender completamente ao que foi pedido, o nível 4 (score 9–10) deve ser atribuído. Não reserve a nota máxima para uma resposta hipotética ideal.
+Na dúvida, interprete a resposta do aluno de forma favorável.
+NÃO crie nem remova critérios.
+NÃO altere a ordem dos critérios.
+NÃO modifique o texto de descrição dos critérios.
+Retorne apenas o JSON final, sem texto extra e sem blocos de código.`;
 
     const destructCriteria = evaluationCriteria
       .map(
