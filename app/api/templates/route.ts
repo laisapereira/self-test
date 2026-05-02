@@ -13,7 +13,10 @@ export async function GET(req: Request): Promise<NextResponse> {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (session?.user?.isAdmin) {
+    const { searchParams } = new URL(req.url);
+    const onlyVisible = searchParams.get("visible") === "true";
+
+    if (session?.user?.isAdmin && !onlyVisible) {
       const templates = await prisma.questionRequestTemplate.findMany();
       return NextResponse.json(templates);
     } else {

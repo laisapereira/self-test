@@ -55,7 +55,7 @@ export default function QuestionRequestCreatePage() {
       if (!isMountedRef.current) return;
       setIsLoadingTemplates(true);
       try {
-        const response = await fetch("/api/templates");
+        const response = await fetch("/api/templates?visible=true");
         const data = await response.json();
         if (isMountedRef.current) {
           if (response.ok && Array.isArray(data)) {
