@@ -1,10 +1,10 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import OpenAI from "openai";
-import { QuestionRequest, QuestionRequestStatus } from "@/prisma";
 import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { QuestionRequest, QuestionRequestStatus } from "@/prisma";
 import { PrismaJson } from "@/prisma/types";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+import OpenAI from "openai";
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
