@@ -48,7 +48,7 @@ json{
       "description": "texto EXATO da descrição do critério",
       "weight": 2,
       "level": 4,
-      "score": 9,
+      "score": 8,
       "levelJustification": "Breve justificativa do nível atribuído"
     }
   ],
