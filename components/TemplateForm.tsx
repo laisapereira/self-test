@@ -193,7 +193,7 @@ export default function TemplateForm({
                 <div>
                   <strong>{param.name}</strong> (
                   {param.multipleSelect ? "Múltipla" : "Única"}):{" "}
-                  {param.values.join(", ")}
+                  {param.values.join("; ")}
                 </div>
                 <Button
                   variant="destructive"
