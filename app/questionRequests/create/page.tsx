@@ -3,7 +3,13 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useEffect, useState, useRef } from "react";
 import { QuestionRequestTemplate } from "@/prisma";
-import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  SelectTrigger,
+} from "@/components/ui/select";
 import { PrismaJson } from "@/prisma/types";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Input } from "@/components/ui/input";
@@ -23,17 +29,18 @@ export default function QuestionRequestCreatePage() {
   }, [status, router]);
 
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
-  const [template, setTemplate] = useState<QuestionRequestTemplate | null>(null);
+  const [template, setTemplate] = useState<QuestionRequestTemplate | null>(
+    null,
+  );
   const [finalPrompt, setFinalPrompt] = useState<string>("");
   const [newRequest, setNewRequest] = useState({
     parameterValues: [] as PrismaJson.QuestionRequestParameterValue[],
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
-  const [activeRequestId, setActiveRequestId] = useState<number | null>(null)
+  const [activeRequestId, setActiveRequestId] = useState<number | null>(null);
 
-
-  const [currentRequestId, setCurrentRequestId] = useState<string | null>(null)
+  const [currentRequestId, setCurrentRequestId] = useState<string | null>(null);
 
   const abortControllerCreateRef = useRef<AbortController | null>(null);
   const isMountedRef = useRef(true);
@@ -77,8 +84,6 @@ export default function QuestionRequestCreatePage() {
     fetchTemplates();
   }, [status]);
 
-
-
   useEffect(() => {
     if (template) {
       const initialValues = template.parameters?.map((param) => ({
@@ -89,12 +94,10 @@ export default function QuestionRequestCreatePage() {
     }
   }, [template]);
 
-
-
   useEffect(() => {
     async function checkPendingRequest() {
-      const response = await fetch("/api/questionRequests?status=PENDING")
-      const data = await response.json()
+      const response = await fetch("/api/questionRequests?status=PENDING");
+      const data = await response.json();
 
       if (data.length > 0) {
         const lastRequest = data[0];
@@ -104,65 +107,89 @@ export default function QuestionRequestCreatePage() {
 
         // Só retoma o polling se a requisição for recente (menos de 5 minutos)
         if (diffMinutes < 5) {
-          setActiveRequestId(lastRequest.id)
-          console.log("Retomando polling para requisição recente:", lastRequest.id)
+          setActiveRequestId(lastRequest.id);
+          console.log(
+            "Retomando polling para requisição recente:",
+            lastRequest.id,
+          );
         } else {
-          console.log("Ignorando requisição pendente antiga (stale):", lastRequest.id)
+          console.log(
+            "Ignorando requisição pendente antiga (stale):",
+            lastRequest.id,
+          );
         }
       }
     }
-    checkPendingRequest()
-  }, [])
+    checkPendingRequest();
+  }, []);
 
   function renderParameterInput(
     parameter: PrismaJson.QuestionRequestTemplateParameter,
-    key: string
+    key: string,
   ): React.ReactNode {
-
     if (parameter.values && parameter.values.length > 0) {
       if (parameter.multipleSelect) {
-        return <MultiSelect
-          key={key}
-          placeholder={`Selecione os parâmetros de: ${parameter.name}`}
-          options={parameter.values.map((value) => ({ value, label: value }))}
-          onValueChange={(values) => handleParameterChange(parameter, values)}
-        />
+        return (
+          <MultiSelect
+            key={key}
+            placeholder={`Selecione os parâmetros de: ${parameter.name}`}
+            options={parameter.values.map((value) => ({ value, label: value }))}
+            onValueChange={(values) => handleParameterChange(parameter, values)}
+          />
+        );
       } else {
-        return <Select onValueChange={(value => handleParameterChange(parameter, [value]))} key={key}>
-          <SelectTrigger>
-            <SelectValue placeholder={`Selecione o parâmetro: ${parameter.name}`} />
-          </SelectTrigger>
-          <SelectContent>
-            {parameter.values.map((value: string) => (
-              <SelectItem key={value} value={value}>
-                {value}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        return (
+          <Select
+            onValueChange={(value) => handleParameterChange(parameter, [value])}
+            key={key}
+          >
+            <SelectTrigger>
+              <SelectValue
+                placeholder={`Selecione o parâmetro: ${parameter.name}`}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {parameter.values.map((value: string) => (
+                <SelectItem key={value} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        );
       }
     } else {
-      return <Input
-        key={key}
-        type="text"
-        value={newRequest.parameterValues.find((param) => param.name === parameter.name)?.values[0] || ""}
-        onChange={(e) => handleParameterChange(parameter, [e.target.value])}
-        placeholder={`Enter ${parameter.name}`}
-        className="mb-4"
-      />;
+      return (
+        <Input
+          key={key}
+          type="text"
+          value={
+            newRequest.parameterValues.find(
+              (param) => param.name === parameter.name,
+            )?.values[0] || ""
+          }
+          onChange={(e) => handleParameterChange(parameter, [e.target.value])}
+          placeholder={`Enter ${parameter.name}`}
+          className="mb-4"
+        />
+      );
     }
   }
 
-
-  function generateFinalPrompt(template: QuestionRequestTemplate,
-    parameterValues: PrismaJson.QuestionRequestParameterValue[]) {
+  function generateFinalPrompt(
+    template: QuestionRequestTemplate,
+    parameterValues: PrismaJson.QuestionRequestParameterValue[],
+  ) {
     // Generate the final prompt by replacing placeholders in the template with actual values
     const promptTemplate = template.promptTemplate;
 
-    const merged = [...parameterValues, { name: "tema", values: [template.name ?? ""] }];
+    const merged = [
+      ...parameterValues,
+      { name: "tema", values: [template.name ?? ""] },
+    ];
 
     const paramMap = new Map<string, string[]>(
-      merged.map(param => [param.name.toLowerCase(), param.values ?? []])
+      merged.map((param) => [param.name.toLowerCase(), param.values ?? []]),
     );
 
     return promptTemplate.replace(/<([^>]+)>/g, (_, key) => {
@@ -171,20 +198,24 @@ export default function QuestionRequestCreatePage() {
       if (!matchValues || matchValues.length === 0) return `<${key}>`;
       // replace with the values, if multipleSelect and multiple values, join with commas
       // using key as default value if no match found
-      const replaced = matchValues.length > 1
-        ? matchValues.join(", ") : matchValues?.[0] ?? `<${key}>`;
+      const replaced =
+        matchValues.length > 1
+          ? matchValues.join(", ")
+          : (matchValues?.[0] ?? `<${key}>`);
 
       return replaced;
     });
   }
 
-  function handleParameterChange(parameter: PrismaJson.QuestionRequestTemplateParameter, values: string[]) {
+  function handleParameterChange(
+    parameter: PrismaJson.QuestionRequestTemplateParameter,
+    values: string[],
+  ) {
     const updatedValues = [...newRequest.parameterValues];
-    const index = updatedValues.findIndex(p => p.name === parameter.name);
+    const index = updatedValues.findIndex((p) => p.name === parameter.name);
 
     if (index >= 0) {
       updatedValues[index] = { ...updatedValues[index], values };
-
     } else {
       updatedValues.push({ name: parameter.name, values });
     }
@@ -195,24 +226,34 @@ export default function QuestionRequestCreatePage() {
     const generatedPrompt = generateFinalPrompt(template!, updatedValues);
 
     setFinalPrompt(generatedPrompt);
-
   }
 
   function renderSelectTemplate() {
-    return <Select onValueChange={(value) => value ? setTemplate(templates.find((t) => `${t.id}` === value) || null) : setTemplate(null)}>
-
-      <label className="text-[1.1rem] font-semibold mt-4">Selecione um tema principal</label>
-      <SelectTrigger>
-        <SelectValue placeholder="Selecione uma àrea geral" />
-      </SelectTrigger>
-      <SelectContent>
-        {templates?.map((template: QuestionRequestTemplate) => (
-          <SelectItem key={template.id} value={`${template.id}`}>
-            {template.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>;
+    return (
+      <div className="flex flex-col gap-2 w-full">
+        <label className="text-[1.1rem] font-semibold">
+          Selecione um tema principal
+        </label>
+        <Select
+          onValueChange={(value) =>
+            value
+              ? setTemplate(templates.find((t) => `${t.id}` === value) || null)
+              : setTemplate(null)
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Selecione uma àrea geral" />
+          </SelectTrigger>
+          <SelectContent>
+            {templates?.map((template: QuestionRequestTemplate) => (
+              <SelectItem key={template.id} value={`${template.id}`}>
+                {template.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    );
   }
 
   async function createRequest() {
@@ -228,18 +269,20 @@ export default function QuestionRequestCreatePage() {
       (parameter: PrismaJson.QuestionRequestTemplateParameter) => {
         const paramValue = newRequest.parameterValues.find(
           (param: PrismaJson.QuestionRequestParameterValue) =>
-            param.name === parameter.name
+            param.name === parameter.name,
         );
         return (
           !paramValue ||
           paramValue.values.length === 0 ||
           paramValue.values[0] === ""
         );
-      }
+      },
     );
 
     if (missingParameters.length > 0) {
-      alert(`Por favor, selecione um valor para os seguintes parâmetros: ${missingParameters.map((p) => p.name).join(", ")}`);
+      alert(
+        `Por favor, selecione um valor para os seguintes parâmetros: ${missingParameters.map((p) => p.name).join(", ")}`,
+      );
       return;
     }
 
@@ -271,9 +314,8 @@ export default function QuestionRequestCreatePage() {
         return;
       }
 
-      const { id } = await response.json()
-      setActiveRequestId(id) // Sincroniza o estado para mostrar o card de progresso
-
+      const { id } = await response.json();
+      setActiveRequestId(id); // Sincroniza o estado para mostrar o card de progresso
     } catch (error: any) {
       if (error.name === "AbortError") {
         console.log("Create request aborted");
@@ -314,9 +356,14 @@ export default function QuestionRequestCreatePage() {
       console.log("[POLLING] Iniciando polling para id:", activeRequestId);
       while (!stopped) {
         try {
-          const response = await fetch(`/api/questionRequests/${activeRequestId}`);
+          const response = await fetch(
+            `/api/questionRequests/${activeRequestId}`,
+          );
           if (!response.ok) {
-            console.error("[POLLING] Erro ao buscar status:", response.statusText);
+            console.error(
+              "[POLLING] Erro ao buscar status:",
+              response.statusText,
+            );
             break;
           }
           const questionRequest = await response.json();
@@ -339,7 +386,9 @@ export default function QuestionRequestCreatePage() {
           }
 
           if (questionRequest.status === "CANCELED") {
-            console.log("[POLLING] requisição cancelada pelo usuário ou sistema.");
+            console.log(
+              "[POLLING] requisição cancelada pelo usuário ou sistema.",
+            );
             setIsLoading(false);
             setActiveRequestId(null);
             return;
@@ -347,7 +396,7 @@ export default function QuestionRequestCreatePage() {
         } catch (error) {
           console.error("[POLLING] erro no fetch:", error);
         }
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         if (stopped) break;
       }
     }
@@ -360,47 +409,63 @@ export default function QuestionRequestCreatePage() {
     };
   }, [activeRequestId]);
 
-
-
   return (
     <div>
       {activeRequestId ? (
         <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex flex-col items-center gap-4">
           <Spinner>
-            O SelfTest está gerando seu desafio personalizado...
-            Pode sair desta página e navegar pelo site tranquilamente, o progresso continuará em segundo plano e você poderá ver o resultado no seu histórico!
+            O SelfTest está gerando seu desafio personalizado... Pode sair desta
+            página e navegar pelo site tranquilamente, o progresso continuará em
+            segundo plano e você poderá ver o resultado no seu histórico!
           </Spinner>
           <div className="flex flex-col w-full gap-2">
             <Button variant="outline" className="w-full" asChild>
               <a href="/questionRequests">Acompanhar no histórico</a>
             </Button>
-            <Button variant="destructive" className="w-full" onClick={cancelRequest}>
+            <Button
+              variant="destructive"
+              className="w-full"
+              onClick={cancelRequest}
+            >
               Cancelar geração
             </Button>
           </div>
         </Card>
       ) : (
-        <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex">
+        <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex flex-col gap-6">
           <CardHeader className="text-center">
-            <h1 className="text-4xl font-bold">Vamos testar seu conhecimento?</h1>
+            <h1 className="text-4xl font-bold">
+              Vamos testar seu conhecimento?
+            </h1>
             <p className="text-slate-500 py-3">
-              Configure abaixo os tópicos para gerar um desafio personalizado de perguntas!
+              Configure abaixo os tópicos para gerar um desafio personalizado de
+              perguntas!
             </p>
           </CardHeader>
-          <CardContent className="flex flex-col gap-2.5">
+          <CardContent className="flex flex-col gap-4">
             {renderSelectTemplate()}
-            {template &&
-              template.parameters?.length > 0 && (
-                <>
-                  <h2 className="text-[1.1rem] font-semibold mt-4"> Defina os parâmetros que a IA deve priorizar</h2>
-                  {template.parameters.map((parameter: PrismaJson.QuestionRequestTemplateParameter) =>
-                    renderParameterInput(parameter, `${parameter.name}`)
-                  )}
-                </>
-              )}
+            {template && template.parameters?.length > 0 && (
+              <>
+                <h2 className="text-[1.1rem] font-semibold mt-4">
+                  {" "}
+                  Defina os parâmetros que a IA deve priorizar
+                </h2>
+                {template.parameters.map(
+                  (parameter: PrismaJson.QuestionRequestTemplateParameter) =>
+                    renderParameterInput(parameter, `${parameter.name}`),
+                )}
+              </>
+            )}
             {template && (
-              <Button onClick={createRequest} disabled={isLoading || isLoadingTemplates}>
-                {isLoading ? <span className="spinner" /> : "Gerar minhas questões"}
+              <Button
+                onClick={createRequest}
+                disabled={isLoading || isLoadingTemplates}
+              >
+                {isLoading ? (
+                  <span className="spinner" />
+                ) : (
+                  "Gerar minhas questões"
+                )}
               </Button>
             )}
           </CardContent>

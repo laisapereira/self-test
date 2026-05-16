@@ -114,7 +114,7 @@ export default function TemplateForm({
   }
 
   return (
-    <div className="p-4 max-w-5xl mx-auto">
+    <div className="p-4 w-full max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Modelos de Questão</h1>
       <Card className="mb-4 border-gray-200">
         <CardHeader>
@@ -122,83 +122,94 @@ export default function TemplateForm({
             {mode === "create" ? "Criar novo modelo" : "Editar modelo"}
           </h2>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-gray-500 mb-3">
-            Informe um nome, insira as instruções (prompt) e adicione
-            parâmetros. Use markdown simples e evite textos muito extensos nas
-            listagens.
-          </p>
-          <Input
-            type="text"
-            value={newTemplate.name}
-            onChange={(e) =>
-              setNewTemplate({ ...newTemplate, name: e.target.value })
-            }
-            placeholder="Nome do template"
-            className="mb-3"
-          />
-          <Textarea
-            value={newTemplate.promptTemplate}
-            onChange={(e) =>
-              setNewTemplate({ ...newTemplate, promptTemplate: e.target.value })
-            }
-            placeholder="Instruções do template (prompt)"
-            className="mb-4"
-            rows={6}
-          />
-
-          <div className="mb-4">
-            <h3 className="text-lg font-medium mb-1">Template de avaliação</h3>
-            <p className="text-sm text-gray-500 mb-2">
-              Opcional. Se selecionado, a IA usará estes critérios ao avaliar
-              respostas discursivas geradas por este template.
+        <CardContent className="grid gap-4">
+          <div>
+            <p className="text-sm text-gray-500 mb-3">
+              Informe um nome, insira as instruções (prompt) e adicione
+              parâmetros. Use markdown simples e evite textos muito extensos nas
+              listagens.
             </p>
-            <Select
-              value={newTemplate.evaluationTemplateId?.toString() ?? "none"}
-              onValueChange={(v) =>
+            <Input
+              type="text"
+              value={newTemplate.name}
+              onChange={(e) =>
+                setNewTemplate({ ...newTemplate, name: e.target.value })
+              }
+              placeholder="Nome do template"
+              className="mb-3"
+            />
+            <Textarea
+              value={newTemplate.promptTemplate}
+              onChange={(e) =>
                 setNewTemplate({
                   ...newTemplate,
-                  evaluationTemplateId: v === "none" ? null : parseInt(v, 10),
+                  promptTemplate: e.target.value,
                 })
               }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Nenhum (a IA define livremente)" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">
-                  Nenhum (a IA define livremente)
-                </SelectItem>
-                {evaluationTemplates.map((et) => (
-                  <SelectItem key={et.id} value={et.id.toString()}>
-                    {et.name}
-                    {et.description && (
-                      <span className="ml-2 text-xs text-gray-400">
-                        — {et.description}
-                      </span>
-                    )}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              placeholder="Instruções do template (prompt)"
+              className="mb-4"
+              rows={6}
+            />
           </div>
 
-          <h3 className="text-lg font-medium">Parâmetros</h3>
+          <div className="grid gap-4">
+            <div>
+              <h3 className="text-lg font-medium mb-1">
+                Template de avaliação
+              </h3>
+              <p className="text-sm text-gray-500 mb-2">
+                Opcional. Se selecionado, a IA usará estes critérios ao avaliar
+                respostas discursivas geradas por este template.
+              </p>
+              <Select
+                value={newTemplate.evaluationTemplateId?.toString() ?? "none"}
+                onValueChange={(v) =>
+                  setNewTemplate({
+                    ...newTemplate,
+                    evaluationTemplateId: v === "none" ? null : parseInt(v, 10),
+                  })
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Nenhum (a IA define livremente)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">
+                    Nenhum (a IA define livremente)
+                  </SelectItem>
+                  {evaluationTemplates.map((et) => (
+                    <SelectItem key={et.id} value={et.id.toString()}>
+                      {et.name}
+                      {et.description && (
+                        <span className="ml-2 text-xs text-gray-400">
+                          — {et.description}
+                        </span>
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-medium">Parâmetros</h3>
+            </div>
+          </div>
           <ul className="mt-4 space-y-2">
             {newTemplate.parameters.map((param, index) => (
               <li
                 key={index}
-                className="rounded-lg border border-gray-200 p-3 flex flex-wrap items-center justify-between gap-2"
+                className="rounded-lg border border-gray-200 p-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
               >
-                <div>
+                <div className="min-w-0 text-sm text-gray-700">
                   <strong>{param.name}</strong> (
                   {param.multipleSelect ? "Múltipla" : "Única"}):{" "}
-                  {param.values.join("; ")}
+                  <span className="break-words">{param.values.join("; ")}</span>
                 </div>
                 <Button
                   variant="destructive"
                   onClick={() => removeParameter(index)}
-                  className="text-sm"
+                  className="text-sm w-full sm:w-auto"
                 >
                   Remover
                 </Button>
@@ -206,45 +217,50 @@ export default function TemplateForm({
             ))}
           </ul>
           <Card className="mt-4 border-gray-200">
-            <CardContent>
+            <CardContent className="grid gap-4">
               <h3 className="text-lg font-medium mb-2">Adicionar parâmetro</h3>
-              <Input
-                type="text"
-                value={newParameter.name}
-                onChange={(e) =>
-                  setNewParameter({ ...newParameter, name: e.target.value })
-                }
-                placeholder="Nome do parâmetro"
-                className="mb-2"
-              />
-              <Input
-                type="text"
-                value={newParameter.values}
-                onChange={(e) =>
-                  setNewParameter({ ...newParameter, values: e.target.value })
-                }
-                placeholder="Valores separados por ; (ex: valor1; valor2)"
-                className="mb-2"
-              />
-              <Checkbox
-                id="check"
-                checked={newParameter.multipleSelect}
-                onCheckedChange={(checked) =>
-                  setNewParameter({
-                    ...newParameter,
-                    multipleSelect: !!checked,
-                  })
-                }
-                className="mb-2"
-              />
-              <Label htmlFor="check"> Seleção múltipla</Label>
-              <br />
-              <Button onClick={addParameter} className="mt-2">
-                Adicionar parâmetro
-              </Button>
+              <div className="grid gap-3">
+                <Input
+                  type="text"
+                  value={newParameter.name}
+                  onChange={(e) =>
+                    setNewParameter({ ...newParameter, name: e.target.value })
+                  }
+                  placeholder="Nome do parâmetro"
+                />
+                <Input
+                  type="text"
+                  value={newParameter.values}
+                  onChange={(e) =>
+                    setNewParameter({ ...newParameter, values: e.target.value })
+                  }
+                  placeholder="Valores separados por ; (ex: valor1; valor2)"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="check"
+                    checked={newParameter.multipleSelect}
+                    onCheckedChange={(checked) =>
+                      setNewParameter({
+                        ...newParameter,
+                        multipleSelect: !!checked,
+                      })
+                    }
+                  />
+                  <Label htmlFor="check">Seleção múltipla</Label>
+                </div>
+                <Button onClick={addParameter} className="w-full sm:w-auto">
+                  Adicionar parâmetro
+                </Button>
+              </div>
             </CardContent>
           </Card>
-          <Button onClick={() => onSubmit(newTemplate)} className="mt-4">
+          <Button
+            onClick={() => onSubmit(newTemplate)}
+            className="mt-4 w-full sm:w-auto"
+          >
             {mode === "create" ? "Criar template" : "Atualizar template"}
           </Button>
         </CardContent>
