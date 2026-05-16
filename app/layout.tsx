@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment, ReactNode, useState } from "react";
 import { Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
 import Sidebar from "@/components/ui/sidebar";
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
@@ -192,6 +193,7 @@ function Navbar() {
 function MenuItems(props: { onClick?: () => void }) {
   const { onClick } = props;
   const { data: session } = useSession();
+  const pathname = usePathname();
   const isUserAdmin = () => {
     if (!session || !session.user) return false;
     return session.user.isAdmin === true;
@@ -205,17 +207,26 @@ function MenuItems(props: { onClick?: () => void }) {
     <>
       {routes
         .filter((route) => !route.requireAdmin || isUserAdmin())
-        .map((route, index) => (
-          <li key={index}>
-            <Link
-              href={route.href}
-              onClick={onClick}
-              className="block rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100"
-            >
-              {route.title}
-            </Link>
-          </li>
-        ))}
+        .map((route, index) => {
+          const active =
+            route.href === pathname ||
+            (route.href !== "/" && pathname?.startsWith(route.href));
+          return (
+            <li key={index}>
+              <Link
+                href={route.href}
+                onClick={onClick}
+                className={`block rounded-lg px-3 py-2 transition ${
+                  active
+                    ? "bg-slate-100 text-slate-900 font-semibold"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                {route.title}
+              </Link>
+            </li>
+          );
+        })}
     </>
   );
 }
