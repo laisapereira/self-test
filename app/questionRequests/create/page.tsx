@@ -143,14 +143,14 @@ export default function QuestionRequestCreatePage() {
             onValueChange={(value) => handleParameterChange(parameter, [value])}
             key={key}
           >
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue
                 placeholder={`Selecione o parâmetro: ${parameter.name}`}
               />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-w-[min(calc(100vw-2rem),var(--radix-select-trigger-width,24rem))]">
               {parameter.values.map((value: string) => (
-                <SelectItem key={value} value={value}>
+                <SelectItem key={value} value={value} className="whitespace-normal break-words">
                   {value}
                 </SelectItem>
               ))}
@@ -244,9 +244,9 @@ export default function QuestionRequestCreatePage() {
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Selecione uma àrea geral" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-w-[min(calc(100vw-2rem),var(--radix-select-trigger-width,24rem))]">
             {templates?.map((template: QuestionRequestTemplate) => (
-              <SelectItem key={template.id} value={`${template.id}`}>
+              <SelectItem key={template.id} value={`${template.id}`} className="whitespace-normal break-words">
                 {template.name}
               </SelectItem>
             ))}
@@ -432,9 +432,9 @@ export default function QuestionRequestCreatePage() {
           </div>
         </Card>
       ) : (
-        <Card className="w-full max-w-2xl mx-auto mt-10 p-6 flex flex-col gap-6">
+        <Card className="w-full max-w-2xl mx-auto mt-4 sm:mt-10 p-4 sm:p-6 flex flex-col gap-6">
           <CardHeader className="text-center">
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-2xl sm:text-4xl font-bold">
               Vamos testar seu conhecimento?
             </h1>
             <p className="text-slate-500 py-3">
