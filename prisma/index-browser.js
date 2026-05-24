@@ -122,23 +122,13 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  admin: 'admin',
+  role: 'role',
   name: 'name',
   email: 'email',
   passwordHash: 'passwordHash',
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-};
-
-exports.Prisma.GroupScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  ownerId: 'ownerId'
 };
 
 exports.Prisma.TopicScalarFieldEnum = {
@@ -238,6 +228,21 @@ exports.Prisma.AutoEvaluationCriterionScalarFieldEnum = {
   score: 'score'
 };
 
+exports.Prisma.ClassScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  ownerId: 'ownerId',
+  link: 'link'
+};
+
+exports.Prisma.ClassCollaboratorScalarFieldEnum = {
+  classId: 'classId',
+  userId: 'userId',
+  addedAt: 'addedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -252,6 +257,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  STUDENT: 'STUDENT',
+  PROFESSOR: 'PROFESSOR',
+  ADMIN: 'ADMIN'
+};
+
 exports.QuestionRequestStatus = exports.$Enums.QuestionRequestStatus = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
@@ -261,7 +272,6 @@ exports.QuestionRequestStatus = exports.$Enums.QuestionRequestStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Group: 'Group',
   Topic: 'Topic',
   QuestionRequestTemplate: 'QuestionRequestTemplate',
   QuestionRequest: 'QuestionRequest',
@@ -271,7 +281,9 @@ exports.Prisma.ModelName = {
   EvaluationCriterion: 'EvaluationCriterion',
   Answer: 'Answer',
   AutoEvaluation: 'AutoEvaluation',
-  AutoEvaluationCriterion: 'AutoEvaluationCriterion'
+  AutoEvaluationCriterion: 'AutoEvaluationCriterion',
+  Class: 'Class',
+  ClassCollaborator: 'ClassCollaborator'
 };
 
 /**

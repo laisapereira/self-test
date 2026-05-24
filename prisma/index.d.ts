@@ -202,11 +202,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
- * Model Group
- * 
- */
-export type Group = $Result.DefaultSelection<Prisma.$GroupPayload>
-/**
  * Model Topic
  * 
  */
@@ -256,12 +251,31 @@ export type AutoEvaluation = $Result.DefaultSelection<Prisma.$AutoEvaluationPayl
  * 
  */
 export type AutoEvaluationCriterion = $Result.DefaultSelection<Prisma.$AutoEvaluationCriterionPayload>
+/**
+ * Model Class
+ * 
+ */
+export type Class = $Result.DefaultSelection<Prisma.$ClassPayload>
+/**
+ * Model ClassCollaborator
+ * 
+ */
+export type ClassCollaborator = $Result.DefaultSelection<Prisma.$ClassCollaboratorPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const QuestionRequestStatus: {
+  export const Role: {
+  STUDENT: 'STUDENT',
+  PROFESSOR: 'PROFESSOR',
+  ADMIN: 'ADMIN'
+};
+
+export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const QuestionRequestStatus: {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
   CANCELED: 'CANCELED',
@@ -271,6 +285,10 @@ export namespace $Enums {
 export type QuestionRequestStatus = (typeof QuestionRequestStatus)[keyof typeof QuestionRequestStatus]
 
 }
+
+export type Role = $Enums.Role
+
+export const Role: typeof $Enums.Role
 
 export type QuestionRequestStatus = $Enums.QuestionRequestStatus
 
@@ -405,16 +423,6 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.group`: Exposes CRUD operations for the **Group** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Groups
-    * const groups = await prisma.group.findMany()
-    * ```
-    */
-  get group(): Prisma.GroupDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.topic`: Exposes CRUD operations for the **Topic** model.
     * Example usage:
     * ```ts
@@ -513,6 +521,26 @@ export class PrismaClient<
     * ```
     */
   get autoEvaluationCriterion(): Prisma.AutoEvaluationCriterionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.class`: Exposes CRUD operations for the **Class** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Classes
+    * const classes = await prisma.class.findMany()
+    * ```
+    */
+  get class(): Prisma.ClassDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.classCollaborator`: Exposes CRUD operations for the **ClassCollaborator** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClassCollaborators
+    * const classCollaborators = await prisma.classCollaborator.findMany()
+    * ```
+    */
+  get classCollaborator(): Prisma.ClassCollaboratorDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -954,7 +982,6 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Group: 'Group',
     Topic: 'Topic',
     QuestionRequestTemplate: 'QuestionRequestTemplate',
     QuestionRequest: 'QuestionRequest',
@@ -964,7 +991,9 @@ export namespace Prisma {
     EvaluationCriterion: 'EvaluationCriterion',
     Answer: 'Answer',
     AutoEvaluation: 'AutoEvaluation',
-    AutoEvaluationCriterion: 'AutoEvaluationCriterion'
+    AutoEvaluationCriterion: 'AutoEvaluationCriterion',
+    Class: 'Class',
+    ClassCollaborator: 'ClassCollaborator'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -983,7 +1012,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "group" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "evaluationTemplate" | "evaluationTemplateCriterion" | "evaluationCriterion" | "answer" | "autoEvaluation" | "autoEvaluationCriterion"
+      modelProps: "user" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "evaluationTemplate" | "evaluationTemplateCriterion" | "evaluationCriterion" | "answer" | "autoEvaluation" | "autoEvaluationCriterion" | "class" | "classCollaborator"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1058,80 +1087,6 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
-          }
-        }
-      }
-      Group: {
-        payload: Prisma.$GroupPayload<ExtArgs>
-        fields: Prisma.GroupFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.GroupFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.GroupFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>
-          }
-          findFirst: {
-            args: Prisma.GroupFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.GroupFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>
-          }
-          findMany: {
-            args: Prisma.GroupFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>[]
-          }
-          create: {
-            args: Prisma.GroupCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>
-          }
-          createMany: {
-            args: Prisma.GroupCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.GroupCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>[]
-          }
-          delete: {
-            args: Prisma.GroupDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>
-          }
-          update: {
-            args: Prisma.GroupUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>
-          }
-          deleteMany: {
-            args: Prisma.GroupDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.GroupUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.GroupUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>[]
-          }
-          upsert: {
-            args: Prisma.GroupUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupPayload>
-          }
-          aggregate: {
-            args: Prisma.GroupAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateGroup>
-          }
-          groupBy: {
-            args: Prisma.GroupGroupByArgs<ExtArgs>
-            result: $Utils.Optional<GroupGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.GroupCountArgs<ExtArgs>
-            result: $Utils.Optional<GroupCountAggregateOutputType> | number
           }
         }
       }
@@ -1875,6 +1830,154 @@ export namespace Prisma {
           }
         }
       }
+      Class: {
+        payload: Prisma.$ClassPayload<ExtArgs>
+        fields: Prisma.ClassFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClassFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClassFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>
+          }
+          findFirst: {
+            args: Prisma.ClassFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClassFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>
+          }
+          findMany: {
+            args: Prisma.ClassFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>[]
+          }
+          create: {
+            args: Prisma.ClassCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>
+          }
+          createMany: {
+            args: Prisma.ClassCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClassCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>[]
+          }
+          delete: {
+            args: Prisma.ClassDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>
+          }
+          update: {
+            args: Prisma.ClassUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClassDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClassUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClassUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>[]
+          }
+          upsert: {
+            args: Prisma.ClassUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassPayload>
+          }
+          aggregate: {
+            args: Prisma.ClassAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClass>
+          }
+          groupBy: {
+            args: Prisma.ClassGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClassGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClassCountArgs<ExtArgs>
+            result: $Utils.Optional<ClassCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClassCollaborator: {
+        payload: Prisma.$ClassCollaboratorPayload<ExtArgs>
+        fields: Prisma.ClassCollaboratorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClassCollaboratorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClassCollaboratorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>
+          }
+          findFirst: {
+            args: Prisma.ClassCollaboratorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClassCollaboratorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>
+          }
+          findMany: {
+            args: Prisma.ClassCollaboratorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>[]
+          }
+          create: {
+            args: Prisma.ClassCollaboratorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>
+          }
+          createMany: {
+            args: Prisma.ClassCollaboratorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClassCollaboratorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>[]
+          }
+          delete: {
+            args: Prisma.ClassCollaboratorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>
+          }
+          update: {
+            args: Prisma.ClassCollaboratorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClassCollaboratorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClassCollaboratorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClassCollaboratorUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>[]
+          }
+          upsert: {
+            args: Prisma.ClassCollaboratorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassCollaboratorPayload>
+          }
+          aggregate: {
+            args: Prisma.ClassCollaboratorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClassCollaborator>
+          }
+          groupBy: {
+            args: Prisma.ClassCollaboratorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClassCollaboratorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClassCollaboratorCountArgs<ExtArgs>
+            result: $Utils.Optional<ClassCollaboratorCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1972,7 +2075,6 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
-    group?: GroupOmit
     topic?: TopicOmit
     questionRequestTemplate?: QuestionRequestTemplateOmit
     questionRequest?: QuestionRequestOmit
@@ -1983,6 +2085,8 @@ export namespace Prisma {
     answer?: AnswerOmit
     autoEvaluation?: AutoEvaluationOmit
     autoEvaluationCriterion?: AutoEvaluationCriterionOmit
+    class?: ClassOmit
+    classCollaborator?: ClassCollaboratorOmit
   }
 
   /* Types for Logging */
@@ -2063,23 +2167,25 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    groups: number
-    ownedGroups: number
     questionRequestTemplates: number
     questionRequests: number
     answers: number
     evaluationTemplates: number
     evaluationCriterions: number
+    ownedClasses: number
+    studentClasses: number
+    collaboratedClasses: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    groups?: boolean | UserCountOutputTypeCountGroupsArgs
-    ownedGroups?: boolean | UserCountOutputTypeCountOwnedGroupsArgs
     questionRequestTemplates?: boolean | UserCountOutputTypeCountQuestionRequestTemplatesArgs
     questionRequests?: boolean | UserCountOutputTypeCountQuestionRequestsArgs
     answers?: boolean | UserCountOutputTypeCountAnswersArgs
     evaluationTemplates?: boolean | UserCountOutputTypeCountEvaluationTemplatesArgs
     evaluationCriterions?: boolean | UserCountOutputTypeCountEvaluationCriterionsArgs
+    ownedClasses?: boolean | UserCountOutputTypeCountOwnedClassesArgs
+    studentClasses?: boolean | UserCountOutputTypeCountStudentClassesArgs
+    collaboratedClasses?: boolean | UserCountOutputTypeCountCollaboratedClassesArgs
   }
 
   // Custom InputTypes
@@ -2091,20 +2197,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountOwnedGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupWhereInput
   }
 
   /**
@@ -2142,35 +2234,25 @@ export namespace Prisma {
     where?: EvaluationCriterionWhereInput
   }
 
-
   /**
-   * Count Type GroupCountOutputType
+   * UserCountOutputType without action
    */
-
-  export type GroupCountOutputType = {
-    users: number
-  }
-
-  export type GroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | GroupCountOutputTypeCountUsersArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * GroupCountOutputType without action
-   */
-  export type GroupCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the GroupCountOutputType
-     */
-    select?: GroupCountOutputTypeSelect<ExtArgs> | null
+  export type UserCountOutputTypeCountOwnedClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassWhereInput
   }
 
   /**
-   * GroupCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type GroupCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
+  export type UserCountOutputTypeCountStudentClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCollaboratedClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassCollaboratorWhereInput
   }
 
 
@@ -2180,10 +2262,12 @@ export namespace Prisma {
 
   export type QuestionRequestTemplateCountOutputType = {
     requests: number
+    classes: number
   }
 
   export type QuestionRequestTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     requests?: boolean | QuestionRequestTemplateCountOutputTypeCountRequestsArgs
+    classes?: boolean | QuestionRequestTemplateCountOutputTypeCountClassesArgs
   }
 
   // Custom InputTypes
@@ -2202,6 +2286,13 @@ export namespace Prisma {
    */
   export type QuestionRequestTemplateCountOutputTypeCountRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QuestionRequestWhereInput
+  }
+
+  /**
+   * QuestionRequestTemplateCountOutputType without action
+   */
+  export type QuestionRequestTemplateCountOutputTypeCountClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassWhereInput
   }
 
 
@@ -2274,11 +2365,13 @@ export namespace Prisma {
   export type EvaluationTemplateCountOutputType = {
     criteria: number
     questionRequestTemplates: number
+    classes: number
   }
 
   export type EvaluationTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     criteria?: boolean | EvaluationTemplateCountOutputTypeCountCriteriaArgs
     questionRequestTemplates?: boolean | EvaluationTemplateCountOutputTypeCountQuestionRequestTemplatesArgs
+    classes?: boolean | EvaluationTemplateCountOutputTypeCountClassesArgs
   }
 
   // Custom InputTypes
@@ -2304,6 +2397,13 @@ export namespace Prisma {
    */
   export type EvaluationTemplateCountOutputTypeCountQuestionRequestTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QuestionRequestTemplateWhereInput
+  }
+
+  /**
+   * EvaluationTemplateCountOutputType without action
+   */
+  export type EvaluationTemplateCountOutputTypeCountClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassWhereInput
   }
 
 
@@ -2401,6 +2501,64 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ClassCountOutputType
+   */
+
+  export type ClassCountOutputType = {
+    students: number
+    collaborators: number
+    questionTemplates: number
+    evaluationTemplates: number
+  }
+
+  export type ClassCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | ClassCountOutputTypeCountStudentsArgs
+    collaborators?: boolean | ClassCountOutputTypeCountCollaboratorsArgs
+    questionTemplates?: boolean | ClassCountOutputTypeCountQuestionTemplatesArgs
+    evaluationTemplates?: boolean | ClassCountOutputTypeCountEvaluationTemplatesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ClassCountOutputType without action
+   */
+  export type ClassCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCountOutputType
+     */
+    select?: ClassCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ClassCountOutputType without action
+   */
+  export type ClassCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+  }
+
+  /**
+   * ClassCountOutputType without action
+   */
+  export type ClassCountOutputTypeCountCollaboratorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassCollaboratorWhereInput
+  }
+
+  /**
+   * ClassCountOutputType without action
+   */
+  export type ClassCountOutputTypeCountQuestionTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuestionRequestTemplateWhereInput
+  }
+
+  /**
+   * ClassCountOutputType without action
+   */
+  export type ClassCountOutputTypeCountEvaluationTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationTemplateWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -2426,7 +2584,7 @@ export namespace Prisma {
 
   export type UserMinAggregateOutputType = {
     id: number | null
-    admin: boolean | null
+    role: $Enums.Role | null
     name: string | null
     email: string | null
     passwordHash: string | null
@@ -2437,7 +2595,7 @@ export namespace Prisma {
 
   export type UserMaxAggregateOutputType = {
     id: number | null
-    admin: boolean | null
+    role: $Enums.Role | null
     name: string | null
     email: string | null
     passwordHash: string | null
@@ -2448,7 +2606,7 @@ export namespace Prisma {
 
   export type UserCountAggregateOutputType = {
     id: number
-    admin: number
+    role: number
     name: number
     email: number
     passwordHash: number
@@ -2469,7 +2627,7 @@ export namespace Prisma {
 
   export type UserMinAggregateInputType = {
     id?: true
-    admin?: true
+    role?: true
     name?: true
     email?: true
     passwordHash?: true
@@ -2480,7 +2638,7 @@ export namespace Prisma {
 
   export type UserMaxAggregateInputType = {
     id?: true
-    admin?: true
+    role?: true
     name?: true
     email?: true
     passwordHash?: true
@@ -2491,7 +2649,7 @@ export namespace Prisma {
 
   export type UserCountAggregateInputType = {
     id?: true
-    admin?: true
+    role?: true
     name?: true
     email?: true
     passwordHash?: true
@@ -2589,7 +2747,7 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: number
-    admin: boolean
+    role: $Enums.Role
     name: string | null
     email: string
     passwordHash: string | null
@@ -2619,26 +2777,27 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    admin?: boolean
+    role?: boolean
     name?: boolean
     email?: boolean
     passwordHash?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    groups?: boolean | User$groupsArgs<ExtArgs>
-    ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
     questionRequestTemplates?: boolean | User$questionRequestTemplatesArgs<ExtArgs>
     questionRequests?: boolean | User$questionRequestsArgs<ExtArgs>
     answers?: boolean | User$answersArgs<ExtArgs>
     evaluationTemplates?: boolean | User$evaluationTemplatesArgs<ExtArgs>
     evaluationCriterions?: boolean | User$evaluationCriterionsArgs<ExtArgs>
+    ownedClasses?: boolean | User$ownedClassesArgs<ExtArgs>
+    studentClasses?: boolean | User$studentClassesArgs<ExtArgs>
+    collaboratedClasses?: boolean | User$collaboratedClassesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    admin?: boolean
+    role?: boolean
     name?: boolean
     email?: boolean
     passwordHash?: boolean
@@ -2649,7 +2808,7 @@ export namespace Prisma {
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    admin?: boolean
+    role?: boolean
     name?: boolean
     email?: boolean
     passwordHash?: boolean
@@ -2660,7 +2819,7 @@ export namespace Prisma {
 
   export type UserSelectScalar = {
     id?: boolean
-    admin?: boolean
+    role?: boolean
     name?: boolean
     email?: boolean
     passwordHash?: boolean
@@ -2669,15 +2828,16 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "admin" | "name" | "email" | "passwordHash" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "role" | "name" | "email" | "passwordHash" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    groups?: boolean | User$groupsArgs<ExtArgs>
-    ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
     questionRequestTemplates?: boolean | User$questionRequestTemplatesArgs<ExtArgs>
     questionRequests?: boolean | User$questionRequestsArgs<ExtArgs>
     answers?: boolean | User$answersArgs<ExtArgs>
     evaluationTemplates?: boolean | User$evaluationTemplatesArgs<ExtArgs>
     evaluationCriterions?: boolean | User$evaluationCriterionsArgs<ExtArgs>
+    ownedClasses?: boolean | User$ownedClassesArgs<ExtArgs>
+    studentClasses?: boolean | User$studentClassesArgs<ExtArgs>
+    collaboratedClasses?: boolean | User$collaboratedClassesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2686,17 +2846,18 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      groups: Prisma.$GroupPayload<ExtArgs>[]
-      ownedGroups: Prisma.$GroupPayload<ExtArgs>[]
       questionRequestTemplates: Prisma.$QuestionRequestTemplatePayload<ExtArgs>[]
       questionRequests: Prisma.$QuestionRequestPayload<ExtArgs>[]
       answers: Prisma.$AnswerPayload<ExtArgs>[]
       evaluationTemplates: Prisma.$EvaluationTemplatePayload<ExtArgs>[]
       evaluationCriterions: Prisma.$EvaluationCriterionPayload<ExtArgs>[]
+      ownedClasses: Prisma.$ClassPayload<ExtArgs>[]
+      studentClasses: Prisma.$ClassPayload<ExtArgs>[]
+      collaboratedClasses: Prisma.$ClassCollaboratorPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      admin: boolean
+      role: $Enums.Role
       name: string | null
       email: string
       passwordHash: string | null
@@ -3097,13 +3258,14 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    groups<T extends User$groupsArgs<ExtArgs> = {}>(args?: Subset<T, User$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    ownedGroups<T extends User$ownedGroupsArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questionRequestTemplates<T extends User$questionRequestTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$questionRequestTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questionRequests<T extends User$questionRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$questionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     answers<T extends User$answersArgs<ExtArgs> = {}>(args?: Subset<T, User$answersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     evaluationTemplates<T extends User$evaluationTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$evaluationTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     evaluationCriterions<T extends User$evaluationCriterionsArgs<ExtArgs> = {}>(args?: Subset<T, User$evaluationCriterionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ownedClasses<T extends User$ownedClassesArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    studentClasses<T extends User$studentClassesArgs<ExtArgs> = {}>(args?: Subset<T, User$studentClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    collaboratedClasses<T extends User$collaboratedClassesArgs<ExtArgs> = {}>(args?: Subset<T, User$collaboratedClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3134,7 +3296,7 @@ export namespace Prisma {
    */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'Int'>
-    readonly admin: FieldRef<"User", 'Boolean'>
+    readonly role: FieldRef<"User", 'Role'>
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly passwordHash: FieldRef<"User", 'String'>
@@ -3529,54 +3691,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.groups
-   */
-  export type User$groupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    where?: GroupWhereInput
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    cursor?: GroupWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
-  }
-
-  /**
-   * User.ownedGroups
-   */
-  export type User$ownedGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    where?: GroupWhereInput
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    cursor?: GroupWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
-  }
-
-  /**
    * User.questionRequestTemplates
    */
   export type User$questionRequestTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3697,6 +3811,78 @@ export namespace Prisma {
   }
 
   /**
+   * User.ownedClasses
+   */
+  export type User$ownedClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    where?: ClassWhereInput
+    orderBy?: ClassOrderByWithRelationInput | ClassOrderByWithRelationInput[]
+    cursor?: ClassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
+  }
+
+  /**
+   * User.studentClasses
+   */
+  export type User$studentClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    where?: ClassWhereInput
+    orderBy?: ClassOrderByWithRelationInput | ClassOrderByWithRelationInput[]
+    cursor?: ClassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
+  }
+
+  /**
+   * User.collaboratedClasses
+   */
+  export type User$collaboratedClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    where?: ClassCollaboratorWhereInput
+    orderBy?: ClassCollaboratorOrderByWithRelationInput | ClassCollaboratorOrderByWithRelationInput[]
+    cursor?: ClassCollaboratorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassCollaboratorScalarFieldEnum | ClassCollaboratorScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3712,1158 +3898,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Group
-   */
-
-  export type AggregateGroup = {
-    _count: GroupCountAggregateOutputType | null
-    _avg: GroupAvgAggregateOutputType | null
-    _sum: GroupSumAggregateOutputType | null
-    _min: GroupMinAggregateOutputType | null
-    _max: GroupMaxAggregateOutputType | null
-  }
-
-  export type GroupAvgAggregateOutputType = {
-    id: number | null
-    ownerId: number | null
-  }
-
-  export type GroupSumAggregateOutputType = {
-    id: number | null
-    ownerId: number | null
-  }
-
-  export type GroupMinAggregateOutputType = {
-    id: number | null
-    name: string | null
-    startDate: Date | null
-    endDate: Date | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    ownerId: number | null
-  }
-
-  export type GroupMaxAggregateOutputType = {
-    id: number | null
-    name: string | null
-    startDate: Date | null
-    endDate: Date | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    ownerId: number | null
-  }
-
-  export type GroupCountAggregateOutputType = {
-    id: number
-    name: number
-    startDate: number
-    endDate: number
-    createdAt: number
-    updatedAt: number
-    ownerId: number
-    _all: number
-  }
-
-
-  export type GroupAvgAggregateInputType = {
-    id?: true
-    ownerId?: true
-  }
-
-  export type GroupSumAggregateInputType = {
-    id?: true
-    ownerId?: true
-  }
-
-  export type GroupMinAggregateInputType = {
-    id?: true
-    name?: true
-    startDate?: true
-    endDate?: true
-    createdAt?: true
-    updatedAt?: true
-    ownerId?: true
-  }
-
-  export type GroupMaxAggregateInputType = {
-    id?: true
-    name?: true
-    startDate?: true
-    endDate?: true
-    createdAt?: true
-    updatedAt?: true
-    ownerId?: true
-  }
-
-  export type GroupCountAggregateInputType = {
-    id?: true
-    name?: true
-    startDate?: true
-    endDate?: true
-    createdAt?: true
-    updatedAt?: true
-    ownerId?: true
-    _all?: true
-  }
-
-  export type GroupAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Group to aggregate.
-     */
-    where?: GroupWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Groups to fetch.
-     */
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: GroupWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Groups from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Groups.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Groups
-    **/
-    _count?: true | GroupCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: GroupAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: GroupSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: GroupMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: GroupMaxAggregateInputType
-  }
-
-  export type GetGroupAggregateType<T extends GroupAggregateArgs> = {
-        [P in keyof T & keyof AggregateGroup]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateGroup[P]>
-      : GetScalarType<T[P], AggregateGroup[P]>
-  }
-
-
-
-
-  export type GroupGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupWhereInput
-    orderBy?: GroupOrderByWithAggregationInput | GroupOrderByWithAggregationInput[]
-    by: GroupScalarFieldEnum[] | GroupScalarFieldEnum
-    having?: GroupScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: GroupCountAggregateInputType | true
-    _avg?: GroupAvgAggregateInputType
-    _sum?: GroupSumAggregateInputType
-    _min?: GroupMinAggregateInputType
-    _max?: GroupMaxAggregateInputType
-  }
-
-  export type GroupGroupByOutputType = {
-    id: number
-    name: string
-    startDate: Date
-    endDate: Date
-    createdAt: Date
-    updatedAt: Date
-    ownerId: number
-    _count: GroupCountAggregateOutputType | null
-    _avg: GroupAvgAggregateOutputType | null
-    _sum: GroupSumAggregateOutputType | null
-    _min: GroupMinAggregateOutputType | null
-    _max: GroupMaxAggregateOutputType | null
-  }
-
-  type GetGroupGroupByPayload<T extends GroupGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<GroupGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof GroupGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], GroupGroupByOutputType[P]>
-            : GetScalarType<T[P], GroupGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type GroupSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    startDate?: boolean
-    endDate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    ownerId?: boolean
-    owner?: boolean | UserDefaultArgs<ExtArgs>
-    users?: boolean | Group$usersArgs<ExtArgs>
-    _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["group"]>
-
-  export type GroupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    startDate?: boolean
-    endDate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    ownerId?: boolean
-    owner?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["group"]>
-
-  export type GroupSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    startDate?: boolean
-    endDate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    ownerId?: boolean
-    owner?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["group"]>
-
-  export type GroupSelectScalar = {
-    id?: boolean
-    name?: boolean
-    startDate?: boolean
-    endDate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    ownerId?: boolean
-  }
-
-  export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startDate" | "endDate" | "createdAt" | "updatedAt" | "ownerId", ExtArgs["result"]["group"]>
-  export type GroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    owner?: boolean | UserDefaultArgs<ExtArgs>
-    users?: boolean | Group$usersArgs<ExtArgs>
-    _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type GroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    owner?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type GroupIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    owner?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $GroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Group"
-    objects: {
-      owner: Prisma.$UserPayload<ExtArgs>
-      users: Prisma.$UserPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      name: string
-      startDate: Date
-      endDate: Date
-      createdAt: Date
-      updatedAt: Date
-      ownerId: number
-    }, ExtArgs["result"]["group"]>
-    composites: {}
-  }
-
-  type GroupGetPayload<S extends boolean | null | undefined | GroupDefaultArgs> = $Result.GetResult<Prisma.$GroupPayload, S>
-
-  type GroupCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<GroupFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: GroupCountAggregateInputType | true
-    }
-
-  export interface GroupDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Group'], meta: { name: 'Group' } }
-    /**
-     * Find zero or one Group that matches the filter.
-     * @param {GroupFindUniqueArgs} args - Arguments to find a Group
-     * @example
-     * // Get one Group
-     * const group = await prisma.group.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends GroupFindUniqueArgs>(args: SelectSubset<T, GroupFindUniqueArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Group that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {GroupFindUniqueOrThrowArgs} args - Arguments to find a Group
-     * @example
-     * // Get one Group
-     * const group = await prisma.group.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends GroupFindUniqueOrThrowArgs>(args: SelectSubset<T, GroupFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Group that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupFindFirstArgs} args - Arguments to find a Group
-     * @example
-     * // Get one Group
-     * const group = await prisma.group.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends GroupFindFirstArgs>(args?: SelectSubset<T, GroupFindFirstArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Group that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupFindFirstOrThrowArgs} args - Arguments to find a Group
-     * @example
-     * // Get one Group
-     * const group = await prisma.group.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends GroupFindFirstOrThrowArgs>(args?: SelectSubset<T, GroupFindFirstOrThrowArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Groups that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Groups
-     * const groups = await prisma.group.findMany()
-     * 
-     * // Get first 10 Groups
-     * const groups = await prisma.group.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const groupWithIdOnly = await prisma.group.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends GroupFindManyArgs>(args?: SelectSubset<T, GroupFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Group.
-     * @param {GroupCreateArgs} args - Arguments to create a Group.
-     * @example
-     * // Create one Group
-     * const Group = await prisma.group.create({
-     *   data: {
-     *     // ... data to create a Group
-     *   }
-     * })
-     * 
-     */
-    create<T extends GroupCreateArgs>(args: SelectSubset<T, GroupCreateArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Groups.
-     * @param {GroupCreateManyArgs} args - Arguments to create many Groups.
-     * @example
-     * // Create many Groups
-     * const group = await prisma.group.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends GroupCreateManyArgs>(args?: SelectSubset<T, GroupCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Groups and returns the data saved in the database.
-     * @param {GroupCreateManyAndReturnArgs} args - Arguments to create many Groups.
-     * @example
-     * // Create many Groups
-     * const group = await prisma.group.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Groups and only return the `id`
-     * const groupWithIdOnly = await prisma.group.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends GroupCreateManyAndReturnArgs>(args?: SelectSubset<T, GroupCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Group.
-     * @param {GroupDeleteArgs} args - Arguments to delete one Group.
-     * @example
-     * // Delete one Group
-     * const Group = await prisma.group.delete({
-     *   where: {
-     *     // ... filter to delete one Group
-     *   }
-     * })
-     * 
-     */
-    delete<T extends GroupDeleteArgs>(args: SelectSubset<T, GroupDeleteArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Group.
-     * @param {GroupUpdateArgs} args - Arguments to update one Group.
-     * @example
-     * // Update one Group
-     * const group = await prisma.group.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends GroupUpdateArgs>(args: SelectSubset<T, GroupUpdateArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Groups.
-     * @param {GroupDeleteManyArgs} args - Arguments to filter Groups to delete.
-     * @example
-     * // Delete a few Groups
-     * const { count } = await prisma.group.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends GroupDeleteManyArgs>(args?: SelectSubset<T, GroupDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Groups.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Groups
-     * const group = await prisma.group.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends GroupUpdateManyArgs>(args: SelectSubset<T, GroupUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Groups and returns the data updated in the database.
-     * @param {GroupUpdateManyAndReturnArgs} args - Arguments to update many Groups.
-     * @example
-     * // Update many Groups
-     * const group = await prisma.group.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Groups and only return the `id`
-     * const groupWithIdOnly = await prisma.group.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends GroupUpdateManyAndReturnArgs>(args: SelectSubset<T, GroupUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Group.
-     * @param {GroupUpsertArgs} args - Arguments to update or create a Group.
-     * @example
-     * // Update or create a Group
-     * const group = await prisma.group.upsert({
-     *   create: {
-     *     // ... data to create a Group
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Group we want to update
-     *   }
-     * })
-     */
-    upsert<T extends GroupUpsertArgs>(args: SelectSubset<T, GroupUpsertArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Groups.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupCountArgs} args - Arguments to filter Groups to count.
-     * @example
-     * // Count the number of Groups
-     * const count = await prisma.group.count({
-     *   where: {
-     *     // ... the filter for the Groups we want to count
-     *   }
-     * })
-    **/
-    count<T extends GroupCountArgs>(
-      args?: Subset<T, GroupCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], GroupCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Group.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends GroupAggregateArgs>(args: Subset<T, GroupAggregateArgs>): Prisma.PrismaPromise<GetGroupAggregateType<T>>
-
-    /**
-     * Group by Group.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends GroupGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: GroupGroupByArgs['orderBy'] }
-        : { orderBy?: GroupGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, GroupGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGroupGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Group model
-   */
-  readonly fields: GroupFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Group.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__GroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    users<T extends Group$usersArgs<ExtArgs> = {}>(args?: Subset<T, Group$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Group model
-   */
-  interface GroupFieldRefs {
-    readonly id: FieldRef<"Group", 'Int'>
-    readonly name: FieldRef<"Group", 'String'>
-    readonly startDate: FieldRef<"Group", 'DateTime'>
-    readonly endDate: FieldRef<"Group", 'DateTime'>
-    readonly createdAt: FieldRef<"Group", 'DateTime'>
-    readonly updatedAt: FieldRef<"Group", 'DateTime'>
-    readonly ownerId: FieldRef<"Group", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Group findUnique
-   */
-  export type GroupFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * Filter, which Group to fetch.
-     */
-    where: GroupWhereUniqueInput
-  }
-
-  /**
-   * Group findUniqueOrThrow
-   */
-  export type GroupFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * Filter, which Group to fetch.
-     */
-    where: GroupWhereUniqueInput
-  }
-
-  /**
-   * Group findFirst
-   */
-  export type GroupFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * Filter, which Group to fetch.
-     */
-    where?: GroupWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Groups to fetch.
-     */
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Groups.
-     */
-    cursor?: GroupWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Groups from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Groups.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Groups.
-     */
-    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
-  }
-
-  /**
-   * Group findFirstOrThrow
-   */
-  export type GroupFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * Filter, which Group to fetch.
-     */
-    where?: GroupWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Groups to fetch.
-     */
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Groups.
-     */
-    cursor?: GroupWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Groups from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Groups.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Groups.
-     */
-    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
-  }
-
-  /**
-   * Group findMany
-   */
-  export type GroupFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * Filter, which Groups to fetch.
-     */
-    where?: GroupWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Groups to fetch.
-     */
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Groups.
-     */
-    cursor?: GroupWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Groups from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Groups.
-     */
-    skip?: number
-    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
-  }
-
-  /**
-   * Group create
-   */
-  export type GroupCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Group.
-     */
-    data: XOR<GroupCreateInput, GroupUncheckedCreateInput>
-  }
-
-  /**
-   * Group createMany
-   */
-  export type GroupCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Groups.
-     */
-    data: GroupCreateManyInput | GroupCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Group createManyAndReturn
-   */
-  export type GroupCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * The data used to create many Groups.
-     */
-    data: GroupCreateManyInput | GroupCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Group update
-   */
-  export type GroupUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Group.
-     */
-    data: XOR<GroupUpdateInput, GroupUncheckedUpdateInput>
-    /**
-     * Choose, which Group to update.
-     */
-    where: GroupWhereUniqueInput
-  }
-
-  /**
-   * Group updateMany
-   */
-  export type GroupUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Groups.
-     */
-    data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyInput>
-    /**
-     * Filter which Groups to update
-     */
-    where?: GroupWhereInput
-    /**
-     * Limit how many Groups to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Group updateManyAndReturn
-   */
-  export type GroupUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * The data used to update Groups.
-     */
-    data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyInput>
-    /**
-     * Filter which Groups to update
-     */
-    where?: GroupWhereInput
-    /**
-     * Limit how many Groups to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Group upsert
-   */
-  export type GroupUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Group to update in case it exists.
-     */
-    where: GroupWhereUniqueInput
-    /**
-     * In case the Group found by the `where` argument doesn't exist, create a new Group with this data.
-     */
-    create: XOR<GroupCreateInput, GroupUncheckedCreateInput>
-    /**
-     * In case the Group was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<GroupUpdateInput, GroupUncheckedUpdateInput>
-  }
-
-  /**
-   * Group delete
-   */
-  export type GroupDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    /**
-     * Filter which Group to delete.
-     */
-    where: GroupWhereUniqueInput
-  }
-
-  /**
-   * Group deleteMany
-   */
-  export type GroupDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Groups to delete
-     */
-    where?: GroupWhereInput
-    /**
-     * Limit how many Groups to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Group.users
-   */
-  export type Group$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-  /**
-   * Group without action
-   */
-  export type GroupDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
   }
 
 
@@ -6120,6 +5154,7 @@ export namespace Prisma {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     requests?: boolean | QuestionRequestTemplate$requestsArgs<ExtArgs>
     evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
+    classes?: boolean | QuestionRequestTemplate$classesArgs<ExtArgs>
     _count?: boolean | QuestionRequestTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["questionRequestTemplate"]>
 
@@ -6168,6 +5203,7 @@ export namespace Prisma {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     requests?: boolean | QuestionRequestTemplate$requestsArgs<ExtArgs>
     evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
+    classes?: boolean | QuestionRequestTemplate$classesArgs<ExtArgs>
     _count?: boolean | QuestionRequestTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type QuestionRequestTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6185,6 +5221,7 @@ export namespace Prisma {
       owner: Prisma.$UserPayload<ExtArgs>
       requests: Prisma.$QuestionRequestPayload<ExtArgs>[]
       evaluationTemplate: Prisma.$EvaluationTemplatePayload<ExtArgs> | null
+      classes: Prisma.$ClassPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6596,6 +5633,7 @@ export namespace Prisma {
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     requests<T extends QuestionRequestTemplate$requestsArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     evaluationTemplate<T extends QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    classes<T extends QuestionRequestTemplate$classesArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$classesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7070,6 +6108,30 @@ export namespace Prisma {
      */
     include?: EvaluationTemplateInclude<ExtArgs> | null
     where?: EvaluationTemplateWhereInput
+  }
+
+  /**
+   * QuestionRequestTemplate.classes
+   */
+  export type QuestionRequestTemplate$classesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    where?: ClassWhereInput
+    orderBy?: ClassOrderByWithRelationInput | ClassOrderByWithRelationInput[]
+    cursor?: ClassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
   }
 
   /**
@@ -9632,6 +8694,7 @@ export namespace Prisma {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     criteria?: boolean | EvaluationTemplate$criteriaArgs<ExtArgs>
     questionRequestTemplates?: boolean | EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs>
+    classes?: boolean | EvaluationTemplate$classesArgs<ExtArgs>
     _count?: boolean | EvaluationTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationTemplate"]>
 
@@ -9672,6 +8735,7 @@ export namespace Prisma {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     criteria?: boolean | EvaluationTemplate$criteriaArgs<ExtArgs>
     questionRequestTemplates?: boolean | EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs>
+    classes?: boolean | EvaluationTemplate$classesArgs<ExtArgs>
     _count?: boolean | EvaluationTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EvaluationTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9687,6 +8751,7 @@ export namespace Prisma {
       owner: Prisma.$UserPayload<ExtArgs>
       criteria: Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>[]
       questionRequestTemplates: Prisma.$QuestionRequestTemplatePayload<ExtArgs>[]
+      classes: Prisma.$ClassPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -10093,6 +9158,7 @@ export namespace Prisma {
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     criteria<T extends EvaluationTemplate$criteriaArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationTemplate$criteriaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplateCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questionRequestTemplates<T extends EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationTemplate$questionRequestTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    classes<T extends EvaluationTemplate$classesArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationTemplate$classesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10570,6 +9636,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: QuestionRequestTemplateScalarFieldEnum | QuestionRequestTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationTemplate.classes
+   */
+  export type EvaluationTemplate$classesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    where?: ClassWhereInput
+    orderBy?: ClassOrderByWithRelationInput | ClassOrderByWithRelationInput[]
+    cursor?: ClassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
   }
 
   /**
@@ -16385,6 +15475,2307 @@ export namespace Prisma {
 
 
   /**
+   * Model Class
+   */
+
+  export type AggregateClass = {
+    _count: ClassCountAggregateOutputType | null
+    _avg: ClassAvgAggregateOutputType | null
+    _sum: ClassSumAggregateOutputType | null
+    _min: ClassMinAggregateOutputType | null
+    _max: ClassMaxAggregateOutputType | null
+  }
+
+  export type ClassAvgAggregateOutputType = {
+    id: number | null
+    ownerId: number | null
+  }
+
+  export type ClassSumAggregateOutputType = {
+    id: number | null
+    ownerId: number | null
+  }
+
+  export type ClassMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    ownerId: number | null
+    link: string | null
+  }
+
+  export type ClassMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    ownerId: number | null
+    link: string | null
+  }
+
+  export type ClassCountAggregateOutputType = {
+    id: number
+    name: number
+    createdAt: number
+    updatedAt: number
+    ownerId: number
+    link: number
+    _all: number
+  }
+
+
+  export type ClassAvgAggregateInputType = {
+    id?: true
+    ownerId?: true
+  }
+
+  export type ClassSumAggregateInputType = {
+    id?: true
+    ownerId?: true
+  }
+
+  export type ClassMinAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    ownerId?: true
+    link?: true
+  }
+
+  export type ClassMaxAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    ownerId?: true
+    link?: true
+  }
+
+  export type ClassCountAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    ownerId?: true
+    link?: true
+    _all?: true
+  }
+
+  export type ClassAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Class to aggregate.
+     */
+    where?: ClassWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Classes to fetch.
+     */
+    orderBy?: ClassOrderByWithRelationInput | ClassOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClassWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Classes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Classes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Classes
+    **/
+    _count?: true | ClassCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClassAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClassSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClassMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClassMaxAggregateInputType
+  }
+
+  export type GetClassAggregateType<T extends ClassAggregateArgs> = {
+        [P in keyof T & keyof AggregateClass]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClass[P]>
+      : GetScalarType<T[P], AggregateClass[P]>
+  }
+
+
+
+
+  export type ClassGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassWhereInput
+    orderBy?: ClassOrderByWithAggregationInput | ClassOrderByWithAggregationInput[]
+    by: ClassScalarFieldEnum[] | ClassScalarFieldEnum
+    having?: ClassScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClassCountAggregateInputType | true
+    _avg?: ClassAvgAggregateInputType
+    _sum?: ClassSumAggregateInputType
+    _min?: ClassMinAggregateInputType
+    _max?: ClassMaxAggregateInputType
+  }
+
+  export type ClassGroupByOutputType = {
+    id: number
+    name: string
+    createdAt: Date
+    updatedAt: Date
+    ownerId: number
+    link: string
+    _count: ClassCountAggregateOutputType | null
+    _avg: ClassAvgAggregateOutputType | null
+    _sum: ClassSumAggregateOutputType | null
+    _min: ClassMinAggregateOutputType | null
+    _max: ClassMaxAggregateOutputType | null
+  }
+
+  type GetClassGroupByPayload<T extends ClassGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClassGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClassGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClassGroupByOutputType[P]>
+            : GetScalarType<T[P], ClassGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClassSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ownerId?: boolean
+    link?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    students?: boolean | Class$studentsArgs<ExtArgs>
+    collaborators?: boolean | Class$collaboratorsArgs<ExtArgs>
+    questionTemplates?: boolean | Class$questionTemplatesArgs<ExtArgs>
+    evaluationTemplates?: boolean | Class$evaluationTemplatesArgs<ExtArgs>
+    _count?: boolean | ClassCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["class"]>
+
+  export type ClassSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ownerId?: boolean
+    link?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["class"]>
+
+  export type ClassSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ownerId?: boolean
+    link?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["class"]>
+
+  export type ClassSelectScalar = {
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ownerId?: boolean
+    link?: boolean
+  }
+
+  export type ClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "ownerId" | "link", ExtArgs["result"]["class"]>
+  export type ClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    students?: boolean | Class$studentsArgs<ExtArgs>
+    collaborators?: boolean | Class$collaboratorsArgs<ExtArgs>
+    questionTemplates?: boolean | Class$questionTemplatesArgs<ExtArgs>
+    evaluationTemplates?: boolean | Class$evaluationTemplatesArgs<ExtArgs>
+    _count?: boolean | ClassCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ClassIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ClassPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Class"
+    objects: {
+      owner: Prisma.$UserPayload<ExtArgs>
+      students: Prisma.$UserPayload<ExtArgs>[]
+      collaborators: Prisma.$ClassCollaboratorPayload<ExtArgs>[]
+      questionTemplates: Prisma.$QuestionRequestTemplatePayload<ExtArgs>[]
+      evaluationTemplates: Prisma.$EvaluationTemplatePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      createdAt: Date
+      updatedAt: Date
+      ownerId: number
+      link: string
+    }, ExtArgs["result"]["class"]>
+    composites: {}
+  }
+
+  type ClassGetPayload<S extends boolean | null | undefined | ClassDefaultArgs> = $Result.GetResult<Prisma.$ClassPayload, S>
+
+  type ClassCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClassFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClassCountAggregateInputType | true
+    }
+
+  export interface ClassDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Class'], meta: { name: 'Class' } }
+    /**
+     * Find zero or one Class that matches the filter.
+     * @param {ClassFindUniqueArgs} args - Arguments to find a Class
+     * @example
+     * // Get one Class
+     * const class = await prisma.class.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClassFindUniqueArgs>(args: SelectSubset<T, ClassFindUniqueArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Class that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClassFindUniqueOrThrowArgs} args - Arguments to find a Class
+     * @example
+     * // Get one Class
+     * const class = await prisma.class.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClassFindUniqueOrThrowArgs>(args: SelectSubset<T, ClassFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Class that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassFindFirstArgs} args - Arguments to find a Class
+     * @example
+     * // Get one Class
+     * const class = await prisma.class.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClassFindFirstArgs>(args?: SelectSubset<T, ClassFindFirstArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Class that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassFindFirstOrThrowArgs} args - Arguments to find a Class
+     * @example
+     * // Get one Class
+     * const class = await prisma.class.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClassFindFirstOrThrowArgs>(args?: SelectSubset<T, ClassFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Classes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Classes
+     * const classes = await prisma.class.findMany()
+     * 
+     * // Get first 10 Classes
+     * const classes = await prisma.class.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const classWithIdOnly = await prisma.class.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClassFindManyArgs>(args?: SelectSubset<T, ClassFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Class.
+     * @param {ClassCreateArgs} args - Arguments to create a Class.
+     * @example
+     * // Create one Class
+     * const Class = await prisma.class.create({
+     *   data: {
+     *     // ... data to create a Class
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClassCreateArgs>(args: SelectSubset<T, ClassCreateArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Classes.
+     * @param {ClassCreateManyArgs} args - Arguments to create many Classes.
+     * @example
+     * // Create many Classes
+     * const class = await prisma.class.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClassCreateManyArgs>(args?: SelectSubset<T, ClassCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Classes and returns the data saved in the database.
+     * @param {ClassCreateManyAndReturnArgs} args - Arguments to create many Classes.
+     * @example
+     * // Create many Classes
+     * const class = await prisma.class.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Classes and only return the `id`
+     * const classWithIdOnly = await prisma.class.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClassCreateManyAndReturnArgs>(args?: SelectSubset<T, ClassCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Class.
+     * @param {ClassDeleteArgs} args - Arguments to delete one Class.
+     * @example
+     * // Delete one Class
+     * const Class = await prisma.class.delete({
+     *   where: {
+     *     // ... filter to delete one Class
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClassDeleteArgs>(args: SelectSubset<T, ClassDeleteArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Class.
+     * @param {ClassUpdateArgs} args - Arguments to update one Class.
+     * @example
+     * // Update one Class
+     * const class = await prisma.class.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClassUpdateArgs>(args: SelectSubset<T, ClassUpdateArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Classes.
+     * @param {ClassDeleteManyArgs} args - Arguments to filter Classes to delete.
+     * @example
+     * // Delete a few Classes
+     * const { count } = await prisma.class.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClassDeleteManyArgs>(args?: SelectSubset<T, ClassDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Classes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Classes
+     * const class = await prisma.class.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClassUpdateManyArgs>(args: SelectSubset<T, ClassUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Classes and returns the data updated in the database.
+     * @param {ClassUpdateManyAndReturnArgs} args - Arguments to update many Classes.
+     * @example
+     * // Update many Classes
+     * const class = await prisma.class.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Classes and only return the `id`
+     * const classWithIdOnly = await prisma.class.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClassUpdateManyAndReturnArgs>(args: SelectSubset<T, ClassUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Class.
+     * @param {ClassUpsertArgs} args - Arguments to update or create a Class.
+     * @example
+     * // Update or create a Class
+     * const class = await prisma.class.upsert({
+     *   create: {
+     *     // ... data to create a Class
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Class we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClassUpsertArgs>(args: SelectSubset<T, ClassUpsertArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Classes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassCountArgs} args - Arguments to filter Classes to count.
+     * @example
+     * // Count the number of Classes
+     * const count = await prisma.class.count({
+     *   where: {
+     *     // ... the filter for the Classes we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClassCountArgs>(
+      args?: Subset<T, ClassCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClassCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Class.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClassAggregateArgs>(args: Subset<T, ClassAggregateArgs>): Prisma.PrismaPromise<GetClassAggregateType<T>>
+
+    /**
+     * Group by Class.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClassGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClassGroupByArgs['orderBy'] }
+        : { orderBy?: ClassGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClassGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClassGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Class model
+   */
+  readonly fields: ClassFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Class.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClassClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    students<T extends Class$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Class$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    collaborators<T extends Class$collaboratorsArgs<ExtArgs> = {}>(args?: Subset<T, Class$collaboratorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    questionTemplates<T extends Class$questionTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, Class$questionTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    evaluationTemplates<T extends Class$evaluationTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, Class$evaluationTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Class model
+   */
+  interface ClassFieldRefs {
+    readonly id: FieldRef<"Class", 'Int'>
+    readonly name: FieldRef<"Class", 'String'>
+    readonly createdAt: FieldRef<"Class", 'DateTime'>
+    readonly updatedAt: FieldRef<"Class", 'DateTime'>
+    readonly ownerId: FieldRef<"Class", 'Int'>
+    readonly link: FieldRef<"Class", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Class findUnique
+   */
+  export type ClassFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * Filter, which Class to fetch.
+     */
+    where: ClassWhereUniqueInput
+  }
+
+  /**
+   * Class findUniqueOrThrow
+   */
+  export type ClassFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * Filter, which Class to fetch.
+     */
+    where: ClassWhereUniqueInput
+  }
+
+  /**
+   * Class findFirst
+   */
+  export type ClassFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * Filter, which Class to fetch.
+     */
+    where?: ClassWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Classes to fetch.
+     */
+    orderBy?: ClassOrderByWithRelationInput | ClassOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Classes.
+     */
+    cursor?: ClassWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Classes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Classes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Classes.
+     */
+    distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
+  }
+
+  /**
+   * Class findFirstOrThrow
+   */
+  export type ClassFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * Filter, which Class to fetch.
+     */
+    where?: ClassWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Classes to fetch.
+     */
+    orderBy?: ClassOrderByWithRelationInput | ClassOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Classes.
+     */
+    cursor?: ClassWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Classes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Classes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Classes.
+     */
+    distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
+  }
+
+  /**
+   * Class findMany
+   */
+  export type ClassFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * Filter, which Classes to fetch.
+     */
+    where?: ClassWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Classes to fetch.
+     */
+    orderBy?: ClassOrderByWithRelationInput | ClassOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Classes.
+     */
+    cursor?: ClassWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Classes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Classes.
+     */
+    skip?: number
+    distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
+  }
+
+  /**
+   * Class create
+   */
+  export type ClassCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Class.
+     */
+    data: XOR<ClassCreateInput, ClassUncheckedCreateInput>
+  }
+
+  /**
+   * Class createMany
+   */
+  export type ClassCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Classes.
+     */
+    data: ClassCreateManyInput | ClassCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Class createManyAndReturn
+   */
+  export type ClassCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * The data used to create many Classes.
+     */
+    data: ClassCreateManyInput | ClassCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Class update
+   */
+  export type ClassUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Class.
+     */
+    data: XOR<ClassUpdateInput, ClassUncheckedUpdateInput>
+    /**
+     * Choose, which Class to update.
+     */
+    where: ClassWhereUniqueInput
+  }
+
+  /**
+   * Class updateMany
+   */
+  export type ClassUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Classes.
+     */
+    data: XOR<ClassUpdateManyMutationInput, ClassUncheckedUpdateManyInput>
+    /**
+     * Filter which Classes to update
+     */
+    where?: ClassWhereInput
+    /**
+     * Limit how many Classes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Class updateManyAndReturn
+   */
+  export type ClassUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * The data used to update Classes.
+     */
+    data: XOR<ClassUpdateManyMutationInput, ClassUncheckedUpdateManyInput>
+    /**
+     * Filter which Classes to update
+     */
+    where?: ClassWhereInput
+    /**
+     * Limit how many Classes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Class upsert
+   */
+  export type ClassUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Class to update in case it exists.
+     */
+    where: ClassWhereUniqueInput
+    /**
+     * In case the Class found by the `where` argument doesn't exist, create a new Class with this data.
+     */
+    create: XOR<ClassCreateInput, ClassUncheckedCreateInput>
+    /**
+     * In case the Class was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClassUpdateInput, ClassUncheckedUpdateInput>
+  }
+
+  /**
+   * Class delete
+   */
+  export type ClassDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    /**
+     * Filter which Class to delete.
+     */
+    where: ClassWhereUniqueInput
+  }
+
+  /**
+   * Class deleteMany
+   */
+  export type ClassDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Classes to delete
+     */
+    where?: ClassWhereInput
+    /**
+     * Limit how many Classes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Class.students
+   */
+  export type Class$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Class.collaborators
+   */
+  export type Class$collaboratorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    where?: ClassCollaboratorWhereInput
+    orderBy?: ClassCollaboratorOrderByWithRelationInput | ClassCollaboratorOrderByWithRelationInput[]
+    cursor?: ClassCollaboratorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassCollaboratorScalarFieldEnum | ClassCollaboratorScalarFieldEnum[]
+  }
+
+  /**
+   * Class.questionTemplates
+   */
+  export type Class$questionTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuestionRequestTemplate
+     */
+    select?: QuestionRequestTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuestionRequestTemplate
+     */
+    omit?: QuestionRequestTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionRequestTemplateInclude<ExtArgs> | null
+    where?: QuestionRequestTemplateWhereInput
+    orderBy?: QuestionRequestTemplateOrderByWithRelationInput | QuestionRequestTemplateOrderByWithRelationInput[]
+    cursor?: QuestionRequestTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuestionRequestTemplateScalarFieldEnum | QuestionRequestTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * Class.evaluationTemplates
+   */
+  export type Class$evaluationTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationTemplate
+     */
+    select?: EvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationTemplate
+     */
+    omit?: EvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationTemplateInclude<ExtArgs> | null
+    where?: EvaluationTemplateWhereInput
+    orderBy?: EvaluationTemplateOrderByWithRelationInput | EvaluationTemplateOrderByWithRelationInput[]
+    cursor?: EvaluationTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvaluationTemplateScalarFieldEnum | EvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * Class without action
+   */
+  export type ClassDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClassCollaborator
+   */
+
+  export type AggregateClassCollaborator = {
+    _count: ClassCollaboratorCountAggregateOutputType | null
+    _avg: ClassCollaboratorAvgAggregateOutputType | null
+    _sum: ClassCollaboratorSumAggregateOutputType | null
+    _min: ClassCollaboratorMinAggregateOutputType | null
+    _max: ClassCollaboratorMaxAggregateOutputType | null
+  }
+
+  export type ClassCollaboratorAvgAggregateOutputType = {
+    classId: number | null
+    userId: number | null
+  }
+
+  export type ClassCollaboratorSumAggregateOutputType = {
+    classId: number | null
+    userId: number | null
+  }
+
+  export type ClassCollaboratorMinAggregateOutputType = {
+    classId: number | null
+    userId: number | null
+    addedAt: Date | null
+  }
+
+  export type ClassCollaboratorMaxAggregateOutputType = {
+    classId: number | null
+    userId: number | null
+    addedAt: Date | null
+  }
+
+  export type ClassCollaboratorCountAggregateOutputType = {
+    classId: number
+    userId: number
+    addedAt: number
+    _all: number
+  }
+
+
+  export type ClassCollaboratorAvgAggregateInputType = {
+    classId?: true
+    userId?: true
+  }
+
+  export type ClassCollaboratorSumAggregateInputType = {
+    classId?: true
+    userId?: true
+  }
+
+  export type ClassCollaboratorMinAggregateInputType = {
+    classId?: true
+    userId?: true
+    addedAt?: true
+  }
+
+  export type ClassCollaboratorMaxAggregateInputType = {
+    classId?: true
+    userId?: true
+    addedAt?: true
+  }
+
+  export type ClassCollaboratorCountAggregateInputType = {
+    classId?: true
+    userId?: true
+    addedAt?: true
+    _all?: true
+  }
+
+  export type ClassCollaboratorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClassCollaborator to aggregate.
+     */
+    where?: ClassCollaboratorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassCollaborators to fetch.
+     */
+    orderBy?: ClassCollaboratorOrderByWithRelationInput | ClassCollaboratorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClassCollaboratorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassCollaborators from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassCollaborators.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClassCollaborators
+    **/
+    _count?: true | ClassCollaboratorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClassCollaboratorAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClassCollaboratorSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClassCollaboratorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClassCollaboratorMaxAggregateInputType
+  }
+
+  export type GetClassCollaboratorAggregateType<T extends ClassCollaboratorAggregateArgs> = {
+        [P in keyof T & keyof AggregateClassCollaborator]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClassCollaborator[P]>
+      : GetScalarType<T[P], AggregateClassCollaborator[P]>
+  }
+
+
+
+
+  export type ClassCollaboratorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassCollaboratorWhereInput
+    orderBy?: ClassCollaboratorOrderByWithAggregationInput | ClassCollaboratorOrderByWithAggregationInput[]
+    by: ClassCollaboratorScalarFieldEnum[] | ClassCollaboratorScalarFieldEnum
+    having?: ClassCollaboratorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClassCollaboratorCountAggregateInputType | true
+    _avg?: ClassCollaboratorAvgAggregateInputType
+    _sum?: ClassCollaboratorSumAggregateInputType
+    _min?: ClassCollaboratorMinAggregateInputType
+    _max?: ClassCollaboratorMaxAggregateInputType
+  }
+
+  export type ClassCollaboratorGroupByOutputType = {
+    classId: number
+    userId: number
+    addedAt: Date
+    _count: ClassCollaboratorCountAggregateOutputType | null
+    _avg: ClassCollaboratorAvgAggregateOutputType | null
+    _sum: ClassCollaboratorSumAggregateOutputType | null
+    _min: ClassCollaboratorMinAggregateOutputType | null
+    _max: ClassCollaboratorMaxAggregateOutputType | null
+  }
+
+  type GetClassCollaboratorGroupByPayload<T extends ClassCollaboratorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClassCollaboratorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClassCollaboratorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClassCollaboratorGroupByOutputType[P]>
+            : GetScalarType<T[P], ClassCollaboratorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClassCollaboratorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    classId?: boolean
+    userId?: boolean
+    addedAt?: boolean
+    class?: boolean | ClassDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classCollaborator"]>
+
+  export type ClassCollaboratorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    classId?: boolean
+    userId?: boolean
+    addedAt?: boolean
+    class?: boolean | ClassDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classCollaborator"]>
+
+  export type ClassCollaboratorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    classId?: boolean
+    userId?: boolean
+    addedAt?: boolean
+    class?: boolean | ClassDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classCollaborator"]>
+
+  export type ClassCollaboratorSelectScalar = {
+    classId?: boolean
+    userId?: boolean
+    addedAt?: boolean
+  }
+
+  export type ClassCollaboratorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"classId" | "userId" | "addedAt", ExtArgs["result"]["classCollaborator"]>
+  export type ClassCollaboratorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    class?: boolean | ClassDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ClassCollaboratorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    class?: boolean | ClassDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ClassCollaboratorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    class?: boolean | ClassDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ClassCollaboratorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClassCollaborator"
+    objects: {
+      class: Prisma.$ClassPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      classId: number
+      userId: number
+      addedAt: Date
+    }, ExtArgs["result"]["classCollaborator"]>
+    composites: {}
+  }
+
+  type ClassCollaboratorGetPayload<S extends boolean | null | undefined | ClassCollaboratorDefaultArgs> = $Result.GetResult<Prisma.$ClassCollaboratorPayload, S>
+
+  type ClassCollaboratorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClassCollaboratorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClassCollaboratorCountAggregateInputType | true
+    }
+
+  export interface ClassCollaboratorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClassCollaborator'], meta: { name: 'ClassCollaborator' } }
+    /**
+     * Find zero or one ClassCollaborator that matches the filter.
+     * @param {ClassCollaboratorFindUniqueArgs} args - Arguments to find a ClassCollaborator
+     * @example
+     * // Get one ClassCollaborator
+     * const classCollaborator = await prisma.classCollaborator.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClassCollaboratorFindUniqueArgs>(args: SelectSubset<T, ClassCollaboratorFindUniqueArgs<ExtArgs>>): Prisma__ClassCollaboratorClient<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClassCollaborator that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClassCollaboratorFindUniqueOrThrowArgs} args - Arguments to find a ClassCollaborator
+     * @example
+     * // Get one ClassCollaborator
+     * const classCollaborator = await prisma.classCollaborator.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClassCollaboratorFindUniqueOrThrowArgs>(args: SelectSubset<T, ClassCollaboratorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClassCollaboratorClient<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClassCollaborator that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassCollaboratorFindFirstArgs} args - Arguments to find a ClassCollaborator
+     * @example
+     * // Get one ClassCollaborator
+     * const classCollaborator = await prisma.classCollaborator.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClassCollaboratorFindFirstArgs>(args?: SelectSubset<T, ClassCollaboratorFindFirstArgs<ExtArgs>>): Prisma__ClassCollaboratorClient<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClassCollaborator that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassCollaboratorFindFirstOrThrowArgs} args - Arguments to find a ClassCollaborator
+     * @example
+     * // Get one ClassCollaborator
+     * const classCollaborator = await prisma.classCollaborator.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClassCollaboratorFindFirstOrThrowArgs>(args?: SelectSubset<T, ClassCollaboratorFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClassCollaboratorClient<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClassCollaborators that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassCollaboratorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClassCollaborators
+     * const classCollaborators = await prisma.classCollaborator.findMany()
+     * 
+     * // Get first 10 ClassCollaborators
+     * const classCollaborators = await prisma.classCollaborator.findMany({ take: 10 })
+     * 
+     * // Only select the `classId`
+     * const classCollaboratorWithClassIdOnly = await prisma.classCollaborator.findMany({ select: { classId: true } })
+     * 
+     */
+    findMany<T extends ClassCollaboratorFindManyArgs>(args?: SelectSubset<T, ClassCollaboratorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClassCollaborator.
+     * @param {ClassCollaboratorCreateArgs} args - Arguments to create a ClassCollaborator.
+     * @example
+     * // Create one ClassCollaborator
+     * const ClassCollaborator = await prisma.classCollaborator.create({
+     *   data: {
+     *     // ... data to create a ClassCollaborator
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClassCollaboratorCreateArgs>(args: SelectSubset<T, ClassCollaboratorCreateArgs<ExtArgs>>): Prisma__ClassCollaboratorClient<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClassCollaborators.
+     * @param {ClassCollaboratorCreateManyArgs} args - Arguments to create many ClassCollaborators.
+     * @example
+     * // Create many ClassCollaborators
+     * const classCollaborator = await prisma.classCollaborator.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClassCollaboratorCreateManyArgs>(args?: SelectSubset<T, ClassCollaboratorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClassCollaborators and returns the data saved in the database.
+     * @param {ClassCollaboratorCreateManyAndReturnArgs} args - Arguments to create many ClassCollaborators.
+     * @example
+     * // Create many ClassCollaborators
+     * const classCollaborator = await prisma.classCollaborator.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClassCollaborators and only return the `classId`
+     * const classCollaboratorWithClassIdOnly = await prisma.classCollaborator.createManyAndReturn({
+     *   select: { classId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClassCollaboratorCreateManyAndReturnArgs>(args?: SelectSubset<T, ClassCollaboratorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClassCollaborator.
+     * @param {ClassCollaboratorDeleteArgs} args - Arguments to delete one ClassCollaborator.
+     * @example
+     * // Delete one ClassCollaborator
+     * const ClassCollaborator = await prisma.classCollaborator.delete({
+     *   where: {
+     *     // ... filter to delete one ClassCollaborator
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClassCollaboratorDeleteArgs>(args: SelectSubset<T, ClassCollaboratorDeleteArgs<ExtArgs>>): Prisma__ClassCollaboratorClient<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClassCollaborator.
+     * @param {ClassCollaboratorUpdateArgs} args - Arguments to update one ClassCollaborator.
+     * @example
+     * // Update one ClassCollaborator
+     * const classCollaborator = await prisma.classCollaborator.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClassCollaboratorUpdateArgs>(args: SelectSubset<T, ClassCollaboratorUpdateArgs<ExtArgs>>): Prisma__ClassCollaboratorClient<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClassCollaborators.
+     * @param {ClassCollaboratorDeleteManyArgs} args - Arguments to filter ClassCollaborators to delete.
+     * @example
+     * // Delete a few ClassCollaborators
+     * const { count } = await prisma.classCollaborator.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClassCollaboratorDeleteManyArgs>(args?: SelectSubset<T, ClassCollaboratorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClassCollaborators.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassCollaboratorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClassCollaborators
+     * const classCollaborator = await prisma.classCollaborator.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClassCollaboratorUpdateManyArgs>(args: SelectSubset<T, ClassCollaboratorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClassCollaborators and returns the data updated in the database.
+     * @param {ClassCollaboratorUpdateManyAndReturnArgs} args - Arguments to update many ClassCollaborators.
+     * @example
+     * // Update many ClassCollaborators
+     * const classCollaborator = await prisma.classCollaborator.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClassCollaborators and only return the `classId`
+     * const classCollaboratorWithClassIdOnly = await prisma.classCollaborator.updateManyAndReturn({
+     *   select: { classId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClassCollaboratorUpdateManyAndReturnArgs>(args: SelectSubset<T, ClassCollaboratorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClassCollaborator.
+     * @param {ClassCollaboratorUpsertArgs} args - Arguments to update or create a ClassCollaborator.
+     * @example
+     * // Update or create a ClassCollaborator
+     * const classCollaborator = await prisma.classCollaborator.upsert({
+     *   create: {
+     *     // ... data to create a ClassCollaborator
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClassCollaborator we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClassCollaboratorUpsertArgs>(args: SelectSubset<T, ClassCollaboratorUpsertArgs<ExtArgs>>): Prisma__ClassCollaboratorClient<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClassCollaborators.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassCollaboratorCountArgs} args - Arguments to filter ClassCollaborators to count.
+     * @example
+     * // Count the number of ClassCollaborators
+     * const count = await prisma.classCollaborator.count({
+     *   where: {
+     *     // ... the filter for the ClassCollaborators we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClassCollaboratorCountArgs>(
+      args?: Subset<T, ClassCollaboratorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClassCollaboratorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClassCollaborator.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassCollaboratorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClassCollaboratorAggregateArgs>(args: Subset<T, ClassCollaboratorAggregateArgs>): Prisma.PrismaPromise<GetClassCollaboratorAggregateType<T>>
+
+    /**
+     * Group by ClassCollaborator.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassCollaboratorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClassCollaboratorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClassCollaboratorGroupByArgs['orderBy'] }
+        : { orderBy?: ClassCollaboratorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClassCollaboratorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClassCollaboratorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClassCollaborator model
+   */
+  readonly fields: ClassCollaboratorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClassCollaborator.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClassCollaboratorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    class<T extends ClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClassDefaultArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClassCollaborator model
+   */
+  interface ClassCollaboratorFieldRefs {
+    readonly classId: FieldRef<"ClassCollaborator", 'Int'>
+    readonly userId: FieldRef<"ClassCollaborator", 'Int'>
+    readonly addedAt: FieldRef<"ClassCollaborator", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClassCollaborator findUnique
+   */
+  export type ClassCollaboratorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassCollaborator to fetch.
+     */
+    where: ClassCollaboratorWhereUniqueInput
+  }
+
+  /**
+   * ClassCollaborator findUniqueOrThrow
+   */
+  export type ClassCollaboratorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassCollaborator to fetch.
+     */
+    where: ClassCollaboratorWhereUniqueInput
+  }
+
+  /**
+   * ClassCollaborator findFirst
+   */
+  export type ClassCollaboratorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassCollaborator to fetch.
+     */
+    where?: ClassCollaboratorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassCollaborators to fetch.
+     */
+    orderBy?: ClassCollaboratorOrderByWithRelationInput | ClassCollaboratorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClassCollaborators.
+     */
+    cursor?: ClassCollaboratorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassCollaborators from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassCollaborators.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClassCollaborators.
+     */
+    distinct?: ClassCollaboratorScalarFieldEnum | ClassCollaboratorScalarFieldEnum[]
+  }
+
+  /**
+   * ClassCollaborator findFirstOrThrow
+   */
+  export type ClassCollaboratorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassCollaborator to fetch.
+     */
+    where?: ClassCollaboratorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassCollaborators to fetch.
+     */
+    orderBy?: ClassCollaboratorOrderByWithRelationInput | ClassCollaboratorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClassCollaborators.
+     */
+    cursor?: ClassCollaboratorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassCollaborators from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassCollaborators.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClassCollaborators.
+     */
+    distinct?: ClassCollaboratorScalarFieldEnum | ClassCollaboratorScalarFieldEnum[]
+  }
+
+  /**
+   * ClassCollaborator findMany
+   */
+  export type ClassCollaboratorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassCollaborators to fetch.
+     */
+    where?: ClassCollaboratorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassCollaborators to fetch.
+     */
+    orderBy?: ClassCollaboratorOrderByWithRelationInput | ClassCollaboratorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClassCollaborators.
+     */
+    cursor?: ClassCollaboratorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassCollaborators from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassCollaborators.
+     */
+    skip?: number
+    distinct?: ClassCollaboratorScalarFieldEnum | ClassCollaboratorScalarFieldEnum[]
+  }
+
+  /**
+   * ClassCollaborator create
+   */
+  export type ClassCollaboratorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClassCollaborator.
+     */
+    data: XOR<ClassCollaboratorCreateInput, ClassCollaboratorUncheckedCreateInput>
+  }
+
+  /**
+   * ClassCollaborator createMany
+   */
+  export type ClassCollaboratorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClassCollaborators.
+     */
+    data: ClassCollaboratorCreateManyInput | ClassCollaboratorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClassCollaborator createManyAndReturn
+   */
+  export type ClassCollaboratorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClassCollaborators.
+     */
+    data: ClassCollaboratorCreateManyInput | ClassCollaboratorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClassCollaborator update
+   */
+  export type ClassCollaboratorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClassCollaborator.
+     */
+    data: XOR<ClassCollaboratorUpdateInput, ClassCollaboratorUncheckedUpdateInput>
+    /**
+     * Choose, which ClassCollaborator to update.
+     */
+    where: ClassCollaboratorWhereUniqueInput
+  }
+
+  /**
+   * ClassCollaborator updateMany
+   */
+  export type ClassCollaboratorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClassCollaborators.
+     */
+    data: XOR<ClassCollaboratorUpdateManyMutationInput, ClassCollaboratorUncheckedUpdateManyInput>
+    /**
+     * Filter which ClassCollaborators to update
+     */
+    where?: ClassCollaboratorWhereInput
+    /**
+     * Limit how many ClassCollaborators to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClassCollaborator updateManyAndReturn
+   */
+  export type ClassCollaboratorUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * The data used to update ClassCollaborators.
+     */
+    data: XOR<ClassCollaboratorUpdateManyMutationInput, ClassCollaboratorUncheckedUpdateManyInput>
+    /**
+     * Filter which ClassCollaborators to update
+     */
+    where?: ClassCollaboratorWhereInput
+    /**
+     * Limit how many ClassCollaborators to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClassCollaborator upsert
+   */
+  export type ClassCollaboratorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClassCollaborator to update in case it exists.
+     */
+    where: ClassCollaboratorWhereUniqueInput
+    /**
+     * In case the ClassCollaborator found by the `where` argument doesn't exist, create a new ClassCollaborator with this data.
+     */
+    create: XOR<ClassCollaboratorCreateInput, ClassCollaboratorUncheckedCreateInput>
+    /**
+     * In case the ClassCollaborator was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClassCollaboratorUpdateInput, ClassCollaboratorUncheckedUpdateInput>
+  }
+
+  /**
+   * ClassCollaborator delete
+   */
+  export type ClassCollaboratorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+    /**
+     * Filter which ClassCollaborator to delete.
+     */
+    where: ClassCollaboratorWhereUniqueInput
+  }
+
+  /**
+   * ClassCollaborator deleteMany
+   */
+  export type ClassCollaboratorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClassCollaborators to delete
+     */
+    where?: ClassCollaboratorWhereInput
+    /**
+     * Limit how many ClassCollaborators to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClassCollaborator without action
+   */
+  export type ClassCollaboratorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassCollaborator
+     */
+    select?: ClassCollaboratorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassCollaborator
+     */
+    omit?: ClassCollaboratorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassCollaboratorInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -16400,7 +17791,7 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
-    admin: 'admin',
+    role: 'role',
     name: 'name',
     email: 'email',
     passwordHash: 'passwordHash',
@@ -16410,19 +17801,6 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
-  export const GroupScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    startDate: 'startDate',
-    endDate: 'endDate',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    ownerId: 'ownerId'
-  };
-
-  export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
 
 
   export const TopicScalarFieldEnum: {
@@ -16552,6 +17930,27 @@ export namespace Prisma {
   export type AutoEvaluationCriterionScalarFieldEnum = (typeof AutoEvaluationCriterionScalarFieldEnum)[keyof typeof AutoEvaluationCriterionScalarFieldEnum]
 
 
+  export const ClassScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    ownerId: 'ownerId',
+    link: 'link'
+  };
+
+  export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]
+
+
+  export const ClassCollaboratorScalarFieldEnum: {
+    classId: 'classId',
+    userId: 'userId',
+    addedAt: 'addedAt'
+  };
+
+  export type ClassCollaboratorScalarFieldEnum = (typeof ClassCollaboratorScalarFieldEnum)[keyof typeof ClassCollaboratorScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -16596,9 +17995,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'Role'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+  /**
+   * Reference to a field of type 'Role[]'
+   */
+  export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
     
 
 
@@ -16627,6 +18033,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -16680,38 +18093,40 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: IntFilter<"User"> | number
-    admin?: BoolFilter<"User"> | boolean
+    role?: EnumRoleFilter<"User"> | $Enums.Role
     name?: StringNullableFilter<"User"> | string | null
     email?: StringFilter<"User"> | string
     passwordHash?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    groups?: GroupListRelationFilter
-    ownedGroups?: GroupListRelationFilter
     questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
     questionRequests?: QuestionRequestListRelationFilter
     answers?: AnswerListRelationFilter
     evaluationTemplates?: EvaluationTemplateListRelationFilter
     evaluationCriterions?: EvaluationCriterionListRelationFilter
+    ownedClasses?: ClassListRelationFilter
+    studentClasses?: ClassListRelationFilter
+    collaboratedClasses?: ClassCollaboratorListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    admin?: SortOrder
+    role?: SortOrder
     name?: SortOrderInput | SortOrder
     email?: SortOrder
     passwordHash?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    groups?: GroupOrderByRelationAggregateInput
-    ownedGroups?: GroupOrderByRelationAggregateInput
     questionRequestTemplates?: QuestionRequestTemplateOrderByRelationAggregateInput
     questionRequests?: QuestionRequestOrderByRelationAggregateInput
     answers?: AnswerOrderByRelationAggregateInput
     evaluationTemplates?: EvaluationTemplateOrderByRelationAggregateInput
     evaluationCriterions?: EvaluationCriterionOrderByRelationAggregateInput
+    ownedClasses?: ClassOrderByRelationAggregateInput
+    studentClasses?: ClassOrderByRelationAggregateInput
+    collaboratedClasses?: ClassCollaboratorOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -16720,24 +18135,25 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    admin?: BoolFilter<"User"> | boolean
+    role?: EnumRoleFilter<"User"> | $Enums.Role
     name?: StringNullableFilter<"User"> | string | null
     passwordHash?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    groups?: GroupListRelationFilter
-    ownedGroups?: GroupListRelationFilter
     questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
     questionRequests?: QuestionRequestListRelationFilter
     answers?: AnswerListRelationFilter
     evaluationTemplates?: EvaluationTemplateListRelationFilter
     evaluationCriterions?: EvaluationCriterionListRelationFilter
+    ownedClasses?: ClassListRelationFilter
+    studentClasses?: ClassListRelationFilter
+    collaboratedClasses?: ClassCollaboratorListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    admin?: SortOrder
+    role?: SortOrder
     name?: SortOrderInput | SortOrder
     email?: SortOrder
     passwordHash?: SortOrderInput | SortOrder
@@ -16756,83 +18172,13 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"User"> | number
-    admin?: BoolWithAggregatesFilter<"User"> | boolean
+    role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     name?: StringNullableWithAggregatesFilter<"User"> | string | null
     email?: StringWithAggregatesFilter<"User"> | string
     passwordHash?: StringNullableWithAggregatesFilter<"User"> | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-  }
-
-  export type GroupWhereInput = {
-    AND?: GroupWhereInput | GroupWhereInput[]
-    OR?: GroupWhereInput[]
-    NOT?: GroupWhereInput | GroupWhereInput[]
-    id?: IntFilter<"Group"> | number
-    name?: StringFilter<"Group"> | string
-    startDate?: DateTimeFilter<"Group"> | Date | string
-    endDate?: DateTimeFilter<"Group"> | Date | string
-    createdAt?: DateTimeFilter<"Group"> | Date | string
-    updatedAt?: DateTimeFilter<"Group"> | Date | string
-    ownerId?: IntFilter<"Group"> | number
-    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
-    users?: UserListRelationFilter
-  }
-
-  export type GroupOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    ownerId?: SortOrder
-    owner?: UserOrderByWithRelationInput
-    users?: UserOrderByRelationAggregateInput
-  }
-
-  export type GroupWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: GroupWhereInput | GroupWhereInput[]
-    OR?: GroupWhereInput[]
-    NOT?: GroupWhereInput | GroupWhereInput[]
-    name?: StringFilter<"Group"> | string
-    startDate?: DateTimeFilter<"Group"> | Date | string
-    endDate?: DateTimeFilter<"Group"> | Date | string
-    createdAt?: DateTimeFilter<"Group"> | Date | string
-    updatedAt?: DateTimeFilter<"Group"> | Date | string
-    ownerId?: IntFilter<"Group"> | number
-    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
-    users?: UserListRelationFilter
-  }, "id">
-
-  export type GroupOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    ownerId?: SortOrder
-    _count?: GroupCountOrderByAggregateInput
-    _avg?: GroupAvgOrderByAggregateInput
-    _max?: GroupMaxOrderByAggregateInput
-    _min?: GroupMinOrderByAggregateInput
-    _sum?: GroupSumOrderByAggregateInput
-  }
-
-  export type GroupScalarWhereWithAggregatesInput = {
-    AND?: GroupScalarWhereWithAggregatesInput | GroupScalarWhereWithAggregatesInput[]
-    OR?: GroupScalarWhereWithAggregatesInput[]
-    NOT?: GroupScalarWhereWithAggregatesInput | GroupScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Group"> | number
-    name?: StringWithAggregatesFilter<"Group"> | string
-    startDate?: DateTimeWithAggregatesFilter<"Group"> | Date | string
-    endDate?: DateTimeWithAggregatesFilter<"Group"> | Date | string
-    createdAt?: DateTimeWithAggregatesFilter<"Group"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Group"> | Date | string
-    ownerId?: IntWithAggregatesFilter<"Group"> | number
   }
 
   export type TopicWhereInput = {
@@ -16900,6 +18246,7 @@ export namespace Prisma {
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     requests?: QuestionRequestListRelationFilter
     evaluationTemplate?: XOR<EvaluationTemplateNullableScalarRelationFilter, EvaluationTemplateWhereInput> | null
+    classes?: ClassListRelationFilter
   }
 
   export type QuestionRequestTemplateOrderByWithRelationInput = {
@@ -16915,6 +18262,7 @@ export namespace Prisma {
     owner?: UserOrderByWithRelationInput
     requests?: QuestionRequestOrderByRelationAggregateInput
     evaluationTemplate?: EvaluationTemplateOrderByWithRelationInput
+    classes?: ClassOrderByRelationAggregateInput
   }
 
   export type QuestionRequestTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -16933,6 +18281,7 @@ export namespace Prisma {
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     requests?: QuestionRequestListRelationFilter
     evaluationTemplate?: XOR<EvaluationTemplateNullableScalarRelationFilter, EvaluationTemplateWhereInput> | null
+    classes?: ClassListRelationFilter
   }, "id">
 
   export type QuestionRequestTemplateOrderByWithAggregationInput = {
@@ -17119,6 +18468,7 @@ export namespace Prisma {
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     criteria?: EvaluationTemplateCriterionListRelationFilter
     questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
+    classes?: ClassListRelationFilter
   }
 
   export type EvaluationTemplateOrderByWithRelationInput = {
@@ -17132,6 +18482,7 @@ export namespace Prisma {
     owner?: UserOrderByWithRelationInput
     criteria?: EvaluationTemplateCriterionOrderByRelationAggregateInput
     questionRequestTemplates?: QuestionRequestTemplateOrderByRelationAggregateInput
+    classes?: ClassOrderByRelationAggregateInput
   }
 
   export type EvaluationTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -17148,6 +18499,7 @@ export namespace Prisma {
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     criteria?: EvaluationTemplateCriterionListRelationFilter
     questionRequestTemplates?: QuestionRequestTemplateListRelationFilter
+    classes?: ClassListRelationFilter
   }, "id">
 
   export type EvaluationTemplateOrderByWithAggregationInput = {
@@ -17530,79 +18882,208 @@ export namespace Prisma {
     score?: FloatWithAggregatesFilter<"AutoEvaluationCriterion"> | number
   }
 
+  export type ClassWhereInput = {
+    AND?: ClassWhereInput | ClassWhereInput[]
+    OR?: ClassWhereInput[]
+    NOT?: ClassWhereInput | ClassWhereInput[]
+    id?: IntFilter<"Class"> | number
+    name?: StringFilter<"Class"> | string
+    createdAt?: DateTimeFilter<"Class"> | Date | string
+    updatedAt?: DateTimeFilter<"Class"> | Date | string
+    ownerId?: IntFilter<"Class"> | number
+    link?: StringFilter<"Class"> | string
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    students?: UserListRelationFilter
+    collaborators?: ClassCollaboratorListRelationFilter
+    questionTemplates?: QuestionRequestTemplateListRelationFilter
+    evaluationTemplates?: EvaluationTemplateListRelationFilter
+  }
+
+  export type ClassOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+    link?: SortOrder
+    owner?: UserOrderByWithRelationInput
+    students?: UserOrderByRelationAggregateInput
+    collaborators?: ClassCollaboratorOrderByRelationAggregateInput
+    questionTemplates?: QuestionRequestTemplateOrderByRelationAggregateInput
+    evaluationTemplates?: EvaluationTemplateOrderByRelationAggregateInput
+  }
+
+  export type ClassWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    link?: string
+    AND?: ClassWhereInput | ClassWhereInput[]
+    OR?: ClassWhereInput[]
+    NOT?: ClassWhereInput | ClassWhereInput[]
+    name?: StringFilter<"Class"> | string
+    createdAt?: DateTimeFilter<"Class"> | Date | string
+    updatedAt?: DateTimeFilter<"Class"> | Date | string
+    ownerId?: IntFilter<"Class"> | number
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    students?: UserListRelationFilter
+    collaborators?: ClassCollaboratorListRelationFilter
+    questionTemplates?: QuestionRequestTemplateListRelationFilter
+    evaluationTemplates?: EvaluationTemplateListRelationFilter
+  }, "id" | "link">
+
+  export type ClassOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+    link?: SortOrder
+    _count?: ClassCountOrderByAggregateInput
+    _avg?: ClassAvgOrderByAggregateInput
+    _max?: ClassMaxOrderByAggregateInput
+    _min?: ClassMinOrderByAggregateInput
+    _sum?: ClassSumOrderByAggregateInput
+  }
+
+  export type ClassScalarWhereWithAggregatesInput = {
+    AND?: ClassScalarWhereWithAggregatesInput | ClassScalarWhereWithAggregatesInput[]
+    OR?: ClassScalarWhereWithAggregatesInput[]
+    NOT?: ClassScalarWhereWithAggregatesInput | ClassScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Class"> | number
+    name?: StringWithAggregatesFilter<"Class"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Class"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Class"> | Date | string
+    ownerId?: IntWithAggregatesFilter<"Class"> | number
+    link?: StringWithAggregatesFilter<"Class"> | string
+  }
+
+  export type ClassCollaboratorWhereInput = {
+    AND?: ClassCollaboratorWhereInput | ClassCollaboratorWhereInput[]
+    OR?: ClassCollaboratorWhereInput[]
+    NOT?: ClassCollaboratorWhereInput | ClassCollaboratorWhereInput[]
+    classId?: IntFilter<"ClassCollaborator"> | number
+    userId?: IntFilter<"ClassCollaborator"> | number
+    addedAt?: DateTimeFilter<"ClassCollaborator"> | Date | string
+    class?: XOR<ClassScalarRelationFilter, ClassWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ClassCollaboratorOrderByWithRelationInput = {
+    classId?: SortOrder
+    userId?: SortOrder
+    addedAt?: SortOrder
+    class?: ClassOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ClassCollaboratorWhereUniqueInput = Prisma.AtLeast<{
+    classId_userId?: ClassCollaboratorClassIdUserIdCompoundUniqueInput
+    AND?: ClassCollaboratorWhereInput | ClassCollaboratorWhereInput[]
+    OR?: ClassCollaboratorWhereInput[]
+    NOT?: ClassCollaboratorWhereInput | ClassCollaboratorWhereInput[]
+    classId?: IntFilter<"ClassCollaborator"> | number
+    userId?: IntFilter<"ClassCollaborator"> | number
+    addedAt?: DateTimeFilter<"ClassCollaborator"> | Date | string
+    class?: XOR<ClassScalarRelationFilter, ClassWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "classId_userId">
+
+  export type ClassCollaboratorOrderByWithAggregationInput = {
+    classId?: SortOrder
+    userId?: SortOrder
+    addedAt?: SortOrder
+    _count?: ClassCollaboratorCountOrderByAggregateInput
+    _avg?: ClassCollaboratorAvgOrderByAggregateInput
+    _max?: ClassCollaboratorMaxOrderByAggregateInput
+    _min?: ClassCollaboratorMinOrderByAggregateInput
+    _sum?: ClassCollaboratorSumOrderByAggregateInput
+  }
+
+  export type ClassCollaboratorScalarWhereWithAggregatesInput = {
+    AND?: ClassCollaboratorScalarWhereWithAggregatesInput | ClassCollaboratorScalarWhereWithAggregatesInput[]
+    OR?: ClassCollaboratorScalarWhereWithAggregatesInput[]
+    NOT?: ClassCollaboratorScalarWhereWithAggregatesInput | ClassCollaboratorScalarWhereWithAggregatesInput[]
+    classId?: IntWithAggregatesFilter<"ClassCollaborator"> | number
+    userId?: IntWithAggregatesFilter<"ClassCollaborator"> | number
+    addedAt?: DateTimeWithAggregatesFilter<"ClassCollaborator"> | Date | string
+  }
+
   export type UserCreateInput = {
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: number
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: number
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
@@ -17612,7 +19093,7 @@ export namespace Prisma {
   }
 
   export type UserUpdateManyMutationInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17623,83 +19104,13 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type GroupCreateInput = {
-    name: string
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner: UserCreateNestedOneWithoutOwnedGroupsInput
-    users?: UserCreateNestedManyWithoutGroupsInput
-  }
-
-  export type GroupUncheckedCreateInput = {
-    id?: number
-    name: string
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    ownerId: number
-    users?: UserUncheckedCreateNestedManyWithoutGroupsInput
-  }
-
-  export type GroupUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
-    users?: UserUpdateManyWithoutGroupsNestedInput
-  }
-
-  export type GroupUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownerId?: IntFieldUpdateOperationsInput | number
-    users?: UserUncheckedUpdateManyWithoutGroupsNestedInput
-  }
-
-  export type GroupCreateManyInput = {
-    id?: number
-    name: string
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    ownerId: number
-  }
-
-  export type GroupUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type GroupUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownerId?: IntFieldUpdateOperationsInput | number
   }
 
   export type TopicCreateInput = {
@@ -17758,6 +19169,7 @@ export namespace Prisma {
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
     evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
+    classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateInput = {
@@ -17771,6 +19183,7 @@ export namespace Prisma {
     ownerId: number
     evaluationTemplateId?: number | null
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
   }
 
   export type QuestionRequestTemplateUpdateInput = {
@@ -17783,6 +19196,7 @@ export namespace Prisma {
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
     evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
+    classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateInput = {
@@ -17796,6 +19210,7 @@ export namespace Prisma {
     ownerId?: IntFieldUpdateOperationsInput | number
     evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateCreateManyInput = {
@@ -17972,6 +19387,7 @@ export namespace Prisma {
     owner: UserCreateNestedOneWithoutEvaluationTemplatesInput
     criteria?: EvaluationTemplateCriterionCreateNestedManyWithoutTemplateInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutEvaluationTemplateInput
+    classes?: ClassCreateNestedManyWithoutEvaluationTemplatesInput
   }
 
   export type EvaluationTemplateUncheckedCreateInput = {
@@ -17984,6 +19400,7 @@ export namespace Prisma {
     ownerId: number
     criteria?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutEvaluationTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutEvaluationTemplatesInput
   }
 
   export type EvaluationTemplateUpdateInput = {
@@ -17995,6 +19412,7 @@ export namespace Prisma {
     owner?: UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput
     criteria?: EvaluationTemplateCriterionUpdateManyWithoutTemplateNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutEvaluationTemplateNestedInput
+    classes?: ClassUpdateManyWithoutEvaluationTemplatesNestedInput
   }
 
   export type EvaluationTemplateUncheckedUpdateInput = {
@@ -18007,6 +19425,7 @@ export namespace Prisma {
     ownerId?: IntFieldUpdateOperationsInput | number
     criteria?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutEvaluationTemplatesNestedInput
   }
 
   export type EvaluationTemplateCreateManyInput = {
@@ -18373,6 +19792,121 @@ export namespace Prisma {
     score?: FloatFieldUpdateOperationsInput | number
   }
 
+  export type ClassCreateInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
+    owner: UserCreateNestedOneWithoutOwnedClassesInput
+    students?: UserCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassUncheckedCreateInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    link: string
+    students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: StringFieldUpdateOperationsInput | string
+    owner?: UserUpdateOneRequiredWithoutOwnedClassesNestedInput
+    students?: UserUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
+    students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassCreateManyInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    link: string
+  }
+
+  export type ClassUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ClassUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ClassCollaboratorCreateInput = {
+    addedAt?: Date | string
+    class: ClassCreateNestedOneWithoutCollaboratorsInput
+    user: UserCreateNestedOneWithoutCollaboratedClassesInput
+  }
+
+  export type ClassCollaboratorUncheckedCreateInput = {
+    classId: number
+    userId: number
+    addedAt?: Date | string
+  }
+
+  export type ClassCollaboratorUpdateInput = {
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    class?: ClassUpdateOneRequiredWithoutCollaboratorsNestedInput
+    user?: UserUpdateOneRequiredWithoutCollaboratedClassesNestedInput
+  }
+
+  export type ClassCollaboratorUncheckedUpdateInput = {
+    classId?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassCollaboratorCreateManyInput = {
+    classId: number
+    userId: number
+    addedAt?: Date | string
+  }
+
+  export type ClassCollaboratorUpdateManyMutationInput = {
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassCollaboratorUncheckedUpdateManyInput = {
+    classId?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -18384,9 +19918,11 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type EnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -18430,12 +19966,6 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type GroupListRelationFilter = {
-    every?: GroupWhereInput
-    some?: GroupWhereInput
-    none?: GroupWhereInput
-  }
-
   export type QuestionRequestTemplateListRelationFilter = {
     every?: QuestionRequestTemplateWhereInput
     some?: QuestionRequestTemplateWhereInput
@@ -18466,13 +19996,21 @@ export namespace Prisma {
     none?: EvaluationCriterionWhereInput
   }
 
+  export type ClassListRelationFilter = {
+    every?: ClassWhereInput
+    some?: ClassWhereInput
+    none?: ClassWhereInput
+  }
+
+  export type ClassCollaboratorListRelationFilter = {
+    every?: ClassCollaboratorWhereInput
+    some?: ClassCollaboratorWhereInput
+    none?: ClassCollaboratorWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
-  }
-
-  export type GroupOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type QuestionRequestTemplateOrderByRelationAggregateInput = {
@@ -18495,9 +20033,17 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ClassOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClassCollaboratorOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    admin?: SortOrder
+    role?: SortOrder
     name?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
@@ -18512,7 +20058,7 @@ export namespace Prisma {
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    admin?: SortOrder
+    role?: SortOrder
     name?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
@@ -18523,7 +20069,7 @@ export namespace Prisma {
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    admin?: SortOrder
+    role?: SortOrder
     name?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
@@ -18552,12 +20098,14 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -18610,61 +20158,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
-  }
-
-  export type UserOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type GroupCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    ownerId?: SortOrder
-  }
-
-  export type GroupAvgOrderByAggregateInput = {
-    id?: SortOrder
-    ownerId?: SortOrder
-  }
-
-  export type GroupMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    ownerId?: SortOrder
-  }
-
-  export type GroupMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    ownerId?: SortOrder
-  }
-
-  export type GroupSumOrderByAggregateInput = {
-    id?: SortOrder
-    ownerId?: SortOrder
-  }
-
   export type TopicCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -18693,6 +20186,11 @@ export namespace Prisma {
   export type TopicSumOrderByAggregateInput = {
     id?: SortOrder
   }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
   export type JsonNullableListFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableListFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>,
@@ -18717,6 +20215,11 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
   }
 
   export type EvaluationTemplateNullableScalarRelationFilter = {
@@ -18768,6 +20271,14 @@ export namespace Prisma {
     id?: SortOrder
     ownerId?: SortOrder
     evaluationTemplateId?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -19242,17 +20753,89 @@ export namespace Prisma {
     score?: SortOrder
   }
 
-  export type GroupCreateNestedManyWithoutUsersInput = {
-    create?: XOR<GroupCreateWithoutUsersInput, GroupUncheckedCreateWithoutUsersInput> | GroupCreateWithoutUsersInput[] | GroupUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutUsersInput | GroupCreateOrConnectWithoutUsersInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
   }
 
-  export type GroupCreateNestedManyWithoutOwnerInput = {
-    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
-    createMany?: GroupCreateManyOwnerInputEnvelope
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClassCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+    link?: SortOrder
+  }
+
+  export type ClassAvgOrderByAggregateInput = {
+    id?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type ClassMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+    link?: SortOrder
+  }
+
+  export type ClassMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ownerId?: SortOrder
+    link?: SortOrder
+  }
+
+  export type ClassSumOrderByAggregateInput = {
+    id?: SortOrder
+    ownerId?: SortOrder
+  }
+
+  export type ClassScalarRelationFilter = {
+    is?: ClassWhereInput
+    isNot?: ClassWhereInput
+  }
+
+  export type ClassCollaboratorClassIdUserIdCompoundUniqueInput = {
+    classId: number
+    userId: number
+  }
+
+  export type ClassCollaboratorCountOrderByAggregateInput = {
+    classId?: SortOrder
+    userId?: SortOrder
+    addedAt?: SortOrder
+  }
+
+  export type ClassCollaboratorAvgOrderByAggregateInput = {
+    classId?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type ClassCollaboratorMaxOrderByAggregateInput = {
+    classId?: SortOrder
+    userId?: SortOrder
+    addedAt?: SortOrder
+  }
+
+  export type ClassCollaboratorMinOrderByAggregateInput = {
+    classId?: SortOrder
+    userId?: SortOrder
+    addedAt?: SortOrder
+  }
+
+  export type ClassCollaboratorSumOrderByAggregateInput = {
+    classId?: SortOrder
+    userId?: SortOrder
   }
 
   export type QuestionRequestTemplateCreateNestedManyWithoutOwnerInput = {
@@ -19290,17 +20873,24 @@ export namespace Prisma {
     connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
   }
 
-  export type GroupUncheckedCreateNestedManyWithoutUsersInput = {
-    create?: XOR<GroupCreateWithoutUsersInput, GroupUncheckedCreateWithoutUsersInput> | GroupCreateWithoutUsersInput[] | GroupUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutUsersInput | GroupCreateOrConnectWithoutUsersInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  export type ClassCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<ClassCreateWithoutOwnerInput, ClassUncheckedCreateWithoutOwnerInput> | ClassCreateWithoutOwnerInput[] | ClassUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutOwnerInput | ClassCreateOrConnectWithoutOwnerInput[]
+    createMany?: ClassCreateManyOwnerInputEnvelope
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
   }
 
-  export type GroupUncheckedCreateNestedManyWithoutOwnerInput = {
-    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
-    createMany?: GroupCreateManyOwnerInputEnvelope
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  export type ClassCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput> | ClassCreateWithoutStudentsInput[] | ClassUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutStudentsInput | ClassCreateOrConnectWithoutStudentsInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+  }
+
+  export type ClassCollaboratorCreateNestedManyWithoutUserInput = {
+    create?: XOR<ClassCollaboratorCreateWithoutUserInput, ClassCollaboratorUncheckedCreateWithoutUserInput> | ClassCollaboratorCreateWithoutUserInput[] | ClassCollaboratorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutUserInput | ClassCollaboratorCreateOrConnectWithoutUserInput[]
+    createMany?: ClassCollaboratorCreateManyUserInputEnvelope
+    connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
   }
 
   export type QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput = {
@@ -19338,8 +20928,28 @@ export namespace Prisma {
     connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type ClassUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<ClassCreateWithoutOwnerInput, ClassUncheckedCreateWithoutOwnerInput> | ClassCreateWithoutOwnerInput[] | ClassUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutOwnerInput | ClassCreateOrConnectWithoutOwnerInput[]
+    createMany?: ClassCreateManyOwnerInputEnvelope
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+  }
+
+  export type ClassUncheckedCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput> | ClassCreateWithoutStudentsInput[] | ClassUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutStudentsInput | ClassCreateOrConnectWithoutStudentsInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+  }
+
+  export type ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ClassCollaboratorCreateWithoutUserInput, ClassCollaboratorUncheckedCreateWithoutUserInput> | ClassCollaboratorCreateWithoutUserInput[] | ClassCollaboratorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutUserInput | ClassCollaboratorCreateOrConnectWithoutUserInput[]
+    createMany?: ClassCollaboratorCreateManyUserInputEnvelope
+    connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+  }
+
+  export type EnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -19352,33 +20962,6 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
-  }
-
-  export type GroupUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<GroupCreateWithoutUsersInput, GroupUncheckedCreateWithoutUsersInput> | GroupCreateWithoutUsersInput[] | GroupUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutUsersInput | GroupCreateOrConnectWithoutUsersInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutUsersInput | GroupUpsertWithWhereUniqueWithoutUsersInput[]
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutUsersInput | GroupUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutUsersInput | GroupUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
-  }
-
-  export type GroupUpdateManyWithoutOwnerNestedInput = {
-    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutOwnerInput | GroupUpsertWithWhereUniqueWithoutOwnerInput[]
-    createMany?: GroupCreateManyOwnerInputEnvelope
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutOwnerInput | GroupUpdateWithWhereUniqueWithoutOwnerInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutOwnerInput | GroupUpdateManyWithWhereWithoutOwnerInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
   }
 
   export type QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput = {
@@ -19451,39 +21034,53 @@ export namespace Prisma {
     deleteMany?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
   }
 
+  export type ClassUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<ClassCreateWithoutOwnerInput, ClassUncheckedCreateWithoutOwnerInput> | ClassCreateWithoutOwnerInput[] | ClassUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutOwnerInput | ClassCreateOrConnectWithoutOwnerInput[]
+    upsert?: ClassUpsertWithWhereUniqueWithoutOwnerInput | ClassUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: ClassCreateManyOwnerInputEnvelope
+    set?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    disconnect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    delete?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    update?: ClassUpdateWithWhereUniqueWithoutOwnerInput | ClassUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: ClassUpdateManyWithWhereWithoutOwnerInput | ClassUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
+  }
+
+  export type ClassUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput> | ClassCreateWithoutStudentsInput[] | ClassUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutStudentsInput | ClassCreateOrConnectWithoutStudentsInput[]
+    upsert?: ClassUpsertWithWhereUniqueWithoutStudentsInput | ClassUpsertWithWhereUniqueWithoutStudentsInput[]
+    set?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    disconnect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    delete?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    update?: ClassUpdateWithWhereUniqueWithoutStudentsInput | ClassUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: ClassUpdateManyWithWhereWithoutStudentsInput | ClassUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
+  }
+
+  export type ClassCollaboratorUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ClassCollaboratorCreateWithoutUserInput, ClassCollaboratorUncheckedCreateWithoutUserInput> | ClassCollaboratorCreateWithoutUserInput[] | ClassCollaboratorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutUserInput | ClassCollaboratorCreateOrConnectWithoutUserInput[]
+    upsert?: ClassCollaboratorUpsertWithWhereUniqueWithoutUserInput | ClassCollaboratorUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ClassCollaboratorCreateManyUserInputEnvelope
+    set?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    disconnect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    delete?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    update?: ClassCollaboratorUpdateWithWhereUniqueWithoutUserInput | ClassCollaboratorUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ClassCollaboratorUpdateManyWithWhereWithoutUserInput | ClassCollaboratorUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ClassCollaboratorScalarWhereInput | ClassCollaboratorScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type GroupUncheckedUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<GroupCreateWithoutUsersInput, GroupUncheckedCreateWithoutUsersInput> | GroupCreateWithoutUsersInput[] | GroupUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutUsersInput | GroupCreateOrConnectWithoutUsersInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutUsersInput | GroupUpsertWithWhereUniqueWithoutUsersInput[]
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutUsersInput | GroupUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutUsersInput | GroupUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
-  }
-
-  export type GroupUncheckedUpdateManyWithoutOwnerNestedInput = {
-    create?: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput> | GroupCreateWithoutOwnerInput[] | GroupUncheckedCreateWithoutOwnerInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutOwnerInput | GroupCreateOrConnectWithoutOwnerInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutOwnerInput | GroupUpsertWithWhereUniqueWithoutOwnerInput[]
-    createMany?: GroupCreateManyOwnerInputEnvelope
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutOwnerInput | GroupUpdateWithWhereUniqueWithoutOwnerInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutOwnerInput | GroupUpdateManyWithWhereWithoutOwnerInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
   }
 
   export type QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput = {
@@ -19556,56 +21153,45 @@ export namespace Prisma {
     deleteMany?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutOwnedGroupsInput = {
-    create?: XOR<UserCreateWithoutOwnedGroupsInput, UserUncheckedCreateWithoutOwnedGroupsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutOwnedGroupsInput
-    connect?: UserWhereUniqueInput
+  export type ClassUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<ClassCreateWithoutOwnerInput, ClassUncheckedCreateWithoutOwnerInput> | ClassCreateWithoutOwnerInput[] | ClassUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutOwnerInput | ClassCreateOrConnectWithoutOwnerInput[]
+    upsert?: ClassUpsertWithWhereUniqueWithoutOwnerInput | ClassUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: ClassCreateManyOwnerInputEnvelope
+    set?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    disconnect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    delete?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    update?: ClassUpdateWithWhereUniqueWithoutOwnerInput | ClassUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: ClassUpdateManyWithWhereWithoutOwnerInput | ClassUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
   }
 
-  export type UserCreateNestedManyWithoutGroupsInput = {
-    create?: XOR<UserCreateWithoutGroupsInput, UserUncheckedCreateWithoutGroupsInput> | UserCreateWithoutGroupsInput[] | UserUncheckedCreateWithoutGroupsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutGroupsInput | UserCreateOrConnectWithoutGroupsInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type ClassUncheckedUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput> | ClassCreateWithoutStudentsInput[] | ClassUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutStudentsInput | ClassCreateOrConnectWithoutStudentsInput[]
+    upsert?: ClassUpsertWithWhereUniqueWithoutStudentsInput | ClassUpsertWithWhereUniqueWithoutStudentsInput[]
+    set?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    disconnect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    delete?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    update?: ClassUpdateWithWhereUniqueWithoutStudentsInput | ClassUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: ClassUpdateManyWithWhereWithoutStudentsInput | ClassUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
   }
 
-  export type UserUncheckedCreateNestedManyWithoutGroupsInput = {
-    create?: XOR<UserCreateWithoutGroupsInput, UserUncheckedCreateWithoutGroupsInput> | UserCreateWithoutGroupsInput[] | UserUncheckedCreateWithoutGroupsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutGroupsInput | UserCreateOrConnectWithoutGroupsInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-  }
-
-  export type UserUpdateOneRequiredWithoutOwnedGroupsNestedInput = {
-    create?: XOR<UserCreateWithoutOwnedGroupsInput, UserUncheckedCreateWithoutOwnedGroupsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutOwnedGroupsInput
-    upsert?: UserUpsertWithoutOwnedGroupsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOwnedGroupsInput, UserUpdateWithoutOwnedGroupsInput>, UserUncheckedUpdateWithoutOwnedGroupsInput>
-  }
-
-  export type UserUpdateManyWithoutGroupsNestedInput = {
-    create?: XOR<UserCreateWithoutGroupsInput, UserUncheckedCreateWithoutGroupsInput> | UserCreateWithoutGroupsInput[] | UserUncheckedCreateWithoutGroupsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutGroupsInput | UserCreateOrConnectWithoutGroupsInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutGroupsInput | UserUpsertWithWhereUniqueWithoutGroupsInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutGroupsInput | UserUpdateWithWhereUniqueWithoutGroupsInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutGroupsInput | UserUpdateManyWithWhereWithoutGroupsInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
-  }
-
-  export type UserUncheckedUpdateManyWithoutGroupsNestedInput = {
-    create?: XOR<UserCreateWithoutGroupsInput, UserUncheckedCreateWithoutGroupsInput> | UserCreateWithoutGroupsInput[] | UserUncheckedCreateWithoutGroupsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutGroupsInput | UserCreateOrConnectWithoutGroupsInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutGroupsInput | UserUpsertWithWhereUniqueWithoutGroupsInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutGroupsInput | UserUpdateWithWhereUniqueWithoutGroupsInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutGroupsInput | UserUpdateManyWithWhereWithoutGroupsInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ClassCollaboratorCreateWithoutUserInput, ClassCollaboratorUncheckedCreateWithoutUserInput> | ClassCollaboratorCreateWithoutUserInput[] | ClassCollaboratorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutUserInput | ClassCollaboratorCreateOrConnectWithoutUserInput[]
+    upsert?: ClassCollaboratorUpsertWithWhereUniqueWithoutUserInput | ClassCollaboratorUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ClassCollaboratorCreateManyUserInputEnvelope
+    set?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    disconnect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    delete?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    update?: ClassCollaboratorUpdateWithWhereUniqueWithoutUserInput | ClassCollaboratorUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ClassCollaboratorUpdateManyWithWhereWithoutUserInput | ClassCollaboratorUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ClassCollaboratorScalarWhereInput | ClassCollaboratorScalarWhereInput[]
   }
 
   export type QuestionRequestTemplateCreateparametersInput = {
@@ -19631,11 +21217,27 @@ export namespace Prisma {
     connect?: EvaluationTemplateWhereUniqueInput
   }
 
+  export type ClassCreateNestedManyWithoutQuestionTemplatesInput = {
+    create?: XOR<ClassCreateWithoutQuestionTemplatesInput, ClassUncheckedCreateWithoutQuestionTemplatesInput> | ClassCreateWithoutQuestionTemplatesInput[] | ClassUncheckedCreateWithoutQuestionTemplatesInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutQuestionTemplatesInput | ClassCreateOrConnectWithoutQuestionTemplatesInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+  }
+
   export type QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput = {
     create?: XOR<QuestionRequestCreateWithoutTemplateInput, QuestionRequestUncheckedCreateWithoutTemplateInput> | QuestionRequestCreateWithoutTemplateInput[] | QuestionRequestUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: QuestionRequestCreateOrConnectWithoutTemplateInput | QuestionRequestCreateOrConnectWithoutTemplateInput[]
     createMany?: QuestionRequestCreateManyTemplateInputEnvelope
     connect?: QuestionRequestWhereUniqueInput | QuestionRequestWhereUniqueInput[]
+  }
+
+  export type ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput = {
+    create?: XOR<ClassCreateWithoutQuestionTemplatesInput, ClassUncheckedCreateWithoutQuestionTemplatesInput> | ClassCreateWithoutQuestionTemplatesInput[] | ClassUncheckedCreateWithoutQuestionTemplatesInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutQuestionTemplatesInput | ClassCreateOrConnectWithoutQuestionTemplatesInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type QuestionRequestTemplateUpdateparametersInput = {
@@ -19675,6 +21277,19 @@ export namespace Prisma {
     update?: XOR<XOR<EvaluationTemplateUpdateToOneWithWhereWithoutQuestionRequestTemplatesInput, EvaluationTemplateUpdateWithoutQuestionRequestTemplatesInput>, EvaluationTemplateUncheckedUpdateWithoutQuestionRequestTemplatesInput>
   }
 
+  export type ClassUpdateManyWithoutQuestionTemplatesNestedInput = {
+    create?: XOR<ClassCreateWithoutQuestionTemplatesInput, ClassUncheckedCreateWithoutQuestionTemplatesInput> | ClassCreateWithoutQuestionTemplatesInput[] | ClassUncheckedCreateWithoutQuestionTemplatesInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutQuestionTemplatesInput | ClassCreateOrConnectWithoutQuestionTemplatesInput[]
+    upsert?: ClassUpsertWithWhereUniqueWithoutQuestionTemplatesInput | ClassUpsertWithWhereUniqueWithoutQuestionTemplatesInput[]
+    set?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    disconnect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    delete?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    update?: ClassUpdateWithWhereUniqueWithoutQuestionTemplatesInput | ClassUpdateWithWhereUniqueWithoutQuestionTemplatesInput[]
+    updateMany?: ClassUpdateManyWithWhereWithoutQuestionTemplatesInput | ClassUpdateManyWithWhereWithoutQuestionTemplatesInput[]
+    deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -19695,6 +21310,19 @@ export namespace Prisma {
     update?: QuestionRequestUpdateWithWhereUniqueWithoutTemplateInput | QuestionRequestUpdateWithWhereUniqueWithoutTemplateInput[]
     updateMany?: QuestionRequestUpdateManyWithWhereWithoutTemplateInput | QuestionRequestUpdateManyWithWhereWithoutTemplateInput[]
     deleteMany?: QuestionRequestScalarWhereInput | QuestionRequestScalarWhereInput[]
+  }
+
+  export type ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput = {
+    create?: XOR<ClassCreateWithoutQuestionTemplatesInput, ClassUncheckedCreateWithoutQuestionTemplatesInput> | ClassCreateWithoutQuestionTemplatesInput[] | ClassUncheckedCreateWithoutQuestionTemplatesInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutQuestionTemplatesInput | ClassCreateOrConnectWithoutQuestionTemplatesInput[]
+    upsert?: ClassUpsertWithWhereUniqueWithoutQuestionTemplatesInput | ClassUpsertWithWhereUniqueWithoutQuestionTemplatesInput[]
+    set?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    disconnect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    delete?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    update?: ClassUpdateWithWhereUniqueWithoutQuestionTemplatesInput | ClassUpdateWithWhereUniqueWithoutQuestionTemplatesInput[]
+    updateMany?: ClassUpdateManyWithWhereWithoutQuestionTemplatesInput | ClassUpdateManyWithWhereWithoutQuestionTemplatesInput[]
+    deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
   }
 
   export type QuestionRequestCreateparameterValuesInput = {
@@ -19876,6 +21504,12 @@ export namespace Prisma {
     connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
   }
 
+  export type ClassCreateNestedManyWithoutEvaluationTemplatesInput = {
+    create?: XOR<ClassCreateWithoutEvaluationTemplatesInput, ClassUncheckedCreateWithoutEvaluationTemplatesInput> | ClassCreateWithoutEvaluationTemplatesInput[] | ClassUncheckedCreateWithoutEvaluationTemplatesInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutEvaluationTemplatesInput | ClassCreateOrConnectWithoutEvaluationTemplatesInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+  }
+
   export type EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput = {
     create?: XOR<EvaluationTemplateCriterionCreateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput> | EvaluationTemplateCriterionCreateWithoutTemplateInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput | EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput[]
@@ -19888,6 +21522,12 @@ export namespace Prisma {
     connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput | QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput[]
     createMany?: QuestionRequestTemplateCreateManyEvaluationTemplateInputEnvelope
     connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+  }
+
+  export type ClassUncheckedCreateNestedManyWithoutEvaluationTemplatesInput = {
+    create?: XOR<ClassCreateWithoutEvaluationTemplatesInput, ClassUncheckedCreateWithoutEvaluationTemplatesInput> | ClassCreateWithoutEvaluationTemplatesInput[] | ClassUncheckedCreateWithoutEvaluationTemplatesInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutEvaluationTemplatesInput | ClassCreateOrConnectWithoutEvaluationTemplatesInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput = {
@@ -19926,6 +21566,19 @@ export namespace Prisma {
     deleteMany?: QuestionRequestTemplateScalarWhereInput | QuestionRequestTemplateScalarWhereInput[]
   }
 
+  export type ClassUpdateManyWithoutEvaluationTemplatesNestedInput = {
+    create?: XOR<ClassCreateWithoutEvaluationTemplatesInput, ClassUncheckedCreateWithoutEvaluationTemplatesInput> | ClassCreateWithoutEvaluationTemplatesInput[] | ClassUncheckedCreateWithoutEvaluationTemplatesInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutEvaluationTemplatesInput | ClassCreateOrConnectWithoutEvaluationTemplatesInput[]
+    upsert?: ClassUpsertWithWhereUniqueWithoutEvaluationTemplatesInput | ClassUpsertWithWhereUniqueWithoutEvaluationTemplatesInput[]
+    set?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    disconnect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    delete?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    update?: ClassUpdateWithWhereUniqueWithoutEvaluationTemplatesInput | ClassUpdateWithWhereUniqueWithoutEvaluationTemplatesInput[]
+    updateMany?: ClassUpdateManyWithWhereWithoutEvaluationTemplatesInput | ClassUpdateManyWithWhereWithoutEvaluationTemplatesInput[]
+    deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
+  }
+
   export type EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput = {
     create?: XOR<EvaluationTemplateCriterionCreateWithoutTemplateInput, EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput> | EvaluationTemplateCriterionCreateWithoutTemplateInput[] | EvaluationTemplateCriterionUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput | EvaluationTemplateCriterionCreateOrConnectWithoutTemplateInput[]
@@ -19952,6 +21605,19 @@ export namespace Prisma {
     update?: QuestionRequestTemplateUpdateWithWhereUniqueWithoutEvaluationTemplateInput | QuestionRequestTemplateUpdateWithWhereUniqueWithoutEvaluationTemplateInput[]
     updateMany?: QuestionRequestTemplateUpdateManyWithWhereWithoutEvaluationTemplateInput | QuestionRequestTemplateUpdateManyWithWhereWithoutEvaluationTemplateInput[]
     deleteMany?: QuestionRequestTemplateScalarWhereInput | QuestionRequestTemplateScalarWhereInput[]
+  }
+
+  export type ClassUncheckedUpdateManyWithoutEvaluationTemplatesNestedInput = {
+    create?: XOR<ClassCreateWithoutEvaluationTemplatesInput, ClassUncheckedCreateWithoutEvaluationTemplatesInput> | ClassCreateWithoutEvaluationTemplatesInput[] | ClassUncheckedCreateWithoutEvaluationTemplatesInput[]
+    connectOrCreate?: ClassCreateOrConnectWithoutEvaluationTemplatesInput | ClassCreateOrConnectWithoutEvaluationTemplatesInput[]
+    upsert?: ClassUpsertWithWhereUniqueWithoutEvaluationTemplatesInput | ClassUpsertWithWhereUniqueWithoutEvaluationTemplatesInput[]
+    set?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    disconnect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    delete?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+    update?: ClassUpdateWithWhereUniqueWithoutEvaluationTemplatesInput | ClassUpdateWithWhereUniqueWithoutEvaluationTemplatesInput[]
+    updateMany?: ClassUpdateManyWithWhereWithoutEvaluationTemplatesInput | ClassUpdateManyWithWhereWithoutEvaluationTemplatesInput[]
+    deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
   }
 
   export type EvaluationCriterionCreateNestedOneWithoutTemplatesInput = {
@@ -20234,6 +21900,204 @@ export namespace Prisma {
     update?: XOR<XOR<EvaluationTemplateCriterionUpdateToOneWithWhereWithoutAutoEvaluationCriteriaInput, EvaluationTemplateCriterionUpdateWithoutAutoEvaluationCriteriaInput>, EvaluationTemplateCriterionUncheckedUpdateWithoutAutoEvaluationCriteriaInput>
   }
 
+  export type UserCreateNestedOneWithoutOwnedClassesInput = {
+    create?: XOR<UserCreateWithoutOwnedClassesInput, UserUncheckedCreateWithoutOwnedClassesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOwnedClassesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedManyWithoutStudentClassesInput = {
+    create?: XOR<UserCreateWithoutStudentClassesInput, UserUncheckedCreateWithoutStudentClassesInput> | UserCreateWithoutStudentClassesInput[] | UserUncheckedCreateWithoutStudentClassesInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutStudentClassesInput | UserCreateOrConnectWithoutStudentClassesInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type ClassCollaboratorCreateNestedManyWithoutClassInput = {
+    create?: XOR<ClassCollaboratorCreateWithoutClassInput, ClassCollaboratorUncheckedCreateWithoutClassInput> | ClassCollaboratorCreateWithoutClassInput[] | ClassCollaboratorUncheckedCreateWithoutClassInput[]
+    connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutClassInput | ClassCollaboratorCreateOrConnectWithoutClassInput[]
+    createMany?: ClassCollaboratorCreateManyClassInputEnvelope
+    connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+  }
+
+  export type QuestionRequestTemplateCreateNestedManyWithoutClassesInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutClassesInput, QuestionRequestTemplateUncheckedCreateWithoutClassesInput> | QuestionRequestTemplateCreateWithoutClassesInput[] | QuestionRequestTemplateUncheckedCreateWithoutClassesInput[]
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutClassesInput | QuestionRequestTemplateCreateOrConnectWithoutClassesInput[]
+    connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+  }
+
+  export type EvaluationTemplateCreateNestedManyWithoutClassesInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutClassesInput, EvaluationTemplateUncheckedCreateWithoutClassesInput> | EvaluationTemplateCreateWithoutClassesInput[] | EvaluationTemplateUncheckedCreateWithoutClassesInput[]
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutClassesInput | EvaluationTemplateCreateOrConnectWithoutClassesInput[]
+    connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutStudentClassesInput = {
+    create?: XOR<UserCreateWithoutStudentClassesInput, UserUncheckedCreateWithoutStudentClassesInput> | UserCreateWithoutStudentClassesInput[] | UserUncheckedCreateWithoutStudentClassesInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutStudentClassesInput | UserCreateOrConnectWithoutStudentClassesInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput = {
+    create?: XOR<ClassCollaboratorCreateWithoutClassInput, ClassCollaboratorUncheckedCreateWithoutClassInput> | ClassCollaboratorCreateWithoutClassInput[] | ClassCollaboratorUncheckedCreateWithoutClassInput[]
+    connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutClassInput | ClassCollaboratorCreateOrConnectWithoutClassInput[]
+    createMany?: ClassCollaboratorCreateManyClassInputEnvelope
+    connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+  }
+
+  export type QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutClassesInput, QuestionRequestTemplateUncheckedCreateWithoutClassesInput> | QuestionRequestTemplateCreateWithoutClassesInput[] | QuestionRequestTemplateUncheckedCreateWithoutClassesInput[]
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutClassesInput | QuestionRequestTemplateCreateOrConnectWithoutClassesInput[]
+    connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+  }
+
+  export type EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutClassesInput, EvaluationTemplateUncheckedCreateWithoutClassesInput> | EvaluationTemplateCreateWithoutClassesInput[] | EvaluationTemplateUncheckedCreateWithoutClassesInput[]
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutClassesInput | EvaluationTemplateCreateOrConnectWithoutClassesInput[]
+    connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutOwnedClassesNestedInput = {
+    create?: XOR<UserCreateWithoutOwnedClassesInput, UserUncheckedCreateWithoutOwnedClassesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOwnedClassesInput
+    upsert?: UserUpsertWithoutOwnedClassesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOwnedClassesInput, UserUpdateWithoutOwnedClassesInput>, UserUncheckedUpdateWithoutOwnedClassesInput>
+  }
+
+  export type UserUpdateManyWithoutStudentClassesNestedInput = {
+    create?: XOR<UserCreateWithoutStudentClassesInput, UserUncheckedCreateWithoutStudentClassesInput> | UserCreateWithoutStudentClassesInput[] | UserUncheckedCreateWithoutStudentClassesInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutStudentClassesInput | UserCreateOrConnectWithoutStudentClassesInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutStudentClassesInput | UserUpsertWithWhereUniqueWithoutStudentClassesInput[]
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutStudentClassesInput | UserUpdateWithWhereUniqueWithoutStudentClassesInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutStudentClassesInput | UserUpdateManyWithWhereWithoutStudentClassesInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type ClassCollaboratorUpdateManyWithoutClassNestedInput = {
+    create?: XOR<ClassCollaboratorCreateWithoutClassInput, ClassCollaboratorUncheckedCreateWithoutClassInput> | ClassCollaboratorCreateWithoutClassInput[] | ClassCollaboratorUncheckedCreateWithoutClassInput[]
+    connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutClassInput | ClassCollaboratorCreateOrConnectWithoutClassInput[]
+    upsert?: ClassCollaboratorUpsertWithWhereUniqueWithoutClassInput | ClassCollaboratorUpsertWithWhereUniqueWithoutClassInput[]
+    createMany?: ClassCollaboratorCreateManyClassInputEnvelope
+    set?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    disconnect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    delete?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    update?: ClassCollaboratorUpdateWithWhereUniqueWithoutClassInput | ClassCollaboratorUpdateWithWhereUniqueWithoutClassInput[]
+    updateMany?: ClassCollaboratorUpdateManyWithWhereWithoutClassInput | ClassCollaboratorUpdateManyWithWhereWithoutClassInput[]
+    deleteMany?: ClassCollaboratorScalarWhereInput | ClassCollaboratorScalarWhereInput[]
+  }
+
+  export type QuestionRequestTemplateUpdateManyWithoutClassesNestedInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutClassesInput, QuestionRequestTemplateUncheckedCreateWithoutClassesInput> | QuestionRequestTemplateCreateWithoutClassesInput[] | QuestionRequestTemplateUncheckedCreateWithoutClassesInput[]
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutClassesInput | QuestionRequestTemplateCreateOrConnectWithoutClassesInput[]
+    upsert?: QuestionRequestTemplateUpsertWithWhereUniqueWithoutClassesInput | QuestionRequestTemplateUpsertWithWhereUniqueWithoutClassesInput[]
+    set?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    disconnect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    delete?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    update?: QuestionRequestTemplateUpdateWithWhereUniqueWithoutClassesInput | QuestionRequestTemplateUpdateWithWhereUniqueWithoutClassesInput[]
+    updateMany?: QuestionRequestTemplateUpdateManyWithWhereWithoutClassesInput | QuestionRequestTemplateUpdateManyWithWhereWithoutClassesInput[]
+    deleteMany?: QuestionRequestTemplateScalarWhereInput | QuestionRequestTemplateScalarWhereInput[]
+  }
+
+  export type EvaluationTemplateUpdateManyWithoutClassesNestedInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutClassesInput, EvaluationTemplateUncheckedCreateWithoutClassesInput> | EvaluationTemplateCreateWithoutClassesInput[] | EvaluationTemplateUncheckedCreateWithoutClassesInput[]
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutClassesInput | EvaluationTemplateCreateOrConnectWithoutClassesInput[]
+    upsert?: EvaluationTemplateUpsertWithWhereUniqueWithoutClassesInput | EvaluationTemplateUpsertWithWhereUniqueWithoutClassesInput[]
+    set?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    disconnect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    delete?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    update?: EvaluationTemplateUpdateWithWhereUniqueWithoutClassesInput | EvaluationTemplateUpdateWithWhereUniqueWithoutClassesInput[]
+    updateMany?: EvaluationTemplateUpdateManyWithWhereWithoutClassesInput | EvaluationTemplateUpdateManyWithWhereWithoutClassesInput[]
+    deleteMany?: EvaluationTemplateScalarWhereInput | EvaluationTemplateScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutStudentClassesNestedInput = {
+    create?: XOR<UserCreateWithoutStudentClassesInput, UserUncheckedCreateWithoutStudentClassesInput> | UserCreateWithoutStudentClassesInput[] | UserUncheckedCreateWithoutStudentClassesInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutStudentClassesInput | UserCreateOrConnectWithoutStudentClassesInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutStudentClassesInput | UserUpsertWithWhereUniqueWithoutStudentClassesInput[]
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutStudentClassesInput | UserUpdateWithWhereUniqueWithoutStudentClassesInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutStudentClassesInput | UserUpdateManyWithWhereWithoutStudentClassesInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput = {
+    create?: XOR<ClassCollaboratorCreateWithoutClassInput, ClassCollaboratorUncheckedCreateWithoutClassInput> | ClassCollaboratorCreateWithoutClassInput[] | ClassCollaboratorUncheckedCreateWithoutClassInput[]
+    connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutClassInput | ClassCollaboratorCreateOrConnectWithoutClassInput[]
+    upsert?: ClassCollaboratorUpsertWithWhereUniqueWithoutClassInput | ClassCollaboratorUpsertWithWhereUniqueWithoutClassInput[]
+    createMany?: ClassCollaboratorCreateManyClassInputEnvelope
+    set?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    disconnect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    delete?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+    update?: ClassCollaboratorUpdateWithWhereUniqueWithoutClassInput | ClassCollaboratorUpdateWithWhereUniqueWithoutClassInput[]
+    updateMany?: ClassCollaboratorUpdateManyWithWhereWithoutClassInput | ClassCollaboratorUpdateManyWithWhereWithoutClassInput[]
+    deleteMany?: ClassCollaboratorScalarWhereInput | ClassCollaboratorScalarWhereInput[]
+  }
+
+  export type QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutClassesInput, QuestionRequestTemplateUncheckedCreateWithoutClassesInput> | QuestionRequestTemplateCreateWithoutClassesInput[] | QuestionRequestTemplateUncheckedCreateWithoutClassesInput[]
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutClassesInput | QuestionRequestTemplateCreateOrConnectWithoutClassesInput[]
+    upsert?: QuestionRequestTemplateUpsertWithWhereUniqueWithoutClassesInput | QuestionRequestTemplateUpsertWithWhereUniqueWithoutClassesInput[]
+    set?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    disconnect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    delete?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    connect?: QuestionRequestTemplateWhereUniqueInput | QuestionRequestTemplateWhereUniqueInput[]
+    update?: QuestionRequestTemplateUpdateWithWhereUniqueWithoutClassesInput | QuestionRequestTemplateUpdateWithWhereUniqueWithoutClassesInput[]
+    updateMany?: QuestionRequestTemplateUpdateManyWithWhereWithoutClassesInput | QuestionRequestTemplateUpdateManyWithWhereWithoutClassesInput[]
+    deleteMany?: QuestionRequestTemplateScalarWhereInput | QuestionRequestTemplateScalarWhereInput[]
+  }
+
+  export type EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput = {
+    create?: XOR<EvaluationTemplateCreateWithoutClassesInput, EvaluationTemplateUncheckedCreateWithoutClassesInput> | EvaluationTemplateCreateWithoutClassesInput[] | EvaluationTemplateUncheckedCreateWithoutClassesInput[]
+    connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutClassesInput | EvaluationTemplateCreateOrConnectWithoutClassesInput[]
+    upsert?: EvaluationTemplateUpsertWithWhereUniqueWithoutClassesInput | EvaluationTemplateUpsertWithWhereUniqueWithoutClassesInput[]
+    set?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    disconnect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    delete?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+    update?: EvaluationTemplateUpdateWithWhereUniqueWithoutClassesInput | EvaluationTemplateUpdateWithWhereUniqueWithoutClassesInput[]
+    updateMany?: EvaluationTemplateUpdateManyWithWhereWithoutClassesInput | EvaluationTemplateUpdateManyWithWhereWithoutClassesInput[]
+    deleteMany?: EvaluationTemplateScalarWhereInput | EvaluationTemplateScalarWhereInput[]
+  }
+
+  export type ClassCreateNestedOneWithoutCollaboratorsInput = {
+    create?: XOR<ClassCreateWithoutCollaboratorsInput, ClassUncheckedCreateWithoutCollaboratorsInput>
+    connectOrCreate?: ClassCreateOrConnectWithoutCollaboratorsInput
+    connect?: ClassWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCollaboratedClassesInput = {
+    create?: XOR<UserCreateWithoutCollaboratedClassesInput, UserUncheckedCreateWithoutCollaboratedClassesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCollaboratedClassesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ClassUpdateOneRequiredWithoutCollaboratorsNestedInput = {
+    create?: XOR<ClassCreateWithoutCollaboratorsInput, ClassUncheckedCreateWithoutCollaboratorsInput>
+    connectOrCreate?: ClassCreateOrConnectWithoutCollaboratorsInput
+    upsert?: ClassUpsertWithoutCollaboratorsInput
+    connect?: ClassWhereUniqueInput
+    update?: XOR<XOR<ClassUpdateToOneWithWhereWithoutCollaboratorsInput, ClassUpdateWithoutCollaboratorsInput>, ClassUncheckedUpdateWithoutCollaboratorsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCollaboratedClassesNestedInput = {
+    create?: XOR<UserCreateWithoutCollaboratedClassesInput, UserUncheckedCreateWithoutCollaboratedClassesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCollaboratedClassesInput
+    upsert?: UserUpsertWithoutCollaboratedClassesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCollaboratedClassesInput, UserUpdateWithoutCollaboratedClassesInput>, UserUncheckedUpdateWithoutCollaboratedClassesInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20245,9 +22109,11 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -20316,12 +22182,14 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -20381,6 +22249,19 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -20443,59 +22324,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type GroupCreateWithoutUsersInput = {
-    name: string
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner: UserCreateNestedOneWithoutOwnedGroupsInput
-  }
-
-  export type GroupUncheckedCreateWithoutUsersInput = {
-    id?: number
-    name: string
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    ownerId: number
-  }
-
-  export type GroupCreateOrConnectWithoutUsersInput = {
-    where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutUsersInput, GroupUncheckedCreateWithoutUsersInput>
-  }
-
-  export type GroupCreateWithoutOwnerInput = {
-    name: string
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutGroupsInput
-  }
-
-  export type GroupUncheckedCreateWithoutOwnerInput = {
-    id?: number
-    name: string
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutGroupsInput
-  }
-
-  export type GroupCreateOrConnectWithoutOwnerInput = {
-    where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput>
-  }
-
-  export type GroupCreateManyOwnerInputEnvelope = {
-    data: GroupCreateManyOwnerInput | GroupCreateManyOwnerInput[]
-    skipDuplicates?: boolean
-  }
-
   export type QuestionRequestTemplateCreateWithoutOwnerInput = {
     name: string
     promptTemplate: string
@@ -20505,6 +22333,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
     evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
+    classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutOwnerInput = {
@@ -20517,6 +22346,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     evaluationTemplateId?: number | null
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
   }
 
   export type QuestionRequestTemplateCreateOrConnectWithoutOwnerInput = {
@@ -20603,6 +22433,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     criteria?: EvaluationTemplateCriterionCreateNestedManyWithoutTemplateInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutEvaluationTemplateInput
+    classes?: ClassCreateNestedManyWithoutEvaluationTemplatesInput
   }
 
   export type EvaluationTemplateUncheckedCreateWithoutOwnerInput = {
@@ -20614,6 +22445,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     criteria?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutEvaluationTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutEvaluationTemplatesInput
   }
 
   export type EvaluationTemplateCreateOrConnectWithoutOwnerInput = {
@@ -20651,49 +22483,85 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type GroupUpsertWithWhereUniqueWithoutUsersInput = {
-    where: GroupWhereUniqueInput
-    update: XOR<GroupUpdateWithoutUsersInput, GroupUncheckedUpdateWithoutUsersInput>
-    create: XOR<GroupCreateWithoutUsersInput, GroupUncheckedCreateWithoutUsersInput>
+  export type ClassCreateWithoutOwnerInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
+    students?: UserCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
   }
 
-  export type GroupUpdateWithWhereUniqueWithoutUsersInput = {
-    where: GroupWhereUniqueInput
-    data: XOR<GroupUpdateWithoutUsersInput, GroupUncheckedUpdateWithoutUsersInput>
+  export type ClassUncheckedCreateWithoutOwnerInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
+    students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
   }
 
-  export type GroupUpdateManyWithWhereWithoutUsersInput = {
-    where: GroupScalarWhereInput
-    data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyWithoutUsersInput>
+  export type ClassCreateOrConnectWithoutOwnerInput = {
+    where: ClassWhereUniqueInput
+    create: XOR<ClassCreateWithoutOwnerInput, ClassUncheckedCreateWithoutOwnerInput>
   }
 
-  export type GroupScalarWhereInput = {
-    AND?: GroupScalarWhereInput | GroupScalarWhereInput[]
-    OR?: GroupScalarWhereInput[]
-    NOT?: GroupScalarWhereInput | GroupScalarWhereInput[]
-    id?: IntFilter<"Group"> | number
-    name?: StringFilter<"Group"> | string
-    startDate?: DateTimeFilter<"Group"> | Date | string
-    endDate?: DateTimeFilter<"Group"> | Date | string
-    createdAt?: DateTimeFilter<"Group"> | Date | string
-    updatedAt?: DateTimeFilter<"Group"> | Date | string
-    ownerId?: IntFilter<"Group"> | number
+  export type ClassCreateManyOwnerInputEnvelope = {
+    data: ClassCreateManyOwnerInput | ClassCreateManyOwnerInput[]
+    skipDuplicates?: boolean
   }
 
-  export type GroupUpsertWithWhereUniqueWithoutOwnerInput = {
-    where: GroupWhereUniqueInput
-    update: XOR<GroupUpdateWithoutOwnerInput, GroupUncheckedUpdateWithoutOwnerInput>
-    create: XOR<GroupCreateWithoutOwnerInput, GroupUncheckedCreateWithoutOwnerInput>
+  export type ClassCreateWithoutStudentsInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
+    owner: UserCreateNestedOneWithoutOwnedClassesInput
+    collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
   }
 
-  export type GroupUpdateWithWhereUniqueWithoutOwnerInput = {
-    where: GroupWhereUniqueInput
-    data: XOR<GroupUpdateWithoutOwnerInput, GroupUncheckedUpdateWithoutOwnerInput>
+  export type ClassUncheckedCreateWithoutStudentsInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    link: string
+    collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
   }
 
-  export type GroupUpdateManyWithWhereWithoutOwnerInput = {
-    where: GroupScalarWhereInput
-    data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyWithoutOwnerInput>
+  export type ClassCreateOrConnectWithoutStudentsInput = {
+    where: ClassWhereUniqueInput
+    create: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type ClassCollaboratorCreateWithoutUserInput = {
+    addedAt?: Date | string
+    class: ClassCreateNestedOneWithoutCollaboratorsInput
+  }
+
+  export type ClassCollaboratorUncheckedCreateWithoutUserInput = {
+    classId: number
+    addedAt?: Date | string
+  }
+
+  export type ClassCollaboratorCreateOrConnectWithoutUserInput = {
+    where: ClassCollaboratorWhereUniqueInput
+    create: XOR<ClassCollaboratorCreateWithoutUserInput, ClassCollaboratorUncheckedCreateWithoutUserInput>
+  }
+
+  export type ClassCollaboratorCreateManyUserInputEnvelope = {
+    data: ClassCollaboratorCreateManyUserInput | ClassCollaboratorCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type QuestionRequestTemplateUpsertWithWhereUniqueWithoutOwnerInput = {
@@ -20845,187 +22713,108 @@ export namespace Prisma {
     ownerId?: IntFilter<"EvaluationCriterion"> | number
   }
 
-  export type UserCreateWithoutOwnedGroupsInput = {
-    admin?: boolean
-    name?: string | null
-    email: string
-    passwordHash?: string | null
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutUsersInput
-    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
-    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
-    answers?: AnswerCreateNestedManyWithoutUserInput
-    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
-    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+  export type ClassUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: ClassWhereUniqueInput
+    update: XOR<ClassUpdateWithoutOwnerInput, ClassUncheckedUpdateWithoutOwnerInput>
+    create: XOR<ClassCreateWithoutOwnerInput, ClassUncheckedCreateWithoutOwnerInput>
   }
 
-  export type UserUncheckedCreateWithoutOwnedGroupsInput = {
-    id?: number
-    admin?: boolean
-    name?: string | null
-    email: string
-    passwordHash?: string | null
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
-    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
-    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
-    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
-    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
-    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+  export type ClassUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: ClassWhereUniqueInput
+    data: XOR<ClassUpdateWithoutOwnerInput, ClassUncheckedUpdateWithoutOwnerInput>
   }
 
-  export type UserCreateOrConnectWithoutOwnedGroupsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutOwnedGroupsInput, UserUncheckedCreateWithoutOwnedGroupsInput>
+  export type ClassUpdateManyWithWhereWithoutOwnerInput = {
+    where: ClassScalarWhereInput
+    data: XOR<ClassUpdateManyMutationInput, ClassUncheckedUpdateManyWithoutOwnerInput>
   }
 
-  export type UserCreateWithoutGroupsInput = {
-    admin?: boolean
-    name?: string | null
-    email: string
-    passwordHash?: string | null
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
-    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
-    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
-    answers?: AnswerCreateNestedManyWithoutUserInput
-    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
-    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+  export type ClassScalarWhereInput = {
+    AND?: ClassScalarWhereInput | ClassScalarWhereInput[]
+    OR?: ClassScalarWhereInput[]
+    NOT?: ClassScalarWhereInput | ClassScalarWhereInput[]
+    id?: IntFilter<"Class"> | number
+    name?: StringFilter<"Class"> | string
+    createdAt?: DateTimeFilter<"Class"> | Date | string
+    updatedAt?: DateTimeFilter<"Class"> | Date | string
+    ownerId?: IntFilter<"Class"> | number
+    link?: StringFilter<"Class"> | string
   }
 
-  export type UserUncheckedCreateWithoutGroupsInput = {
-    id?: number
-    admin?: boolean
-    name?: string | null
-    email: string
-    passwordHash?: string | null
-    image?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
-    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
-    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
-    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
-    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
-    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+  export type ClassUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: ClassWhereUniqueInput
+    update: XOR<ClassUpdateWithoutStudentsInput, ClassUncheckedUpdateWithoutStudentsInput>
+    create: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
   }
 
-  export type UserCreateOrConnectWithoutGroupsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutGroupsInput, UserUncheckedCreateWithoutGroupsInput>
+  export type ClassUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: ClassWhereUniqueInput
+    data: XOR<ClassUpdateWithoutStudentsInput, ClassUncheckedUpdateWithoutStudentsInput>
   }
 
-  export type UserUpsertWithoutOwnedGroupsInput = {
-    update: XOR<UserUpdateWithoutOwnedGroupsInput, UserUncheckedUpdateWithoutOwnedGroupsInput>
-    create: XOR<UserCreateWithoutOwnedGroupsInput, UserUncheckedCreateWithoutOwnedGroupsInput>
-    where?: UserWhereInput
+  export type ClassUpdateManyWithWhereWithoutStudentsInput = {
+    where: ClassScalarWhereInput
+    data: XOR<ClassUpdateManyMutationInput, ClassUncheckedUpdateManyWithoutStudentsInput>
   }
 
-  export type UserUpdateToOneWithWhereWithoutOwnedGroupsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutOwnedGroupsInput, UserUncheckedUpdateWithoutOwnedGroupsInput>
+  export type ClassCollaboratorUpsertWithWhereUniqueWithoutUserInput = {
+    where: ClassCollaboratorWhereUniqueInput
+    update: XOR<ClassCollaboratorUpdateWithoutUserInput, ClassCollaboratorUncheckedUpdateWithoutUserInput>
+    create: XOR<ClassCollaboratorCreateWithoutUserInput, ClassCollaboratorUncheckedCreateWithoutUserInput>
   }
 
-  export type UserUpdateWithoutOwnedGroupsInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutUsersNestedInput
-    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
-    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
-    answers?: AnswerUpdateManyWithoutUserNestedInput
-    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
-    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+  export type ClassCollaboratorUpdateWithWhereUniqueWithoutUserInput = {
+    where: ClassCollaboratorWhereUniqueInput
+    data: XOR<ClassCollaboratorUpdateWithoutUserInput, ClassCollaboratorUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserUncheckedUpdateWithoutOwnedGroupsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
-    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
-    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
-    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
-    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
-    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+  export type ClassCollaboratorUpdateManyWithWhereWithoutUserInput = {
+    where: ClassCollaboratorScalarWhereInput
+    data: XOR<ClassCollaboratorUpdateManyMutationInput, ClassCollaboratorUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type UserUpsertWithWhereUniqueWithoutGroupsInput = {
-    where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutGroupsInput, UserUncheckedUpdateWithoutGroupsInput>
-    create: XOR<UserCreateWithoutGroupsInput, UserUncheckedCreateWithoutGroupsInput>
-  }
-
-  export type UserUpdateWithWhereUniqueWithoutGroupsInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutGroupsInput, UserUncheckedUpdateWithoutGroupsInput>
-  }
-
-  export type UserUpdateManyWithWhereWithoutGroupsInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutGroupsInput>
-  }
-
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: IntFilter<"User"> | number
-    admin?: BoolFilter<"User"> | boolean
-    name?: StringNullableFilter<"User"> | string | null
-    email?: StringFilter<"User"> | string
-    passwordHash?: StringNullableFilter<"User"> | string | null
-    image?: StringNullableFilter<"User"> | string | null
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
+  export type ClassCollaboratorScalarWhereInput = {
+    AND?: ClassCollaboratorScalarWhereInput | ClassCollaboratorScalarWhereInput[]
+    OR?: ClassCollaboratorScalarWhereInput[]
+    NOT?: ClassCollaboratorScalarWhereInput | ClassCollaboratorScalarWhereInput[]
+    classId?: IntFilter<"ClassCollaborator"> | number
+    userId?: IntFilter<"ClassCollaborator"> | number
+    addedAt?: DateTimeFilter<"ClassCollaborator"> | Date | string
   }
 
   export type UserCreateWithoutQuestionRequestTemplatesInput = {
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuestionRequestTemplatesInput = {
     id?: number
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuestionRequestTemplatesInput = {
@@ -21068,6 +22857,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutEvaluationTemplatesInput
     criteria?: EvaluationTemplateCriterionCreateNestedManyWithoutTemplateInput
+    classes?: ClassCreateNestedManyWithoutEvaluationTemplatesInput
   }
 
   export type EvaluationTemplateUncheckedCreateWithoutQuestionRequestTemplatesInput = {
@@ -21079,11 +22869,40 @@ export namespace Prisma {
     updatedAt?: Date | string
     ownerId: number
     criteria?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutEvaluationTemplatesInput
   }
 
   export type EvaluationTemplateCreateOrConnectWithoutQuestionRequestTemplatesInput = {
     where: EvaluationTemplateWhereUniqueInput
     create: XOR<EvaluationTemplateCreateWithoutQuestionRequestTemplatesInput, EvaluationTemplateUncheckedCreateWithoutQuestionRequestTemplatesInput>
+  }
+
+  export type ClassCreateWithoutQuestionTemplatesInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
+    owner: UserCreateNestedOneWithoutOwnedClassesInput
+    students?: UserCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassUncheckedCreateWithoutQuestionTemplatesInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    link: string
+    students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassCreateOrConnectWithoutQuestionTemplatesInput = {
+    where: ClassWhereUniqueInput
+    create: XOR<ClassCreateWithoutQuestionTemplatesInput, ClassUncheckedCreateWithoutQuestionTemplatesInput>
   }
 
   export type UserUpsertWithoutQuestionRequestTemplatesInput = {
@@ -21098,36 +22917,38 @@ export namespace Prisma {
   }
 
   export type UserUpdateWithoutQuestionRequestTemplatesInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuestionRequestTemplatesInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuestionRequestUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -21165,6 +22986,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput
     criteria?: EvaluationTemplateCriterionUpdateManyWithoutTemplateNestedInput
+    classes?: ClassUpdateManyWithoutEvaluationTemplatesNestedInput
   }
 
   export type EvaluationTemplateUncheckedUpdateWithoutQuestionRequestTemplatesInput = {
@@ -21176,39 +22998,58 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownerId?: IntFieldUpdateOperationsInput | number
     criteria?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutEvaluationTemplatesNestedInput
+  }
+
+  export type ClassUpsertWithWhereUniqueWithoutQuestionTemplatesInput = {
+    where: ClassWhereUniqueInput
+    update: XOR<ClassUpdateWithoutQuestionTemplatesInput, ClassUncheckedUpdateWithoutQuestionTemplatesInput>
+    create: XOR<ClassCreateWithoutQuestionTemplatesInput, ClassUncheckedCreateWithoutQuestionTemplatesInput>
+  }
+
+  export type ClassUpdateWithWhereUniqueWithoutQuestionTemplatesInput = {
+    where: ClassWhereUniqueInput
+    data: XOR<ClassUpdateWithoutQuestionTemplatesInput, ClassUncheckedUpdateWithoutQuestionTemplatesInput>
+  }
+
+  export type ClassUpdateManyWithWhereWithoutQuestionTemplatesInput = {
+    where: ClassScalarWhereInput
+    data: XOR<ClassUpdateManyMutationInput, ClassUncheckedUpdateManyWithoutQuestionTemplatesInput>
   }
 
   export type UserCreateWithoutQuestionRequestsInput = {
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     answers?: AnswerCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuestionRequestsInput = {
     id?: number
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuestionRequestsInput = {
@@ -21225,6 +23066,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
     evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
+    classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutRequestsInput = {
@@ -21237,6 +23079,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     ownerId: number
     evaluationTemplateId?: number | null
+    classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
   }
 
   export type QuestionRequestTemplateCreateOrConnectWithoutRequestsInput = {
@@ -21285,36 +23128,38 @@ export namespace Prisma {
   }
 
   export type UserUpdateWithoutQuestionRequestsInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuestionRequestsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuestionRequestTemplateUpsertWithoutRequestsInput = {
@@ -21337,6 +23182,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
     evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
+    classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutRequestsInput = {
@@ -21349,6 +23195,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
     evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
+    classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
   }
 
   export type QuestionUpsertWithWhereUniqueWithoutRequestInput = {
@@ -21486,36 +23333,38 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutEvaluationTemplatesInput = {
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEvaluationTemplatesInput = {
     id?: number
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEvaluationTemplatesInput = {
@@ -21557,6 +23406,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
+    classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput = {
@@ -21569,6 +23419,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
     ownerId: number
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
   }
 
   export type QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput = {
@@ -21579,6 +23430,34 @@ export namespace Prisma {
   export type QuestionRequestTemplateCreateManyEvaluationTemplateInputEnvelope = {
     data: QuestionRequestTemplateCreateManyEvaluationTemplateInput | QuestionRequestTemplateCreateManyEvaluationTemplateInput[]
     skipDuplicates?: boolean
+  }
+
+  export type ClassCreateWithoutEvaluationTemplatesInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
+    owner: UserCreateNestedOneWithoutOwnedClassesInput
+    students?: UserCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassUncheckedCreateWithoutEvaluationTemplatesInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    link: string
+    students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassCreateOrConnectWithoutEvaluationTemplatesInput = {
+    where: ClassWhereUniqueInput
+    create: XOR<ClassCreateWithoutEvaluationTemplatesInput, ClassUncheckedCreateWithoutEvaluationTemplatesInput>
   }
 
   export type UserUpsertWithoutEvaluationTemplatesInput = {
@@ -21593,36 +23472,38 @@ export namespace Prisma {
   }
 
   export type UserUpdateWithoutEvaluationTemplatesInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEvaluationTemplatesInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -21668,6 +23549,22 @@ export namespace Prisma {
     data: XOR<QuestionRequestTemplateUpdateManyMutationInput, QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateInput>
   }
 
+  export type ClassUpsertWithWhereUniqueWithoutEvaluationTemplatesInput = {
+    where: ClassWhereUniqueInput
+    update: XOR<ClassUpdateWithoutEvaluationTemplatesInput, ClassUncheckedUpdateWithoutEvaluationTemplatesInput>
+    create: XOR<ClassCreateWithoutEvaluationTemplatesInput, ClassUncheckedCreateWithoutEvaluationTemplatesInput>
+  }
+
+  export type ClassUpdateWithWhereUniqueWithoutEvaluationTemplatesInput = {
+    where: ClassWhereUniqueInput
+    data: XOR<ClassUpdateWithoutEvaluationTemplatesInput, ClassUncheckedUpdateWithoutEvaluationTemplatesInput>
+  }
+
+  export type ClassUpdateManyWithWhereWithoutEvaluationTemplatesInput = {
+    where: ClassScalarWhereInput
+    data: XOR<ClassUpdateManyMutationInput, ClassUncheckedUpdateManyWithoutEvaluationTemplatesInput>
+  }
+
   export type EvaluationCriterionCreateWithoutTemplatesInput = {
     name?: string
     description: string
@@ -21696,6 +23593,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutEvaluationTemplatesInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutEvaluationTemplateInput
+    classes?: ClassCreateNestedManyWithoutEvaluationTemplatesInput
   }
 
   export type EvaluationTemplateUncheckedCreateWithoutCriteriaInput = {
@@ -21707,6 +23605,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     ownerId: number
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutEvaluationTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutEvaluationTemplatesInput
   }
 
   export type EvaluationTemplateCreateOrConnectWithoutCriteriaInput = {
@@ -21784,6 +23683,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutEvaluationTemplateNestedInput
+    classes?: ClassUpdateManyWithoutEvaluationTemplatesNestedInput
   }
 
   export type EvaluationTemplateUncheckedUpdateWithoutCriteriaInput = {
@@ -21795,6 +23695,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownerId?: IntFieldUpdateOperationsInput | number
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutEvaluationTemplatesNestedInput
   }
 
   export type AutoEvaluationCriterionUpsertWithWhereUniqueWithoutTemplateCriterionInput = {
@@ -21826,36 +23727,38 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutEvaluationCriterionsInput = {
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEvaluationCriterionsInput = {
     id?: number
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEvaluationCriterionsInput = {
@@ -21900,36 +23803,38 @@ export namespace Prisma {
   }
 
   export type UserUpdateWithoutEvaluationCriterionsInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEvaluationCriterionsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutCriterionInput = {
@@ -21973,36 +23878,38 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutAnswersInput = {
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAnswersInput = {
     id?: number
-    admin?: boolean
+    role?: $Enums.Role
     name?: string | null
     email: string
     passwordHash?: string | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutUsersInput
-    ownedGroups?: GroupUncheckedCreateNestedManyWithoutOwnerInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
     questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAnswersInput = {
@@ -22074,36 +23981,38 @@ export namespace Prisma {
   }
 
   export type UserUpdateWithoutAnswersInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnswersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutUsersNestedInput
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AutoEvaluationUpsertWithoutAnswerInput = {
@@ -22345,13 +24254,434 @@ export namespace Prisma {
     templateId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type GroupCreateManyOwnerInput = {
-    id?: number
-    name: string
-    startDate: Date | string
-    endDate: Date | string
+  export type UserCreateWithoutOwnedClassesInput = {
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOwnedClassesInput = {
+    id?: number
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOwnedClassesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOwnedClassesInput, UserUncheckedCreateWithoutOwnedClassesInput>
+  }
+
+  export type UserCreateWithoutStudentClassesInput = {
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutStudentClassesInput = {
+    id?: number
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutStudentClassesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutStudentClassesInput, UserUncheckedCreateWithoutStudentClassesInput>
+  }
+
+  export type ClassCollaboratorCreateWithoutClassInput = {
+    addedAt?: Date | string
+    user: UserCreateNestedOneWithoutCollaboratedClassesInput
+  }
+
+  export type ClassCollaboratorUncheckedCreateWithoutClassInput = {
+    userId: number
+    addedAt?: Date | string
+  }
+
+  export type ClassCollaboratorCreateOrConnectWithoutClassInput = {
+    where: ClassCollaboratorWhereUniqueInput
+    create: XOR<ClassCollaboratorCreateWithoutClassInput, ClassCollaboratorUncheckedCreateWithoutClassInput>
+  }
+
+  export type ClassCollaboratorCreateManyClassInputEnvelope = {
+    data: ClassCollaboratorCreateManyClassInput | ClassCollaboratorCreateManyClassInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type QuestionRequestTemplateCreateWithoutClassesInput = {
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
+    requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
+    evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
+  }
+
+  export type QuestionRequestTemplateUncheckedCreateWithoutClassesInput = {
+    id?: number
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    ownerId: number
+    evaluationTemplateId?: number | null
+    requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type QuestionRequestTemplateCreateOrConnectWithoutClassesInput = {
+    where: QuestionRequestTemplateWhereUniqueInput
+    create: XOR<QuestionRequestTemplateCreateWithoutClassesInput, QuestionRequestTemplateUncheckedCreateWithoutClassesInput>
+  }
+
+  export type EvaluationTemplateCreateWithoutClassesInput = {
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutEvaluationTemplatesInput
+    criteria?: EvaluationTemplateCriterionCreateNestedManyWithoutTemplateInput
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutEvaluationTemplateInput
+  }
+
+  export type EvaluationTemplateUncheckedCreateWithoutClassesInput = {
+    id?: number
+    name: string
+    description?: string | null
+    evaluationPrompt?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    criteria?: EvaluationTemplateCriterionUncheckedCreateNestedManyWithoutTemplateInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutEvaluationTemplateInput
+  }
+
+  export type EvaluationTemplateCreateOrConnectWithoutClassesInput = {
+    where: EvaluationTemplateWhereUniqueInput
+    create: XOR<EvaluationTemplateCreateWithoutClassesInput, EvaluationTemplateUncheckedCreateWithoutClassesInput>
+  }
+
+  export type UserUpsertWithoutOwnedClassesInput = {
+    update: XOR<UserUpdateWithoutOwnedClassesInput, UserUncheckedUpdateWithoutOwnedClassesInput>
+    create: XOR<UserCreateWithoutOwnedClassesInput, UserUncheckedCreateWithoutOwnedClassesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOwnedClassesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOwnedClassesInput, UserUncheckedUpdateWithoutOwnedClassesInput>
+  }
+
+  export type UserUpdateWithoutOwnedClassesInput = {
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOwnedClassesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutStudentClassesInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutStudentClassesInput, UserUncheckedUpdateWithoutStudentClassesInput>
+    create: XOR<UserCreateWithoutStudentClassesInput, UserUncheckedCreateWithoutStudentClassesInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutStudentClassesInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutStudentClassesInput, UserUncheckedUpdateWithoutStudentClassesInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutStudentClassesInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutStudentClassesInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: IntFilter<"User"> | number
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    name?: StringNullableFilter<"User"> | string | null
+    email?: StringFilter<"User"> | string
+    passwordHash?: StringNullableFilter<"User"> | string | null
+    image?: StringNullableFilter<"User"> | string | null
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+  }
+
+  export type ClassCollaboratorUpsertWithWhereUniqueWithoutClassInput = {
+    where: ClassCollaboratorWhereUniqueInput
+    update: XOR<ClassCollaboratorUpdateWithoutClassInput, ClassCollaboratorUncheckedUpdateWithoutClassInput>
+    create: XOR<ClassCollaboratorCreateWithoutClassInput, ClassCollaboratorUncheckedCreateWithoutClassInput>
+  }
+
+  export type ClassCollaboratorUpdateWithWhereUniqueWithoutClassInput = {
+    where: ClassCollaboratorWhereUniqueInput
+    data: XOR<ClassCollaboratorUpdateWithoutClassInput, ClassCollaboratorUncheckedUpdateWithoutClassInput>
+  }
+
+  export type ClassCollaboratorUpdateManyWithWhereWithoutClassInput = {
+    where: ClassCollaboratorScalarWhereInput
+    data: XOR<ClassCollaboratorUpdateManyMutationInput, ClassCollaboratorUncheckedUpdateManyWithoutClassInput>
+  }
+
+  export type QuestionRequestTemplateUpsertWithWhereUniqueWithoutClassesInput = {
+    where: QuestionRequestTemplateWhereUniqueInput
+    update: XOR<QuestionRequestTemplateUpdateWithoutClassesInput, QuestionRequestTemplateUncheckedUpdateWithoutClassesInput>
+    create: XOR<QuestionRequestTemplateCreateWithoutClassesInput, QuestionRequestTemplateUncheckedCreateWithoutClassesInput>
+  }
+
+  export type QuestionRequestTemplateUpdateWithWhereUniqueWithoutClassesInput = {
+    where: QuestionRequestTemplateWhereUniqueInput
+    data: XOR<QuestionRequestTemplateUpdateWithoutClassesInput, QuestionRequestTemplateUncheckedUpdateWithoutClassesInput>
+  }
+
+  export type QuestionRequestTemplateUpdateManyWithWhereWithoutClassesInput = {
+    where: QuestionRequestTemplateScalarWhereInput
+    data: XOR<QuestionRequestTemplateUpdateManyMutationInput, QuestionRequestTemplateUncheckedUpdateManyWithoutClassesInput>
+  }
+
+  export type EvaluationTemplateUpsertWithWhereUniqueWithoutClassesInput = {
+    where: EvaluationTemplateWhereUniqueInput
+    update: XOR<EvaluationTemplateUpdateWithoutClassesInput, EvaluationTemplateUncheckedUpdateWithoutClassesInput>
+    create: XOR<EvaluationTemplateCreateWithoutClassesInput, EvaluationTemplateUncheckedCreateWithoutClassesInput>
+  }
+
+  export type EvaluationTemplateUpdateWithWhereUniqueWithoutClassesInput = {
+    where: EvaluationTemplateWhereUniqueInput
+    data: XOR<EvaluationTemplateUpdateWithoutClassesInput, EvaluationTemplateUncheckedUpdateWithoutClassesInput>
+  }
+
+  export type EvaluationTemplateUpdateManyWithWhereWithoutClassesInput = {
+    where: EvaluationTemplateScalarWhereInput
+    data: XOR<EvaluationTemplateUpdateManyMutationInput, EvaluationTemplateUncheckedUpdateManyWithoutClassesInput>
+  }
+
+  export type ClassCreateWithoutCollaboratorsInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
+    owner: UserCreateNestedOneWithoutOwnedClassesInput
+    students?: UserCreateNestedManyWithoutStudentClassesInput
+    questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassUncheckedCreateWithoutCollaboratorsInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    link: string
+    students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
+    questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassCreateOrConnectWithoutCollaboratorsInput = {
+    where: ClassWhereUniqueInput
+    create: XOR<ClassCreateWithoutCollaboratorsInput, ClassUncheckedCreateWithoutCollaboratorsInput>
+  }
+
+  export type UserCreateWithoutCollaboratedClassesInput = {
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+  }
+
+  export type UserUncheckedCreateWithoutCollaboratedClassesInput = {
+    id?: number
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+  }
+
+  export type UserCreateOrConnectWithoutCollaboratedClassesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCollaboratedClassesInput, UserUncheckedCreateWithoutCollaboratedClassesInput>
+  }
+
+  export type ClassUpsertWithoutCollaboratorsInput = {
+    update: XOR<ClassUpdateWithoutCollaboratorsInput, ClassUncheckedUpdateWithoutCollaboratorsInput>
+    create: XOR<ClassCreateWithoutCollaboratorsInput, ClassUncheckedCreateWithoutCollaboratorsInput>
+    where?: ClassWhereInput
+  }
+
+  export type ClassUpdateToOneWithWhereWithoutCollaboratorsInput = {
+    where?: ClassWhereInput
+    data: XOR<ClassUpdateWithoutCollaboratorsInput, ClassUncheckedUpdateWithoutCollaboratorsInput>
+  }
+
+  export type ClassUpdateWithoutCollaboratorsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: StringFieldUpdateOperationsInput | string
+    owner?: UserUpdateOneRequiredWithoutOwnedClassesNestedInput
+    students?: UserUpdateManyWithoutStudentClassesNestedInput
+    questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateWithoutCollaboratorsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
+    students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
+    questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+  }
+
+  export type UserUpsertWithoutCollaboratedClassesInput = {
+    update: XOR<UserUpdateWithoutCollaboratedClassesInput, UserUncheckedUpdateWithoutCollaboratedClassesInput>
+    create: XOR<UserCreateWithoutCollaboratedClassesInput, UserUncheckedCreateWithoutCollaboratedClassesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCollaboratedClassesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCollaboratedClassesInput, UserUncheckedUpdateWithoutCollaboratedClassesInput>
+  }
+
+  export type UserUpdateWithoutCollaboratedClassesInput = {
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCollaboratedClassesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type QuestionRequestTemplateCreateManyOwnerInput = {
@@ -22403,61 +24733,17 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type GroupUpdateWithoutUsersInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneRequiredWithoutOwnedGroupsNestedInput
+  export type ClassCreateManyOwnerInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
   }
 
-  export type GroupUncheckedUpdateWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownerId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type GroupUncheckedUpdateManyWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownerId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type GroupUpdateWithoutOwnerInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutGroupsNestedInput
-  }
-
-  export type GroupUncheckedUpdateWithoutOwnerInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutGroupsNestedInput
-  }
-
-  export type GroupUncheckedUpdateManyWithoutOwnerInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type ClassCollaboratorCreateManyUserInput = {
+    classId: number
+    addedAt?: Date | string
   }
 
   export type QuestionRequestTemplateUpdateWithoutOwnerInput = {
@@ -22469,6 +24755,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
     evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
+    classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutOwnerInput = {
@@ -22481,6 +24768,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerInput = {
@@ -22570,6 +24858,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     criteria?: EvaluationTemplateCriterionUpdateManyWithoutTemplateNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutEvaluationTemplateNestedInput
+    classes?: ClassUpdateManyWithoutEvaluationTemplatesNestedInput
   }
 
   export type EvaluationTemplateUncheckedUpdateWithoutOwnerInput = {
@@ -22581,6 +24870,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     criteria?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput
     questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutEvaluationTemplatesNestedInput
   }
 
   export type EvaluationTemplateUncheckedUpdateManyWithoutOwnerInput = {
@@ -22614,48 +24904,82 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserUpdateWithoutGroupsInput = {
-    admin?: BoolFieldUpdateOperationsInput | boolean
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+  export type ClassUpdateWithoutOwnerInput = {
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUpdateManyWithoutOwnerNestedInput
-    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
-    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
-    answers?: AnswerUpdateManyWithoutUserNestedInput
-    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
-    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    link?: StringFieldUpdateOperationsInput | string
+    students?: UserUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutGroupsInput = {
+  export type ClassUncheckedUpdateWithoutOwnerInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ownedGroups?: GroupUncheckedUpdateManyWithoutOwnerNestedInput
-    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
-    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
-    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
-    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
-    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    link?: StringFieldUpdateOperationsInput | string
+    students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
   }
 
-  export type UserUncheckedUpdateManyWithoutGroupsInput = {
+  export type ClassUncheckedUpdateManyWithoutOwnerInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin?: BoolFieldUpdateOperationsInput | boolean
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ClassUpdateWithoutStudentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: StringFieldUpdateOperationsInput | string
+    owner?: UserUpdateOneRequiredWithoutOwnedClassesNestedInput
+    collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
+    collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateManyWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ClassCollaboratorUpdateWithoutUserInput = {
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    class?: ClassUpdateOneRequiredWithoutCollaboratorsNestedInput
+  }
+
+  export type ClassCollaboratorUncheckedUpdateWithoutUserInput = {
+    classId?: IntFieldUpdateOperationsInput | number
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassCollaboratorUncheckedUpdateManyWithoutUserInput = {
+    classId?: IntFieldUpdateOperationsInput | number
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type QuestionRequestCreateManyTemplateInput = {
@@ -22689,6 +25013,38 @@ export namespace Prisma {
     parameterValues?: QuestionRequestUpdateparameterValuesInput | InputJsonValue[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ClassUpdateWithoutQuestionTemplatesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: StringFieldUpdateOperationsInput | string
+    owner?: UserUpdateOneRequiredWithoutOwnedClassesNestedInput
+    students?: UserUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateWithoutQuestionTemplatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
+    students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateManyWithoutQuestionTemplatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
   }
 
   export type QuestionCreateManyRequestInput = {
@@ -22834,6 +25190,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
+    classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutEvaluationTemplateInput = {
@@ -22846,6 +25203,7 @@ export namespace Prisma {
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateInput = {
@@ -22857,6 +25215,38 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
     ownerId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ClassUpdateWithoutEvaluationTemplatesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: StringFieldUpdateOperationsInput | string
+    owner?: UserUpdateOneRequiredWithoutOwnedClassesNestedInput
+    students?: UserUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateWithoutEvaluationTemplatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
+    students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateManyWithoutEvaluationTemplatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
   }
 
   export type AutoEvaluationCriterionCreateManyTemplateCriterionInput = {
@@ -22948,6 +25338,142 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     weight?: FloatFieldUpdateOperationsInput | number
     score?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type ClassCollaboratorCreateManyClassInput = {
+    userId: number
+    addedAt?: Date | string
+  }
+
+  export type UserUpdateWithoutStudentClassesInput = {
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutStudentClassesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutStudentClassesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassCollaboratorUpdateWithoutClassInput = {
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCollaboratedClassesNestedInput
+  }
+
+  export type ClassCollaboratorUncheckedUpdateWithoutClassInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassCollaboratorUncheckedUpdateManyWithoutClassInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionRequestTemplateUpdateWithoutClassesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
+    requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
+    evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
+  }
+
+  export type QuestionRequestTemplateUncheckedUpdateWithoutClassesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    ownerId?: IntFieldUpdateOperationsInput | number
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
+    requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type QuestionRequestTemplateUncheckedUpdateManyWithoutClassesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    ownerId?: IntFieldUpdateOperationsInput | number
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type EvaluationTemplateUpdateWithoutClassesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutEvaluationTemplatesNestedInput
+    criteria?: EvaluationTemplateCriterionUpdateManyWithoutTemplateNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutEvaluationTemplateNestedInput
+  }
+
+  export type EvaluationTemplateUncheckedUpdateWithoutClassesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    criteria?: EvaluationTemplateCriterionUncheckedUpdateManyWithoutTemplateNestedInput
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateNestedInput
+  }
+
+  export type EvaluationTemplateUncheckedUpdateManyWithoutClassesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
   }
 
 
