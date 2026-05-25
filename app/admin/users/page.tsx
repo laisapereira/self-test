@@ -1,10 +1,10 @@
+import { SemesterUsersSection } from "@/components/admin/SemesterUsersSection";
+import { UserSearch } from "@/components/admin/UserSearch";
 import { getCurrentUser } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { groupBySemester, sortedSemesters } from "@/lib/semester";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
-import { UserSearch } from "@/components/admin/UserSearch";
-import { SemesterUsersSection } from "@/components/admin/SemesterUsersSection";
 
 export default async function AdminUsersPage({
   searchParams,
@@ -27,7 +27,7 @@ export default async function AdminUsersPage({
     "use server";
 
     const currentUser = await getCurrentUser();
-    if (!currentUser.admin) {
+    if (!currentUser.role || currentUser.role !== "ADMIN") {
       throw new Error("Unauthorized");
     }
 

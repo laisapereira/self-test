@@ -1,6 +1,5 @@
 import { getCurrentUser } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 async function getParams(req: Request) {

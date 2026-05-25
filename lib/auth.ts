@@ -1,7 +1,7 @@
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
 import prisma from '@/lib/prisma';
+import bcrypt from "bcryptjs";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 declare module "next-auth" {
   interface Session {
@@ -9,7 +9,7 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
-      isAdmin?: boolean;
+      typeRole?: "STUDENT" | "PROFESSOR" | "ADMIN";
     };
   }
 }
@@ -49,6 +49,7 @@ export const authOptions = {
           email: user.email,
           name: user.name,
           image: user.image,
+          typeRole: user.role,
         };
       },
     }),
@@ -57,11 +58,11 @@ export const authOptions = {
     signIn: '/login',
   },
   callbacks: {
-    async signIn({ user }: { user: { email?: string | null; name?: string | null; image?: string | null } }) {
-      if (user.email /*user.email?.endsWith("@ufba.br")*/) {
-        console.log("[Auth] usuario sendo upsertado | email:", user.email);
+    async signIn({ user }: { user: { email?: string | null; name?: string | null; image?: string | null ; typeRole?: "STUDENT" | "PROFESSOR" | "ADMIN" } }) {
+      if (user.email) {
+        console.log("[Auth] usuario sendo ou att ou inserido| email:", user.email);
         const userCount = await prisma.user.count();
-        const isAdmin = userCount === 0;
+        const isFirstAdmin = userCount === 0;
         await prisma.user.upsert({
           where: { email: user.email },
           update: {},
@@ -69,7 +70,7 @@ export const authOptions = {
             email: user.email,
             name: user.name,
             image: user.image,
-            admin: isAdmin,
+            role: isFirstAdmin ? "ADMIN" : "STUDENT",
           },
         });
         return true;
@@ -82,7 +83,7 @@ export const authOptions = {
       if (token && token.email) {
         const user = await prisma.user.findUnique({ where: { email: token.email } });
         fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'user_fetched', user }) + '\\n');
-        session.user.isAdmin = user?.admin || false;
+        session.user.typeRole = user?.role;
         fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'session_modified', session }) + '\\n');
       }
       return session;
