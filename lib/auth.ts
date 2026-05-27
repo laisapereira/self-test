@@ -10,6 +10,7 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
       typeRole?: "STUDENT" | "PROFESSOR" | "ADMIN";
+      isAdmin?: boolean;
     };
   }
 }
@@ -63,6 +64,7 @@ export const authOptions = {
         console.log("[Auth] usuario sendo ou att ou inserido| email:", user.email);
         const userCount = await prisma.user.count();
         const isFirstAdmin = userCount === 0;
+        
         await prisma.user.upsert({
           where: { email: user.email },
           update: {},
@@ -84,6 +86,7 @@ export const authOptions = {
         const user = await prisma.user.findUnique({ where: { email: token.email } });
         fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'user_fetched', user }) + '\\n');
         session.user.typeRole = user?.role;
+        session.user.isAdmin = user?.role === "ADMIN";
         fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'session_modified', session }) + '\\n');
       }
       return session;
