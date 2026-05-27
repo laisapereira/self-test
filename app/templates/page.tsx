@@ -21,7 +21,7 @@ export default function QuestionRequestTemplates() {
   });
 
   const isForbidden =
-    status === "authenticated" && session?.user?.isAdmin === false;
+    status === "authenticated" && session?.user?.typeRole !== "ADMIN";
 
   async function fetchTemplates() {
     const response = await fetch("/api/templates");

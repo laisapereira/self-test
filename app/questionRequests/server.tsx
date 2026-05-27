@@ -1,6 +1,6 @@
 'use server';
 
-import { getCurrentUser } from "@/lib/apiUtils";
+import { getCurrentUser, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 
 export async function fetchRequests(params: { userId?: number; page?: number; pageSize?: number; templateId?: number }) {
@@ -16,7 +16,7 @@ export async function fetchRequests(params: { userId?: number; page?: number; pa
   if (!params.userId) {
     params.userId = currentUser.id;
   }
-  if (params.userId != currentUser.id && !currentUser.admin) {
+  if (params.userId != currentUser.id && !isUserAdmin(currentUser)) {
     throw new Error("Unauthorized");
   }
 

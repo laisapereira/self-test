@@ -1,6 +1,6 @@
 import { SemesterUsersSection } from "@/components/admin/SemesterUsersSection";
 import { UserSearch } from "@/components/admin/UserSearch";
-import { getCurrentUser } from "@/lib/apiUtils";
+import { getCurrentUser, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { groupBySemester, sortedSemesters } from "@/lib/semester";
 import { revalidatePath } from "next/cache";
@@ -58,7 +58,8 @@ export default async function AdminUsersPage({
   }
 
   const currentUser = await getCurrentUser();
-  if (!currentUser.admin) {
+  
+  if (!isUserAdmin(currentUser)) {
     throw new Error("Unauthorized");
   }
 

@@ -1,24 +1,17 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { getCurrentUser } from "@/lib/apiUtils";
+import { SemesterAccordion } from "@/components/SemesterAccordion";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { getCurrentUser, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { groupBySemester, sortedSemesters } from "@/lib/semester";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
-import { SemesterAccordion } from "@/components/SemesterAccordion";
 
 export default async function UsersPage() {
   async function toggleAdmin(formData: FormData) {
     "use server";
 
     const currentUser = await getCurrentUser();
-    if (!currentUser.admin) {
+    if (!isUserAdmin(currentUser)) {
       throw new Error("Unauthorized");
     }
 
@@ -49,7 +42,7 @@ export default async function UsersPage() {
   }
 
   const currentUser = await getCurrentUser();
-  if (!currentUser.admin) {
+  if (!isUserAdmin(currentUser)) {
     throw new Error("Unauthorized");
   }
 

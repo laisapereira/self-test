@@ -46,9 +46,11 @@ const routes = [
     requireAdmin: true,
   },
   {
-    title: "Dashboard",
+    title: "Dashboard de notas",
     href: "/dashboard",
   },
+
+  { title: "Turmas", href: "/classes" },
 ];
 
 export default function RootLayout({ children }: { children: ReactNode }) {

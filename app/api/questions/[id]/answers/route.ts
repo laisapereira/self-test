@@ -1,4 +1,4 @@
-import { getCurrentUser, getParamId } from "@/lib/apiUtils";
+import { getCurrentUser, getParamId, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -62,7 +62,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const { question, userId } = await getParams(req, params);
     const currentUser = await getCurrentUser();
     
-    if (userId != undefined && userId != currentUser.id && !currentUser.admin) {
+    if (userId != undefined && userId != currentUser.id && !isUserAdmin(currentUser)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     
