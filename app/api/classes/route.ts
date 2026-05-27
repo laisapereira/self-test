@@ -67,16 +67,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { name, collaborators = [], questionTemplates = [], evaluationTemplates = [] } = await req.json();
+    const { name, collaborators = [], students = [], questionTemplates = [], evaluationTemplates = [] } = await req.json();
 
     const newClass = await prisma.class.create({
       data: {
         owner: { connect: { id: user.id } },
         name,
-        collaborators: { create: collaborators.map((userId: string) => ({ id: userId })) },
-        questionTemplates: { connect: questionTemplates.map((id: string) => ({ id })) },
-        evaluationTemplates: { connect: evaluationTemplates.map((id: string) => ({ id })) },
         link: nanoid(8),
+        collaborators: { create: collaborators.map((userId: number) => ({ userId })) },
+        students: { connect: students.map((id: number) => ({ id })) },
+        questionTemplates: { connect: questionTemplates.map((id: number) => ({ id })) },
+        evaluationTemplates: { connect: evaluationTemplates.map((id: number) => ({ id })) },
       },
     });
 
