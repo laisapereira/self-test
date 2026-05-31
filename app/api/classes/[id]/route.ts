@@ -84,7 +84,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         ...(evaluationTemplates && {
           evaluationTemplates: { set: evaluationTemplates.map((tid: number) => ({ id: tid })) },
         }),
-        ...(collaborators && {
+        ...((isOwner || isUserAdmin(currentUser)) && collaborators && {
           collaborators: {
             deleteMany: {},
             create: collaborators.map((uid: number) => ({ userId: uid })),
