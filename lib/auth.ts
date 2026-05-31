@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -56,15 +56,33 @@ export const authOptions = {
     }),
   ],
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   callbacks: {
-    async signIn({ user }: { user: { email?: string | null; name?: string | null; image?: string | null ; typeRole?: "STUDENT" | "PROFESSOR" | "ADMIN" } }) {
+    async signIn({
+      user,
+    }: {
+      user: {
+        email?: string | null;
+        name?: string | null;
+        image?: string | null;
+        typeRole?: "STUDENT" | "PROFESSOR" | "ADMIN";
+      };
+    }) {
       if (user.email) {
-        console.log("[Auth] usuario sendo ou att ou inserido| email:", user.email);
+ 
         const userCount = await prisma.user.count();
         const isFirstAdmin = userCount === 0;
-        
+
+        // Busca a turma de testers pelo nome configurado na env var
+        const testerClass = process.env.TESTER_CLASS_NAME
+          ? await prisma.class.findFirst({
+              where: { name: process.env.TESTER_CLASS_NAME },
+            })
+          : null;
+
+        console.log("[Auth] testerClass:", testerClass);
+
         await prisma.user.upsert({
           where: { email: user.email },
           update: {},
@@ -73,6 +91,10 @@ export const authOptions = {
             name: user.name,
             image: user.image,
             role: isFirstAdmin ? "ADMIN" : "STUDENT",
+            // Conecta à turma testers apenas se ela existir
+            ...(testerClass && {
+              studentClasses: { connect: { id: testerClass.id } },
+            }),
           },
         });
         return true;
@@ -80,14 +102,25 @@ export const authOptions = {
       return false;
     },
     async session({ session, token }: { session: any; token: any }) {
-      const fs = require('fs');
-      fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'session', token, session }) + '\\n');
+      const fs = require("fs");
+      fs.appendFileSync(
+        "nextauth_debug.log",
+        JSON.stringify({ event: "session", token, session }) + "\\n",
+      );
       if (token && token.email) {
-        const user = await prisma.user.findUnique({ where: { email: token.email } });
-        fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'user_fetched', user }) + '\\n');
+        const user = await prisma.user.findUnique({
+          where: { email: token.email },
+        });
+        fs.appendFileSync(
+          "nextauth_debug.log",
+          JSON.stringify({ event: "user_fetched", user }) + "\\n",
+        );
         session.user.typeRole = user?.role;
         session.user.isAdmin = user?.role === "ADMIN";
-        fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'session_modified', session }) + '\\n');
+        fs.appendFileSync(
+          "nextauth_debug.log",
+          JSON.stringify({ event: "session_modified", session }) + "\\n",
+        );
       }
       return session;
     },
