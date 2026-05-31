@@ -32,10 +32,14 @@ export default async function AdminUsersPage({
     }
 
     const userIdString = formData.get("userId");
-    const makeAdminString = formData.get("admin");
+    const role = formData.get("role") as string;
 
-    if (!userIdString || !makeAdminString) {
+    if (!userIdString || !role) {
       throw new Error("Missing required fields");
+    }
+
+    if (!["STUDENT", "PROFESSOR", "ADMIN"].includes(role)) {
+      throw new Error("Invalid role");
     }
 
     const userId = Number(userIdString);
@@ -43,15 +47,13 @@ export default async function AdminUsersPage({
       throw new Error("Invalid userId");
     }
 
-    const makeAdmin = makeAdminString === "true";
-
     if (currentUser.id === userId) {
-      throw new Error("Você não pode alterar seu próprio perfil de admin aqui");
+      throw new Error("Você não pode alterar seu próprio role aqui");
     }
 
     await prisma.user.update({
       where: { id: userId },
-      data: { role: makeAdmin ? "ADMIN" : "STUDENT" },
+      data: { role: role as "STUDENT" | "PROFESSOR" | "ADMIN" },
     });
 
     revalidatePath("/admin/users");

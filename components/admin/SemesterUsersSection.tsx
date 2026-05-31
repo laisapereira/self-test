@@ -89,23 +89,18 @@ export function SemesterUsersSection({
                   </TableCell>
                 )}
                 <TableCell className="flex gap-2">
-                  <form action={toggleAdmin} className="inline">
+                  <form action={toggleAdmin} className="inline-flex items-center gap-2">
                     <input type="hidden" name="userId" value={user.id} />
-                    <input
-                      type="hidden"
-                      name="admin"
-                      value={user.role !== "ADMIN" ? "true" : "false"}
-                    />
-                    <button
-                      type="submit"
-                      className={`rounded px-2 py-1 text-sm font-medium ${
-                        user.role === "ADMIN"
-                          ? "bg-rose-500 text-white hover:bg-rose-600"
-                          : "bg-blue-600 text-white hover:bg-blue-700"
-                      }`}
+                    <select
+                      name="role"
+                      defaultValue={user.role}
+                      className="rounded border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                      onChange={(e) => e.currentTarget.form?.requestSubmit()}
                     >
-                      {user.role === "ADMIN" ? "Remover" : "Tornar admin"}
-                    </button>
+                      <option value="STUDENT">Aluno</option>
+                      <option value="PROFESSOR">Professor</option>
+                      <option value="ADMIN">Admin</option>
+                    </select>
                   </form>
                   <Link
                     href={`/questionRequests?userId=${user.id}`}
