@@ -59,9 +59,19 @@ export async function GET(req: Request): Promise<NextResponse> {
       return NextResponse.json(templates);
     }
 
-    // Aluno vê só templates visíveis (RF05 restringe por turma — mantém fallback)
+    // RF05: aluno sem turma não vê templates
+    const hasClass = await prisma.class.findFirst({
+      where: { students: { some: { id: currentUser.id } } },
+    });
+
+    if (!hasClass) return NextResponse.json([]);
+
+    // Aluno com turma vê templates visíveis das suas turmas
     const templates = await prisma.questionRequestTemplate.findMany({
-      where: { visible: true },
+      where: {
+        visible: true,
+        classes: { some: { students: { some: { id: currentUser.id } } } },
+      },
       select: { id: true, name: true, promptTemplate: true, parameters: true },
     });
     return NextResponse.json(templates);
