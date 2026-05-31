@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Collaborator = { id: number; name: string; email: string };
 type Student = { id: number; name: string; email: string };
@@ -34,11 +35,24 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
 
   const [collaboratorEmail, setCollaboratorEmail] = useState("");
   const [studentEmail, setStudentEmail] = useState("");
-  const [questionTemplateInput, setQuestionTemplateInput] = useState("");
-  const [evaluationTemplateInput, setEvaluationTemplateInput] = useState("");
 
   const [collaboratorError, setCollaboratorError] = useState("");
   const [studentError, setStudentError] = useState("");
+
+  const [availableQuestionTemplates, setAvailableQuestionTemplates] = useState<Template[]>([]);
+  const [availableEvaluationTemplates, setAvailableEvaluationTemplates] = useState<Template[]>([]);
+  const [selectedQuestionTemplateId, setSelectedQuestionTemplateId] = useState("");
+  const [selectedEvaluationTemplateId, setSelectedEvaluationTemplateId] = useState("");
+
+  // Busca os templates disponíveis ao montar o componente
+  useEffect(() => {
+    fetch("/api/templates").then((r) => r.json()).then((data) => {
+      setAvailableQuestionTemplates(Array.isArray(data) ? data : []);
+    });
+    fetch("/api/templates/evaluation").then((r) => r.json()).then((data) => {
+      setAvailableEvaluationTemplates(Array.isArray(data) ? data : []);
+    });
+  }, []);
 
   async function handleAddCollaborator() {
     setCollaboratorError("");
@@ -92,8 +106,13 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
     setQuestionTemplates((prev) => prev.filter((t) => t.id !== id));
   }
 
+  // Encontra o template selecionado pelo id e adiciona à lista, se ainda não estiver
   function handleAddQuestionTemplate() {
-    // TODO: substituir por Select com opções do banco
+    const template = availableQuestionTemplates.find((t) => String(t.id) === selectedQuestionTemplateId);
+    if (!template) return;
+    if (questionTemplates.some((t) => t.id === template.id)) return;
+    setQuestionTemplates((prev) => [...prev, template]);
+    setSelectedQuestionTemplateId("");
   }
 
   function handleRemoveEvaluationTemplate(id: number) {
@@ -101,7 +120,11 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
   }
 
   function handleAddEvaluationTemplate() {
-    // TODO: substituir por Select com opções do banco
+    const template = availableEvaluationTemplates.find((t) => String(t.id) === selectedEvaluationTemplateId);
+    if (!template) return;
+    if (evaluationTemplates.some((t) => t.id === template.id)) return;
+    setEvaluationTemplates((prev) => [...prev, template]);
+    setSelectedEvaluationTemplateId("");
   }
 
   function handleSubmit() {
@@ -267,12 +290,19 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
             <CardContent className="pt-4 space-y-3">
               <p className="text-sm text-gray-500">Selecionar template de geração</p>
               <div className="flex flex-col sm:flex-row gap-2">
-                <Input
-                  placeholder="Nome do template..."
-                  className="flex-1"
-                  value={questionTemplateInput}
-                  onChange={(e) => setQuestionTemplateInput(e.target.value)}
-                />
+                {/* Select populado com templates disponíveis da API */}
+                <Select value={selectedQuestionTemplateId} onValueChange={setSelectedQuestionTemplateId}>
+                  <SelectTrigger className="flex-1">
+                    <SelectValue placeholder="Escolha um template..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableQuestionTemplates
+                      .filter((t) => !questionTemplates.some((qt) => qt.id === t.id))
+                      .map((t) => (
+                        <SelectItem key={t.id} value={String(t.id)}>{t.name}</SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
                 <Button variant="outline" onClick={handleAddQuestionTemplate} className="w-full sm:w-auto">
                   Adicionar
                 </Button>
@@ -314,12 +344,18 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
             <CardContent className="pt-4 space-y-3">
               <p className="text-sm text-gray-500">Selecionar template de avaliação</p>
               <div className="flex flex-col sm:flex-row gap-2">
-                <Input
-                  placeholder="Nome do template..."
-                  className="flex-1"
-                  value={evaluationTemplateInput}
-                  onChange={(e) => setEvaluationTemplateInput(e.target.value)}
-                />
+                <Select value={selectedEvaluationTemplateId} onValueChange={setSelectedEvaluationTemplateId}>
+                  <SelectTrigger className="flex-1">
+                    <SelectValue placeholder="Escolha um template..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableEvaluationTemplates
+                      .filter((t) => !evaluationTemplates.some((et) => et.id === t.id))
+                      .map((t) => (
+                        <SelectItem key={t.id} value={String(t.id)}>{t.name}</SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
                 <Button variant="outline" onClick={handleAddEvaluationTemplate} className="w-full sm:w-auto">
                   Adicionar
                 </Button>
