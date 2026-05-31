@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getCurrentUser, isUserAdmin, isUserProfessor } from "@/lib/apiUtils";
 
 export async function GET(req: Request): Promise<NextResponse> {
   try {
@@ -28,16 +29,42 @@ export async function GET(req: Request): Promise<NextResponse> {
       return NextResponse.json(templates);
     }
 
-    if (session?.user?.isAdmin && !onlyVisible) {
+    const currentUser = await getCurrentUser();
+
+    // Admin vê tudo
+    if (isUserAdmin(currentUser) && !onlyVisible) {
       const templates = await prisma.questionRequestTemplate.findMany();
       return NextResponse.json(templates);
-    } else {
+    }
+
+    // Professor vê os seus + os das turmas que gerencia
+    if (isUserProfessor(currentUser)) {
       const templates = await prisma.questionRequestTemplate.findMany({
-        where: { visible: true },
-        select: { id: true, name: true, promptTemplate: true, parameters: true },
+        where: {
+          OR: [
+            { ownerId: currentUser.id },
+            {
+              classes: {
+                some: {
+                  OR: [
+                    { ownerId: currentUser.id },
+                    { collaborators: { some: { userId: currentUser.id } } },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       });
       return NextResponse.json(templates);
     }
+
+    // Aluno vê só templates visíveis (RF05 restringe por turma — mantém fallback)
+    const templates = await prisma.questionRequestTemplate.findMany({
+      where: { visible: true },
+      select: { id: true, name: true, promptTemplate: true, parameters: true },
+    });
+    return NextResponse.json(templates);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch templates" },
