@@ -31,9 +31,11 @@ export async function GET(req: Request): Promise<NextResponse> {
 
     const currentUser = await getCurrentUser();
 
-    // Admin vê tudo
+    // Admin vê tudo, com owner incluído para agrupamento
     if (isUserAdmin(currentUser) && !onlyVisible) {
-      const templates = await prisma.questionRequestTemplate.findMany();
+      const templates = await prisma.questionRequestTemplate.findMany({
+        include: { owner: { select: { id: true, name: true, email: true } } },
+      });
       return NextResponse.json(templates);
     }
 

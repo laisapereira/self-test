@@ -22,6 +22,7 @@ type EvaluationTemplate = {
   createdAt: string;
   criteria: EvaluationCriterion[];
   _count: { questionRequestTemplates: number };
+  owner?: { id: number; name: string | null; email: string };
 };
 
 export default function EvaluationTemplatesPage() {
@@ -30,8 +31,8 @@ export default function EvaluationTemplatesPage() {
   const [templates, setTemplates] = useState<EvaluationTemplate[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const isForbidden =
-    status === "authenticated" && session?.user?.isAdmin === false;
+  const isAdmin = session?.user?.typeRole === "ADMIN";
+  const isForbidden = status === "authenticated" && !isAdmin;
 
   async function fetchTemplates() {
     setLoading(true);
@@ -100,21 +101,41 @@ export default function EvaluationTemplatesPage() {
           <p className="text-sm text-gray-500">
             Nenhum template de avaliação encontrado. Crie um para começar.
           </p>
+        ) : isAdmin ? (
+          // Admin: agrupa por criador
+          Object.entries(
+            templates.reduce((acc, t) => {
+              const key = t.owner?.name ?? t.owner?.email ?? `ID ${t.id}`;
+              if (!acc[key]) acc[key] = [];
+              acc[key].push(t);
+              return acc;
+            }, {} as Record<string, EvaluationTemplate[]>)
+          ).map(([ownerName, ownerTemplates]) => (
+            <div key={ownerName} className="mb-6">
+              <h2 className="text-base font-semibold text-slate-600 mb-3 flex items-center gap-2">
+                <span className="rounded-full bg-slate-100 px-3 py-0.5 text-sm">{ownerName}</span>
+                <span className="text-xs text-gray-400">{ownerTemplates.length} template(s)</span>
+              </h2>
+              <ul className="space-y-4">
+                {ownerTemplates.map((template) => (
+                  <TemplateCard
+                    key={template.id}
+                    template={template}
+                    onEdit={() => router.push(`/templates/evaluation/${template.id}/edit`)}
+                    onDelete={() => deleteTemplate(template.id, template._count.questionRequestTemplates)}
+                  />
+                ))}
+              </ul>
+            </div>
+          ))
         ) : (
           <ul className="space-y-4">
             {templates.map((template) => (
               <TemplateCard
                 key={template.id}
                 template={template}
-                onEdit={() =>
-                  router.push(`/templates/evaluation/${template.id}/edit`)
-                }
-                onDelete={() =>
-                  deleteTemplate(
-                    template.id,
-                    template._count.questionRequestTemplates,
-                  )
-                }
+                onEdit={() => router.push(`/templates/evaluation/${template.id}/edit`)}
+                onDelete={() => deleteTemplate(template.id, template._count.questionRequestTemplates)}
               />
             ))}
           </ul>

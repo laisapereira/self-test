@@ -17,6 +17,7 @@ export async function GET() {
           orderBy: { order: "asc" },
         },
         _count: { select: { questionRequestTemplates: true } },
+        owner: { select: { id: true, name: true, email: true } },
       },
       orderBy: { createdAt: "desc" },
     });
