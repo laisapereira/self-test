@@ -15,6 +15,18 @@ export async function GET(req: Request): Promise<NextResponse> {
 
     const { searchParams } = new URL(req.url);
     const onlyVisible = searchParams.get("visible") === "true";
+    const classId = searchParams.get("classId");
+
+    // Se classId fornecido, retorna só os templates daquela turma
+    if (classId) {
+      const templates = await prisma.questionRequestTemplate.findMany({
+        where: {
+          classes: { some: { id: parseInt(classId, 10) } },
+        },
+        select: { id: true, name: true, promptTemplate: true, parameters: true },
+      });
+      return NextResponse.json(templates);
+    }
 
     if (session?.user?.isAdmin && !onlyVisible) {
       const templates = await prisma.questionRequestTemplate.findMany();

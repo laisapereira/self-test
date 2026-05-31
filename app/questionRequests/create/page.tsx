@@ -18,7 +18,7 @@ import { Spinner } from "@/components/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export default function QuestionRequestCreatePage() {
+export default function QuestionRequestCreatePage({ classId }: { classId?: string }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -62,7 +62,8 @@ export default function QuestionRequestCreatePage() {
       if (!isMountedRef.current) return;
       setIsLoadingTemplates(true);
       try {
-        const response = await fetch("/api/templates?visible=true");
+        const url = classId ? `/api/templates?classId=${classId}` : "/api/templates?visible=true";
+        const response = await fetch(url);
         const data = await response.json();
         if (isMountedRef.current) {
           if (response.ok && Array.isArray(data)) {
