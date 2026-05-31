@@ -195,6 +195,7 @@ function DashboardInner() {
   >([]);
 
   const isAdmin = session?.user?.isAdmin || false;
+  const [studentClasses, setStudentClasses] = useState<{ id: number; name: string }[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -207,6 +208,14 @@ function DashboardInner() {
       setTemplates(data);
     })();
   }, []);
+
+  // Busca as turmas do aluno para exibir o contexto no banner
+  useEffect(() => {
+    if (session?.user?.typeRole !== "STUDENT") return;
+    fetch("/api/classes")
+      .then((r) => r.json())
+      .then((data) => setStudentClasses(data.classes ?? []));
+  }, [session]);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -273,7 +282,14 @@ function DashboardInner() {
 
             {!isAdmin && (
               <div className="mb-4 rounded border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
-                Você está visualizando apenas suas próprias notas
+                {studentClasses.length > 0 ? (
+                  <>
+                    Você está gerando questões como parte da{studentClasses.length > 1 ? "s turmas" : " turma"}{" "}
+                    <strong>{studentClasses.map((c) => c.name).join(", ")}</strong>
+                  </>
+                ) : (
+                  "Você está visualizando apenas suas próprias notas"
+                )}
               </div>
             )}
 
