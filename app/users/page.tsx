@@ -35,7 +35,7 @@ export default async function UsersPage() {
 
     await prisma.user.update({
       where: { id: userId },
-      data: { admin: makeAdmin },
+      data: { role: makeAdmin ? "ADMIN" : "STUDENT" },
     });
 
     revalidatePath("/users");
@@ -84,7 +84,7 @@ export default async function UsersPage() {
                         <TableCell>{user.id}</TableCell>
                         <TableCell>{user.name}</TableCell>
                         <TableCell>{user.email}</TableCell>
-                        <TableCell>{user.admin ? "Sim" : "Não"}</TableCell>
+                        <TableCell>{user.role === "ADMIN" ? "Sim" : "Não"}</TableCell>
                         <TableCell className="space-x-2">
                           <Link
                             href={`/questions?userId=${user.id}`}
@@ -108,13 +108,13 @@ export default async function UsersPage() {
                             <input
                               type="hidden"
                               name="admin"
-                              value={!user.admin ? "true" : "false"}
+                              value={user.role !== "ADMIN" ? "true" : "false"}
                             />
                             <button
                               type="submit"
                               className="rounded bg-blue-600 px-2 py-1 text-white hover:bg-blue-700 disabled:opacity-50"
                             >
-                              {user.admin ? "Remover admin" : "Dar admin"}
+                              {user.role === "ADMIN" ? "Remover admin" : "Dar admin"}
                             </button>
                           </form>
                         </TableCell>

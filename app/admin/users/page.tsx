@@ -51,7 +51,7 @@ export default async function AdminUsersPage({
 
     await prisma.user.update({
       where: { id: userId },
-      data: { admin: makeAdmin },
+      data: { role: makeAdmin ? "ADMIN" : "STUDENT" },
     });
 
     revalidatePath("/admin/users");
@@ -69,10 +69,10 @@ export default async function AdminUsersPage({
   });
 
   const totalUsers = await prisma.user.count();
-  const adminsCount = await prisma.user.count({ where: { admin: true } });
+  const adminsCount = await prisma.user.count({ where: { role: "ADMIN" } });
 
-  const adminUsers = users.filter((u) => u.admin);
-  const regularUsers = users.filter((u) => !u.admin);
+  const adminUsers = users.filter((u) => u.role === "ADMIN");
+  const regularUsers = users.filter((u) => u.role !== "ADMIN");
 
   const grouped = groupBySemester(regularUsers, (u) => u.createdAt);
   const semesterKeys = sortedSemesters(Object.keys(grouped));

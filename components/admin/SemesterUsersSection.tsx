@@ -16,7 +16,7 @@ interface User {
   id: number;
   name: string | null;
   email: string;
-  admin: boolean;
+  role: string;
   createdAt: Date;
 }
 
@@ -70,12 +70,12 @@ export function SemesterUsersSection({
                 <TableCell>
                   <span
                     className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                      user.admin
+                      user.role === "ADMIN"
                         ? "bg-green-100 text-green-700"
                         : "bg-slate-100 text-slate-700"
                     }`}
                   >
-                    {user.admin ? "ADMIN" : "USER"}
+                    {user.role === "ADMIN" ? "ADMIN" : "USER"}
                   </span>
                 </TableCell>
                 {showCreatedAt && (
@@ -94,17 +94,17 @@ export function SemesterUsersSection({
                     <input
                       type="hidden"
                       name="admin"
-                      value={!user.admin ? "true" : "false"}
+                      value={user.role !== "ADMIN" ? "true" : "false"}
                     />
                     <button
                       type="submit"
                       className={`rounded px-2 py-1 text-sm font-medium ${
-                        user.admin
+                        user.role === "ADMIN"
                           ? "bg-rose-500 text-white hover:bg-rose-600"
                           : "bg-blue-600 text-white hover:bg-blue-700"
                       }`}
                     >
-                      {user.admin ? "Remover" : "Tornar admin"}
+                      {user.role === "ADMIN" ? "Remover" : "Tornar admin"}
                     </button>
                   </form>
                   <Link
