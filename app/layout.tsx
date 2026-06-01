@@ -184,7 +184,7 @@ function Navbar() {
           isOpen={open}
           toggle={() => setOpen(false)}
           items={routes
-            .filter((route) => !route.requireAdmin || session.user?.isAdmin)
+            .filter((route) => !route.requireAdmin || session.user?.isAdmin || session.user?.isProfessor)
             .map((route) => ({ href: route.href, title: route.title }))}
         />
       ) : null}
@@ -196,10 +196,6 @@ function MenuItems(props: { onClick?: () => void }) {
   const { onClick } = props;
   const { data: session } = useSession();
   const pathname = usePathname();
-  const isUserAdmin = () => {
-    if (!session || !session.user) return false;
-    return session.user.isAdmin === true;
-  };
 
   if (!session) {
     return <></>;
@@ -208,7 +204,7 @@ function MenuItems(props: { onClick?: () => void }) {
   return (
     <>
       {routes
-        .filter((route) => !route.requireAdmin || isUserAdmin())
+        .filter((route) => !route.requireAdmin || session.user?.isAdmin || session.user?.isProfessor)
         .map((route, index) => {
           const active =
             route.href === pathname ||

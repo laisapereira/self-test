@@ -11,6 +11,7 @@ declare module "next-auth" {
       image?: string | null;
       typeRole?: "STUDENT" | "PROFESSOR" | "ADMIN";
       isAdmin?: boolean;
+      isProfessor?: boolean;
     };
   }
 }
@@ -117,6 +118,7 @@ export const authOptions = {
         );
         session.user.typeRole = user?.role;
         session.user.isAdmin = user?.role === "ADMIN";
+        session.user.isProfessor = user?.role === "PROFESSOR";
         fs.appendFileSync(
           "nextauth_debug.log",
           JSON.stringify({ event: "session_modified", session }) + "\\n",
