@@ -21,7 +21,9 @@ export default function QuestionRequestTemplates() {
   const [templates, setTemplates] = useState<TemplateWithOwner[]>([]);
 
   const isForbidden =
-    status === "authenticated" && session?.user?.typeRole !== "ADMIN";
+    status === "authenticated" &&
+    session?.user?.typeRole !== "ADMIN" &&
+    session?.user?.typeRole !== "PROFESSOR";
 
   async function fetchTemplates() {
     const response = await fetch("/api/templates");

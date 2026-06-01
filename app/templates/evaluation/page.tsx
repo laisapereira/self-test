@@ -32,7 +32,8 @@ export default function EvaluationTemplatesPage() {
   const [loading, setLoading] = useState(true);
 
   const isAdmin = session?.user?.typeRole === "ADMIN";
-  const isForbidden = status === "authenticated" && !isAdmin;
+  const isProfessor = session?.user?.typeRole === "PROFESSOR";
+  const isForbidden = status === "authenticated" && !isAdmin && !isProfessor;
 
   async function fetchTemplates() {
     setLoading(true);

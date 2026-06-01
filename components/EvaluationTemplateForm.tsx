@@ -118,7 +118,9 @@ export default function EvaluationTemplateForm({
   });
 
   const isForbidden =
-    status === "authenticated" && session?.user?.isAdmin === false;
+    status === "authenticated" &&
+    session?.user?.isAdmin === false &&
+    session?.user?.isProfessor === false;
 
   if (status === "loading") {
     return <div className="p-8 text-center text-slate-500">Carregando...</div>;
