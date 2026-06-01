@@ -1,16 +1,20 @@
 import prisma from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+import { getCurrentUser, isUserAdmin, isUserProfessor } from "@/lib/apiUtils";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.isAdmin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    const currentUser = await getCurrentUser();
+
+    if (!isUserAdmin(currentUser) && !isUserProfessor(currentUser)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
+    // Admin vê todos; professor vê apenas os seus
+    const where = isUserAdmin(currentUser) ? {} : { ownerId: currentUser.id };
+
     const templates = await prisma.evaluationTemplate.findMany({
+      where,
       include: {
         criteria: {
           include: { criterion: true },
@@ -31,25 +35,18 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email || !session.user.isAdmin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { name, description, evaluationPrompt, criteria } = await req.json();
-  if (!name || !criteria?.length) {
-    return NextResponse.json(
-      { error: "Name and criteria are required" },
-      { status: 400 },
-    );
-  }
-
   try {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    const currentUser = await getCurrentUser();
+    if (!isUserAdmin(currentUser) && !isUserProfessor(currentUser)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
+    const { name, description, evaluationPrompt, criteria } = await req.json();
+    if (!name || !criteria?.length) {
+      return NextResponse.json(
+        { error: "Name and criteria are required" },
+        { status: 400 },
+      );
     }
 
     const template = await prisma.evaluationTemplate.create({
@@ -57,14 +54,14 @@ export async function POST(req: Request) {
         name,
         description: description || null,
         evaluationPrompt: evaluationPrompt || null,
-        ownerId: user.id,
+        ownerId: currentUser.id,
         criteria: {
           create: criteria.map(
             (c: { criterionName: string; description: string; weight: number }, index: number) => ({
               weight: c.weight,
               order: index,
               criterion: {
-                create: { name: c.criterionName, description: c.description, ownerId: user.id },
+                create: { name: c.criterionName, description: c.description, ownerId: currentUser.id },
               },
             }),
           ),
@@ -79,7 +76,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(template, { status: 201 });
-  } catch {
+  } catch (error) {
+    if (error instanceof Response) return error;
     return NextResponse.json(
       { error: "Failed to create evaluation template" },
       { status: 500 },
