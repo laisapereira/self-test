@@ -9,7 +9,9 @@ export default function Home() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const classId = searchParams.get("classId");
-  const [studentClasses, setStudentClasses] = useState<{ id: number; name: string }[]>([]);
+  const [studentClasses, setStudentClasses] = useState<
+    { id: number; name: string }[]
+  >([]);
 
   const firstName = session?.user?.name?.split(" ")[0] || "Usuário";
 
