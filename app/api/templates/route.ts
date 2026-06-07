@@ -14,32 +14,33 @@ export async function GET(req: Request): Promise<NextResponse> {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const currentUser = await getCurrentUser();
     const { searchParams } = new URL(req.url);
-    const onlyVisible = searchParams.get("visible") === "true";
     const classId = searchParams.get("classId");
 
     // Se classId fornecido, retorna só os templates daquela turma
+    // Admins e professores veem todos (incluindo ocultos); alunos só veem visíveis
     if (classId) {
+      const isPrivileged = isUserAdmin(currentUser) || isUserProfessor(currentUser);
       const templates = await prisma.questionRequestTemplate.findMany({
         where: {
           classes: { some: { id: parseInt(classId, 10) } },
+          ...(!isPrivileged && { visible: true }),
         },
         select: { id: true, name: true, promptTemplate: true, parameters: true },
       });
       return NextResponse.json(templates);
     }
 
-    const currentUser = await getCurrentUser();
-
-    // Admin vê tudo, com owner incluído para agrupamento
-    if (isUserAdmin(currentUser) && !onlyVisible) {
+    // Admin vê todos os templates (independente do filtro visible)
+    if (isUserAdmin(currentUser)) {
       const templates = await prisma.questionRequestTemplate.findMany({
         include: { owner: { select: { id: true, name: true, email: true } } },
       });
       return NextResponse.json(templates);
     }
 
-    // Professor vê apenas os templates que criou
+    // Professor vê apenas os templates que criou (independente do filtro visible)
     if (isUserProfessor(currentUser)) {
       const templates = await prisma.questionRequestTemplate.findMany({
         where: { ownerId: currentUser.id },

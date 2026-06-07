@@ -102,27 +102,14 @@ export const authOptions = {
       }
       return false;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      const fs = require("fs");
-      fs.appendFileSync(
-        "nextauth_debug.log",
-        JSON.stringify({ event: "session", token, session }) + "\\n",
-      );
-      if (token && token.email) {
+    async session({ session, token }: { session: import("next-auth").Session; token: import("next-auth/jwt").JWT }) {
+      if (token?.email && session.user) {
         const user = await prisma.user.findUnique({
           where: { email: token.email },
         });
-        fs.appendFileSync(
-          "nextauth_debug.log",
-          JSON.stringify({ event: "user_fetched", user }) + "\\n",
-        );
         session.user.typeRole = user?.role;
         session.user.isAdmin = user?.role === "ADMIN";
         session.user.isProfessor = user?.role === "PROFESSOR";
-        fs.appendFileSync(
-          "nextauth_debug.log",
-          JSON.stringify({ event: "session_modified", session }) + "\\n",
-        );
       }
       return session;
     },

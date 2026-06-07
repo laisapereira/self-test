@@ -42,6 +42,7 @@ model User {
   ownedClasses             Class[]                   @relation("ClassOwner")
   studentClasses           Class[]                   @relation("ClassStudents")
   collaboratedClasses      ClassCollaborator[]
+  feedbackSummaries        StudentTemplateFeedbackSummary[]
 }
 
 model Topic {
@@ -68,6 +69,7 @@ model QuestionRequestTemplate {
   evaluationTemplate   EvaluationTemplate? @relation(fields: [evaluationTemplateId], references: [id])
   evaluationTemplateId Int?
   classes              Class[]
+  feedbackSummaries    StudentTemplateFeedbackSummary[]
 }
 
 enum QuestionRequestStatus {
@@ -213,6 +215,7 @@ model Class {
   questionTemplates   QuestionRequestTemplate[]
   evaluationTemplates EvaluationTemplate[]
   link                String                    @unique
+
 }
 
 model ClassCollaborator {
@@ -224,4 +227,18 @@ model ClassCollaborator {
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([classId, userId])
+}
+
+model StudentTemplateFeedbackSummary {
+  id        Int      @id @default(autoincrement())
+  summary   String
+  updatedAt DateTime @updatedAt
+
+  studentId  Int
+  templateId Int
+
+  student  User                    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  template QuestionRequestTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, templateId])
 }

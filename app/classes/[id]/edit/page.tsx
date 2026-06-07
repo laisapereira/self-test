@@ -8,6 +8,7 @@ export default function EditClassPage() {
   const params = useParams();
   const router = useRouter();
   const [defaultValues, setDefaultValues] = useState<ClassFormData | null>(null);
+  const [owner, setOwner] = useState<{ id: number; name: string; email: string } | undefined>();
 
   useEffect(() => {
     async function fetchClass() {
@@ -15,6 +16,7 @@ export default function EditClassPage() {
       if (res.ok) {
         const data = await res.json();
         const c = data.class;
+        setOwner(c.owner);
         setDefaultValues({
           name: c.name,
           collaborators: c.collaborators.map((col: any) => col.user),
@@ -50,7 +52,7 @@ export default function EditClassPage() {
   return (
     <div className="p-4 max-w-4xl mx-auto space-y-4">
       <h1 className="text-2xl font-bold">Editar turma</h1>
-      <ClassForm mode="edit" defaultValues={defaultValues} onSubmit={handleSubmit} />
+      <ClassForm mode="edit" owner={owner} defaultValues={defaultValues} onSubmit={handleSubmit} />
     </div>
   );
 }

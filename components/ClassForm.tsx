@@ -4,13 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Collaborator = { id: number; name: string; email: string };
 type Student = { id: number; name: string; email: string };
 type Template = { id: number; name: string };
+type UserResult = { id: number; name: string; email: string; role: string };
 
 export type ClassFormData = {
   name: string;
@@ -22,29 +31,111 @@ export type ClassFormData = {
 
 type ClassFormProps = {
   mode: "create" | "edit";
+  owner?: { id: number; name: string; email: string };
   defaultValues?: ClassFormData;
   onSubmit: (data: ClassFormData) => void;
 };
 
-export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormProps) {
+function UserSearchInput({
+  placeholder,
+  onAdd,
+  filterResults,
+}: {
+  placeholder: string;
+  onAdd: (user: UserResult) => string | null;
+  filterResults?: (u: UserResult) => boolean;
+}) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<UserResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
+  const filterResultsRef = useRef(filterResults);
+  filterResultsRef.current = filterResults;
+
+  useEffect(() => {
+    setError("");
+    if (query.length < 2) {
+      setResults([]);
+      setOpen(false);
+      return;
+    }
+    const t = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/users?q=${encodeURIComponent(query)}`);
+        if (res.ok) {
+          const data = await res.json();
+          const users: UserResult[] = data.users ?? [];
+          const fn = filterResultsRef.current;
+          setResults(fn ? users.filter(fn) : users);
+          setOpen(true);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }, 300);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  function select(user: UserResult) {
+    const err = onAdd(user);
+    if (err) {
+      setError(err);
+    } else {
+      setQuery("");
+      setResults([]);
+      setOpen(false);
+      setError("");
+    }
+  }
+
+  return (
+    <div className="relative">
+      <Input
+        placeholder={placeholder}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={() => results.length > 0 && setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+      />
+      {open && (
+        <div className="absolute top-full left-0 right-0 z-20 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-auto">
+          {results.map((u) => (
+            <button
+              key={u.id}
+              type="button"
+              className="w-full text-left px-3 py-2 hover:bg-gray-50 border-b border-gray-100 last:border-0"
+              onMouseDown={() => select(u)}
+            >
+              <p className="text-sm font-medium text-gray-700">{u.name}</p>
+              <p className="text-xs text-gray-500">{u.email}</p>
+            </button>
+          ))}
+          {!loading && results.length === 0 && (
+            <p className="px-3 py-2 text-sm text-gray-400">Nenhum usuário encontrado.</p>
+          )}
+        </div>
+      )}
+      {loading && <p className="text-xs text-gray-400 mt-1">Buscando...</p>}
+      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+    </div>
+  );
+}
+
+export default function ClassForm({ mode, owner, defaultValues, onSubmit }: ClassFormProps) {
   const [name, setName] = useState(defaultValues?.name ?? "");
   const [collaborators, setCollaborators] = useState<Collaborator[]>(defaultValues?.collaborators ?? []);
   const [students, setStudents] = useState<Student[]>(defaultValues?.students ?? []);
   const [questionTemplates, setQuestionTemplates] = useState<Template[]>(defaultValues?.questionTemplates ?? []);
   const [evaluationTemplates, setEvaluationTemplates] = useState<Template[]>(defaultValues?.evaluationTemplates ?? []);
 
-  const [collaboratorEmail, setCollaboratorEmail] = useState("");
-  const [studentEmail, setStudentEmail] = useState("");
-
-  const [collaboratorError, setCollaboratorError] = useState("");
-  const [studentError, setStudentError] = useState("");
-
   const [availableQuestionTemplates, setAvailableQuestionTemplates] = useState<Template[]>([]);
   const [availableEvaluationTemplates, setAvailableEvaluationTemplates] = useState<Template[]>([]);
+  const [confirmRemove, setConfirmRemove] = useState<Student | null>(null);
   const [selectedQuestionTemplateId, setSelectedQuestionTemplateId] = useState("");
   const [selectedEvaluationTemplateId, setSelectedEvaluationTemplateId] = useState("");
 
-  // Busca os templates disponíveis ao montar o componente
   useEffect(() => {
     fetch("/api/templates").then((r) => r.json()).then((data) => {
       setAvailableQuestionTemplates(Array.isArray(data) ? data : []);
@@ -54,48 +145,36 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
     });
   }, []);
 
-  async function handleAddCollaborator() {
-    setCollaboratorError("");
-    const res = await fetch(`/api/users?email=${encodeURIComponent(collaboratorEmail)}`);
-    if (!res.ok) {
-      setCollaboratorError("Usuário não encontrado.");
-      return;
-    }
-    const { user } = await res.json();
+  function handleAddCollaborator(user: UserResult): string | null {
     if (user.role !== "PROFESSOR" && user.role !== "ADMIN") {
-      setCollaboratorError("Apenas professores podem ser colaboradores.");
-      return;
+      return "Apenas professores podem ser colaboradores.";
+    }
+    if (owner && user.id === owner.id) {
+      return "Esse professor já é o dono da turma.";
     }
     if (collaborators.some((c) => c.id === user.id)) {
-      setCollaboratorError("Esse professor já foi adicionado.");
-      return;
+      return "Esse professor já foi adicionado.";
     }
     setCollaborators((prev) => [...prev, { id: user.id, name: user.name, email: user.email }]);
-    setCollaboratorEmail("");
+    return null;
   }
 
   function handleRemoveCollaborator(id: number) {
     setCollaborators((prev) => prev.filter((c) => c.id !== id));
   }
 
-  async function handleAddStudent() {
-    setStudentError("");
-    const res = await fetch(`/api/users?email=${encodeURIComponent(studentEmail)}`);
-    if (!res.ok) {
-      setStudentError("Usuário não encontrado.");
-      return;
+  function handleAddStudent(user: UserResult): string | null {
+    if (owner && user.id === owner.id) {
+      return "O dono da turma não pode ser adicionado como aluno.";
     }
-    const { user } = await res.json();
     if (students.some((s) => s.id === user.id)) {
-      setStudentError("Esse usuário já está na turma.");
-      return;
+      return "Esse usuário já está na turma.";
     }
     if (collaborators.some((c) => c.id === user.id)) {
-      setStudentError("Esse usuário já é colaborador da turma.");
-      return;
+      return "Esse usuário já é colaborador da turma.";
     }
     setStudents((prev) => [...prev, { id: user.id, name: user.name, email: user.email }]);
-    setStudentEmail("");
+    return null;
   }
 
   function handleRemoveStudent(id: number) {
@@ -106,7 +185,6 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
     setQuestionTemplates((prev) => prev.filter((t) => t.id !== id));
   }
 
-  // Encontra o template selecionado pelo id e adiciona à lista, se ainda não estiver
   function handleAddQuestionTemplate() {
     const template = availableQuestionTemplates.find((t) => String(t.id) === selectedQuestionTemplateId);
     if (!template) return;
@@ -161,45 +239,46 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
-          {collaborators.length > 0 && (
-            <ul className="space-y-2">
-              {collaborators.map((c) => (
-                <li
-                  key={c.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
+          <ul className="space-y-2">
+            {/* Owner imutável */}
+            {owner && (
+              <li className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-100 px-3 py-2">
+                <div>
+                  <p className="text-sm font-medium text-gray-700">{owner.name}</p>
+                  <p className="text-xs text-gray-500">{owner.email}</p>
+                </div>
+                <span className="text-xs text-gray-400 font-medium px-2 py-0.5 rounded bg-gray-200">
+                  Criador
+                </span>
+              </li>
+            )}
+            {collaborators.map((c) => (
+              <li
+                key={c.id}
+                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
+              >
+                <div>
+                  <p className="text-sm font-medium text-gray-700">{c.name}</p>
+                  <p className="text-xs text-gray-500">{c.email}</p>
+                </div>
+                <button
+                  onClick={() => handleRemoveCollaborator(c.id)}
+                  className="text-gray-400 hover:text-red-500 transition-colors"
                 >
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">{c.name}</p>
-                    <p className="text-xs text-gray-500">{c.email}</p>
-                  </div>
-                  <button
-                    onClick={() => handleRemoveCollaborator(c.id)}
-                    className="text-gray-400 hover:text-red-500 transition-colors"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+                  <X className="h-4 w-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
 
           <Card className="border-dashed border-gray-300 bg-gray-50/50">
             <CardContent className="pt-4 space-y-3">
-              <p className="text-sm text-gray-500">Buscar professor por e-mail</p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Input
-                  placeholder="professor@email.com"
-                  className="flex-1"
-                  value={collaboratorEmail}
-                  onChange={(e) => setCollaboratorEmail(e.target.value)}
-                />
-                <Button variant="outline" onClick={handleAddCollaborator} className="w-full sm:w-auto">
-                  Adicionar
-                </Button>
-              </div>
-              {collaboratorError && (
-                <p className="text-xs text-red-500">{collaboratorError}</p>
-              )}
+              <p className="text-sm text-gray-500">Buscar professor por nome ou e-mail</p>
+              <UserSearchInput
+                placeholder="Nome ou e-mail do professor..."
+                onAdd={handleAddCollaborator}
+                filterResults={(u) => (u.role === "PROFESSOR" || u.role === "ADMIN") && (!owner || u.id !== owner.id)}
+              />
             </CardContent>
           </Card>
         </CardContent>
@@ -210,7 +289,7 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
         <CardHeader>
           <h2 className="text-lg font-semibold">Alunos</h2>
           <p className="text-sm text-gray-500">
-            Adicione alunos à turma pelo e-mail.
+            Adicione alunos à turma pelo nome ou e-mail.
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -226,10 +305,12 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
                     <p className="text-xs text-gray-500">{s.email}</p>
                   </div>
                   <button
-                    onClick={() => handleRemoveStudent(s.id)}
-                    className="text-gray-400 hover:text-red-500 transition-colors"
+                    onClick={() => setConfirmRemove(s)}
+                    title="Remover aluno"
+                    className="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-red-500 border border-red-200 hover:bg-red-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-3.5 w-3.5" />
+                    Remover
                   </button>
                 </li>
               ))}
@@ -238,21 +319,11 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
 
           <Card className="border-dashed border-gray-300 bg-gray-50/50">
             <CardContent className="pt-4 space-y-3">
-              <p className="text-sm text-gray-500">Buscar aluno por e-mail</p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Input
-                  placeholder="aluno@email.com"
-                  className="flex-1"
-                  value={studentEmail}
-                  onChange={(e) => setStudentEmail(e.target.value)}
-                />
-                <Button variant="outline" onClick={handleAddStudent} className="w-full sm:w-auto">
-                  Adicionar
-                </Button>
-              </div>
-              {studentError && (
-                <p className="text-xs text-red-500">{studentError}</p>
-              )}
+              <p className="text-sm text-gray-500">Buscar aluno por nome ou e-mail</p>
+              <UserSearchInput
+                placeholder="Nome ou e-mail do aluno..."
+                onAdd={handleAddStudent}
+              />
             </CardContent>
           </Card>
         </CardContent>
@@ -290,7 +361,6 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
             <CardContent className="pt-4 space-y-3">
               <p className="text-sm text-gray-500">Selecionar template de geração</p>
               <div className="flex flex-col sm:flex-row gap-2">
-                {/* Select populado com templates disponíveis da API */}
                 <Select value={selectedQuestionTemplateId} onValueChange={setSelectedQuestionTemplateId}>
                   <SelectTrigger className="flex-1">
                     <SelectValue placeholder="Escolha um template..." />
@@ -370,6 +440,35 @@ export default function ClassForm({ mode, defaultValues, onSubmit }: ClassFormPr
           {mode === "create" ? "Criar turma" : "Salvar alterações"}
         </Button>
       </div>
+
+      <Dialog open={!!confirmRemove} onOpenChange={(open) => { if (!open) setConfirmRemove(null); }}>
+        <DialogContent onKeyDown={(e) => { if (e.key === "Escape") setConfirmRemove(null); }}>
+          <DialogHeader>
+            <DialogTitle>Remover aluno da turma?</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja retirar <strong>{confirmRemove?.name ?? confirmRemove?.email}</strong> desta turma?
+              Esta ação pode ser desfeita antes de salvar o formulário.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              onClick={() => setConfirmRemove(null)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (confirmRemove) handleRemoveStudent(confirmRemove.id);
+                setConfirmRemove(null);
+              }}
+            >
+              Remover
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

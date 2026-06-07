@@ -6,10 +6,12 @@ async function getClassAndVerifyAccess(id: number, userId: number, isAdmin: bool
   const classData = await prisma.class.findUnique({
     where: { id },
     include: {
+      owner: { select: { id: true, name: true, email: true } },
       students: { select: { id: true, name: true, email: true } },
       collaborators: { include: { user: { select: { id: true, name: true, email: true } } } },
       questionTemplates: { select: { id: true, name: true } },
       evaluationTemplates: { select: { id: true, name: true } },
+      featuredTemplate: { select: { id: true, name: true } },
     },
   });
 
@@ -58,7 +60,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
     }
 
-    const classData = await prisma.class.findUnique({ where: { id: numericId } });
+    const classData = await prisma.class.findUnique({
+      where: { id: numericId },
+      include: { students: { select: { id: true } } },
+    });
     if (!classData) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
@@ -73,6 +78,19 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
 
     const { name, questionTemplates, evaluationTemplates, collaborators, students } = await req.json();
+
+    // Diff-based connect/disconnect: evita deletar e reinserir toda a lista
+    let studentsDiff: Record<string, unknown> | undefined;
+    if (students) {
+      const existingIds = new Set(classData.students.map((s) => s.id));
+      const newIds = new Set(students as number[]);
+      const toConnect = [...newIds].filter((id) => !existingIds.has(id)).map((id) => ({ id }));
+      const toDisconnect = [...existingIds].filter((id) => !newIds.has(id)).map((id) => ({ id }));
+      studentsDiff = {
+        ...(toConnect.length > 0 && { connect: toConnect }),
+        ...(toDisconnect.length > 0 && { disconnect: toDisconnect }),
+      };
+    }
 
     const updated = await prisma.class.update({
       where: { id: numericId },
@@ -90,9 +108,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
             create: collaborators.map((uid: number) => ({ userId: uid })),
           },
         }),
-        ...(students && {
-          students: { set: students.map((uid: number) => ({ id: uid })) },
-        }),
+        ...(studentsDiff && { students: studentsDiff }),
       },
     });
 

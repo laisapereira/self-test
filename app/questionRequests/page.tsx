@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { StudentStatsHeader } from "@/components/StudentStatsHeader";
 import {
   Table,
   TableBody,
@@ -142,6 +143,7 @@ function QuestionRequestsPageInner() {
 
   return (
     <>
+      {!userId && <StudentStatsHeader />}
       <div className="w-full max-w-5xl mx-auto p-4 my-6">
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <h1 className="text-2xl font-bold text-slate-800 text-center">

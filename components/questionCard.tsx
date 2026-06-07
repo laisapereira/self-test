@@ -360,21 +360,30 @@ export function QuestionCard(props: {
               )}
 
               {feedbackLLM && (
-                <div className="mt-4 border border-gray-200 bg-gray-50 rounded-lg p-4 sm:p-5 mb-4">
-                  <div className="text-xs uppercase font-bold text-gray-500 mb-3 tracking-wider">
-                    Feedback do modelo
-                  </div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="font-medium text-slate-700 text-sm">
-                      Nota:
+                <div className="mt-4 border-t border-slate-100 pt-4 mb-4">
+                  <div className="flex items-baseline gap-3 mb-3">
+                    <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+                      Avaliação
                     </span>
-                    <span className="bg-white px-2 py-0.5 rounded border border-gray-200 font-bold text-slate-800 shadow-sm">
+                    <span className="text-sm font-bold text-slate-700">
                       {feedbackLLM.score}
+                      <span className="text-xs font-normal text-slate-400 ml-0.5">/ 10</span>
                     </span>
                   </div>
-                  <p className="text-sm text-slate-700 leading-relaxed">
-                    {feedbackLLM.justification}
-                  </p>
+                  <div
+                    className="text-sm leading-relaxed text-slate-600 text-justify
+                      [&_strong]:font-semibold [&_strong]:text-slate-700
+                      [&_p]:mt-2 [&_p:first-child]:mt-0
+                      [&_p:has(>strong)]:mt-6 [&_p:first-child:has(>strong)]:mt-0 [&_p:has(>strong)]:mb-0.5
+                      [&_ul]:mt-1 [&_ul]:space-y-0.5 [&_ul]:pl-4 [&_ul]:list-disc
+                      [&_ol]:mt-1 [&_ol]:space-y-0.5 [&_ol]:pl-4 [&_ol]:list-decimal
+                      [&_li]:leading-relaxed
+                      [&_a]:text-blue-600 [&_a]:underline"
+                  >
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ code: CodeBlock }}>
+                      {feedbackLLM.justification.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, "").replace(/\s{2,}/g, " ")}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               )}
             </div>

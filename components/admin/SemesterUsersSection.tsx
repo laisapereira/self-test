@@ -56,7 +56,6 @@ export function SemesterUsersSection({
               <TableHead>ID</TableHead>
               <TableHead>Nome</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Admin</TableHead>
               {showCreatedAt && <TableHead>Semestre / Cadastro</TableHead>}
               <TableHead>Ações</TableHead>
             </TableRow>
@@ -67,17 +66,6 @@ export function SemesterUsersSection({
                 <TableCell>{user.id}</TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                      user.role === "ADMIN"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    {user.role === "ADMIN" ? "ADMIN" : "USER"}
-                  </span>
-                </TableCell>
                 {showCreatedAt && (
                   <TableCell className="text-sm text-slate-500">
                     <span className="font-medium text-slate-700">

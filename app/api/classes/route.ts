@@ -18,27 +18,30 @@ export async function GET() {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    if (isUserAdmin(user)) {
-      const classes = await prisma.class.findMany();
-      return NextResponse.json({ classes });
-    }
+    const countInclude = {
+      _count: { select: { students: true, questionTemplates: true } },
+    } as const;
 
-    if (isUserProfessor(user)) {
-      const classes = await prisma.class.findMany({
-        where: {
-          OR: [
-            { ownerId: user.id },
-            { collaborators: { some: { userId: user.id } } },
-          ],
-        },
-      });
-      return NextResponse.json({ classes });
+    if (isUserAdmin(user) || isUserProfessor(user)) {
+      const [owned, collaborated] = await Promise.all([
+        prisma.class.findMany({
+          where: { ownerId: user.id },
+          include: countInclude,
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.class.findMany({
+          where: { collaborators: { some: { userId: user.id } } },
+          include: countInclude,
+          orderBy: { createdAt: "desc" },
+        }),
+      ]);
+      return NextResponse.json({ owned, collaborated });
     }
 
     const classes = await prisma.class.findMany({
-      where: {
-        students: { some: { id: user.id } },
-      },
+      where: { students: { some: { id: user.id } } },
+      include: countInclude,
+      orderBy: { createdAt: "desc" },
     });
 
     return NextResponse.json({ classes });

@@ -11,10 +11,26 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
+    const q = searchParams.get("q");
     const email = searchParams.get("email");
 
+    if (q) {
+      const users = await prisma.user.findMany({
+        where: {
+          OR: [
+            { name: { contains: q, mode: "insensitive" } },
+            { email: { contains: q, mode: "insensitive" } },
+          ],
+        },
+        select: { id: true, name: true, email: true, role: true },
+        orderBy: { name: "asc" },
+        take: 8,
+      });
+      return NextResponse.json({ users });
+    }
+
     if (!email) {
-      return NextResponse.json({ error: "email query param is required" }, { status: 400 });
+      return NextResponse.json({ error: "email or q query param is required" }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({

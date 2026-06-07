@@ -9,18 +9,17 @@ export default function Home() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const classId = searchParams.get("classId");
-  const [studentClasses, setStudentClasses] = useState<
-    { id: number; name: string }[]
-  >([]);
+  const [studentClasses, setStudentClasses] = useState<{ id: number; name: string }[]>([]);
+  const [selectedClassName, setSelectedClassName] = useState<string>("");
 
   const firstName = session?.user?.name?.split(" ")[0] || "Usuário";
 
   useEffect(() => {
-    if (session?.user?.typeRole !== "STUDENT") return;
+    if (status !== "authenticated" || session?.user?.typeRole !== "STUDENT") return;
     fetch("/api/classes")
       .then((r) => r.json())
       .then((data) => setStudentClasses(data.classes ?? []));
-  }, [session]);
+  }, [status, session?.user?.typeRole]);
 
   if (status === "loading") {
     return (
@@ -91,15 +90,18 @@ export default function Home() {
           {studentClasses.length > 0 && (
             <div className="rounded-xl border border-blue-200 bg-blue-50 px-6 py-4 shadow-sm">
               <p className="text-xs font-semibold uppercase tracking-wide text-blue-400 mb-1">
-                {studentClasses.length === 1 ? "Sua turma" : "Suas turmas"}
+                {selectedClassName ? "Turma selecionada" : studentClasses.length === 1 ? "Sua turma" : "Suas turmas"}
               </p>
               <p className="text-lg font-bold text-blue-700">
-                {studentClasses.map((c) => c.name).join(" · ")}
+                {selectedClassName || studentClasses.map((c) => c.name).join(" · ")}
               </p>
             </div>
           )}
 
-          <QuestionRequestCreatePage classId={classId ?? undefined} />
+          <QuestionRequestCreatePage
+            classId={classId ?? undefined}
+            onClassChange={(_id, name) => setSelectedClassName(name)}
+          />
         </section>
       )}
     </main>

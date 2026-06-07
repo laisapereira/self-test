@@ -5,7 +5,16 @@ import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, BookOpen, ClipboardList, Link2, Copy, Check } from "lucide-react";
+import { Users, BookOpen, ClipboardList, Link2, Copy, Check, BarChart2, LogOut } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import Link from "next/link";
 
 type ClassDetail = {
   id: number;
@@ -24,10 +33,13 @@ export default function ClassDetailPage() {
   const router = useRouter();
   const [classData, setClassData] = useState<ClassDetail | null>(null);
   const [copied, setCopied] = useState(false);
+  const [confirmLeave, setConfirmLeave] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+
+  const isStudent = session?.user?.typeRole === "STUDENT";
 
   const isProfessorOrAdmin =
-    session?.user?.typeRole === "ADMIN" ||
-    session?.user?.typeRole === "PROFESSOR";
+    session?.user?.typeRole === "ADMIN" || session?.user?.typeRole === "PROFESSOR";
 
   async function fetchClass() {
     const res = await fetch(`/api/classes/${params.id}`);
@@ -48,6 +60,15 @@ export default function ClassDetailPage() {
     setTimeout(() => setCopied(false), 2000);
   }
 
+  async function handleLeaveClass() {
+    setLeaving(true);
+    const res = await fetch(`/api/classes/${params.id}/leave`, { method: "POST" });
+    setLeaving(false);
+    if (res.ok) {
+      router.push("/classes");
+    }
+  }
+
   if (status === "loading" || !classData) {
     return <div className="p-8 text-center text-slate-500">Carregando...</div>;
   }
@@ -56,11 +77,31 @@ export default function ClassDetailPage() {
     <div className="p-4 max-w-4xl mx-auto space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">{classData.name}</h1>
-        {isProfessorOrAdmin && (
-          <Button variant="outline" onClick={() => router.push(`/classes/${classData.id}/edit`)}>
-            Editar turma
-          </Button>
-        )}
+        <div className="flex gap-2">
+          {isProfessorOrAdmin && (
+            <>
+              <Link href={`/classes/${classData.id}/dashboard`}>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <BarChart2 className="h-4 w-4" />
+                  Dashboard
+                </Button>
+              </Link>
+              <Button variant="outline" onClick={() => router.push(`/classes/${classData.id}/edit`)}>
+                Editar turma
+              </Button>
+            </>
+          )}
+          {isStudent && (
+            <Button
+              variant="outline"
+              onClick={() => setConfirmLeave(true)}
+              className="flex items-center gap-2 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+            >
+              <LogOut className="h-4 w-4" />
+              Sair da turma
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Link de acesso */}
@@ -193,6 +234,30 @@ export default function ClassDetailPage() {
           </CardContent>
         </Card>
       )}
+
+      <Dialog open={confirmLeave} onOpenChange={setConfirmLeave}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Sair da turma?</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja sair de <strong>{classData.name}</strong>?
+              Você perderá acesso aos materiais e precisará ser adicionado novamente pelo professor.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setConfirmLeave(false)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={leaving}
+              onClick={handleLeaveClass}
+            >
+              {leaving ? "Saindo..." : "Sair da turma"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

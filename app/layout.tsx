@@ -4,7 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/ui/sidebar";
@@ -45,11 +45,6 @@ const routes = [
     href: "/admin/users",
     requireAdmin: true,
   },
-  {
-    title: "Dashboard de notas",
-    href: "/dashboard",
-  },
-
   { title: "Turmas", href: "/classes" },
 ];
 

@@ -1,29 +1,15 @@
+import { getCurrentUser, isUserAdmin, getParamId } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-
-function parseId(id: string) {
-  const n = parseInt(id, 10);
-  return isNaN(n) ? null : n;
-}
 
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.isAdmin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { id } = await params;
-  const numericId = parseId(id);
-  if (!numericId) {
-    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
-  }
-
   try {
+    const user = await getCurrentUser();
+    const numericId = await getParamId({ params });
+
     const template = await prisma.evaluationTemplate.findUnique({
       where: { id: numericId },
       include: {
@@ -37,12 +23,14 @@ export async function GET(
     if (!template) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
+    if (!isUserAdmin(user) && template.ownerId !== user.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     return NextResponse.json(template);
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to fetch evaluation template" },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (error instanceof NextResponse) return error;
+    return NextResponse.json({ error: "Failed to fetch evaluation template" }, { status: 500 });
   }
 }
 
@@ -50,31 +38,23 @@ export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email || !session.user.isAdmin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { id } = await params;
-  const numericId = parseId(id);
-  if (!numericId) {
-    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
-  }
-
-  const { name, description, evaluationPrompt, criteria } = await req.json();
-  if (!name || !criteria?.length) {
-    return NextResponse.json(
-      { error: "Name and criteria are required" },
-      { status: 400 },
-    );
-  }
-
   try {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email! },
+    const user = await getCurrentUser();
+    const numericId = await getParamId({ params });
+
+    const template = await prisma.evaluationTemplate.findUnique({
+      where: { id: numericId },
     });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!template) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    if (!isUserAdmin(user) && template.ownerId !== user.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const { name, description, evaluationPrompt, criteria } = await req.json();
+    if (!name || !criteria?.length) {
+      return NextResponse.json({ error: "Name and criteria are required" }, { status: 400 });
     }
 
     await prisma.evaluationTemplateCriterion.deleteMany({
@@ -108,11 +88,9 @@ export async function PUT(
     });
 
     return NextResponse.json(updated);
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to update evaluation template" },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (error instanceof NextResponse) return error;
+    return NextResponse.json({ error: "Failed to update evaluation template" }, { status: 500 });
   }
 }
 
@@ -120,36 +98,34 @@ export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.isAdmin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { id } = await params;
-  const numericId = parseId(id);
-  if (!numericId) {
-    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
-  }
-
   try {
+    const user = await getCurrentUser();
+    const numericId = await getParamId({ params });
+
+    const template = await prisma.evaluationTemplate.findUnique({
+      where: { id: numericId },
+    });
+    if (!template) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    if (!isUserAdmin(user) && template.ownerId !== user.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const linkedCount = await prisma.questionRequestTemplate.count({
       where: { evaluationTemplateId: numericId },
     });
     if (linkedCount > 0) {
       return NextResponse.json(
-        {
-          error: `Não é possível excluir: ${linkedCount} template(s) de questão utiliza(m) este template de avaliação.`,
-        },
+        { error: `Não é possível excluir: ${linkedCount} template(s) de questão utiliza(m) este template de avaliação.` },
         { status: 409 },
       );
     }
 
     await prisma.evaluationTemplate.delete({ where: { id: numericId } });
     return NextResponse.json({ message: "Deleted" });
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to delete evaluation template" },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (error instanceof NextResponse) return error;
+    return NextResponse.json({ error: "Failed to delete evaluation template" }, { status: 500 });
   }
 }
