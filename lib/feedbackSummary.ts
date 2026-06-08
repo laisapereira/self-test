@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import prisma from "@/lib/prisma";
+import { saveLlmUsage } from "@/lib/llmUsage";
 
 function getOpenAI() {
   return new OpenAI({
@@ -51,6 +52,17 @@ Retorne apenas JSON no formato: { "summary": "- tópico 1\n- tópico 2\n- tópic
     messages: [{ role: "system", content: prompt }],
     response_format: { type: "json_object" },
   });
+
+  if (completion.usage) {
+    saveLlmUsage({
+      type: "PERFORMANCE_SUMMARY",
+      promptTokens: completion.usage.prompt_tokens,
+      completionTokens: completion.usage.completion_tokens,
+      model: "deepseek-chat",
+      userId: studentId,
+      templateId,
+    });
+  }
 
   const raw = completion.choices[0].message.content;
   if (!raw) return null;

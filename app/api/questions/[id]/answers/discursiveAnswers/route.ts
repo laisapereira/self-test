@@ -4,6 +4,7 @@ import { getCurrentUser, getParamId, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { saveLlmUsage } from "@/lib/llmUsage";
 
 type EvaluationRequestBody = {
   openAnswer: string;
@@ -102,7 +103,7 @@ async function evaluateAnswer(openai: OpenAI, prompt: string) {
     },
   });
 
-  return completion.choices[0].message.content;
+  return completion;
 }
 
 export async function POST(
@@ -216,8 +217,24 @@ ${formatedCriteria}
       baseURL: process.env.DEEPSEEK_API_URL,
     });
 
-    const llmResponse = await evaluateAnswer(openai, prompt);
+    const completion = await evaluateAnswer(openai, prompt);
 
+    if (completion.usage) {
+      const qr = await prisma.questionRequest.findUnique({
+        where: { id: question.requestId },
+        select: { templateId: true },
+      });
+      saveLlmUsage({
+        type: "ANSWER_EVALUATION",
+        promptTokens: completion.usage.prompt_tokens,
+        completionTokens: completion.usage.completion_tokens,
+        model: "deepseek-chat",
+        userId: user.id,
+        templateId: qr?.templateId,
+      });
+    }
+
+    const llmResponse = completion.choices[0].message.content;
     const llmText =
       typeof llmResponse === "string"
         ? llmResponse

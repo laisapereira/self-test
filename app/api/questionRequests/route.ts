@@ -5,6 +5,7 @@ import { PrismaJson } from "@/prisma/types";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { saveLlmUsage } from "@/lib/llmUsage";
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -46,8 +47,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "templateId and parameterValues are required" }, { status: 400 });
   }
  
-  const signal = req.signal;
-
   try {
     const user = await prisma.user.findUnique({ where: { email: session.user.email } });
     if (!user) {
@@ -73,7 +72,7 @@ export async function POST(req: Request) {
     }); */
 
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     /* if (error.name === "AbortError" || error.message?.includes("abort")) {
       console.log("[QuestionRequestsAPI] request cancelada pelo cliente, marcando como CANCELED...");
       
@@ -122,7 +121,7 @@ async function backgroundProcessing(questionRequest: QuestionRequest) {
 
  console.log("[QuestionRequestsAPI] questões geradas com sucesso | id:", questionRequest.id)
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[QuestionRequestsAPI] falha no background | id:", questionRequest.id, error)
     await prisma.questionRequest.update({
       where: { id: questionRequest.id },
@@ -154,7 +153,7 @@ async function generateQuestions(questionRequest: QuestionRequest) {
     if ('alternatives' in question) {
 
       const indices = Array.from({ length: question?.alternatives?.length }, (_, i) => i);
-      indices.sort((i) => Math.random() - 0.5);
+      indices.sort(() => Math.random() - 0.5);
       // shuffle alternatives and update the index of the correct answer
       question.alternatives = indices.map((i) => question.alternatives[i]);
       question.correctAnswerIndex = indices.indexOf(question.correctAnswerIndex);
@@ -265,6 +264,16 @@ async function requestLLM(questionRequest: QuestionRequest) {
     }
   });
 
+  if (completion.usage) {
+    saveLlmUsage({
+      type: "QUESTION_GENERATION",
+      promptTokens: completion.usage.prompt_tokens,
+      completionTokens: completion.usage.completion_tokens,
+      model: "deepseek-chat",
+      userId: questionRequest.userId,
+      templateId: questionRequest.templateId,
+    });
+  }
 
   return completion.choices[0].message.content;
 }

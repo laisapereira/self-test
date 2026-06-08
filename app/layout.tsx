@@ -45,6 +45,11 @@ const routes = [
     href: "/admin/users",
     requireAdmin: true,
   },
+  {
+    title: "Uso de LLM",
+    href: "/admin/usage",
+    requireAdmin: true,
+  },
   { title: "Turmas", href: "/classes" },
 ];
 
