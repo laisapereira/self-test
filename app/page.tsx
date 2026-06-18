@@ -3,7 +3,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import QuestionRequestCreatePage from "./questionRequests/create/page";
+import { QuestionRequestCreatePage } from "./questionRequests/create/_form";
 
 export default function Home() {
   const { data: session, status } = useSession();

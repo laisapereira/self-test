@@ -1,6 +1,6 @@
 import { EvaluationCriteria } from "@/components/questionCard";
 import { DEFAULT_EVALUATION_PREAMBLE } from "@/components/EvaluationTemplateForm";
-import { getCurrentUser, getParamId, isUserAdmin, isPlaygroundLimitReached } from "@/lib/apiUtils";
+import { getCurrentUser, getParamId, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
@@ -113,10 +113,6 @@ export async function POST(
   try {
     const user = await getCurrentUser();
     const { question } = await getParams(req, params);
-
-    if (await isPlaygroundLimitReached(user.id)) {
-      return NextResponse.json({ error: "playground_limit_reached" }, { status: 429 });
-    }
 
     const existingAnswer = await prisma.answer.findFirst({
       where: { questionId: question.id, userId: user.id },
