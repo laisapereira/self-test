@@ -1,7 +1,7 @@
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import prisma from '@/lib/prisma';
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 declare module "next-auth" {
   interface Session {
@@ -9,7 +9,9 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      typeRole?: "STUDENT" | "PROFESSOR" | "ADMIN";
       isAdmin?: boolean;
+      isProfessor?: boolean;
     };
   }
 }
@@ -49,19 +51,39 @@ export const authOptions = {
           email: user.email,
           name: user.name,
           image: user.image,
+          typeRole: user.role,
         };
       },
     }),
   ],
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   callbacks: {
-    async signIn({ user }: { user: { email?: string | null; name?: string | null; image?: string | null } }) {
-      if (user.email /*user.email?.endsWith("@ufba.br")*/) {
-        console.log("[Auth] usuario sendo upsertado | email:", user.email);
+    async signIn({
+      user,
+    }: {
+      user: {
+        email?: string | null;
+        name?: string | null;
+        image?: string | null;
+        typeRole?: "STUDENT" | "PROFESSOR" | "ADMIN";
+      };
+    }) {
+      if (user.email) {
+ 
         const userCount = await prisma.user.count();
-        const isAdmin = userCount === 0;
+        const isFirstAdmin = userCount === 0;
+
+        // Busca a turma de testers pelo nome configurado na env var
+        const testerClass = process.env.TESTER_CLASS_NAME
+          ? await prisma.class.findFirst({
+              where: { name: process.env.TESTER_CLASS_NAME },
+            })
+          : null;
+
+        console.log("[Auth] testerClass:", testerClass);
+
         await prisma.user.upsert({
           where: { email: user.email },
           update: {},
@@ -69,21 +91,25 @@ export const authOptions = {
             email: user.email,
             name: user.name,
             image: user.image,
-            admin: isAdmin,
+            role: isFirstAdmin ? "ADMIN" : "STUDENT",
+            // Conecta à turma testers apenas se ela existir
+            ...(testerClass && {
+              studentClasses: { connect: { id: testerClass.id } },
+            }),
           },
         });
         return true;
       }
       return false;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      const fs = require('fs');
-      fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'session', token, session }) + '\\n');
-      if (token && token.email) {
-        const user = await prisma.user.findUnique({ where: { email: token.email } });
-        fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'user_fetched', user }) + '\\n');
-        session.user.isAdmin = user?.admin || false;
-        fs.appendFileSync('nextauth_debug.log', JSON.stringify({ event: 'session_modified', session }) + '\\n');
+    async session({ session, token }: { session: import("next-auth").Session; token: import("next-auth/jwt").JWT }) {
+      if (token?.email && session.user) {
+        const user = await prisma.user.findUnique({
+          where: { email: token.email },
+        });
+        session.user.typeRole = user?.role;
+        session.user.isAdmin = user?.role === "ADMIN";
+        session.user.isProfessor = user?.role === "PROFESSOR";
       }
       return session;
     },

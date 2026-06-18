@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit *)",
+      "Bash(not exist *)",
+      "Bash(New-Item -ItemType Directory -Force \"e:\\\\studies\\\\tcc 2025.2\\\\self-test\\\\app\\\\classes\\\\create\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"e:\\\\studies\\\\tcc 2025.2\\\\self-test\\\\app\\\\classes\\\\create\")",
+      "Bash(git -C \"e:\\\\studies\\\\tcc 2025.2\\\\self-test\" status)"
+    ],
+    "additionalDirectories": [
+      "e:\\studies\\tcc 2025.2\\self-test\\app\\classes",
+      "e:\\studies\\tcc 2025.2\\self-test\\app\\api\\classes\\[id]"
+    ]
+  }
+}

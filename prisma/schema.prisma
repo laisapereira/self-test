@@ -18,9 +18,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  STUDENT
+  PROFESSOR
+  ADMIN
+}
+
 model User {
   id           Int      @id @default(autoincrement())
-  admin        Boolean  @default(false)
+  role         Role     @default(STUDENT)
   name         String?
   email        String   @unique
   passwordHash String?
@@ -28,33 +34,16 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  groups                   Group[]                   @relation("GroupUsers")
-  ownedGroups              Group[]
   questionRequestTemplates QuestionRequestTemplate[]
   questionRequests         QuestionRequest[]
   answers                  Answer[]
   evaluationTemplates      EvaluationTemplate[]
   evaluationCriterions     EvaluationCriterion[]
-}
-
-model Group {
-  id        Int      @id @default(autoincrement())
-  name      String
-  startDate DateTime
-  endDate   DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  ownerId Int
-  owner   User   @relation(fields: [ownerId], references: [id])
-  users   User[] @relation("GroupUsers")
-}
-
-model Topic {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  ownedClasses             Class[]                          @relation("ClassOwner")
+  studentClasses           Class[]                          @relation("ClassStudents")
+  collaboratedClasses      ClassCollaborator[]
+  feedbackSummaries        StudentTemplateFeedbackSummary[]
+  llmUsages                LlmUsage[]
 }
 
 model QuestionRequestTemplate {
@@ -71,8 +60,11 @@ model QuestionRequestTemplate {
   owner User @relation(fields: [ownerId], references: [id])
 
   requests             QuestionRequest[]
-  evaluationTemplate   EvaluationTemplate? @relation(fields: [evaluationTemplateId], references: [id])
+  evaluationTemplate   EvaluationTemplate?              @relation(fields: [evaluationTemplateId], references: [id])
   evaluationTemplateId Int?
+  classes              Class[]
+  feedbackSummaries    StudentTemplateFeedbackSummary[]
+  llmUsages            LlmUsage[]
 }
 
 enum QuestionRequestStatus {
@@ -124,6 +116,7 @@ model EvaluationTemplate {
 
   criteria                 EvaluationTemplateCriterion[]
   questionRequestTemplates QuestionRequestTemplate[]
+  classes                  Class[]
 }
 
 model EvaluationTemplateCriterion {
@@ -202,4 +195,69 @@ model AutoEvaluationCriterion {
   description String
   weight      Float
   score       Float
+}
+
+model Class {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownerId             Int
+  owner               User                      @relation("ClassOwner", fields: [ownerId], references: [id])
+  students            User[]                    @relation("ClassStudents")
+  collaborators       ClassCollaborator[]
+  questionTemplates   QuestionRequestTemplate[]
+  evaluationTemplates EvaluationTemplate[]
+  link                String                    @unique
+  llmUsages           LlmUsage[]
+}
+
+model ClassCollaborator {
+  classId Int
+  userId  Int
+  addedAt DateTime @default(now())
+
+  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([classId, userId])
+}
+
+enum LlmUsageType {
+  QUESTION_GENERATION
+  ANSWER_EVALUATION
+  PERFORMANCE_SUMMARY
+}
+
+model LlmUsage {
+  id               Int          @id @default(autoincrement())
+  type             LlmUsageType
+  promptTokens     Int
+  completionTokens Int
+  model            String
+  createdAt        DateTime     @default(now())
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  classId Int?
+  class   Class? @relation(fields: [classId], references: [id], onDelete: SetNull)
+
+  templateId Int?
+  template   QuestionRequestTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+}
+
+model StudentTemplateFeedbackSummary {
+  id        Int      @id @default(autoincrement())
+  summary   String
+  updatedAt DateTime @updatedAt
+
+  studentId  Int
+  templateId Int
+
+  student  User                    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  template QuestionRequestTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, templateId])
 }

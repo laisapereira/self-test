@@ -4,7 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/ui/sidebar";
@@ -43,12 +43,14 @@ const routes = [
   {
     title: "Usuários",
     href: "/admin/users",
-    requireAdmin: true,
+    adminOnly: true,
   },
   {
-    title: "Dashboard",
-    href: "/dashboard",
+    title: "Uso de LLM",
+    href: "/admin/usage",
+    adminOnly: true,
   },
+  { title: "Turmas", href: "/classes" },
 ];
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -182,7 +184,12 @@ function Navbar() {
           isOpen={open}
           toggle={() => setOpen(false)}
           items={routes
-            .filter((route) => !route.requireAdmin || session.user?.isAdmin)
+            .filter((route) => {
+              if (route.adminOnly) return session.user?.isAdmin;
+              if (route.professorOnly) return session.user?.isProfessor;
+              if (route.requireAdmin) return session.user?.isAdmin || session.user?.isProfessor;
+              return true;
+            })
             .map((route) => ({ href: route.href, title: route.title }))}
         />
       ) : null}
@@ -194,10 +201,6 @@ function MenuItems(props: { onClick?: () => void }) {
   const { onClick } = props;
   const { data: session } = useSession();
   const pathname = usePathname();
-  const isUserAdmin = () => {
-    if (!session || !session.user) return false;
-    return session.user.isAdmin === true;
-  };
 
   if (!session) {
     return <></>;
@@ -206,7 +209,12 @@ function MenuItems(props: { onClick?: () => void }) {
   return (
     <>
       {routes
-        .filter((route) => !route.requireAdmin || isUserAdmin())
+        .filter((route) => {
+          if (route.adminOnly) return session.user?.isAdmin;
+          if (route.professorOnly) return session.user?.isProfessor;
+          if (route.requireAdmin) return session.user?.isAdmin || session.user?.isProfessor;
+          return true;
+        })
         .map((route, index) => {
           const active =
             route.href === pathname ||

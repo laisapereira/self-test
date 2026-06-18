@@ -1,6 +1,7 @@
+import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+
 import { authOptions } from "./auth";
 
 export async function getCurrentUser() {
@@ -27,3 +28,16 @@ export async function getParamId({ params }: { params: Promise<{ id: string }> }
 
   return id;
 }
+
+export function isUserAdmin(user: { role?: string }) {
+  return user.role === "ADMIN";
+}
+
+export function isUserStudent(user: { role?: string }) {
+  return user.role === "STUDENT";
+}
+
+export function isUserProfessor(user: { role?: string }) {
+  return user.role === "PROFESSOR";
+}
+

@@ -16,7 +16,7 @@ interface User {
   id: number;
   name: string | null;
   email: string;
-  admin: boolean;
+  role: string;
   createdAt: Date;
 }
 
@@ -56,7 +56,6 @@ export function SemesterUsersSection({
               <TableHead>ID</TableHead>
               <TableHead>Nome</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Admin</TableHead>
               {showCreatedAt && <TableHead>Semestre / Cadastro</TableHead>}
               <TableHead>Ações</TableHead>
             </TableRow>
@@ -67,17 +66,6 @@ export function SemesterUsersSection({
                 <TableCell>{user.id}</TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                      user.admin
-                        ? "bg-green-100 text-green-700"
-                        : "bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    {user.admin ? "ADMIN" : "USER"}
-                  </span>
-                </TableCell>
                 {showCreatedAt && (
                   <TableCell className="text-sm text-slate-500">
                     <span className="font-medium text-slate-700">
@@ -89,23 +77,18 @@ export function SemesterUsersSection({
                   </TableCell>
                 )}
                 <TableCell className="flex gap-2">
-                  <form action={toggleAdmin} className="inline">
+                  <form action={toggleAdmin} className="inline-flex items-center gap-2">
                     <input type="hidden" name="userId" value={user.id} />
-                    <input
-                      type="hidden"
-                      name="admin"
-                      value={!user.admin ? "true" : "false"}
-                    />
-                    <button
-                      type="submit"
-                      className={`rounded px-2 py-1 text-sm font-medium ${
-                        user.admin
-                          ? "bg-rose-500 text-white hover:bg-rose-600"
-                          : "bg-blue-600 text-white hover:bg-blue-700"
-                      }`}
+                    <select
+                      name="role"
+                      defaultValue={user.role}
+                      className="rounded border border-slate-200 px-2 py-1 text-sm text-slate-700"
+                      onChange={(e) => e.currentTarget.form?.requestSubmit()}
                     >
-                      {user.admin ? "Remover" : "Tornar admin"}
-                    </button>
+                      <option value="STUDENT">Aluno</option>
+                      <option value="PROFESSOR">Professor</option>
+                      <option value="ADMIN">Admin</option>
+                    </select>
                   </form>
                   <Link
                     href={`/questionRequests?userId=${user.id}`}

@@ -10,7 +10,7 @@ import {
 import React, { Suspense, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
-  fetchAllUsersForTemplate,
+  fetchUsersByClassForTemplate,
   fetchRequestsForTemplate,
   fetchTemplate,
 } from "./server";
@@ -24,7 +24,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SemesterAccordion } from "@/components/SemesterAccordion";
-import { groupBySemester, sortedSemesters } from "@/lib/semester";
 
 interface DashboardQuestion {
   id: number;
@@ -189,12 +188,14 @@ function DashboardInner() {
     null,
   );
   const [parameterValues, setParameterValues] = useState<string[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
+  const [byClass, setByClass] = useState<{ id: number; name: string; students: User[] }[]>([]);
+  const [avulsos, setAvulsos] = useState<User[]>([]);
   const [questionRequests, setQuestionRequests] = useState<
     DashboardQuestionRequest[]
   >([]);
 
   const isAdmin = session?.user?.isAdmin || false;
+  const [studentClasses, setStudentClasses] = useState<{ id: number; name: string }[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -207,6 +208,14 @@ function DashboardInner() {
       setTemplates(data);
     })();
   }, []);
+
+  // Busca as turmas do aluno para exibir o contexto no banner
+  useEffect(() => {
+    if (session?.user?.typeRole !== "STUDENT") return;
+    fetch("/api/classes")
+      .then((r) => r.json())
+      .then((data) => setStudentClasses(data.classes ?? []));
+  }, [session]);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -224,18 +233,19 @@ function DashboardInner() {
       setParameterName(preferred?.name || "topico");
       setParameterValues(preferred?.values || []);
 
-      const allUsers = await fetchAllUsersForTemplate(selectedTemplateId);
-      setUsers(allUsers);
+      const { byClass: classes, avulsos: avulsosData } = await fetchUsersByClassForTemplate(selectedTemplateId);
+      setByClass(classes as { id: number; name: string; students: User[] }[]);
+      setAvulsos(avulsosData as User[]);
+
+      const allUsers = [
+        ...classes.flatMap((c: { id: number; name: string; students: User[] }) => c.students),
+        ...avulsosData,
+      ] as User[];
 
       let allRequests: DashboardQuestionRequest[] = [];
       for (const user of allUsers) {
-        const requests = await fetchRequestsForTemplate(
-          selectedTemplateId,
-          user.id,
-        );
-        allRequests = allRequests.concat(
-          requests as DashboardQuestionRequest[],
-        );
+        const requests = await fetchRequestsForTemplate(selectedTemplateId, user.id);
+        allRequests = allRequests.concat(requests as DashboardQuestionRequest[]);
       }
       setQuestionRequests(allRequests);
     })();
@@ -247,8 +257,6 @@ function DashboardInner() {
     setSelectedTemplateId(templates[0].id);
   }, [templates, selectedTemplateId]);
 
-  const grouped = groupBySemester(users, (u) => new Date(u.createdAt));
-  const semesterKeys = sortedSemesters(Object.keys(grouped));
 
   return (
     <div className="p-4">
@@ -273,7 +281,14 @@ function DashboardInner() {
 
             {!isAdmin && (
               <div className="mb-4 rounded border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
-                Você está visualizando apenas suas próprias notas
+                {studentClasses.length > 0 ? (
+                  <>
+                    Você está gerando questões como parte da{studentClasses.length > 1 ? "s turmas" : " turma"}{" "}
+                    <strong>{studentClasses.map((c) => c.name).join(", ")}</strong>
+                  </>
+                ) : (
+                  "Você está visualizando apenas suas próprias notas"
+                )}
               </div>
             )}
 
@@ -314,33 +329,45 @@ function DashboardInner() {
         </>
       )}
 
-      {selectedTemplateId !== null && semesterKeys.length > 0 && (
-        <div>
-          {semesterKeys.map((semester, idx) => {
-            const semesterUsers = grouped[semester];
-            return (
-              <SemesterAccordion
-                key={semester}
-                title={semester}
-                count={semesterUsers.length}
-                defaultOpen={idx === 0}
-              >
-                <SemesterTable
-                  users={semesterUsers}
-                  requests={questionRequests}
-                  parameterName={parameterName}
-                  parameterValues={parameterValues}
-                />
-              </SemesterAccordion>
-            );
-          })}
-        </div>
-      )}
+      {selectedTemplateId !== null && (
+        <div className="space-y-4">
+          {byClass.map((cls, idx) => (
+            <SemesterAccordion
+              key={cls.id}
+              title={cls.name}
+              count={cls.students.length}
+              defaultOpen={idx === 0}
+            >
+              <SemesterTable
+                users={cls.students}
+                requests={questionRequests}
+                parameterName={parameterName}
+                parameterValues={parameterValues}
+              />
+            </SemesterAccordion>
+          ))}
 
-      {selectedTemplateId !== null && semesterKeys.length === 0 && users.length === 0 && (
-        <p className="text-sm text-slate-500">
-          Nenhum aluno encontrado para este template.
-        </p>
+          {avulsos.length > 0 && (
+            <SemesterAccordion
+              title="Templates avulsos"
+              count={avulsos.length}
+              defaultOpen={byClass.length === 0}
+            >
+              <SemesterTable
+                users={avulsos}
+                requests={questionRequests}
+                parameterName={parameterName}
+                parameterValues={parameterValues}
+              />
+            </SemesterAccordion>
+          )}
+
+          {byClass.length === 0 && avulsos.length === 0 && (
+            <p className="text-sm text-slate-500">
+              Nenhum aluno encontrado para este template.
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

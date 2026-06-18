@@ -1,9 +1,10 @@
 import { EvaluationCriteria } from "@/components/questionCard";
 import { DEFAULT_EVALUATION_PREAMBLE } from "@/components/EvaluationTemplateForm";
-import { getCurrentUser, getParamId } from "@/lib/apiUtils";
+import { getCurrentUser, getParamId, isUserAdmin, isPlaygroundLimitReached } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { saveLlmUsage } from "@/lib/llmUsage";
 
 type EvaluationRequestBody = {
   openAnswer: string;
@@ -52,35 +53,42 @@ export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const { question, userId } = await getParams(req, params);
+  try {
+    const user = await getCurrentUser();
+    const { question, userId: requestedUserId } = await getParams(req, params);
 
-  const answer = await prisma.answer.findFirst({
-    where: {
-      questionId: question.id,
-      ...(userId ? { userId } : {}),
-    },
-    include: {
-      autoEvaluation: {
-        // relação Answer -> AutoEvaluation
-        include: {
-          criteria: true, // relação AutoEvaluation -> Criteria
+    // Admins podem consultar a resposta de qualquer usuário via ?userId=X
+    // Demais usuários só veem a própria resposta
+    const targetUserId = requestedUserId && isUserAdmin(user) ? requestedUserId : user.id;
+
+    const answer = await prisma.answer.findFirst({
+      where: {
+        questionId: question.id,
+        userId: targetUserId,
+      },
+      include: {
+        autoEvaluation: {
+          include: { criteria: true },
         },
       },
-    },
-  });
+    });
 
-  if (!answer) {
-    return NextResponse.json({ message: "Not found" }, { status: 404 });
+    if (!answer) {
+      return NextResponse.json({ message: "Not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      {
+        answer,
+        feedbackLLM: answer.autoEvaluation ?? null,
+        criteriaScores: answer.autoEvaluation?.criteria ?? [],
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    if (error instanceof NextResponse) return error;
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-
-  return NextResponse.json(
-    {
-      answer,
-      feedbackLLM: answer.autoEvaluation ?? null,
-      criteriaScores: answer.autoEvaluation?.criteria ?? [],
-    },
-    { status: 200 },
-  );
 }
 
 async function evaluateAnswer(openai: OpenAI, prompt: string) {
@@ -95,7 +103,7 @@ async function evaluateAnswer(openai: OpenAI, prompt: string) {
     },
   });
 
-  return completion.choices[0].message.content;
+  return completion;
 }
 
 export async function POST(
@@ -106,15 +114,13 @@ export async function POST(
     const user = await getCurrentUser();
     const { question } = await getParams(req, params);
 
-    // if an answer already exists for this question and user, return error
-    const existingAnswer = await prisma.answer.findFirst({
-      where: {
-        questionId: question.id,
-        userId: user.id,
-      },
-    });
+    if (await isPlaygroundLimitReached(user.id)) {
+      return NextResponse.json({ error: "playground_limit_reached" }, { status: 429 });
+    }
 
-    // get question
+    const existingAnswer = await prisma.answer.findFirst({
+      where: { questionId: question.id, userId: user.id },
+    });
     if (existingAnswer) {
       return NextResponse.json(
         { error: "Answer already exists" },
@@ -167,7 +173,25 @@ ${formatedCriteria}
 2. Calcule "finalScore" como **média ponderada**:
   \`finalScore = (sum(score_i × weight_i)) ÷ (sum(weight_i))\`
 
-3. Retorne um JSON com o seguinte formato:
+3. Escreva "justification" em **Markdown**, seguindo esta estrutura obrigatória e sem desvios:
+
+  Comece com 1 a 2 frases de resumo geral em texto simples, sem negrito e sem bullets. Exemplo: "A resposta demonstra compreensão básica do conceito, mas deixou de abordar aspectos importantes da implementação."
+
+  Em seguida, adicione as seções abaixo. Cada título de seção DEVE estar em sua própria linha, precedido por uma linha em branco:
+
+  **O que você acertou:**
+  - (bullet por ponto positivo identificado na resposta)
+
+  **O que faltou ou pode melhorar:**
+  - (bullet por lacuna ou imprecisão)
+
+  Se finalScore < 7, adicione também a seção abaixo — caso contrário, omita-a completamente:
+
+  **Para revisar:**
+  - Nome do livro ou curso — breve descrição de por que é relevante
+  - (2 a 3 sugestões de livros clássicos, cursos gratuitos ou plataformas conhecidas relacionadas ao tema da questão)
+
+4. Retorne um JSON com o seguinte formato:
 
 {
   "autoEvaluation": [
@@ -176,7 +200,7 @@ ${formatedCriteria}
   ],
   "finalScore": 8.67,
   "finalScoreFormula": "finalScore = (9×2 + 8×1) ÷ (2 + 1) = 26 ÷ 3 ≈ 8.67",
-  "justification": "Resumo textual explicando o desempenho geral. Seja construtivo."
+  "justification": "Resumo geral em 1-2 frases.\n\n**O que você acertou:**\n- ponto 1\n\n**O que faltou ou pode melhorar:**\n- ponto 1\n\n**Para revisar:**\n- Livro X — motivo"
 }
 
 ### Regras do formato
@@ -191,8 +215,24 @@ ${formatedCriteria}
       baseURL: process.env.DEEPSEEK_API_URL,
     });
 
-    const llmResponse = await evaluateAnswer(openai, prompt);
+    const completion = await evaluateAnswer(openai, prompt);
 
+    if (completion.usage) {
+      const qr = await prisma.questionRequest.findUnique({
+        where: { id: question.requestId },
+        select: { templateId: true },
+      });
+      saveLlmUsage({
+        type: "ANSWER_EVALUATION",
+        promptTokens: completion.usage.prompt_tokens,
+        completionTokens: completion.usage.completion_tokens,
+        model: "deepseek-chat",
+        userId: user.id,
+        templateId: qr?.templateId,
+      });
+    }
+
+    const llmResponse = completion.choices[0].message.content;
     const llmText =
       typeof llmResponse === "string"
         ? llmResponse
@@ -213,7 +253,7 @@ ${formatedCriteria}
       );
     }
 
-    const { autoEvaluation, finalScore, finalScoreFormula, justification } =
+    const { autoEvaluation, finalScore, justification } =
       parsedResponse as {
         autoEvaluation: {
           description: string;
@@ -221,7 +261,6 @@ ${formatedCriteria}
           score: number;
         }[];
         finalScore: number;
-        finalScoreFormula: string;
         justification?: string;
       };
 

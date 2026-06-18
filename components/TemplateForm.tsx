@@ -30,6 +30,7 @@ type Template = {
   promptTemplate: string;
   parameters: PrismaJson.QuestionRequestTemplateParameter[];
   evaluationTemplateId?: number | null;
+  playground?: boolean;
 };
 
 type ParameterInput = {
@@ -44,6 +45,48 @@ type TemplateFormProps = {
   mode: "create" | "edit";
 };
 
+const DEFAULT_PROMPT_TEMPLATE = `Você é um professor do curso de Ciência da Computação de uma universidade de grande prestígio, e deve elaborar questões abertas de nível FÁCIL (graduação) sobre o tema "<tema>", especificamente sobre <subtopico>. Se a questão envolver código-fonte, use a linguagem de programação <linguagem>. As questões podem envolver análise crítica, mas sem perder a objetividade.
+REGRAS:
+
+A resposta ideal deve caber em no máximo 15 palavras, e no máximo 1 trecho de código curto.
+Se houver código no enunciado, limite a ATÉ 25 linhas.
+Nas questões que envolvem código, foque em compreensão e aplicação (explicar, identificar elementos no código, identificar erro, prever saída, completar/refatorar um método simples, comparar 2 abordagens básicas).
+
+PROCESSO:
+
+Pense em 15 questões interessantes, com as seguintes restrições:
+
+Pelo menos 5 devem envolver um pequeno trecho de código para analisar/corrigir.
+No máximo 2 podem pedir "comparação entre abordagens" (para não ficar avançado).
+
+
+Em seguida, selecione as 5 questões mais interessantes e completas.
+CRITÉRIO DE SELEÇÃO (OBRIGATÓRIO):
+
+Se alguma questão estiver com cara de "avançada", reescreva para intermediária antes de selecionar.
+Prefira as que são claras, objetivas e avaliáveis (sem depender de respostas longas).
+
+
+Para cada uma das 5 questões selecionadas, forneça uma chave "content" contendo o enunciado da questão (em formato Markdown).
+
+IMPORTANTE (FORMATO):
+
+Retorne APENAS o JSON no formato do exemplo.
+Não inclua texto fora do JSON.
+
+Exemplo de saída esperada (JSON):
+
+{
+  "questions": [
+    {
+      "content": "Explique a diferença entre variáveis declaradas com \`var\`, \`let\` e \`const\` em JavaScript. Apresente exemplos práticos de escopo, hoisting e reatribuição."
+    },
+    {
+      "content": "Analise o trecho de código abaixo e identifique o erro...\\n\`\`\`javascript\\nfunction soma(a, b) {\\n  return a - b;\\n}\\n\`\`\`"
+    }
+  ]
+}`;
+
 export default function TemplateForm({
   defaultValues,
   onSubmit,
@@ -53,9 +96,10 @@ export default function TemplateForm({
 
   const [newTemplate, setNewTemplate] = useState<Template>({
     name: defaultValues?.name || "",
-    promptTemplate: defaultValues?.promptTemplate || "",
+    promptTemplate: defaultValues?.promptTemplate || DEFAULT_PROMPT_TEMPLATE,
     parameters: defaultValues?.parameters || [],
     evaluationTemplateId: defaultValues?.evaluationTemplateId ?? null,
+    playground: defaultValues?.playground ?? false,
   });
   const [newParameter, setNewParameter] = useState<ParameterInput>({
     name: "",
@@ -74,7 +118,9 @@ export default function TemplateForm({
   }, []);
 
   const isForbidden =
-    status === "authenticated" && session?.user?.isAdmin === false;
+    status === "authenticated" &&
+    session?.user?.isAdmin === false &&
+    session?.user?.isProfessor === false;
 
   if (status === "loading") {
     return <div className="p-8 text-center text-slate-500">Carregando...</div>;
@@ -189,6 +235,25 @@ export default function TemplateForm({
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-lg border border-amber-100 bg-amber-50 px-4 py-3">
+              <Checkbox
+                id="playground"
+                checked={newTemplate.playground ?? false}
+                onCheckedChange={(checked) =>
+                  setNewTemplate({ ...newTemplate, playground: !!checked })
+                }
+                className="mt-0.5"
+              />
+              <div>
+                <Label htmlFor="playground" className="font-medium text-amber-800 cursor-pointer">
+                  Disponível no playground
+                </Label>
+                <p className="text-xs text-amber-600 mt-0.5">
+                  Permite que alunos sem turma experimentem este template com limite de 5 respostas.
+                </p>
+              </div>
             </div>
 
             <div>

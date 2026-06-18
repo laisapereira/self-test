@@ -1,4 +1,4 @@
-import { getCurrentUser, getParamId } from "@/lib/apiUtils";
+import { getCurrentUser, getParamId, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -24,15 +24,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const user = await getCurrentUser();
     const { question } = await getParams(req, params)
 
-    // if an answer already exists for this question and user, return error
     const existingAnswer = await prisma.answer.findFirst({
-      where: {
-        questionId: question.id,
-        userId: user.id,
-      },
+      where: { questionId: question.id, userId: user.id },
     });
-
-    // get question
     if (existingAnswer) {
       return NextResponse.json({ error: "Answer already exists" }, { status: 400 });
     }
@@ -62,7 +56,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const { question, userId } = await getParams(req, params);
     const currentUser = await getCurrentUser();
     
-    if (userId != undefined && userId != currentUser.id && !currentUser.admin) {
+    if (userId != undefined && userId != currentUser.id && !isUserAdmin(currentUser)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     

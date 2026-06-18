@@ -6,7 +6,9 @@ import { QuestionRequestTemplate } from "@/prisma";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectValue,
   SelectTrigger,
 } from "@/components/ui/select";
@@ -18,7 +20,16 @@ import { Spinner } from "@/components/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export default function QuestionRequestCreatePage() {
+type ClassOption = { id: number; name: string };
+type ClassGroups = { owned: ClassOption[]; collaborated: ClassOption[]; enrolled: ClassOption[] };
+
+export default function QuestionRequestCreatePage({
+  classId,
+  onClassChange,
+}: {
+  classId?: string;
+  onClassChange?: (classId: string, className: string) => void;
+}) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -28,10 +39,12 @@ export default function QuestionRequestCreatePage() {
     }
   }, [status, router]);
 
+  const [classGroups, setClassGroups] = useState<ClassGroups>({ owned: [], collaborated: [], enrolled: [] });
+  const [classesLoaded, setClassesLoaded] = useState(false);
+  const [selectedClassId, setSelectedClassId] = useState<string>(classId ?? "");
+
   const [templates, setTemplates] = useState<QuestionRequestTemplate[]>([]);
-  const [template, setTemplate] = useState<QuestionRequestTemplate | null>(
-    null,
-  );
+  const [template, setTemplate] = useState<QuestionRequestTemplate | null>(null);
   const [finalPrompt, setFinalPrompt] = useState<string>("");
   const [newRequest, setNewRequest] = useState({
     parameterValues: [] as PrismaJson.QuestionRequestParameterValue[],
@@ -40,10 +53,11 @@ export default function QuestionRequestCreatePage() {
   const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
   const [activeRequestId, setActiveRequestId] = useState<number | null>(null);
 
-  const [currentRequestId, setCurrentRequestId] = useState<string | null>(null);
-
   const abortControllerCreateRef = useRef<AbortController | null>(null);
   const isMountedRef = useRef(true);
+
+  const allClasses = [...classGroups.owned, ...classGroups.collaborated, ...classGroups.enrolled];
+  const isStudent = session?.user?.typeRole === "STUDENT";
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -55,44 +69,61 @@ export default function QuestionRequestCreatePage() {
     };
   }, []);
 
+  // Fetch classes
   useEffect(() => {
     if (status !== "authenticated") return;
-
-    async function fetchTemplates() {
-      if (!isMountedRef.current) return;
-      setIsLoadingTemplates(true);
-      try {
-        const response = await fetch("/api/templates?visible=true");
-        const data = await response.json();
-        if (isMountedRef.current) {
-          if (response.ok && Array.isArray(data)) {
-            setTemplates(data);
-          } else {
-            console.error("Failed to load templates:", data);
+    fetch("/api/classes")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!isMountedRef.current) return;
+        if (data.classes) {
+          // Student
+          const enrolled: ClassOption[] = data.classes;
+          setClassGroups({ owned: [], collaborated: [], enrolled });
+          if (enrolled.length === 1 && !classId) {
+            setSelectedClassId(String(enrolled[0].id));
+          }
+        } else {
+          // Admin/Professor
+          const owned: ClassOption[] = data.owned ?? [];
+          const collaborated: ClassOption[] = data.collaborated ?? [];
+          setClassGroups({ owned, collaborated, enrolled: [] });
+          const total = owned.length + collaborated.length;
+          if (total === 1 && !classId) {
+            setSelectedClassId(String(total > 0 ? (owned[0] ?? collaborated[0]).id : ""));
           }
         }
-      } catch (error: any) {
-        if (isMountedRef.current) {
-          console.error("Error fetching templates:", error);
-        }
-      } finally {
-        if (isMountedRef.current) {
-          setIsLoadingTemplates(false);
-        }
-      }
-    }
-    fetchTemplates();
+        setClassesLoaded(true);
+      });
   }, [status]);
 
+  // Notifica o pai quando a turma selecionada muda
   useEffect(() => {
-    if (template) {
-      const initialValues = template.parameters?.map((param) => ({
-        name: param.name,
-        values: param.multipleSelect ? [] : [""],
-      }));
-      setNewRequest({ parameterValues: initialValues });
+    if (!onClassChange || !classesLoaded) return;
+    const selected = allClasses.find((c) => String(c.id) === selectedClassId);
+    onClassChange(selectedClassId, selected?.name ?? "");
+  }, [selectedClassId, classesLoaded]);
+
+  // Fetch templates when selected class changes
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    if (!selectedClassId) {
+      setTemplates([]);
+      setTemplate(null);
+      return;
     }
-  }, [template]);
+    setIsLoadingTemplates(true);
+    setTemplate(null);
+    fetch(`/api/templates?classId=${selectedClassId}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (!isMountedRef.current) return;
+        if (Array.isArray(data)) setTemplates(data);
+      })
+      .finally(() => {
+        if (isMountedRef.current) setIsLoadingTemplates(false);
+      });
+  }, [status, selectedClassId]);
 
   useEffect(() => {
     async function checkPendingRequest() {
@@ -105,23 +136,23 @@ export default function QuestionRequestCreatePage() {
         const now = new Date().getTime();
         const diffMinutes = (now - createdAt) / (1000 * 60);
 
-        // Só retoma o polling se a requisição for recente (menos de 5 minutos)
         if (diffMinutes < 5) {
           setActiveRequestId(lastRequest.id);
-          console.log(
-            "Retomando polling para requisição recente:",
-            lastRequest.id,
-          );
-        } else {
-          console.log(
-            "Ignorando requisição pendente antiga (stale):",
-            lastRequest.id,
-          );
         }
       }
     }
     checkPendingRequest();
   }, []);
+
+  useEffect(() => {
+    if (template) {
+      const initialValues = template.parameters?.map((param) => ({
+        name: param.name,
+        values: param.multipleSelect ? [] : [""],
+      }));
+      setNewRequest({ parameterValues: initialValues });
+    }
+  }, [template]);
 
   function renderParameterInput(
     parameter: PrismaJson.QuestionRequestTemplateParameter,
@@ -143,10 +174,8 @@ export default function QuestionRequestCreatePage() {
             onValueChange={(value) => handleParameterChange(parameter, [value])}
             key={key}
           >
-            <SelectTrigger className="w-full">
-              <SelectValue
-                placeholder={`Selecione o parâmetro: ${parameter.name}`}
-              />
+            <SelectTrigger>
+              <SelectValue placeholder={`Selecione o parâmetro: ${parameter.name}`} />
             </SelectTrigger>
             <SelectContent className="max-w-[min(calc(100vw-2rem),var(--radix-select-trigger-width,24rem))]">
               {parameter.values.map((value: string) => (
@@ -164,9 +193,7 @@ export default function QuestionRequestCreatePage() {
           key={key}
           type="text"
           value={
-            newRequest.parameterValues.find(
-              (param) => param.name === parameter.name,
-            )?.values[0] || ""
+            newRequest.parameterValues.find((param) => param.name === parameter.name)?.values[0] || ""
           }
           onChange={(e) => handleParameterChange(parameter, [e.target.value])}
           placeholder={`Enter ${parameter.name}`}
@@ -180,30 +207,18 @@ export default function QuestionRequestCreatePage() {
     template: QuestionRequestTemplate,
     parameterValues: PrismaJson.QuestionRequestParameterValue[],
   ) {
-    // Generate the final prompt by replacing placeholders in the template with actual values
     const promptTemplate = template.promptTemplate;
-
     const merged = [
       ...parameterValues,
       { name: "tema", values: [template.name ?? ""] },
     ];
-
     const paramMap = new Map<string, string[]>(
       merged.map((param) => [param.name.toLowerCase(), param.values ?? []]),
     );
-
     return promptTemplate.replace(/<([^>]+)>/g, (_, key) => {
       const matchValues = paramMap.get(key.toLowerCase());
-
       if (!matchValues || matchValues.length === 0) return `<${key}>`;
-      // replace with the values, if multipleSelect and multiple values, join with commas
-      // using key as default value if no match found
-      const replaced =
-        matchValues.length > 1
-          ? matchValues.join(", ")
-          : (matchValues?.[0] ?? `<${key}>`);
-
-      return replaced;
+      return matchValues.length > 1 ? matchValues.join(", ") : (matchValues?.[0] ?? `<${key}>`);
     });
   }
 
@@ -213,45 +228,84 @@ export default function QuestionRequestCreatePage() {
   ) {
     const updatedValues = [...newRequest.parameterValues];
     const index = updatedValues.findIndex((p) => p.name === parameter.name);
-
     if (index >= 0) {
       updatedValues[index] = { ...updatedValues[index], values };
     } else {
       updatedValues.push({ name: parameter.name, values });
     }
-
     setNewRequest({ ...newRequest, parameterValues: updatedValues });
+    setFinalPrompt(generateFinalPrompt(template!, updatedValues));
+  }
 
-    // Generate the final prompt whenever a parameter changes
-    const generatedPrompt = generateFinalPrompt(template!, updatedValues);
+  function renderSelectClass() {
+    const hasGroups = classGroups.owned.length > 0 || classGroups.collaborated.length > 0;
 
-    setFinalPrompt(generatedPrompt);
+    return (
+      <div className="flex flex-col gap-2 w-full">
+        <label className="text-[1.1rem] font-semibold">Selecione a turma</label>
+        <Select
+          value={selectedClassId}
+          onValueChange={(value) => setSelectedClassId(value)}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Escolha uma turma..." />
+          </SelectTrigger>
+          <SelectContent>
+            {hasGroups ? (
+              <>
+                {classGroups.owned.length > 0 && (
+                  <SelectGroup>
+                    <SelectLabel>Suas turmas</SelectLabel>
+                    {classGroups.owned.map((c) => (
+                      <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>
+                    ))}
+                  </SelectGroup>
+                )}
+                {classGroups.collaborated.length > 0 && (
+                  <SelectGroup>
+                    <SelectLabel>Colaborando</SelectLabel>
+                    {classGroups.collaborated.map((c) => (
+                      <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>
+                    ))}
+                  </SelectGroup>
+                )}
+              </>
+            ) : (
+              classGroups.enrolled.map((c) => (
+                <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>
+              ))
+            )}
+          </SelectContent>
+        </Select>
+      </div>
+    );
   }
 
   function renderSelectTemplate() {
     return (
       <div className="flex flex-col gap-2 w-full">
-        <label className="text-[1.1rem] font-semibold">
-          Selecione um tema principal
-        </label>
-        <Select
-          onValueChange={(value) =>
-            value
-              ? setTemplate(templates.find((t) => `${t.id}` === value) || null)
-              : setTemplate(null)
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Selecione uma àrea geral" />
-          </SelectTrigger>
-          <SelectContent className="max-w-[min(calc(100vw-2rem),var(--radix-select-trigger-width,24rem))]">
-            {templates?.map((template: QuestionRequestTemplate) => (
-              <SelectItem key={template.id} value={`${template.id}`} className="whitespace-normal break-words">
-                {template.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <label className="text-[1.1rem] font-semibold">Selecione um tema principal</label>
+
+        {isLoadingTemplates ? (
+          <p className="text-sm text-gray-400">Carregando templates...</p>
+        ) : templates.length === 0 ? (
+          <p className="text-sm text-gray-400">Nenhum template disponível para esta turma.</p>
+        ) : (
+          <Select
+            onValueChange={(value) =>
+              setTemplate(templates.find((t) => `${t.id}` === value) || null)
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecione uma área geral" />
+            </SelectTrigger>
+            <SelectContent>
+              {templates.map((t) => (
+                <SelectItem key={t.id} value={`${t.id}`}>{t.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
     );
   }
@@ -259,23 +313,13 @@ export default function QuestionRequestCreatePage() {
   async function createRequest() {
     if (!template) return;
 
-    // Validate that all parameters have values
-    interface MissingParameter {
-      name: string;
-      values: string[];
-    }
-
+    interface MissingParameter { name: string; values: string[] }
     const missingParameters: MissingParameter[] = template.parameters.filter(
       (parameter: PrismaJson.QuestionRequestTemplateParameter) => {
         const paramValue = newRequest.parameterValues.find(
-          (param: PrismaJson.QuestionRequestParameterValue) =>
-            param.name === parameter.name,
+          (param: PrismaJson.QuestionRequestParameterValue) => param.name === parameter.name,
         );
-        return (
-          !paramValue ||
-          paramValue.values.length === 0 ||
-          paramValue.values[0] === ""
-        );
+        return !paramValue || paramValue.values.length === 0 || paramValue.values[0] === "";
       },
     );
 
@@ -298,9 +342,7 @@ export default function QuestionRequestCreatePage() {
     try {
       const response = await fetch("/api/questionRequests", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(request),
         signal: abortControllerCreateRef.current.signal,
       });
@@ -309,30 +351,24 @@ export default function QuestionRequestCreatePage() {
 
       if (!response.ok) {
         setIsLoading(false);
-        console.log("Response", response);
         alert("Failed to create request");
         return;
       }
 
       const { id } = await response.json();
-      setActiveRequestId(id); // Sincroniza o estado para mostrar o card de progresso
+      setActiveRequestId(id);
     } catch (error: any) {
-      if (error.name === "AbortError") {
-        console.log("Create request aborted");
-      } else {
+      if (error.name !== "AbortError") {
         console.error("Error creating request:", error);
         alert("Failed to create request");
       }
     } finally {
-      if (isMountedRef.current) {
-        setIsLoading(false);
-      }
+      if (isMountedRef.current) setIsLoading(false);
     }
   }
 
   async function cancelRequest() {
     if (!activeRequestId) return;
-
     try {
       await fetch(`/api/questionRequests/${activeRequestId}`, {
         method: "PATCH",
@@ -349,46 +385,27 @@ export default function QuestionRequestCreatePage() {
 
   useEffect(() => {
     if (!activeRequestId) return;
-
     let stopped = false;
 
     async function poll() {
-      console.log("[POLLING] Iniciando polling para id:", activeRequestId);
       while (!stopped) {
         try {
-          const response = await fetch(
-            `/api/questionRequests/${activeRequestId}`,
-          );
-          if (!response.ok) {
-            console.error(
-              "[POLLING] Erro ao buscar status:",
-              response.statusText,
-            );
-            break;
-          }
+          const response = await fetch(`/api/questionRequests/${activeRequestId}`);
+          if (!response.ok) break;
           const questionRequest = await response.json();
-
-          console.log("[POLLING] status atual:", questionRequest.status);
-
           if (stopped) break;
 
           if (questionRequest.status === "COMPLETED") {
-            console.log("[POLLING] redirecionando...");
             window.location.href = `/questions?questionRequestId=${activeRequestId}`;
             return;
           }
-
           if (questionRequest.status === "FAILED") {
             setIsLoading(false);
             setActiveRequestId(null);
             alert("Falha ao gerar questões");
             return;
           }
-
           if (questionRequest.status === "CANCELED") {
-            console.log(
-              "[POLLING] requisição cancelada pelo usuário ou sistema.",
-            );
             setIsLoading(false);
             setActiveRequestId(null);
             return;
@@ -402,12 +419,11 @@ export default function QuestionRequestCreatePage() {
     }
 
     poll();
-
-    return () => {
-      console.log("[POLLING] Parando polling para id:", activeRequestId);
-      stopped = true;
-    };
+    return () => { stopped = true; };
   }, [activeRequestId]);
+
+  // Empty state: classes loaded but user has none
+  const showEmptyState = classesLoaded && allClasses.length === 0;
 
   return (
     <div>
@@ -422,32 +438,42 @@ export default function QuestionRequestCreatePage() {
             <Button variant="outline" className="w-full" asChild>
               <a href="/questionRequests">Acompanhar no histórico</a>
             </Button>
-            <Button
-              variant="destructive"
-              className="w-full"
-              onClick={cancelRequest}
-            >
+            <Button variant="destructive" className="w-full" onClick={cancelRequest}>
               Cancelar geração
             </Button>
           </div>
         </Card>
+      ) : showEmptyState ? (
+        <Card className="w-full max-w-2xl mx-auto mt-10 p-8 flex flex-col items-center gap-3 text-center">
+          <p className="text-lg font-semibold text-gray-700">Nenhuma turma encontrada</p>
+          <p className="text-sm text-gray-500">
+            {isStudent
+              ? "Você ainda não está em nenhuma turma. Aguarde seu professor te adicionar."
+              : "Crie uma turma e associe templates a ela para começar a gerar questões."}
+          </p>
+          {!isStudent && (
+            <Button variant="outline" asChild className="mt-2">
+              <a href="/classes/new">Criar turma</a>
+            </Button>
+          )}
+        </Card>
       ) : (
         <Card className="w-full max-w-2xl mx-auto mt-4 sm:mt-10 p-4 sm:p-6 flex flex-col gap-6">
           <CardHeader className="text-center">
-            <h1 className="text-2xl sm:text-4xl font-bold">
-              Vamos testar seu conhecimento?
-            </h1>
+            <h1 className="text-2xl sm:text-4xl font-bold">Vamos testar seu conhecimento?</h1>
             <p className="text-slate-500 py-3">
-              Configure abaixo os tópicos para gerar um desafio personalizado de
-              perguntas!
+              Configure abaixo os tópicos para gerar um desafio personalizado de perguntas!
             </p>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            {renderSelectTemplate()}
+            {/* Só mostra o seletor de turma se houver mais de uma opção */}
+            {allClasses.length > 1 && renderSelectClass()}
+
+            {selectedClassId && renderSelectTemplate()}
+
             {template && template.parameters?.length > 0 && (
               <>
                 <h2 className="text-[1.1rem] font-semibold mt-4">
-                  {" "}
                   Defina os parâmetros que a IA deve priorizar
                 </h2>
                 {template.parameters.map(
@@ -457,15 +483,8 @@ export default function QuestionRequestCreatePage() {
               </>
             )}
             {template && (
-              <Button
-                onClick={createRequest}
-                disabled={isLoading || isLoadingTemplates}
-              >
-                {isLoading ? (
-                  <span className="spinner" />
-                ) : (
-                  "Gerar minhas questões"
-                )}
+              <Button onClick={createRequest} disabled={isLoading || isLoadingTemplates}>
+                {isLoading ? <span className="spinner" /> : "Gerar minhas questões"}
               </Button>
             )}
           </CardContent>

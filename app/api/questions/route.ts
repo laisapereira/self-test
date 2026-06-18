@@ -1,6 +1,5 @@
-import { getCurrentUser } from "@/lib/apiUtils";
+import { getCurrentUser, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 async function getParams(req: Request) {
@@ -26,7 +25,7 @@ export async function GET(req: Request) {
       userId = currentUser.id;
     }
 
-    if (userId != currentUser.id && !currentUser.admin) {
+    if (userId != currentUser.id && !isUserAdmin(currentUser)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
