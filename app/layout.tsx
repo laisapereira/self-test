@@ -210,7 +210,6 @@ function MenuItems(props: { onClick?: () => void }) {
       {routes
         .filter((route) => {
           if (route.adminOnly) return session.user?.isAdmin;
-          if (route.professorOnly) return session.user?.isProfessor;
           if (route.requireAdmin) return session.user?.isAdmin || session.user?.isProfessor;
           return true;
         })
