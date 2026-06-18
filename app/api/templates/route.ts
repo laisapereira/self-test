@@ -48,7 +48,7 @@ export async function GET(req: Request): Promise<NextResponse> {
       return NextResponse.json(templates);
     }
 
-    // RF05: aluno sem turma não vê templates
+    // Aluno sem turma não vê templates
     const hasClass = await prisma.class.findFirst({
       where: { students: { some: { id: currentUser.id } } },
     });
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    const { name, promptTemplate, parameters } = await req.json();
+    const { name, promptTemplate, parameters, playground } = await req.json();
     if (!name || !promptTemplate) {
       return NextResponse.json(
         { error: "Name and promptTemplate are required" },
@@ -92,6 +92,7 @@ export async function POST(req: Request) {
         promptTemplate,
         parameters: parameters as PrismaJson.QuestionRequestTemplateParameter[],
         ownerId: currentUser.id,
+        playground: playground === true,
       },
     });
     return NextResponse.json(newTemplate, { status: 201 });

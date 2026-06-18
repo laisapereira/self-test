@@ -1,6 +1,6 @@
 import { EvaluationCriteria } from "@/components/questionCard";
 import { DEFAULT_EVALUATION_PREAMBLE } from "@/components/EvaluationTemplateForm";
-import { getCurrentUser, getParamId, isUserAdmin } from "@/lib/apiUtils";
+import { getCurrentUser, getParamId, isUserAdmin, isPlaygroundLimitReached } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
@@ -114,15 +114,13 @@ export async function POST(
     const user = await getCurrentUser();
     const { question } = await getParams(req, params);
 
-    // if an answer already exists for this question and user, return error
-    const existingAnswer = await prisma.answer.findFirst({
-      where: {
-        questionId: question.id,
-        userId: user.id,
-      },
-    });
+    if (await isPlaygroundLimitReached(user.id)) {
+      return NextResponse.json({ error: "playground_limit_reached" }, { status: 429 });
+    }
 
-    // get question
+    const existingAnswer = await prisma.answer.findFirst({
+      where: { questionId: question.id, userId: user.id },
+    });
     if (existingAnswer) {
       return NextResponse.json(
         { error: "Answer already exists" },

@@ -4,7 +4,7 @@ import { useState, useEffect, Fragment } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Users, BookOpen, Link2, Crown, UsersRound, ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
+import { Users, BookOpen, Link2, Crown, UsersRound, ChevronDown, ChevronRight, ExternalLink, Globe } from "lucide-react";
 
 type ClassItem = {
   id: number;
@@ -20,6 +20,7 @@ export default function ClassesPage() {
 
   const [owned, setOwned] = useState<ClassItem[]>([]);
   const [collaborated, setCollaborated] = useState<ClassItem[]>([]);
+  const [others, setOthers] = useState<ClassItem[]>([]);
   const [studentClasses, setStudentClasses] = useState<ClassItem[]>([]);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function ClassesPage() {
         if ("owned" in data) {
           setOwned(data.owned ?? []);
           setCollaborated(data.collaborated ?? []);
+          setOthers(data.others ?? []);
         } else {
           setStudentClasses(data.classes ?? []);
         }
@@ -76,7 +78,7 @@ export default function ClassesPage() {
     );
   }
 
-  const hasNoClasses = owned.length === 0 && collaborated.length === 0;
+  const hasNoClasses = owned.length === 0 && collaborated.length === 0 && others.length === 0;
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
@@ -109,6 +111,19 @@ export default function ClassesPage() {
                   classes={collaborated}
                   onNavigate={(id) => router.push(`/classes/${id}`)}
                   role="Colaborador"
+                  showRole
+                />
+              </>
+            )}
+            {others.length > 0 && (
+              <>
+                <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 text-xs font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1.5">
+                  <Globe className="h-3 w-3" /> Outras turmas — {others.length}
+                </div>
+                <ClassTable
+                  classes={others}
+                  onNavigate={(id) => router.push(`/classes/${id}`)}
+                  role="Sem vínculo"
                   showRole
                 />
               </>

@@ -34,6 +34,15 @@ const CodeBlock = ({ node, inline, className, children, ...props }: any) => {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import Link from "next/link";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ConfidenceLevel } from "./confidenceLevel";
@@ -68,6 +77,7 @@ export function QuestionCard(props: {
   );
   const [criteriaScores, setCriteriaScores] = useState<CriterionScore[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPlaygroundModal, setShowPlaygroundModal] = useState(false);
 
   useEffect(() => {
     const searchParams = new URLSearchParams();
@@ -138,6 +148,11 @@ export function QuestionCard(props: {
         body: JSON.stringify({ answerIndex: alternative, confidenceLevel }),
       });
 
+      if (response.status === 429) {
+        setShowPlaygroundModal(true);
+        return;
+      }
+
       if (!response.ok) {
         const text = await response.text();
         console.error(
@@ -147,7 +162,7 @@ export function QuestionCard(props: {
           response.status,
           text,
         );
-        throw new Error("Failed to submit discursive answer");
+        throw new Error("Failed to submit answer");
       }
 
       const data = await response.json();
@@ -187,6 +202,11 @@ export function QuestionCard(props: {
           }),
         },
       );
+      if (response.status === 429) {
+        setShowPlaygroundModal(true);
+        return;
+      }
+
       if (!response.ok) {
         const text = await response.text();
         console.error(
@@ -477,6 +497,25 @@ export function QuestionCard(props: {
 
         {answer && <QuestionFeedback question={question} answer={answer} />}
       </CardContent>
+
+      <Dialog open={showPlaygroundModal} onOpenChange={setShowPlaygroundModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Quer continuar praticando?</DialogTitle>
+            <DialogDescription>
+              Você usou sua cota do modo playground. Para responder mais questões, entre em uma turma com o link do seu professor.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setShowPlaygroundModal(false)}>
+              Agora não
+            </Button>
+            <Link href="/classes">
+              <Button variant="default">Tenho um código de turma</Button>
+            </Link>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }

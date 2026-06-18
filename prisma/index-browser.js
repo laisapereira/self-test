@@ -131,13 +131,6 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.TopicScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.QuestionRequestTemplateScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -243,6 +236,26 @@ exports.Prisma.ClassCollaboratorScalarFieldEnum = {
   addedAt: 'addedAt'
 };
 
+exports.Prisma.LlmUsageScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  promptTokens: 'promptTokens',
+  completionTokens: 'completionTokens',
+  model: 'model',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  classId: 'classId',
+  templateId: 'templateId'
+};
+
+exports.Prisma.StudentTemplateFeedbackSummaryScalarFieldEnum = {
+  id: 'id',
+  summary: 'summary',
+  updatedAt: 'updatedAt',
+  studentId: 'studentId',
+  templateId: 'templateId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -270,9 +283,14 @@ exports.QuestionRequestStatus = exports.$Enums.QuestionRequestStatus = {
   FAILED: 'FAILED'
 };
 
+exports.LlmUsageType = exports.$Enums.LlmUsageType = {
+  QUESTION_GENERATION: 'QUESTION_GENERATION',
+  ANSWER_EVALUATION: 'ANSWER_EVALUATION',
+  PERFORMANCE_SUMMARY: 'PERFORMANCE_SUMMARY'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
-  Topic: 'Topic',
   QuestionRequestTemplate: 'QuestionRequestTemplate',
   QuestionRequest: 'QuestionRequest',
   Question: 'Question',
@@ -283,7 +301,9 @@ exports.Prisma.ModelName = {
   AutoEvaluation: 'AutoEvaluation',
   AutoEvaluationCriterion: 'AutoEvaluationCriterion',
   Class: 'Class',
-  ClassCollaborator: 'ClassCollaborator'
+  ClassCollaborator: 'ClassCollaborator',
+  LlmUsage: 'LlmUsage',
+  StudentTemplateFeedbackSummary: 'StudentTemplateFeedbackSummary'
 };
 
 /**

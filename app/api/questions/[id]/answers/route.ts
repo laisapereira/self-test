@@ -24,15 +24,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const user = await getCurrentUser();
     const { question } = await getParams(req, params)
 
-    // if an answer already exists for this question and user, return error
     const existingAnswer = await prisma.answer.findFirst({
-      where: {
-        questionId: question.id,
-        userId: user.id,
-      },
+      where: { questionId: question.id, userId: user.id },
     });
-
-    // get question
     if (existingAnswer) {
       return NextResponse.json({ error: "Answer already exists" }, { status: 400 });
     }

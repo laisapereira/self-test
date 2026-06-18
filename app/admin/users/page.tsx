@@ -3,6 +3,7 @@ import { UserSearch } from "@/components/admin/UserSearch";
 import { getCurrentUser, isUserAdmin } from "@/lib/apiUtils";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function AdminUsersPage({
@@ -62,7 +63,7 @@ export default async function AdminUsersPage({
   const currentUser = await getCurrentUser();
   
   if (!isUserAdmin(currentUser)) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const users = await prisma.user.findMany({

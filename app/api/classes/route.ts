@@ -22,7 +22,30 @@ export async function GET() {
       _count: { select: { students: true, questionTemplates: true } },
     } as const;
 
-    if (isUserAdmin(user) || isUserProfessor(user)) {
+    if (isUserAdmin(user)) {
+      const [owned, collaborated, all] = await Promise.all([
+        prisma.class.findMany({
+          where: { ownerId: user.id },
+          include: countInclude,
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.class.findMany({
+          where: { collaborators: { some: { userId: user.id } } },
+          include: countInclude,
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.class.findMany({
+          include: countInclude,
+          orderBy: { createdAt: "desc" },
+        }),
+      ]);
+      const ownedIds = new Set(owned.map((c) => c.id));
+      const collaboratedIds = new Set(collaborated.map((c) => c.id));
+      const others = all.filter((c) => !ownedIds.has(c.id) && !collaboratedIds.has(c.id));
+      return NextResponse.json({ owned, collaborated, others });
+    }
+
+    if (isUserProfessor(user)) {
       const [owned, collaborated] = await Promise.all([
         prisma.class.findMany({
           where: { ownerId: user.id },

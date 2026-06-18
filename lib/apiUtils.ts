@@ -40,3 +40,4 @@ export function isUserStudent(user: { role?: string }) {
 export function isUserProfessor(user: { role?: string }) {
   return user.role === "PROFESSOR";
 }
+

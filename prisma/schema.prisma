@@ -39,18 +39,11 @@ model User {
   answers                  Answer[]
   evaluationTemplates      EvaluationTemplate[]
   evaluationCriterions     EvaluationCriterion[]
-  ownedClasses             Class[]                   @relation("ClassOwner")
-  studentClasses           Class[]                   @relation("ClassStudents")
+  ownedClasses             Class[]                          @relation("ClassOwner")
+  studentClasses           Class[]                          @relation("ClassStudents")
   collaboratedClasses      ClassCollaborator[]
   feedbackSummaries        StudentTemplateFeedbackSummary[]
   llmUsages                LlmUsage[]
-}
-
-model Topic {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model QuestionRequestTemplate {
@@ -67,7 +60,7 @@ model QuestionRequestTemplate {
   owner User @relation(fields: [ownerId], references: [id])
 
   requests             QuestionRequest[]
-  evaluationTemplate   EvaluationTemplate? @relation(fields: [evaluationTemplateId], references: [id])
+  evaluationTemplate   EvaluationTemplate?              @relation(fields: [evaluationTemplateId], references: [id])
   evaluationTemplateId Int?
   classes              Class[]
   feedbackSummaries    StudentTemplateFeedbackSummary[]
@@ -218,7 +211,6 @@ model Class {
   evaluationTemplates EvaluationTemplate[]
   link                String                    @unique
   llmUsages           LlmUsage[]
-
 }
 
 model ClassCollaborator {

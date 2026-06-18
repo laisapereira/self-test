@@ -43,12 +43,12 @@ const routes = [
   {
     title: "Usuários",
     href: "/admin/users",
-    requireAdmin: true,
+    adminOnly: true,
   },
   {
     title: "Uso de LLM",
     href: "/admin/usage",
-    requireAdmin: true,
+    adminOnly: true,
   },
   { title: "Turmas", href: "/classes" },
 ];
@@ -184,7 +184,12 @@ function Navbar() {
           isOpen={open}
           toggle={() => setOpen(false)}
           items={routes
-            .filter((route) => !route.requireAdmin || session.user?.isAdmin || session.user?.isProfessor)
+            .filter((route) => {
+              if (route.adminOnly) return session.user?.isAdmin;
+              if (route.professorOnly) return session.user?.isProfessor;
+              if (route.requireAdmin) return session.user?.isAdmin || session.user?.isProfessor;
+              return true;
+            })
             .map((route) => ({ href: route.href, title: route.title }))}
         />
       ) : null}
@@ -204,7 +209,12 @@ function MenuItems(props: { onClick?: () => void }) {
   return (
     <>
       {routes
-        .filter((route) => !route.requireAdmin || session.user?.isAdmin || session.user?.isProfessor)
+        .filter((route) => {
+          if (route.adminOnly) return session.user?.isAdmin;
+          if (route.professorOnly) return session.user?.isProfessor;
+          if (route.requireAdmin) return session.user?.isAdmin || session.user?.isProfessor;
+          return true;
+        })
         .map((route, index) => {
           const active =
             route.href === pathname ||

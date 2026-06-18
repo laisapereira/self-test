@@ -202,11 +202,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
- * Model Topic
- * 
- */
-export type Topic = $Result.DefaultSelection<Prisma.$TopicPayload>
-/**
  * Model QuestionRequestTemplate
  * 
  */
@@ -261,6 +256,16 @@ export type Class = $Result.DefaultSelection<Prisma.$ClassPayload>
  * 
  */
 export type ClassCollaborator = $Result.DefaultSelection<Prisma.$ClassCollaboratorPayload>
+/**
+ * Model LlmUsage
+ * 
+ */
+export type LlmUsage = $Result.DefaultSelection<Prisma.$LlmUsagePayload>
+/**
+ * Model StudentTemplateFeedbackSummary
+ * 
+ */
+export type StudentTemplateFeedbackSummary = $Result.DefaultSelection<Prisma.$StudentTemplateFeedbackSummaryPayload>
 
 /**
  * Enums
@@ -284,6 +289,15 @@ export const QuestionRequestStatus: {
 
 export type QuestionRequestStatus = (typeof QuestionRequestStatus)[keyof typeof QuestionRequestStatus]
 
+
+export const LlmUsageType: {
+  QUESTION_GENERATION: 'QUESTION_GENERATION',
+  ANSWER_EVALUATION: 'ANSWER_EVALUATION',
+  PERFORMANCE_SUMMARY: 'PERFORMANCE_SUMMARY'
+};
+
+export type LlmUsageType = (typeof LlmUsageType)[keyof typeof LlmUsageType]
+
 }
 
 export type Role = $Enums.Role
@@ -293,6 +307,10 @@ export const Role: typeof $Enums.Role
 export type QuestionRequestStatus = $Enums.QuestionRequestStatus
 
 export const QuestionRequestStatus: typeof $Enums.QuestionRequestStatus
+
+export type LlmUsageType = $Enums.LlmUsageType
+
+export const LlmUsageType: typeof $Enums.LlmUsageType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -423,16 +441,6 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.topic`: Exposes CRUD operations for the **Topic** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Topics
-    * const topics = await prisma.topic.findMany()
-    * ```
-    */
-  get topic(): Prisma.TopicDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.questionRequestTemplate`: Exposes CRUD operations for the **QuestionRequestTemplate** model.
     * Example usage:
     * ```ts
@@ -541,6 +549,26 @@ export class PrismaClient<
     * ```
     */
   get classCollaborator(): Prisma.ClassCollaboratorDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.llmUsage`: Exposes CRUD operations for the **LlmUsage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LlmUsages
+    * const llmUsages = await prisma.llmUsage.findMany()
+    * ```
+    */
+  get llmUsage(): Prisma.LlmUsageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentTemplateFeedbackSummary`: Exposes CRUD operations for the **StudentTemplateFeedbackSummary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentTemplateFeedbackSummaries
+    * const studentTemplateFeedbackSummaries = await prisma.studentTemplateFeedbackSummary.findMany()
+    * ```
+    */
+  get studentTemplateFeedbackSummary(): Prisma.StudentTemplateFeedbackSummaryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -982,7 +1010,6 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Topic: 'Topic',
     QuestionRequestTemplate: 'QuestionRequestTemplate',
     QuestionRequest: 'QuestionRequest',
     Question: 'Question',
@@ -993,7 +1020,9 @@ export namespace Prisma {
     AutoEvaluation: 'AutoEvaluation',
     AutoEvaluationCriterion: 'AutoEvaluationCriterion',
     Class: 'Class',
-    ClassCollaborator: 'ClassCollaborator'
+    ClassCollaborator: 'ClassCollaborator',
+    LlmUsage: 'LlmUsage',
+    StudentTemplateFeedbackSummary: 'StudentTemplateFeedbackSummary'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1012,7 +1041,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "topic" | "questionRequestTemplate" | "questionRequest" | "question" | "evaluationTemplate" | "evaluationTemplateCriterion" | "evaluationCriterion" | "answer" | "autoEvaluation" | "autoEvaluationCriterion" | "class" | "classCollaborator"
+      modelProps: "user" | "questionRequestTemplate" | "questionRequest" | "question" | "evaluationTemplate" | "evaluationTemplateCriterion" | "evaluationCriterion" | "answer" | "autoEvaluation" | "autoEvaluationCriterion" | "class" | "classCollaborator" | "llmUsage" | "studentTemplateFeedbackSummary"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1087,80 +1116,6 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
-          }
-        }
-      }
-      Topic: {
-        payload: Prisma.$TopicPayload<ExtArgs>
-        fields: Prisma.TopicFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.TopicFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.TopicFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>
-          }
-          findFirst: {
-            args: Prisma.TopicFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.TopicFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>
-          }
-          findMany: {
-            args: Prisma.TopicFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>[]
-          }
-          create: {
-            args: Prisma.TopicCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>
-          }
-          createMany: {
-            args: Prisma.TopicCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.TopicCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>[]
-          }
-          delete: {
-            args: Prisma.TopicDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>
-          }
-          update: {
-            args: Prisma.TopicUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>
-          }
-          deleteMany: {
-            args: Prisma.TopicDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.TopicUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.TopicUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>[]
-          }
-          upsert: {
-            args: Prisma.TopicUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TopicPayload>
-          }
-          aggregate: {
-            args: Prisma.TopicAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTopic>
-          }
-          groupBy: {
-            args: Prisma.TopicGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TopicGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.TopicCountArgs<ExtArgs>
-            result: $Utils.Optional<TopicCountAggregateOutputType> | number
           }
         }
       }
@@ -1978,6 +1933,154 @@ export namespace Prisma {
           }
         }
       }
+      LlmUsage: {
+        payload: Prisma.$LlmUsagePayload<ExtArgs>
+        fields: Prisma.LlmUsageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LlmUsageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LlmUsageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>
+          }
+          findFirst: {
+            args: Prisma.LlmUsageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LlmUsageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>
+          }
+          findMany: {
+            args: Prisma.LlmUsageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>[]
+          }
+          create: {
+            args: Prisma.LlmUsageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>
+          }
+          createMany: {
+            args: Prisma.LlmUsageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LlmUsageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>[]
+          }
+          delete: {
+            args: Prisma.LlmUsageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>
+          }
+          update: {
+            args: Prisma.LlmUsageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>
+          }
+          deleteMany: {
+            args: Prisma.LlmUsageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LlmUsageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LlmUsageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>[]
+          }
+          upsert: {
+            args: Prisma.LlmUsageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LlmUsagePayload>
+          }
+          aggregate: {
+            args: Prisma.LlmUsageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLlmUsage>
+          }
+          groupBy: {
+            args: Prisma.LlmUsageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LlmUsageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LlmUsageCountArgs<ExtArgs>
+            result: $Utils.Optional<LlmUsageCountAggregateOutputType> | number
+          }
+        }
+      }
+      StudentTemplateFeedbackSummary: {
+        payload: Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>
+        fields: Prisma.StudentTemplateFeedbackSummaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentTemplateFeedbackSummaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentTemplateFeedbackSummaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>
+          }
+          findFirst: {
+            args: Prisma.StudentTemplateFeedbackSummaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentTemplateFeedbackSummaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>
+          }
+          findMany: {
+            args: Prisma.StudentTemplateFeedbackSummaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>[]
+          }
+          create: {
+            args: Prisma.StudentTemplateFeedbackSummaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>
+          }
+          createMany: {
+            args: Prisma.StudentTemplateFeedbackSummaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentTemplateFeedbackSummaryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>[]
+          }
+          delete: {
+            args: Prisma.StudentTemplateFeedbackSummaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>
+          }
+          update: {
+            args: Prisma.StudentTemplateFeedbackSummaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentTemplateFeedbackSummaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentTemplateFeedbackSummaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentTemplateFeedbackSummaryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentTemplateFeedbackSummaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTemplateFeedbackSummaryPayload>
+          }
+          aggregate: {
+            args: Prisma.StudentTemplateFeedbackSummaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentTemplateFeedbackSummary>
+          }
+          groupBy: {
+            args: Prisma.StudentTemplateFeedbackSummaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentTemplateFeedbackSummaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentTemplateFeedbackSummaryCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentTemplateFeedbackSummaryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2075,7 +2178,6 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
-    topic?: TopicOmit
     questionRequestTemplate?: QuestionRequestTemplateOmit
     questionRequest?: QuestionRequestOmit
     question?: QuestionOmit
@@ -2087,6 +2189,8 @@ export namespace Prisma {
     autoEvaluationCriterion?: AutoEvaluationCriterionOmit
     class?: ClassOmit
     classCollaborator?: ClassCollaboratorOmit
+    llmUsage?: LlmUsageOmit
+    studentTemplateFeedbackSummary?: StudentTemplateFeedbackSummaryOmit
   }
 
   /* Types for Logging */
@@ -2175,6 +2279,8 @@ export namespace Prisma {
     ownedClasses: number
     studentClasses: number
     collaboratedClasses: number
+    feedbackSummaries: number
+    llmUsages: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2186,6 +2292,8 @@ export namespace Prisma {
     ownedClasses?: boolean | UserCountOutputTypeCountOwnedClassesArgs
     studentClasses?: boolean | UserCountOutputTypeCountStudentClassesArgs
     collaboratedClasses?: boolean | UserCountOutputTypeCountCollaboratedClassesArgs
+    feedbackSummaries?: boolean | UserCountOutputTypeCountFeedbackSummariesArgs
+    llmUsages?: boolean | UserCountOutputTypeCountLlmUsagesArgs
   }
 
   // Custom InputTypes
@@ -2255,6 +2363,20 @@ export namespace Prisma {
     where?: ClassCollaboratorWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFeedbackSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTemplateFeedbackSummaryWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLlmUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LlmUsageWhereInput
+  }
+
 
   /**
    * Count Type QuestionRequestTemplateCountOutputType
@@ -2263,11 +2385,15 @@ export namespace Prisma {
   export type QuestionRequestTemplateCountOutputType = {
     requests: number
     classes: number
+    feedbackSummaries: number
+    llmUsages: number
   }
 
   export type QuestionRequestTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     requests?: boolean | QuestionRequestTemplateCountOutputTypeCountRequestsArgs
     classes?: boolean | QuestionRequestTemplateCountOutputTypeCountClassesArgs
+    feedbackSummaries?: boolean | QuestionRequestTemplateCountOutputTypeCountFeedbackSummariesArgs
+    llmUsages?: boolean | QuestionRequestTemplateCountOutputTypeCountLlmUsagesArgs
   }
 
   // Custom InputTypes
@@ -2293,6 +2419,20 @@ export namespace Prisma {
    */
   export type QuestionRequestTemplateCountOutputTypeCountClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ClassWhereInput
+  }
+
+  /**
+   * QuestionRequestTemplateCountOutputType without action
+   */
+  export type QuestionRequestTemplateCountOutputTypeCountFeedbackSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTemplateFeedbackSummaryWhereInput
+  }
+
+  /**
+   * QuestionRequestTemplateCountOutputType without action
+   */
+  export type QuestionRequestTemplateCountOutputTypeCountLlmUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LlmUsageWhereInput
   }
 
 
@@ -2509,6 +2649,7 @@ export namespace Prisma {
     collaborators: number
     questionTemplates: number
     evaluationTemplates: number
+    llmUsages: number
   }
 
   export type ClassCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2516,6 +2657,7 @@ export namespace Prisma {
     collaborators?: boolean | ClassCountOutputTypeCountCollaboratorsArgs
     questionTemplates?: boolean | ClassCountOutputTypeCountQuestionTemplatesArgs
     evaluationTemplates?: boolean | ClassCountOutputTypeCountEvaluationTemplatesArgs
+    llmUsages?: boolean | ClassCountOutputTypeCountLlmUsagesArgs
   }
 
   // Custom InputTypes
@@ -2555,6 +2697,13 @@ export namespace Prisma {
    */
   export type ClassCountOutputTypeCountEvaluationTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EvaluationTemplateWhereInput
+  }
+
+  /**
+   * ClassCountOutputType without action
+   */
+  export type ClassCountOutputTypeCountLlmUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LlmUsageWhereInput
   }
 
 
@@ -2792,6 +2941,8 @@ export namespace Prisma {
     ownedClasses?: boolean | User$ownedClassesArgs<ExtArgs>
     studentClasses?: boolean | User$studentClassesArgs<ExtArgs>
     collaboratedClasses?: boolean | User$collaboratedClassesArgs<ExtArgs>
+    feedbackSummaries?: boolean | User$feedbackSummariesArgs<ExtArgs>
+    llmUsages?: boolean | User$llmUsagesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2838,6 +2989,8 @@ export namespace Prisma {
     ownedClasses?: boolean | User$ownedClassesArgs<ExtArgs>
     studentClasses?: boolean | User$studentClassesArgs<ExtArgs>
     collaboratedClasses?: boolean | User$collaboratedClassesArgs<ExtArgs>
+    feedbackSummaries?: boolean | User$feedbackSummariesArgs<ExtArgs>
+    llmUsages?: boolean | User$llmUsagesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2854,6 +3007,8 @@ export namespace Prisma {
       ownedClasses: Prisma.$ClassPayload<ExtArgs>[]
       studentClasses: Prisma.$ClassPayload<ExtArgs>[]
       collaboratedClasses: Prisma.$ClassCollaboratorPayload<ExtArgs>[]
+      feedbackSummaries: Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>[]
+      llmUsages: Prisma.$LlmUsagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3266,6 +3421,8 @@ export namespace Prisma {
     ownedClasses<T extends User$ownedClassesArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     studentClasses<T extends User$studentClassesArgs<ExtArgs> = {}>(args?: Subset<T, User$studentClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     collaboratedClasses<T extends User$collaboratedClassesArgs<ExtArgs> = {}>(args?: Subset<T, User$collaboratedClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    feedbackSummaries<T extends User$feedbackSummariesArgs<ExtArgs> = {}>(args?: Subset<T, User$feedbackSummariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    llmUsages<T extends User$llmUsagesArgs<ExtArgs> = {}>(args?: Subset<T, User$llmUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3883,6 +4040,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.feedbackSummaries
+   */
+  export type User$feedbackSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    orderBy?: StudentTemplateFeedbackSummaryOrderByWithRelationInput | StudentTemplateFeedbackSummaryOrderByWithRelationInput[]
+    cursor?: StudentTemplateFeedbackSummaryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTemplateFeedbackSummaryScalarFieldEnum | StudentTemplateFeedbackSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * User.llmUsages
+   */
+  export type User$llmUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    where?: LlmUsageWhereInput
+    orderBy?: LlmUsageOrderByWithRelationInput | LlmUsageOrderByWithRelationInput[]
+    cursor?: LlmUsageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LlmUsageScalarFieldEnum | LlmUsageScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3898,1022 +4103,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Topic
-   */
-
-  export type AggregateTopic = {
-    _count: TopicCountAggregateOutputType | null
-    _avg: TopicAvgAggregateOutputType | null
-    _sum: TopicSumAggregateOutputType | null
-    _min: TopicMinAggregateOutputType | null
-    _max: TopicMaxAggregateOutputType | null
-  }
-
-  export type TopicAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type TopicSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type TopicMinAggregateOutputType = {
-    id: number | null
-    name: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type TopicMaxAggregateOutputType = {
-    id: number | null
-    name: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type TopicCountAggregateOutputType = {
-    id: number
-    name: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type TopicAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type TopicSumAggregateInputType = {
-    id?: true
-  }
-
-  export type TopicMinAggregateInputType = {
-    id?: true
-    name?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type TopicMaxAggregateInputType = {
-    id?: true
-    name?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type TopicCountAggregateInputType = {
-    id?: true
-    name?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type TopicAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Topic to aggregate.
-     */
-    where?: TopicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Topics to fetch.
-     */
-    orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: TopicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Topics from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Topics.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Topics
-    **/
-    _count?: true | TopicCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: TopicAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: TopicSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: TopicMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: TopicMaxAggregateInputType
-  }
-
-  export type GetTopicAggregateType<T extends TopicAggregateArgs> = {
-        [P in keyof T & keyof AggregateTopic]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateTopic[P]>
-      : GetScalarType<T[P], AggregateTopic[P]>
-  }
-
-
-
-
-  export type TopicGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TopicWhereInput
-    orderBy?: TopicOrderByWithAggregationInput | TopicOrderByWithAggregationInput[]
-    by: TopicScalarFieldEnum[] | TopicScalarFieldEnum
-    having?: TopicScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: TopicCountAggregateInputType | true
-    _avg?: TopicAvgAggregateInputType
-    _sum?: TopicSumAggregateInputType
-    _min?: TopicMinAggregateInputType
-    _max?: TopicMaxAggregateInputType
-  }
-
-  export type TopicGroupByOutputType = {
-    id: number
-    name: string
-    createdAt: Date
-    updatedAt: Date
-    _count: TopicCountAggregateOutputType | null
-    _avg: TopicAvgAggregateOutputType | null
-    _sum: TopicSumAggregateOutputType | null
-    _min: TopicMinAggregateOutputType | null
-    _max: TopicMaxAggregateOutputType | null
-  }
-
-  type GetTopicGroupByPayload<T extends TopicGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<TopicGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof TopicGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], TopicGroupByOutputType[P]>
-            : GetScalarType<T[P], TopicGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type TopicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["topic"]>
-
-  export type TopicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["topic"]>
-
-  export type TopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["topic"]>
-
-  export type TopicSelectScalar = {
-    id?: boolean
-    name?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type TopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["topic"]>
-
-  export type $TopicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Topic"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      name: string
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["topic"]>
-    composites: {}
-  }
-
-  type TopicGetPayload<S extends boolean | null | undefined | TopicDefaultArgs> = $Result.GetResult<Prisma.$TopicPayload, S>
-
-  type TopicCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<TopicFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: TopicCountAggregateInputType | true
-    }
-
-  export interface TopicDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Topic'], meta: { name: 'Topic' } }
-    /**
-     * Find zero or one Topic that matches the filter.
-     * @param {TopicFindUniqueArgs} args - Arguments to find a Topic
-     * @example
-     * // Get one Topic
-     * const topic = await prisma.topic.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends TopicFindUniqueArgs>(args: SelectSubset<T, TopicFindUniqueArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Topic that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {TopicFindUniqueOrThrowArgs} args - Arguments to find a Topic
-     * @example
-     * // Get one Topic
-     * const topic = await prisma.topic.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends TopicFindUniqueOrThrowArgs>(args: SelectSubset<T, TopicFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Topic that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TopicFindFirstArgs} args - Arguments to find a Topic
-     * @example
-     * // Get one Topic
-     * const topic = await prisma.topic.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends TopicFindFirstArgs>(args?: SelectSubset<T, TopicFindFirstArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Topic that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TopicFindFirstOrThrowArgs} args - Arguments to find a Topic
-     * @example
-     * // Get one Topic
-     * const topic = await prisma.topic.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends TopicFindFirstOrThrowArgs>(args?: SelectSubset<T, TopicFindFirstOrThrowArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Topics that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TopicFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Topics
-     * const topics = await prisma.topic.findMany()
-     * 
-     * // Get first 10 Topics
-     * const topics = await prisma.topic.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const topicWithIdOnly = await prisma.topic.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends TopicFindManyArgs>(args?: SelectSubset<T, TopicFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Topic.
-     * @param {TopicCreateArgs} args - Arguments to create a Topic.
-     * @example
-     * // Create one Topic
-     * const Topic = await prisma.topic.create({
-     *   data: {
-     *     // ... data to create a Topic
-     *   }
-     * })
-     * 
-     */
-    create<T extends TopicCreateArgs>(args: SelectSubset<T, TopicCreateArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Topics.
-     * @param {TopicCreateManyArgs} args - Arguments to create many Topics.
-     * @example
-     * // Create many Topics
-     * const topic = await prisma.topic.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends TopicCreateManyArgs>(args?: SelectSubset<T, TopicCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Topics and returns the data saved in the database.
-     * @param {TopicCreateManyAndReturnArgs} args - Arguments to create many Topics.
-     * @example
-     * // Create many Topics
-     * const topic = await prisma.topic.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Topics and only return the `id`
-     * const topicWithIdOnly = await prisma.topic.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends TopicCreateManyAndReturnArgs>(args?: SelectSubset<T, TopicCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Topic.
-     * @param {TopicDeleteArgs} args - Arguments to delete one Topic.
-     * @example
-     * // Delete one Topic
-     * const Topic = await prisma.topic.delete({
-     *   where: {
-     *     // ... filter to delete one Topic
-     *   }
-     * })
-     * 
-     */
-    delete<T extends TopicDeleteArgs>(args: SelectSubset<T, TopicDeleteArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Topic.
-     * @param {TopicUpdateArgs} args - Arguments to update one Topic.
-     * @example
-     * // Update one Topic
-     * const topic = await prisma.topic.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends TopicUpdateArgs>(args: SelectSubset<T, TopicUpdateArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Topics.
-     * @param {TopicDeleteManyArgs} args - Arguments to filter Topics to delete.
-     * @example
-     * // Delete a few Topics
-     * const { count } = await prisma.topic.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends TopicDeleteManyArgs>(args?: SelectSubset<T, TopicDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Topics.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TopicUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Topics
-     * const topic = await prisma.topic.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends TopicUpdateManyArgs>(args: SelectSubset<T, TopicUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Topics and returns the data updated in the database.
-     * @param {TopicUpdateManyAndReturnArgs} args - Arguments to update many Topics.
-     * @example
-     * // Update many Topics
-     * const topic = await prisma.topic.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Topics and only return the `id`
-     * const topicWithIdOnly = await prisma.topic.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends TopicUpdateManyAndReturnArgs>(args: SelectSubset<T, TopicUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Topic.
-     * @param {TopicUpsertArgs} args - Arguments to update or create a Topic.
-     * @example
-     * // Update or create a Topic
-     * const topic = await prisma.topic.upsert({
-     *   create: {
-     *     // ... data to create a Topic
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Topic we want to update
-     *   }
-     * })
-     */
-    upsert<T extends TopicUpsertArgs>(args: SelectSubset<T, TopicUpsertArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Topics.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TopicCountArgs} args - Arguments to filter Topics to count.
-     * @example
-     * // Count the number of Topics
-     * const count = await prisma.topic.count({
-     *   where: {
-     *     // ... the filter for the Topics we want to count
-     *   }
-     * })
-    **/
-    count<T extends TopicCountArgs>(
-      args?: Subset<T, TopicCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], TopicCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Topic.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TopicAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends TopicAggregateArgs>(args: Subset<T, TopicAggregateArgs>): Prisma.PrismaPromise<GetTopicAggregateType<T>>
-
-    /**
-     * Group by Topic.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TopicGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends TopicGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TopicGroupByArgs['orderBy'] }
-        : { orderBy?: TopicGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, TopicGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTopicGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Topic model
-   */
-  readonly fields: TopicFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Topic.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__TopicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Topic model
-   */
-  interface TopicFieldRefs {
-    readonly id: FieldRef<"Topic", 'Int'>
-    readonly name: FieldRef<"Topic", 'String'>
-    readonly createdAt: FieldRef<"Topic", 'DateTime'>
-    readonly updatedAt: FieldRef<"Topic", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Topic findUnique
-   */
-  export type TopicFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * Filter, which Topic to fetch.
-     */
-    where: TopicWhereUniqueInput
-  }
-
-  /**
-   * Topic findUniqueOrThrow
-   */
-  export type TopicFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * Filter, which Topic to fetch.
-     */
-    where: TopicWhereUniqueInput
-  }
-
-  /**
-   * Topic findFirst
-   */
-  export type TopicFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * Filter, which Topic to fetch.
-     */
-    where?: TopicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Topics to fetch.
-     */
-    orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Topics.
-     */
-    cursor?: TopicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Topics from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Topics.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Topics.
-     */
-    distinct?: TopicScalarFieldEnum | TopicScalarFieldEnum[]
-  }
-
-  /**
-   * Topic findFirstOrThrow
-   */
-  export type TopicFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * Filter, which Topic to fetch.
-     */
-    where?: TopicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Topics to fetch.
-     */
-    orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Topics.
-     */
-    cursor?: TopicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Topics from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Topics.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Topics.
-     */
-    distinct?: TopicScalarFieldEnum | TopicScalarFieldEnum[]
-  }
-
-  /**
-   * Topic findMany
-   */
-  export type TopicFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * Filter, which Topics to fetch.
-     */
-    where?: TopicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Topics to fetch.
-     */
-    orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Topics.
-     */
-    cursor?: TopicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Topics from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Topics.
-     */
-    skip?: number
-    distinct?: TopicScalarFieldEnum | TopicScalarFieldEnum[]
-  }
-
-  /**
-   * Topic create
-   */
-  export type TopicCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * The data needed to create a Topic.
-     */
-    data: XOR<TopicCreateInput, TopicUncheckedCreateInput>
-  }
-
-  /**
-   * Topic createMany
-   */
-  export type TopicCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Topics.
-     */
-    data: TopicCreateManyInput | TopicCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Topic createManyAndReturn
-   */
-  export type TopicCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * The data used to create many Topics.
-     */
-    data: TopicCreateManyInput | TopicCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Topic update
-   */
-  export type TopicUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * The data needed to update a Topic.
-     */
-    data: XOR<TopicUpdateInput, TopicUncheckedUpdateInput>
-    /**
-     * Choose, which Topic to update.
-     */
-    where: TopicWhereUniqueInput
-  }
-
-  /**
-   * Topic updateMany
-   */
-  export type TopicUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Topics.
-     */
-    data: XOR<TopicUpdateManyMutationInput, TopicUncheckedUpdateManyInput>
-    /**
-     * Filter which Topics to update
-     */
-    where?: TopicWhereInput
-    /**
-     * Limit how many Topics to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Topic updateManyAndReturn
-   */
-  export type TopicUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * The data used to update Topics.
-     */
-    data: XOR<TopicUpdateManyMutationInput, TopicUncheckedUpdateManyInput>
-    /**
-     * Filter which Topics to update
-     */
-    where?: TopicWhereInput
-    /**
-     * Limit how many Topics to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Topic upsert
-   */
-  export type TopicUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * The filter to search for the Topic to update in case it exists.
-     */
-    where: TopicWhereUniqueInput
-    /**
-     * In case the Topic found by the `where` argument doesn't exist, create a new Topic with this data.
-     */
-    create: XOR<TopicCreateInput, TopicUncheckedCreateInput>
-    /**
-     * In case the Topic was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<TopicUpdateInput, TopicUncheckedUpdateInput>
-  }
-
-  /**
-   * Topic delete
-   */
-  export type TopicDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
-    /**
-     * Filter which Topic to delete.
-     */
-    where: TopicWhereUniqueInput
-  }
-
-  /**
-   * Topic deleteMany
-   */
-  export type TopicDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Topics to delete
-     */
-    where?: TopicWhereInput
-    /**
-     * Limit how many Topics to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Topic without action
-   */
-  export type TopicDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Topic
-     */
-    select?: TopicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Topic
-     */
-    omit?: TopicOmit<ExtArgs> | null
   }
 
 
@@ -5155,6 +4344,8 @@ export namespace Prisma {
     requests?: boolean | QuestionRequestTemplate$requestsArgs<ExtArgs>
     evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
     classes?: boolean | QuestionRequestTemplate$classesArgs<ExtArgs>
+    feedbackSummaries?: boolean | QuestionRequestTemplate$feedbackSummariesArgs<ExtArgs>
+    llmUsages?: boolean | QuestionRequestTemplate$llmUsagesArgs<ExtArgs>
     _count?: boolean | QuestionRequestTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["questionRequestTemplate"]>
 
@@ -5204,6 +4395,8 @@ export namespace Prisma {
     requests?: boolean | QuestionRequestTemplate$requestsArgs<ExtArgs>
     evaluationTemplate?: boolean | QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>
     classes?: boolean | QuestionRequestTemplate$classesArgs<ExtArgs>
+    feedbackSummaries?: boolean | QuestionRequestTemplate$feedbackSummariesArgs<ExtArgs>
+    llmUsages?: boolean | QuestionRequestTemplate$llmUsagesArgs<ExtArgs>
     _count?: boolean | QuestionRequestTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type QuestionRequestTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5222,6 +4415,8 @@ export namespace Prisma {
       requests: Prisma.$QuestionRequestPayload<ExtArgs>[]
       evaluationTemplate: Prisma.$EvaluationTemplatePayload<ExtArgs> | null
       classes: Prisma.$ClassPayload<ExtArgs>[]
+      feedbackSummaries: Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>[]
+      llmUsages: Prisma.$LlmUsagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5634,6 +4829,8 @@ export namespace Prisma {
     requests<T extends QuestionRequestTemplate$requestsArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     evaluationTemplate<T extends QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$evaluationTemplateArgs<ExtArgs>>): Prisma__EvaluationTemplateClient<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     classes<T extends QuestionRequestTemplate$classesArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$classesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    feedbackSummaries<T extends QuestionRequestTemplate$feedbackSummariesArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$feedbackSummariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    llmUsages<T extends QuestionRequestTemplate$llmUsagesArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplate$llmUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6132,6 +5329,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
+  }
+
+  /**
+   * QuestionRequestTemplate.feedbackSummaries
+   */
+  export type QuestionRequestTemplate$feedbackSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    orderBy?: StudentTemplateFeedbackSummaryOrderByWithRelationInput | StudentTemplateFeedbackSummaryOrderByWithRelationInput[]
+    cursor?: StudentTemplateFeedbackSummaryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTemplateFeedbackSummaryScalarFieldEnum | StudentTemplateFeedbackSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * QuestionRequestTemplate.llmUsages
+   */
+  export type QuestionRequestTemplate$llmUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    where?: LlmUsageWhereInput
+    orderBy?: LlmUsageOrderByWithRelationInput | LlmUsageOrderByWithRelationInput[]
+    cursor?: LlmUsageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LlmUsageScalarFieldEnum | LlmUsageScalarFieldEnum[]
   }
 
   /**
@@ -15689,6 +14934,7 @@ export namespace Prisma {
     collaborators?: boolean | Class$collaboratorsArgs<ExtArgs>
     questionTemplates?: boolean | Class$questionTemplatesArgs<ExtArgs>
     evaluationTemplates?: boolean | Class$evaluationTemplatesArgs<ExtArgs>
+    llmUsages?: boolean | Class$llmUsagesArgs<ExtArgs>
     _count?: boolean | ClassCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["class"]>
 
@@ -15728,6 +14974,7 @@ export namespace Prisma {
     collaborators?: boolean | Class$collaboratorsArgs<ExtArgs>
     questionTemplates?: boolean | Class$questionTemplatesArgs<ExtArgs>
     evaluationTemplates?: boolean | Class$evaluationTemplatesArgs<ExtArgs>
+    llmUsages?: boolean | Class$llmUsagesArgs<ExtArgs>
     _count?: boolean | ClassCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15745,6 +14992,7 @@ export namespace Prisma {
       collaborators: Prisma.$ClassCollaboratorPayload<ExtArgs>[]
       questionTemplates: Prisma.$QuestionRequestTemplatePayload<ExtArgs>[]
       evaluationTemplates: Prisma.$EvaluationTemplatePayload<ExtArgs>[]
+      llmUsages: Prisma.$LlmUsagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -16152,6 +15400,7 @@ export namespace Prisma {
     collaborators<T extends Class$collaboratorsArgs<ExtArgs> = {}>(args?: Subset<T, Class$collaboratorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questionTemplates<T extends Class$questionTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, Class$questionTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     evaluationTemplates<T extends Class$evaluationTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, Class$evaluationTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    llmUsages<T extends Class$llmUsagesArgs<ExtArgs> = {}>(args?: Subset<T, Class$llmUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16676,6 +15925,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EvaluationTemplateScalarFieldEnum | EvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * Class.llmUsages
+   */
+  export type Class$llmUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    where?: LlmUsageWhereInput
+    orderBy?: LlmUsageOrderByWithRelationInput | LlmUsageOrderByWithRelationInput[]
+    cursor?: LlmUsageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LlmUsageScalarFieldEnum | LlmUsageScalarFieldEnum[]
   }
 
   /**
@@ -17776,6 +17049,2351 @@ export namespace Prisma {
 
 
   /**
+   * Model LlmUsage
+   */
+
+  export type AggregateLlmUsage = {
+    _count: LlmUsageCountAggregateOutputType | null
+    _avg: LlmUsageAvgAggregateOutputType | null
+    _sum: LlmUsageSumAggregateOutputType | null
+    _min: LlmUsageMinAggregateOutputType | null
+    _max: LlmUsageMaxAggregateOutputType | null
+  }
+
+  export type LlmUsageAvgAggregateOutputType = {
+    id: number | null
+    promptTokens: number | null
+    completionTokens: number | null
+    userId: number | null
+    classId: number | null
+    templateId: number | null
+  }
+
+  export type LlmUsageSumAggregateOutputType = {
+    id: number | null
+    promptTokens: number | null
+    completionTokens: number | null
+    userId: number | null
+    classId: number | null
+    templateId: number | null
+  }
+
+  export type LlmUsageMinAggregateOutputType = {
+    id: number | null
+    type: $Enums.LlmUsageType | null
+    promptTokens: number | null
+    completionTokens: number | null
+    model: string | null
+    createdAt: Date | null
+    userId: number | null
+    classId: number | null
+    templateId: number | null
+  }
+
+  export type LlmUsageMaxAggregateOutputType = {
+    id: number | null
+    type: $Enums.LlmUsageType | null
+    promptTokens: number | null
+    completionTokens: number | null
+    model: string | null
+    createdAt: Date | null
+    userId: number | null
+    classId: number | null
+    templateId: number | null
+  }
+
+  export type LlmUsageCountAggregateOutputType = {
+    id: number
+    type: number
+    promptTokens: number
+    completionTokens: number
+    model: number
+    createdAt: number
+    userId: number
+    classId: number
+    templateId: number
+    _all: number
+  }
+
+
+  export type LlmUsageAvgAggregateInputType = {
+    id?: true
+    promptTokens?: true
+    completionTokens?: true
+    userId?: true
+    classId?: true
+    templateId?: true
+  }
+
+  export type LlmUsageSumAggregateInputType = {
+    id?: true
+    promptTokens?: true
+    completionTokens?: true
+    userId?: true
+    classId?: true
+    templateId?: true
+  }
+
+  export type LlmUsageMinAggregateInputType = {
+    id?: true
+    type?: true
+    promptTokens?: true
+    completionTokens?: true
+    model?: true
+    createdAt?: true
+    userId?: true
+    classId?: true
+    templateId?: true
+  }
+
+  export type LlmUsageMaxAggregateInputType = {
+    id?: true
+    type?: true
+    promptTokens?: true
+    completionTokens?: true
+    model?: true
+    createdAt?: true
+    userId?: true
+    classId?: true
+    templateId?: true
+  }
+
+  export type LlmUsageCountAggregateInputType = {
+    id?: true
+    type?: true
+    promptTokens?: true
+    completionTokens?: true
+    model?: true
+    createdAt?: true
+    userId?: true
+    classId?: true
+    templateId?: true
+    _all?: true
+  }
+
+  export type LlmUsageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LlmUsage to aggregate.
+     */
+    where?: LlmUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LlmUsages to fetch.
+     */
+    orderBy?: LlmUsageOrderByWithRelationInput | LlmUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LlmUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LlmUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LlmUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LlmUsages
+    **/
+    _count?: true | LlmUsageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LlmUsageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LlmUsageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LlmUsageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LlmUsageMaxAggregateInputType
+  }
+
+  export type GetLlmUsageAggregateType<T extends LlmUsageAggregateArgs> = {
+        [P in keyof T & keyof AggregateLlmUsage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLlmUsage[P]>
+      : GetScalarType<T[P], AggregateLlmUsage[P]>
+  }
+
+
+
+
+  export type LlmUsageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LlmUsageWhereInput
+    orderBy?: LlmUsageOrderByWithAggregationInput | LlmUsageOrderByWithAggregationInput[]
+    by: LlmUsageScalarFieldEnum[] | LlmUsageScalarFieldEnum
+    having?: LlmUsageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LlmUsageCountAggregateInputType | true
+    _avg?: LlmUsageAvgAggregateInputType
+    _sum?: LlmUsageSumAggregateInputType
+    _min?: LlmUsageMinAggregateInputType
+    _max?: LlmUsageMaxAggregateInputType
+  }
+
+  export type LlmUsageGroupByOutputType = {
+    id: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt: Date
+    userId: number | null
+    classId: number | null
+    templateId: number | null
+    _count: LlmUsageCountAggregateOutputType | null
+    _avg: LlmUsageAvgAggregateOutputType | null
+    _sum: LlmUsageSumAggregateOutputType | null
+    _min: LlmUsageMinAggregateOutputType | null
+    _max: LlmUsageMaxAggregateOutputType | null
+  }
+
+  type GetLlmUsageGroupByPayload<T extends LlmUsageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LlmUsageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LlmUsageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LlmUsageGroupByOutputType[P]>
+            : GetScalarType<T[P], LlmUsageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LlmUsageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    promptTokens?: boolean
+    completionTokens?: boolean
+    model?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    classId?: boolean
+    templateId?: boolean
+    user?: boolean | LlmUsage$userArgs<ExtArgs>
+    class?: boolean | LlmUsage$classArgs<ExtArgs>
+    template?: boolean | LlmUsage$templateArgs<ExtArgs>
+  }, ExtArgs["result"]["llmUsage"]>
+
+  export type LlmUsageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    promptTokens?: boolean
+    completionTokens?: boolean
+    model?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    classId?: boolean
+    templateId?: boolean
+    user?: boolean | LlmUsage$userArgs<ExtArgs>
+    class?: boolean | LlmUsage$classArgs<ExtArgs>
+    template?: boolean | LlmUsage$templateArgs<ExtArgs>
+  }, ExtArgs["result"]["llmUsage"]>
+
+  export type LlmUsageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    promptTokens?: boolean
+    completionTokens?: boolean
+    model?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    classId?: boolean
+    templateId?: boolean
+    user?: boolean | LlmUsage$userArgs<ExtArgs>
+    class?: boolean | LlmUsage$classArgs<ExtArgs>
+    template?: boolean | LlmUsage$templateArgs<ExtArgs>
+  }, ExtArgs["result"]["llmUsage"]>
+
+  export type LlmUsageSelectScalar = {
+    id?: boolean
+    type?: boolean
+    promptTokens?: boolean
+    completionTokens?: boolean
+    model?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    classId?: boolean
+    templateId?: boolean
+  }
+
+  export type LlmUsageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "promptTokens" | "completionTokens" | "model" | "createdAt" | "userId" | "classId" | "templateId", ExtArgs["result"]["llmUsage"]>
+  export type LlmUsageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | LlmUsage$userArgs<ExtArgs>
+    class?: boolean | LlmUsage$classArgs<ExtArgs>
+    template?: boolean | LlmUsage$templateArgs<ExtArgs>
+  }
+  export type LlmUsageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | LlmUsage$userArgs<ExtArgs>
+    class?: boolean | LlmUsage$classArgs<ExtArgs>
+    template?: boolean | LlmUsage$templateArgs<ExtArgs>
+  }
+  export type LlmUsageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | LlmUsage$userArgs<ExtArgs>
+    class?: boolean | LlmUsage$classArgs<ExtArgs>
+    template?: boolean | LlmUsage$templateArgs<ExtArgs>
+  }
+
+  export type $LlmUsagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LlmUsage"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
+      class: Prisma.$ClassPayload<ExtArgs> | null
+      template: Prisma.$QuestionRequestTemplatePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      type: $Enums.LlmUsageType
+      promptTokens: number
+      completionTokens: number
+      model: string
+      createdAt: Date
+      userId: number | null
+      classId: number | null
+      templateId: number | null
+    }, ExtArgs["result"]["llmUsage"]>
+    composites: {}
+  }
+
+  type LlmUsageGetPayload<S extends boolean | null | undefined | LlmUsageDefaultArgs> = $Result.GetResult<Prisma.$LlmUsagePayload, S>
+
+  type LlmUsageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LlmUsageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LlmUsageCountAggregateInputType | true
+    }
+
+  export interface LlmUsageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LlmUsage'], meta: { name: 'LlmUsage' } }
+    /**
+     * Find zero or one LlmUsage that matches the filter.
+     * @param {LlmUsageFindUniqueArgs} args - Arguments to find a LlmUsage
+     * @example
+     * // Get one LlmUsage
+     * const llmUsage = await prisma.llmUsage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LlmUsageFindUniqueArgs>(args: SelectSubset<T, LlmUsageFindUniqueArgs<ExtArgs>>): Prisma__LlmUsageClient<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LlmUsage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LlmUsageFindUniqueOrThrowArgs} args - Arguments to find a LlmUsage
+     * @example
+     * // Get one LlmUsage
+     * const llmUsage = await prisma.llmUsage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LlmUsageFindUniqueOrThrowArgs>(args: SelectSubset<T, LlmUsageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LlmUsageClient<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LlmUsage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LlmUsageFindFirstArgs} args - Arguments to find a LlmUsage
+     * @example
+     * // Get one LlmUsage
+     * const llmUsage = await prisma.llmUsage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LlmUsageFindFirstArgs>(args?: SelectSubset<T, LlmUsageFindFirstArgs<ExtArgs>>): Prisma__LlmUsageClient<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LlmUsage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LlmUsageFindFirstOrThrowArgs} args - Arguments to find a LlmUsage
+     * @example
+     * // Get one LlmUsage
+     * const llmUsage = await prisma.llmUsage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LlmUsageFindFirstOrThrowArgs>(args?: SelectSubset<T, LlmUsageFindFirstOrThrowArgs<ExtArgs>>): Prisma__LlmUsageClient<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LlmUsages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LlmUsageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LlmUsages
+     * const llmUsages = await prisma.llmUsage.findMany()
+     * 
+     * // Get first 10 LlmUsages
+     * const llmUsages = await prisma.llmUsage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const llmUsageWithIdOnly = await prisma.llmUsage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LlmUsageFindManyArgs>(args?: SelectSubset<T, LlmUsageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LlmUsage.
+     * @param {LlmUsageCreateArgs} args - Arguments to create a LlmUsage.
+     * @example
+     * // Create one LlmUsage
+     * const LlmUsage = await prisma.llmUsage.create({
+     *   data: {
+     *     // ... data to create a LlmUsage
+     *   }
+     * })
+     * 
+     */
+    create<T extends LlmUsageCreateArgs>(args: SelectSubset<T, LlmUsageCreateArgs<ExtArgs>>): Prisma__LlmUsageClient<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LlmUsages.
+     * @param {LlmUsageCreateManyArgs} args - Arguments to create many LlmUsages.
+     * @example
+     * // Create many LlmUsages
+     * const llmUsage = await prisma.llmUsage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LlmUsageCreateManyArgs>(args?: SelectSubset<T, LlmUsageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LlmUsages and returns the data saved in the database.
+     * @param {LlmUsageCreateManyAndReturnArgs} args - Arguments to create many LlmUsages.
+     * @example
+     * // Create many LlmUsages
+     * const llmUsage = await prisma.llmUsage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LlmUsages and only return the `id`
+     * const llmUsageWithIdOnly = await prisma.llmUsage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LlmUsageCreateManyAndReturnArgs>(args?: SelectSubset<T, LlmUsageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LlmUsage.
+     * @param {LlmUsageDeleteArgs} args - Arguments to delete one LlmUsage.
+     * @example
+     * // Delete one LlmUsage
+     * const LlmUsage = await prisma.llmUsage.delete({
+     *   where: {
+     *     // ... filter to delete one LlmUsage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LlmUsageDeleteArgs>(args: SelectSubset<T, LlmUsageDeleteArgs<ExtArgs>>): Prisma__LlmUsageClient<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LlmUsage.
+     * @param {LlmUsageUpdateArgs} args - Arguments to update one LlmUsage.
+     * @example
+     * // Update one LlmUsage
+     * const llmUsage = await prisma.llmUsage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LlmUsageUpdateArgs>(args: SelectSubset<T, LlmUsageUpdateArgs<ExtArgs>>): Prisma__LlmUsageClient<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LlmUsages.
+     * @param {LlmUsageDeleteManyArgs} args - Arguments to filter LlmUsages to delete.
+     * @example
+     * // Delete a few LlmUsages
+     * const { count } = await prisma.llmUsage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LlmUsageDeleteManyArgs>(args?: SelectSubset<T, LlmUsageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LlmUsages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LlmUsageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LlmUsages
+     * const llmUsage = await prisma.llmUsage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LlmUsageUpdateManyArgs>(args: SelectSubset<T, LlmUsageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LlmUsages and returns the data updated in the database.
+     * @param {LlmUsageUpdateManyAndReturnArgs} args - Arguments to update many LlmUsages.
+     * @example
+     * // Update many LlmUsages
+     * const llmUsage = await prisma.llmUsage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LlmUsages and only return the `id`
+     * const llmUsageWithIdOnly = await prisma.llmUsage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LlmUsageUpdateManyAndReturnArgs>(args: SelectSubset<T, LlmUsageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LlmUsage.
+     * @param {LlmUsageUpsertArgs} args - Arguments to update or create a LlmUsage.
+     * @example
+     * // Update or create a LlmUsage
+     * const llmUsage = await prisma.llmUsage.upsert({
+     *   create: {
+     *     // ... data to create a LlmUsage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LlmUsage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LlmUsageUpsertArgs>(args: SelectSubset<T, LlmUsageUpsertArgs<ExtArgs>>): Prisma__LlmUsageClient<$Result.GetResult<Prisma.$LlmUsagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LlmUsages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LlmUsageCountArgs} args - Arguments to filter LlmUsages to count.
+     * @example
+     * // Count the number of LlmUsages
+     * const count = await prisma.llmUsage.count({
+     *   where: {
+     *     // ... the filter for the LlmUsages we want to count
+     *   }
+     * })
+    **/
+    count<T extends LlmUsageCountArgs>(
+      args?: Subset<T, LlmUsageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LlmUsageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LlmUsage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LlmUsageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LlmUsageAggregateArgs>(args: Subset<T, LlmUsageAggregateArgs>): Prisma.PrismaPromise<GetLlmUsageAggregateType<T>>
+
+    /**
+     * Group by LlmUsage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LlmUsageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LlmUsageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LlmUsageGroupByArgs['orderBy'] }
+        : { orderBy?: LlmUsageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LlmUsageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLlmUsageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LlmUsage model
+   */
+  readonly fields: LlmUsageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LlmUsage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LlmUsageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends LlmUsage$userArgs<ExtArgs> = {}>(args?: Subset<T, LlmUsage$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    class<T extends LlmUsage$classArgs<ExtArgs> = {}>(args?: Subset<T, LlmUsage$classArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    template<T extends LlmUsage$templateArgs<ExtArgs> = {}>(args?: Subset<T, LlmUsage$templateArgs<ExtArgs>>): Prisma__QuestionRequestTemplateClient<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LlmUsage model
+   */
+  interface LlmUsageFieldRefs {
+    readonly id: FieldRef<"LlmUsage", 'Int'>
+    readonly type: FieldRef<"LlmUsage", 'LlmUsageType'>
+    readonly promptTokens: FieldRef<"LlmUsage", 'Int'>
+    readonly completionTokens: FieldRef<"LlmUsage", 'Int'>
+    readonly model: FieldRef<"LlmUsage", 'String'>
+    readonly createdAt: FieldRef<"LlmUsage", 'DateTime'>
+    readonly userId: FieldRef<"LlmUsage", 'Int'>
+    readonly classId: FieldRef<"LlmUsage", 'Int'>
+    readonly templateId: FieldRef<"LlmUsage", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LlmUsage findUnique
+   */
+  export type LlmUsageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which LlmUsage to fetch.
+     */
+    where: LlmUsageWhereUniqueInput
+  }
+
+  /**
+   * LlmUsage findUniqueOrThrow
+   */
+  export type LlmUsageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which LlmUsage to fetch.
+     */
+    where: LlmUsageWhereUniqueInput
+  }
+
+  /**
+   * LlmUsage findFirst
+   */
+  export type LlmUsageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which LlmUsage to fetch.
+     */
+    where?: LlmUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LlmUsages to fetch.
+     */
+    orderBy?: LlmUsageOrderByWithRelationInput | LlmUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LlmUsages.
+     */
+    cursor?: LlmUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LlmUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LlmUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LlmUsages.
+     */
+    distinct?: LlmUsageScalarFieldEnum | LlmUsageScalarFieldEnum[]
+  }
+
+  /**
+   * LlmUsage findFirstOrThrow
+   */
+  export type LlmUsageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which LlmUsage to fetch.
+     */
+    where?: LlmUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LlmUsages to fetch.
+     */
+    orderBy?: LlmUsageOrderByWithRelationInput | LlmUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LlmUsages.
+     */
+    cursor?: LlmUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LlmUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LlmUsages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LlmUsages.
+     */
+    distinct?: LlmUsageScalarFieldEnum | LlmUsageScalarFieldEnum[]
+  }
+
+  /**
+   * LlmUsage findMany
+   */
+  export type LlmUsageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * Filter, which LlmUsages to fetch.
+     */
+    where?: LlmUsageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LlmUsages to fetch.
+     */
+    orderBy?: LlmUsageOrderByWithRelationInput | LlmUsageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LlmUsages.
+     */
+    cursor?: LlmUsageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LlmUsages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LlmUsages.
+     */
+    skip?: number
+    distinct?: LlmUsageScalarFieldEnum | LlmUsageScalarFieldEnum[]
+  }
+
+  /**
+   * LlmUsage create
+   */
+  export type LlmUsageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LlmUsage.
+     */
+    data: XOR<LlmUsageCreateInput, LlmUsageUncheckedCreateInput>
+  }
+
+  /**
+   * LlmUsage createMany
+   */
+  export type LlmUsageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LlmUsages.
+     */
+    data: LlmUsageCreateManyInput | LlmUsageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LlmUsage createManyAndReturn
+   */
+  export type LlmUsageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * The data used to create many LlmUsages.
+     */
+    data: LlmUsageCreateManyInput | LlmUsageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LlmUsage update
+   */
+  export type LlmUsageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LlmUsage.
+     */
+    data: XOR<LlmUsageUpdateInput, LlmUsageUncheckedUpdateInput>
+    /**
+     * Choose, which LlmUsage to update.
+     */
+    where: LlmUsageWhereUniqueInput
+  }
+
+  /**
+   * LlmUsage updateMany
+   */
+  export type LlmUsageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LlmUsages.
+     */
+    data: XOR<LlmUsageUpdateManyMutationInput, LlmUsageUncheckedUpdateManyInput>
+    /**
+     * Filter which LlmUsages to update
+     */
+    where?: LlmUsageWhereInput
+    /**
+     * Limit how many LlmUsages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LlmUsage updateManyAndReturn
+   */
+  export type LlmUsageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * The data used to update LlmUsages.
+     */
+    data: XOR<LlmUsageUpdateManyMutationInput, LlmUsageUncheckedUpdateManyInput>
+    /**
+     * Filter which LlmUsages to update
+     */
+    where?: LlmUsageWhereInput
+    /**
+     * Limit how many LlmUsages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LlmUsage upsert
+   */
+  export type LlmUsageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LlmUsage to update in case it exists.
+     */
+    where: LlmUsageWhereUniqueInput
+    /**
+     * In case the LlmUsage found by the `where` argument doesn't exist, create a new LlmUsage with this data.
+     */
+    create: XOR<LlmUsageCreateInput, LlmUsageUncheckedCreateInput>
+    /**
+     * In case the LlmUsage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LlmUsageUpdateInput, LlmUsageUncheckedUpdateInput>
+  }
+
+  /**
+   * LlmUsage delete
+   */
+  export type LlmUsageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+    /**
+     * Filter which LlmUsage to delete.
+     */
+    where: LlmUsageWhereUniqueInput
+  }
+
+  /**
+   * LlmUsage deleteMany
+   */
+  export type LlmUsageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LlmUsages to delete
+     */
+    where?: LlmUsageWhereInput
+    /**
+     * Limit how many LlmUsages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LlmUsage.user
+   */
+  export type LlmUsage$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * LlmUsage.class
+   */
+  export type LlmUsage$classArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    where?: ClassWhereInput
+  }
+
+  /**
+   * LlmUsage.template
+   */
+  export type LlmUsage$templateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuestionRequestTemplate
+     */
+    select?: QuestionRequestTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuestionRequestTemplate
+     */
+    omit?: QuestionRequestTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionRequestTemplateInclude<ExtArgs> | null
+    where?: QuestionRequestTemplateWhereInput
+  }
+
+  /**
+   * LlmUsage without action
+   */
+  export type LlmUsageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LlmUsage
+     */
+    select?: LlmUsageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LlmUsage
+     */
+    omit?: LlmUsageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LlmUsageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model StudentTemplateFeedbackSummary
+   */
+
+  export type AggregateStudentTemplateFeedbackSummary = {
+    _count: StudentTemplateFeedbackSummaryCountAggregateOutputType | null
+    _avg: StudentTemplateFeedbackSummaryAvgAggregateOutputType | null
+    _sum: StudentTemplateFeedbackSummarySumAggregateOutputType | null
+    _min: StudentTemplateFeedbackSummaryMinAggregateOutputType | null
+    _max: StudentTemplateFeedbackSummaryMaxAggregateOutputType | null
+  }
+
+  export type StudentTemplateFeedbackSummaryAvgAggregateOutputType = {
+    id: number | null
+    studentId: number | null
+    templateId: number | null
+  }
+
+  export type StudentTemplateFeedbackSummarySumAggregateOutputType = {
+    id: number | null
+    studentId: number | null
+    templateId: number | null
+  }
+
+  export type StudentTemplateFeedbackSummaryMinAggregateOutputType = {
+    id: number | null
+    summary: string | null
+    updatedAt: Date | null
+    studentId: number | null
+    templateId: number | null
+  }
+
+  export type StudentTemplateFeedbackSummaryMaxAggregateOutputType = {
+    id: number | null
+    summary: string | null
+    updatedAt: Date | null
+    studentId: number | null
+    templateId: number | null
+  }
+
+  export type StudentTemplateFeedbackSummaryCountAggregateOutputType = {
+    id: number
+    summary: number
+    updatedAt: number
+    studentId: number
+    templateId: number
+    _all: number
+  }
+
+
+  export type StudentTemplateFeedbackSummaryAvgAggregateInputType = {
+    id?: true
+    studentId?: true
+    templateId?: true
+  }
+
+  export type StudentTemplateFeedbackSummarySumAggregateInputType = {
+    id?: true
+    studentId?: true
+    templateId?: true
+  }
+
+  export type StudentTemplateFeedbackSummaryMinAggregateInputType = {
+    id?: true
+    summary?: true
+    updatedAt?: true
+    studentId?: true
+    templateId?: true
+  }
+
+  export type StudentTemplateFeedbackSummaryMaxAggregateInputType = {
+    id?: true
+    summary?: true
+    updatedAt?: true
+    studentId?: true
+    templateId?: true
+  }
+
+  export type StudentTemplateFeedbackSummaryCountAggregateInputType = {
+    id?: true
+    summary?: true
+    updatedAt?: true
+    studentId?: true
+    templateId?: true
+    _all?: true
+  }
+
+  export type StudentTemplateFeedbackSummaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentTemplateFeedbackSummary to aggregate.
+     */
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentTemplateFeedbackSummaries to fetch.
+     */
+    orderBy?: StudentTemplateFeedbackSummaryOrderByWithRelationInput | StudentTemplateFeedbackSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentTemplateFeedbackSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentTemplateFeedbackSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentTemplateFeedbackSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentTemplateFeedbackSummaries
+    **/
+    _count?: true | StudentTemplateFeedbackSummaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StudentTemplateFeedbackSummaryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StudentTemplateFeedbackSummarySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentTemplateFeedbackSummaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentTemplateFeedbackSummaryMaxAggregateInputType
+  }
+
+  export type GetStudentTemplateFeedbackSummaryAggregateType<T extends StudentTemplateFeedbackSummaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentTemplateFeedbackSummary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentTemplateFeedbackSummary[P]>
+      : GetScalarType<T[P], AggregateStudentTemplateFeedbackSummary[P]>
+  }
+
+
+
+
+  export type StudentTemplateFeedbackSummaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    orderBy?: StudentTemplateFeedbackSummaryOrderByWithAggregationInput | StudentTemplateFeedbackSummaryOrderByWithAggregationInput[]
+    by: StudentTemplateFeedbackSummaryScalarFieldEnum[] | StudentTemplateFeedbackSummaryScalarFieldEnum
+    having?: StudentTemplateFeedbackSummaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentTemplateFeedbackSummaryCountAggregateInputType | true
+    _avg?: StudentTemplateFeedbackSummaryAvgAggregateInputType
+    _sum?: StudentTemplateFeedbackSummarySumAggregateInputType
+    _min?: StudentTemplateFeedbackSummaryMinAggregateInputType
+    _max?: StudentTemplateFeedbackSummaryMaxAggregateInputType
+  }
+
+  export type StudentTemplateFeedbackSummaryGroupByOutputType = {
+    id: number
+    summary: string
+    updatedAt: Date
+    studentId: number
+    templateId: number
+    _count: StudentTemplateFeedbackSummaryCountAggregateOutputType | null
+    _avg: StudentTemplateFeedbackSummaryAvgAggregateOutputType | null
+    _sum: StudentTemplateFeedbackSummarySumAggregateOutputType | null
+    _min: StudentTemplateFeedbackSummaryMinAggregateOutputType | null
+    _max: StudentTemplateFeedbackSummaryMaxAggregateOutputType | null
+  }
+
+  type GetStudentTemplateFeedbackSummaryGroupByPayload<T extends StudentTemplateFeedbackSummaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentTemplateFeedbackSummaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentTemplateFeedbackSummaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentTemplateFeedbackSummaryGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentTemplateFeedbackSummaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentTemplateFeedbackSummarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    summary?: boolean
+    updatedAt?: boolean
+    studentId?: boolean
+    templateId?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | QuestionRequestTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentTemplateFeedbackSummary"]>
+
+  export type StudentTemplateFeedbackSummarySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    summary?: boolean
+    updatedAt?: boolean
+    studentId?: boolean
+    templateId?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | QuestionRequestTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentTemplateFeedbackSummary"]>
+
+  export type StudentTemplateFeedbackSummarySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    summary?: boolean
+    updatedAt?: boolean
+    studentId?: boolean
+    templateId?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | QuestionRequestTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentTemplateFeedbackSummary"]>
+
+  export type StudentTemplateFeedbackSummarySelectScalar = {
+    id?: boolean
+    summary?: boolean
+    updatedAt?: boolean
+    studentId?: boolean
+    templateId?: boolean
+  }
+
+  export type StudentTemplateFeedbackSummaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "summary" | "updatedAt" | "studentId" | "templateId", ExtArgs["result"]["studentTemplateFeedbackSummary"]>
+  export type StudentTemplateFeedbackSummaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | QuestionRequestTemplateDefaultArgs<ExtArgs>
+  }
+  export type StudentTemplateFeedbackSummaryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | QuestionRequestTemplateDefaultArgs<ExtArgs>
+  }
+  export type StudentTemplateFeedbackSummaryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | QuestionRequestTemplateDefaultArgs<ExtArgs>
+  }
+
+  export type $StudentTemplateFeedbackSummaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentTemplateFeedbackSummary"
+    objects: {
+      student: Prisma.$UserPayload<ExtArgs>
+      template: Prisma.$QuestionRequestTemplatePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      summary: string
+      updatedAt: Date
+      studentId: number
+      templateId: number
+    }, ExtArgs["result"]["studentTemplateFeedbackSummary"]>
+    composites: {}
+  }
+
+  type StudentTemplateFeedbackSummaryGetPayload<S extends boolean | null | undefined | StudentTemplateFeedbackSummaryDefaultArgs> = $Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload, S>
+
+  type StudentTemplateFeedbackSummaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentTemplateFeedbackSummaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentTemplateFeedbackSummaryCountAggregateInputType | true
+    }
+
+  export interface StudentTemplateFeedbackSummaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentTemplateFeedbackSummary'], meta: { name: 'StudentTemplateFeedbackSummary' } }
+    /**
+     * Find zero or one StudentTemplateFeedbackSummary that matches the filter.
+     * @param {StudentTemplateFeedbackSummaryFindUniqueArgs} args - Arguments to find a StudentTemplateFeedbackSummary
+     * @example
+     * // Get one StudentTemplateFeedbackSummary
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentTemplateFeedbackSummaryFindUniqueArgs>(args: SelectSubset<T, StudentTemplateFeedbackSummaryFindUniqueArgs<ExtArgs>>): Prisma__StudentTemplateFeedbackSummaryClient<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentTemplateFeedbackSummary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentTemplateFeedbackSummaryFindUniqueOrThrowArgs} args - Arguments to find a StudentTemplateFeedbackSummary
+     * @example
+     * // Get one StudentTemplateFeedbackSummary
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentTemplateFeedbackSummaryFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentTemplateFeedbackSummaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentTemplateFeedbackSummaryClient<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentTemplateFeedbackSummary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTemplateFeedbackSummaryFindFirstArgs} args - Arguments to find a StudentTemplateFeedbackSummary
+     * @example
+     * // Get one StudentTemplateFeedbackSummary
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentTemplateFeedbackSummaryFindFirstArgs>(args?: SelectSubset<T, StudentTemplateFeedbackSummaryFindFirstArgs<ExtArgs>>): Prisma__StudentTemplateFeedbackSummaryClient<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentTemplateFeedbackSummary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTemplateFeedbackSummaryFindFirstOrThrowArgs} args - Arguments to find a StudentTemplateFeedbackSummary
+     * @example
+     * // Get one StudentTemplateFeedbackSummary
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentTemplateFeedbackSummaryFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentTemplateFeedbackSummaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentTemplateFeedbackSummaryClient<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentTemplateFeedbackSummaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTemplateFeedbackSummaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentTemplateFeedbackSummaries
+     * const studentTemplateFeedbackSummaries = await prisma.studentTemplateFeedbackSummary.findMany()
+     * 
+     * // Get first 10 StudentTemplateFeedbackSummaries
+     * const studentTemplateFeedbackSummaries = await prisma.studentTemplateFeedbackSummary.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentTemplateFeedbackSummaryWithIdOnly = await prisma.studentTemplateFeedbackSummary.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentTemplateFeedbackSummaryFindManyArgs>(args?: SelectSubset<T, StudentTemplateFeedbackSummaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentTemplateFeedbackSummary.
+     * @param {StudentTemplateFeedbackSummaryCreateArgs} args - Arguments to create a StudentTemplateFeedbackSummary.
+     * @example
+     * // Create one StudentTemplateFeedbackSummary
+     * const StudentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.create({
+     *   data: {
+     *     // ... data to create a StudentTemplateFeedbackSummary
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentTemplateFeedbackSummaryCreateArgs>(args: SelectSubset<T, StudentTemplateFeedbackSummaryCreateArgs<ExtArgs>>): Prisma__StudentTemplateFeedbackSummaryClient<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentTemplateFeedbackSummaries.
+     * @param {StudentTemplateFeedbackSummaryCreateManyArgs} args - Arguments to create many StudentTemplateFeedbackSummaries.
+     * @example
+     * // Create many StudentTemplateFeedbackSummaries
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentTemplateFeedbackSummaryCreateManyArgs>(args?: SelectSubset<T, StudentTemplateFeedbackSummaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentTemplateFeedbackSummaries and returns the data saved in the database.
+     * @param {StudentTemplateFeedbackSummaryCreateManyAndReturnArgs} args - Arguments to create many StudentTemplateFeedbackSummaries.
+     * @example
+     * // Create many StudentTemplateFeedbackSummaries
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentTemplateFeedbackSummaries and only return the `id`
+     * const studentTemplateFeedbackSummaryWithIdOnly = await prisma.studentTemplateFeedbackSummary.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentTemplateFeedbackSummaryCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentTemplateFeedbackSummaryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentTemplateFeedbackSummary.
+     * @param {StudentTemplateFeedbackSummaryDeleteArgs} args - Arguments to delete one StudentTemplateFeedbackSummary.
+     * @example
+     * // Delete one StudentTemplateFeedbackSummary
+     * const StudentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.delete({
+     *   where: {
+     *     // ... filter to delete one StudentTemplateFeedbackSummary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentTemplateFeedbackSummaryDeleteArgs>(args: SelectSubset<T, StudentTemplateFeedbackSummaryDeleteArgs<ExtArgs>>): Prisma__StudentTemplateFeedbackSummaryClient<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentTemplateFeedbackSummary.
+     * @param {StudentTemplateFeedbackSummaryUpdateArgs} args - Arguments to update one StudentTemplateFeedbackSummary.
+     * @example
+     * // Update one StudentTemplateFeedbackSummary
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentTemplateFeedbackSummaryUpdateArgs>(args: SelectSubset<T, StudentTemplateFeedbackSummaryUpdateArgs<ExtArgs>>): Prisma__StudentTemplateFeedbackSummaryClient<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentTemplateFeedbackSummaries.
+     * @param {StudentTemplateFeedbackSummaryDeleteManyArgs} args - Arguments to filter StudentTemplateFeedbackSummaries to delete.
+     * @example
+     * // Delete a few StudentTemplateFeedbackSummaries
+     * const { count } = await prisma.studentTemplateFeedbackSummary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentTemplateFeedbackSummaryDeleteManyArgs>(args?: SelectSubset<T, StudentTemplateFeedbackSummaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentTemplateFeedbackSummaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTemplateFeedbackSummaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentTemplateFeedbackSummaries
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentTemplateFeedbackSummaryUpdateManyArgs>(args: SelectSubset<T, StudentTemplateFeedbackSummaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentTemplateFeedbackSummaries and returns the data updated in the database.
+     * @param {StudentTemplateFeedbackSummaryUpdateManyAndReturnArgs} args - Arguments to update many StudentTemplateFeedbackSummaries.
+     * @example
+     * // Update many StudentTemplateFeedbackSummaries
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentTemplateFeedbackSummaries and only return the `id`
+     * const studentTemplateFeedbackSummaryWithIdOnly = await prisma.studentTemplateFeedbackSummary.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentTemplateFeedbackSummaryUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentTemplateFeedbackSummaryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentTemplateFeedbackSummary.
+     * @param {StudentTemplateFeedbackSummaryUpsertArgs} args - Arguments to update or create a StudentTemplateFeedbackSummary.
+     * @example
+     * // Update or create a StudentTemplateFeedbackSummary
+     * const studentTemplateFeedbackSummary = await prisma.studentTemplateFeedbackSummary.upsert({
+     *   create: {
+     *     // ... data to create a StudentTemplateFeedbackSummary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentTemplateFeedbackSummary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentTemplateFeedbackSummaryUpsertArgs>(args: SelectSubset<T, StudentTemplateFeedbackSummaryUpsertArgs<ExtArgs>>): Prisma__StudentTemplateFeedbackSummaryClient<$Result.GetResult<Prisma.$StudentTemplateFeedbackSummaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentTemplateFeedbackSummaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTemplateFeedbackSummaryCountArgs} args - Arguments to filter StudentTemplateFeedbackSummaries to count.
+     * @example
+     * // Count the number of StudentTemplateFeedbackSummaries
+     * const count = await prisma.studentTemplateFeedbackSummary.count({
+     *   where: {
+     *     // ... the filter for the StudentTemplateFeedbackSummaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentTemplateFeedbackSummaryCountArgs>(
+      args?: Subset<T, StudentTemplateFeedbackSummaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentTemplateFeedbackSummaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentTemplateFeedbackSummary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTemplateFeedbackSummaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentTemplateFeedbackSummaryAggregateArgs>(args: Subset<T, StudentTemplateFeedbackSummaryAggregateArgs>): Prisma.PrismaPromise<GetStudentTemplateFeedbackSummaryAggregateType<T>>
+
+    /**
+     * Group by StudentTemplateFeedbackSummary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTemplateFeedbackSummaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentTemplateFeedbackSummaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentTemplateFeedbackSummaryGroupByArgs['orderBy'] }
+        : { orderBy?: StudentTemplateFeedbackSummaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentTemplateFeedbackSummaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentTemplateFeedbackSummaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentTemplateFeedbackSummary model
+   */
+  readonly fields: StudentTemplateFeedbackSummaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentTemplateFeedbackSummary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentTemplateFeedbackSummaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    template<T extends QuestionRequestTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionRequestTemplateDefaultArgs<ExtArgs>>): Prisma__QuestionRequestTemplateClient<$Result.GetResult<Prisma.$QuestionRequestTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentTemplateFeedbackSummary model
+   */
+  interface StudentTemplateFeedbackSummaryFieldRefs {
+    readonly id: FieldRef<"StudentTemplateFeedbackSummary", 'Int'>
+    readonly summary: FieldRef<"StudentTemplateFeedbackSummary", 'String'>
+    readonly updatedAt: FieldRef<"StudentTemplateFeedbackSummary", 'DateTime'>
+    readonly studentId: FieldRef<"StudentTemplateFeedbackSummary", 'Int'>
+    readonly templateId: FieldRef<"StudentTemplateFeedbackSummary", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentTemplateFeedbackSummary findUnique
+   */
+  export type StudentTemplateFeedbackSummaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTemplateFeedbackSummary to fetch.
+     */
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary findUniqueOrThrow
+   */
+  export type StudentTemplateFeedbackSummaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTemplateFeedbackSummary to fetch.
+     */
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary findFirst
+   */
+  export type StudentTemplateFeedbackSummaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTemplateFeedbackSummary to fetch.
+     */
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentTemplateFeedbackSummaries to fetch.
+     */
+    orderBy?: StudentTemplateFeedbackSummaryOrderByWithRelationInput | StudentTemplateFeedbackSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentTemplateFeedbackSummaries.
+     */
+    cursor?: StudentTemplateFeedbackSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentTemplateFeedbackSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentTemplateFeedbackSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentTemplateFeedbackSummaries.
+     */
+    distinct?: StudentTemplateFeedbackSummaryScalarFieldEnum | StudentTemplateFeedbackSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary findFirstOrThrow
+   */
+  export type StudentTemplateFeedbackSummaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTemplateFeedbackSummary to fetch.
+     */
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentTemplateFeedbackSummaries to fetch.
+     */
+    orderBy?: StudentTemplateFeedbackSummaryOrderByWithRelationInput | StudentTemplateFeedbackSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentTemplateFeedbackSummaries.
+     */
+    cursor?: StudentTemplateFeedbackSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentTemplateFeedbackSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentTemplateFeedbackSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentTemplateFeedbackSummaries.
+     */
+    distinct?: StudentTemplateFeedbackSummaryScalarFieldEnum | StudentTemplateFeedbackSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary findMany
+   */
+  export type StudentTemplateFeedbackSummaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTemplateFeedbackSummaries to fetch.
+     */
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentTemplateFeedbackSummaries to fetch.
+     */
+    orderBy?: StudentTemplateFeedbackSummaryOrderByWithRelationInput | StudentTemplateFeedbackSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentTemplateFeedbackSummaries.
+     */
+    cursor?: StudentTemplateFeedbackSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentTemplateFeedbackSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentTemplateFeedbackSummaries.
+     */
+    skip?: number
+    distinct?: StudentTemplateFeedbackSummaryScalarFieldEnum | StudentTemplateFeedbackSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary create
+   */
+  export type StudentTemplateFeedbackSummaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentTemplateFeedbackSummary.
+     */
+    data: XOR<StudentTemplateFeedbackSummaryCreateInput, StudentTemplateFeedbackSummaryUncheckedCreateInput>
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary createMany
+   */
+  export type StudentTemplateFeedbackSummaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentTemplateFeedbackSummaries.
+     */
+    data: StudentTemplateFeedbackSummaryCreateManyInput | StudentTemplateFeedbackSummaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary createManyAndReturn
+   */
+  export type StudentTemplateFeedbackSummaryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentTemplateFeedbackSummaries.
+     */
+    data: StudentTemplateFeedbackSummaryCreateManyInput | StudentTemplateFeedbackSummaryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary update
+   */
+  export type StudentTemplateFeedbackSummaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentTemplateFeedbackSummary.
+     */
+    data: XOR<StudentTemplateFeedbackSummaryUpdateInput, StudentTemplateFeedbackSummaryUncheckedUpdateInput>
+    /**
+     * Choose, which StudentTemplateFeedbackSummary to update.
+     */
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary updateMany
+   */
+  export type StudentTemplateFeedbackSummaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentTemplateFeedbackSummaries.
+     */
+    data: XOR<StudentTemplateFeedbackSummaryUpdateManyMutationInput, StudentTemplateFeedbackSummaryUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentTemplateFeedbackSummaries to update
+     */
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    /**
+     * Limit how many StudentTemplateFeedbackSummaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary updateManyAndReturn
+   */
+  export type StudentTemplateFeedbackSummaryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentTemplateFeedbackSummaries.
+     */
+    data: XOR<StudentTemplateFeedbackSummaryUpdateManyMutationInput, StudentTemplateFeedbackSummaryUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentTemplateFeedbackSummaries to update
+     */
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    /**
+     * Limit how many StudentTemplateFeedbackSummaries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary upsert
+   */
+  export type StudentTemplateFeedbackSummaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentTemplateFeedbackSummary to update in case it exists.
+     */
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+    /**
+     * In case the StudentTemplateFeedbackSummary found by the `where` argument doesn't exist, create a new StudentTemplateFeedbackSummary with this data.
+     */
+    create: XOR<StudentTemplateFeedbackSummaryCreateInput, StudentTemplateFeedbackSummaryUncheckedCreateInput>
+    /**
+     * In case the StudentTemplateFeedbackSummary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentTemplateFeedbackSummaryUpdateInput, StudentTemplateFeedbackSummaryUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary delete
+   */
+  export type StudentTemplateFeedbackSummaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+    /**
+     * Filter which StudentTemplateFeedbackSummary to delete.
+     */
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary deleteMany
+   */
+  export type StudentTemplateFeedbackSummaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentTemplateFeedbackSummaries to delete
+     */
+    where?: StudentTemplateFeedbackSummaryWhereInput
+    /**
+     * Limit how many StudentTemplateFeedbackSummaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentTemplateFeedbackSummary without action
+   */
+  export type StudentTemplateFeedbackSummaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTemplateFeedbackSummary
+     */
+    select?: StudentTemplateFeedbackSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTemplateFeedbackSummary
+     */
+    omit?: StudentTemplateFeedbackSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTemplateFeedbackSummaryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -17801,16 +19419,6 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
-  export const TopicScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type TopicScalarFieldEnum = (typeof TopicScalarFieldEnum)[keyof typeof TopicScalarFieldEnum]
 
 
   export const QuestionRequestTemplateScalarFieldEnum: {
@@ -17951,6 +19559,32 @@ export namespace Prisma {
   export type ClassCollaboratorScalarFieldEnum = (typeof ClassCollaboratorScalarFieldEnum)[keyof typeof ClassCollaboratorScalarFieldEnum]
 
 
+  export const LlmUsageScalarFieldEnum: {
+    id: 'id',
+    type: 'type',
+    promptTokens: 'promptTokens',
+    completionTokens: 'completionTokens',
+    model: 'model',
+    createdAt: 'createdAt',
+    userId: 'userId',
+    classId: 'classId',
+    templateId: 'templateId'
+  };
+
+  export type LlmUsageScalarFieldEnum = (typeof LlmUsageScalarFieldEnum)[keyof typeof LlmUsageScalarFieldEnum]
+
+
+  export const StudentTemplateFeedbackSummaryScalarFieldEnum: {
+    id: 'id',
+    summary: 'summary',
+    updatedAt: 'updatedAt',
+    studentId: 'studentId',
+    templateId: 'templateId'
+  };
+
+  export type StudentTemplateFeedbackSummaryScalarFieldEnum = (typeof StudentTemplateFeedbackSummaryScalarFieldEnum)[keyof typeof StudentTemplateFeedbackSummaryScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -18083,6 +19717,20 @@ export namespace Prisma {
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
+
+
+  /**
+   * Reference to a field of type 'LlmUsageType'
+   */
+  export type EnumLlmUsageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LlmUsageType'>
+    
+
+
+  /**
+   * Reference to a field of type 'LlmUsageType[]'
+   */
+  export type ListEnumLlmUsageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LlmUsageType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -18108,6 +19756,8 @@ export namespace Prisma {
     ownedClasses?: ClassListRelationFilter
     studentClasses?: ClassListRelationFilter
     collaboratedClasses?: ClassCollaboratorListRelationFilter
+    feedbackSummaries?: StudentTemplateFeedbackSummaryListRelationFilter
+    llmUsages?: LlmUsageListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -18127,6 +19777,8 @@ export namespace Prisma {
     ownedClasses?: ClassOrderByRelationAggregateInput
     studentClasses?: ClassOrderByRelationAggregateInput
     collaboratedClasses?: ClassCollaboratorOrderByRelationAggregateInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryOrderByRelationAggregateInput
+    llmUsages?: LlmUsageOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -18149,6 +19801,8 @@ export namespace Prisma {
     ownedClasses?: ClassListRelationFilter
     studentClasses?: ClassListRelationFilter
     collaboratedClasses?: ClassCollaboratorListRelationFilter
+    feedbackSummaries?: StudentTemplateFeedbackSummaryListRelationFilter
+    llmUsages?: LlmUsageListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -18181,55 +19835,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
-  export type TopicWhereInput = {
-    AND?: TopicWhereInput | TopicWhereInput[]
-    OR?: TopicWhereInput[]
-    NOT?: TopicWhereInput | TopicWhereInput[]
-    id?: IntFilter<"Topic"> | number
-    name?: StringFilter<"Topic"> | string
-    createdAt?: DateTimeFilter<"Topic"> | Date | string
-    updatedAt?: DateTimeFilter<"Topic"> | Date | string
-  }
-
-  export type TopicOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TopicWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: TopicWhereInput | TopicWhereInput[]
-    OR?: TopicWhereInput[]
-    NOT?: TopicWhereInput | TopicWhereInput[]
-    name?: StringFilter<"Topic"> | string
-    createdAt?: DateTimeFilter<"Topic"> | Date | string
-    updatedAt?: DateTimeFilter<"Topic"> | Date | string
-  }, "id">
-
-  export type TopicOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: TopicCountOrderByAggregateInput
-    _avg?: TopicAvgOrderByAggregateInput
-    _max?: TopicMaxOrderByAggregateInput
-    _min?: TopicMinOrderByAggregateInput
-    _sum?: TopicSumOrderByAggregateInput
-  }
-
-  export type TopicScalarWhereWithAggregatesInput = {
-    AND?: TopicScalarWhereWithAggregatesInput | TopicScalarWhereWithAggregatesInput[]
-    OR?: TopicScalarWhereWithAggregatesInput[]
-    NOT?: TopicScalarWhereWithAggregatesInput | TopicScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Topic"> | number
-    name?: StringWithAggregatesFilter<"Topic"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Topic"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Topic"> | Date | string
-  }
-
   export type QuestionRequestTemplateWhereInput = {
     AND?: QuestionRequestTemplateWhereInput | QuestionRequestTemplateWhereInput[]
     OR?: QuestionRequestTemplateWhereInput[]
@@ -18247,6 +19852,8 @@ export namespace Prisma {
     requests?: QuestionRequestListRelationFilter
     evaluationTemplate?: XOR<EvaluationTemplateNullableScalarRelationFilter, EvaluationTemplateWhereInput> | null
     classes?: ClassListRelationFilter
+    feedbackSummaries?: StudentTemplateFeedbackSummaryListRelationFilter
+    llmUsages?: LlmUsageListRelationFilter
   }
 
   export type QuestionRequestTemplateOrderByWithRelationInput = {
@@ -18263,6 +19870,8 @@ export namespace Prisma {
     requests?: QuestionRequestOrderByRelationAggregateInput
     evaluationTemplate?: EvaluationTemplateOrderByWithRelationInput
     classes?: ClassOrderByRelationAggregateInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryOrderByRelationAggregateInput
+    llmUsages?: LlmUsageOrderByRelationAggregateInput
   }
 
   export type QuestionRequestTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -18282,6 +19891,8 @@ export namespace Prisma {
     requests?: QuestionRequestListRelationFilter
     evaluationTemplate?: XOR<EvaluationTemplateNullableScalarRelationFilter, EvaluationTemplateWhereInput> | null
     classes?: ClassListRelationFilter
+    feedbackSummaries?: StudentTemplateFeedbackSummaryListRelationFilter
+    llmUsages?: LlmUsageListRelationFilter
   }, "id">
 
   export type QuestionRequestTemplateOrderByWithAggregationInput = {
@@ -18897,6 +20508,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorListRelationFilter
     questionTemplates?: QuestionRequestTemplateListRelationFilter
     evaluationTemplates?: EvaluationTemplateListRelationFilter
+    llmUsages?: LlmUsageListRelationFilter
   }
 
   export type ClassOrderByWithRelationInput = {
@@ -18911,6 +20523,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorOrderByRelationAggregateInput
     questionTemplates?: QuestionRequestTemplateOrderByRelationAggregateInput
     evaluationTemplates?: EvaluationTemplateOrderByRelationAggregateInput
+    llmUsages?: LlmUsageOrderByRelationAggregateInput
   }
 
   export type ClassWhereUniqueInput = Prisma.AtLeast<{
@@ -18928,6 +20541,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorListRelationFilter
     questionTemplates?: QuestionRequestTemplateListRelationFilter
     evaluationTemplates?: EvaluationTemplateListRelationFilter
+    llmUsages?: LlmUsageListRelationFilter
   }, "id" | "link">
 
   export type ClassOrderByWithAggregationInput = {
@@ -19007,6 +20621,150 @@ export namespace Prisma {
     addedAt?: DateTimeWithAggregatesFilter<"ClassCollaborator"> | Date | string
   }
 
+  export type LlmUsageWhereInput = {
+    AND?: LlmUsageWhereInput | LlmUsageWhereInput[]
+    OR?: LlmUsageWhereInput[]
+    NOT?: LlmUsageWhereInput | LlmUsageWhereInput[]
+    id?: IntFilter<"LlmUsage"> | number
+    type?: EnumLlmUsageTypeFilter<"LlmUsage"> | $Enums.LlmUsageType
+    promptTokens?: IntFilter<"LlmUsage"> | number
+    completionTokens?: IntFilter<"LlmUsage"> | number
+    model?: StringFilter<"LlmUsage"> | string
+    createdAt?: DateTimeFilter<"LlmUsage"> | Date | string
+    userId?: IntNullableFilter<"LlmUsage"> | number | null
+    classId?: IntNullableFilter<"LlmUsage"> | number | null
+    templateId?: IntNullableFilter<"LlmUsage"> | number | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    class?: XOR<ClassNullableScalarRelationFilter, ClassWhereInput> | null
+    template?: XOR<QuestionRequestTemplateNullableScalarRelationFilter, QuestionRequestTemplateWhereInput> | null
+  }
+
+  export type LlmUsageOrderByWithRelationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    promptTokens?: SortOrder
+    completionTokens?: SortOrder
+    model?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    classId?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    class?: ClassOrderByWithRelationInput
+    template?: QuestionRequestTemplateOrderByWithRelationInput
+  }
+
+  export type LlmUsageWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: LlmUsageWhereInput | LlmUsageWhereInput[]
+    OR?: LlmUsageWhereInput[]
+    NOT?: LlmUsageWhereInput | LlmUsageWhereInput[]
+    type?: EnumLlmUsageTypeFilter<"LlmUsage"> | $Enums.LlmUsageType
+    promptTokens?: IntFilter<"LlmUsage"> | number
+    completionTokens?: IntFilter<"LlmUsage"> | number
+    model?: StringFilter<"LlmUsage"> | string
+    createdAt?: DateTimeFilter<"LlmUsage"> | Date | string
+    userId?: IntNullableFilter<"LlmUsage"> | number | null
+    classId?: IntNullableFilter<"LlmUsage"> | number | null
+    templateId?: IntNullableFilter<"LlmUsage"> | number | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    class?: XOR<ClassNullableScalarRelationFilter, ClassWhereInput> | null
+    template?: XOR<QuestionRequestTemplateNullableScalarRelationFilter, QuestionRequestTemplateWhereInput> | null
+  }, "id">
+
+  export type LlmUsageOrderByWithAggregationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    promptTokens?: SortOrder
+    completionTokens?: SortOrder
+    model?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    classId?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
+    _count?: LlmUsageCountOrderByAggregateInput
+    _avg?: LlmUsageAvgOrderByAggregateInput
+    _max?: LlmUsageMaxOrderByAggregateInput
+    _min?: LlmUsageMinOrderByAggregateInput
+    _sum?: LlmUsageSumOrderByAggregateInput
+  }
+
+  export type LlmUsageScalarWhereWithAggregatesInput = {
+    AND?: LlmUsageScalarWhereWithAggregatesInput | LlmUsageScalarWhereWithAggregatesInput[]
+    OR?: LlmUsageScalarWhereWithAggregatesInput[]
+    NOT?: LlmUsageScalarWhereWithAggregatesInput | LlmUsageScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"LlmUsage"> | number
+    type?: EnumLlmUsageTypeWithAggregatesFilter<"LlmUsage"> | $Enums.LlmUsageType
+    promptTokens?: IntWithAggregatesFilter<"LlmUsage"> | number
+    completionTokens?: IntWithAggregatesFilter<"LlmUsage"> | number
+    model?: StringWithAggregatesFilter<"LlmUsage"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"LlmUsage"> | Date | string
+    userId?: IntNullableWithAggregatesFilter<"LlmUsage"> | number | null
+    classId?: IntNullableWithAggregatesFilter<"LlmUsage"> | number | null
+    templateId?: IntNullableWithAggregatesFilter<"LlmUsage"> | number | null
+  }
+
+  export type StudentTemplateFeedbackSummaryWhereInput = {
+    AND?: StudentTemplateFeedbackSummaryWhereInput | StudentTemplateFeedbackSummaryWhereInput[]
+    OR?: StudentTemplateFeedbackSummaryWhereInput[]
+    NOT?: StudentTemplateFeedbackSummaryWhereInput | StudentTemplateFeedbackSummaryWhereInput[]
+    id?: IntFilter<"StudentTemplateFeedbackSummary"> | number
+    summary?: StringFilter<"StudentTemplateFeedbackSummary"> | string
+    updatedAt?: DateTimeFilter<"StudentTemplateFeedbackSummary"> | Date | string
+    studentId?: IntFilter<"StudentTemplateFeedbackSummary"> | number
+    templateId?: IntFilter<"StudentTemplateFeedbackSummary"> | number
+    student?: XOR<UserScalarRelationFilter, UserWhereInput>
+    template?: XOR<QuestionRequestTemplateScalarRelationFilter, QuestionRequestTemplateWhereInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryOrderByWithRelationInput = {
+    id?: SortOrder
+    summary?: SortOrder
+    updatedAt?: SortOrder
+    studentId?: SortOrder
+    templateId?: SortOrder
+    student?: UserOrderByWithRelationInput
+    template?: QuestionRequestTemplateOrderByWithRelationInput
+  }
+
+  export type StudentTemplateFeedbackSummaryWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    studentId_templateId?: StudentTemplateFeedbackSummaryStudentIdTemplateIdCompoundUniqueInput
+    AND?: StudentTemplateFeedbackSummaryWhereInput | StudentTemplateFeedbackSummaryWhereInput[]
+    OR?: StudentTemplateFeedbackSummaryWhereInput[]
+    NOT?: StudentTemplateFeedbackSummaryWhereInput | StudentTemplateFeedbackSummaryWhereInput[]
+    summary?: StringFilter<"StudentTemplateFeedbackSummary"> | string
+    updatedAt?: DateTimeFilter<"StudentTemplateFeedbackSummary"> | Date | string
+    studentId?: IntFilter<"StudentTemplateFeedbackSummary"> | number
+    templateId?: IntFilter<"StudentTemplateFeedbackSummary"> | number
+    student?: XOR<UserScalarRelationFilter, UserWhereInput>
+    template?: XOR<QuestionRequestTemplateScalarRelationFilter, QuestionRequestTemplateWhereInput>
+  }, "id" | "studentId_templateId">
+
+  export type StudentTemplateFeedbackSummaryOrderByWithAggregationInput = {
+    id?: SortOrder
+    summary?: SortOrder
+    updatedAt?: SortOrder
+    studentId?: SortOrder
+    templateId?: SortOrder
+    _count?: StudentTemplateFeedbackSummaryCountOrderByAggregateInput
+    _avg?: StudentTemplateFeedbackSummaryAvgOrderByAggregateInput
+    _max?: StudentTemplateFeedbackSummaryMaxOrderByAggregateInput
+    _min?: StudentTemplateFeedbackSummaryMinOrderByAggregateInput
+    _sum?: StudentTemplateFeedbackSummarySumOrderByAggregateInput
+  }
+
+  export type StudentTemplateFeedbackSummaryScalarWhereWithAggregatesInput = {
+    AND?: StudentTemplateFeedbackSummaryScalarWhereWithAggregatesInput | StudentTemplateFeedbackSummaryScalarWhereWithAggregatesInput[]
+    OR?: StudentTemplateFeedbackSummaryScalarWhereWithAggregatesInput[]
+    NOT?: StudentTemplateFeedbackSummaryScalarWhereWithAggregatesInput | StudentTemplateFeedbackSummaryScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"StudentTemplateFeedbackSummary"> | number
+    summary?: StringWithAggregatesFilter<"StudentTemplateFeedbackSummary"> | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StudentTemplateFeedbackSummary"> | Date | string
+    studentId?: IntWithAggregatesFilter<"StudentTemplateFeedbackSummary"> | number
+    templateId?: IntWithAggregatesFilter<"StudentTemplateFeedbackSummary"> | number
+  }
+
   export type UserCreateInput = {
     role?: $Enums.Role
     name?: string | null
@@ -19023,6 +20781,8 @@ export namespace Prisma {
     ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -19042,6 +20802,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -19060,6 +20822,8 @@ export namespace Prisma {
     ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -19079,6 +20843,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -19113,52 +20879,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type TopicCreateInput = {
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type TopicUncheckedCreateInput = {
-    id?: number
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type TopicUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TopicUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TopicCreateManyInput = {
-    id?: number
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type TopicUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TopicUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type QuestionRequestTemplateCreateInput = {
     name: string
     promptTemplate: string
@@ -19170,6 +20890,8 @@ export namespace Prisma {
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
     evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
     classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateInput = {
@@ -19184,6 +20906,8 @@ export namespace Prisma {
     evaluationTemplateId?: number | null
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
     classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateUpdateInput = {
@@ -19197,6 +20921,8 @@ export namespace Prisma {
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
     evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
     classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateInput = {
@@ -19211,6 +20937,8 @@ export namespace Prisma {
     evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
     classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateCreateManyInput = {
@@ -19802,6 +21530,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
     questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutClassInput
   }
 
   export type ClassUncheckedCreateInput = {
@@ -19815,6 +21544,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
     questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutClassInput
   }
 
   export type ClassUpdateInput = {
@@ -19827,6 +21557,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
     questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateInput = {
@@ -19840,6 +21571,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
     questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutClassNestedInput
   }
 
   export type ClassCreateManyInput = {
@@ -19905,6 +21637,135 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LlmUsageCreateInput = {
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    user?: UserCreateNestedOneWithoutLlmUsagesInput
+    class?: ClassCreateNestedOneWithoutLlmUsagesInput
+    template?: QuestionRequestTemplateCreateNestedOneWithoutLlmUsagesInput
+  }
+
+  export type LlmUsageUncheckedCreateInput = {
+    id?: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    userId?: number | null
+    classId?: number | null
+    templateId?: number | null
+  }
+
+  export type LlmUsageUpdateInput = {
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutLlmUsagesNestedInput
+    class?: ClassUpdateOneWithoutLlmUsagesNestedInput
+    template?: QuestionRequestTemplateUpdateOneWithoutLlmUsagesNestedInput
+  }
+
+  export type LlmUsageUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    classId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type LlmUsageCreateManyInput = {
+    id?: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    userId?: number | null
+    classId?: number | null
+    templateId?: number | null
+  }
+
+  export type LlmUsageUpdateManyMutationInput = {
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LlmUsageUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    classId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateInput = {
+    summary: string
+    updatedAt?: Date | string
+    student: UserCreateNestedOneWithoutFeedbackSummariesInput
+    template: QuestionRequestTemplateCreateNestedOneWithoutFeedbackSummariesInput
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedCreateInput = {
+    id?: number
+    summary: string
+    updatedAt?: Date | string
+    studentId: number
+    templateId: number
+  }
+
+  export type StudentTemplateFeedbackSummaryUpdateInput = {
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: UserUpdateOneRequiredWithoutFeedbackSummariesNestedInput
+    template?: QuestionRequestTemplateUpdateOneRequiredWithoutFeedbackSummariesNestedInput
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentId?: IntFieldUpdateOperationsInput | number
+    templateId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateManyInput = {
+    id?: number
+    summary: string
+    updatedAt?: Date | string
+    studentId: number
+    templateId: number
+  }
+
+  export type StudentTemplateFeedbackSummaryUpdateManyMutationInput = {
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentId?: IntFieldUpdateOperationsInput | number
+    templateId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -20008,6 +21869,18 @@ export namespace Prisma {
     none?: ClassCollaboratorWhereInput
   }
 
+  export type StudentTemplateFeedbackSummaryListRelationFilter = {
+    every?: StudentTemplateFeedbackSummaryWhereInput
+    some?: StudentTemplateFeedbackSummaryWhereInput
+    none?: StudentTemplateFeedbackSummaryWhereInput
+  }
+
+  export type LlmUsageListRelationFilter = {
+    every?: LlmUsageWhereInput
+    some?: LlmUsageWhereInput
+    none?: LlmUsageWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -20038,6 +21911,14 @@ export namespace Prisma {
   }
 
   export type ClassCollaboratorOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StudentTemplateFeedbackSummaryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LlmUsageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20156,35 +22037,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type TopicCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TopicAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type TopicMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TopicMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TopicSumOrderByAggregateInput = {
-    id?: SortOrder
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -20838,6 +22690,133 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
+  export type EnumLlmUsageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.LlmUsageType | EnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LlmUsageType[] | ListEnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LlmUsageType[] | ListEnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLlmUsageTypeFilter<$PrismaModel> | $Enums.LlmUsageType
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type ClassNullableScalarRelationFilter = {
+    is?: ClassWhereInput | null
+    isNot?: ClassWhereInput | null
+  }
+
+  export type LlmUsageCountOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    promptTokens?: SortOrder
+    completionTokens?: SortOrder
+    model?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    classId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type LlmUsageAvgOrderByAggregateInput = {
+    id?: SortOrder
+    promptTokens?: SortOrder
+    completionTokens?: SortOrder
+    userId?: SortOrder
+    classId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type LlmUsageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    promptTokens?: SortOrder
+    completionTokens?: SortOrder
+    model?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    classId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type LlmUsageMinOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    promptTokens?: SortOrder
+    completionTokens?: SortOrder
+    model?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    classId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type LlmUsageSumOrderByAggregateInput = {
+    id?: SortOrder
+    promptTokens?: SortOrder
+    completionTokens?: SortOrder
+    userId?: SortOrder
+    classId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type EnumLlmUsageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LlmUsageType | EnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LlmUsageType[] | ListEnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LlmUsageType[] | ListEnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLlmUsageTypeWithAggregatesFilter<$PrismaModel> | $Enums.LlmUsageType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLlmUsageTypeFilter<$PrismaModel>
+    _max?: NestedEnumLlmUsageTypeFilter<$PrismaModel>
+  }
+
+  export type QuestionRequestTemplateScalarRelationFilter = {
+    is?: QuestionRequestTemplateWhereInput
+    isNot?: QuestionRequestTemplateWhereInput
+  }
+
+  export type StudentTemplateFeedbackSummaryStudentIdTemplateIdCompoundUniqueInput = {
+    studentId: number
+    templateId: number
+  }
+
+  export type StudentTemplateFeedbackSummaryCountOrderByAggregateInput = {
+    id?: SortOrder
+    summary?: SortOrder
+    updatedAt?: SortOrder
+    studentId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type StudentTemplateFeedbackSummaryAvgOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type StudentTemplateFeedbackSummaryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    summary?: SortOrder
+    updatedAt?: SortOrder
+    studentId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type StudentTemplateFeedbackSummaryMinOrderByAggregateInput = {
+    id?: SortOrder
+    summary?: SortOrder
+    updatedAt?: SortOrder
+    studentId?: SortOrder
+    templateId?: SortOrder
+  }
+
+  export type StudentTemplateFeedbackSummarySumOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    templateId?: SortOrder
+  }
+
   export type QuestionRequestTemplateCreateNestedManyWithoutOwnerInput = {
     create?: XOR<QuestionRequestTemplateCreateWithoutOwnerInput, QuestionRequestTemplateUncheckedCreateWithoutOwnerInput> | QuestionRequestTemplateCreateWithoutOwnerInput[] | QuestionRequestTemplateUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutOwnerInput | QuestionRequestTemplateCreateOrConnectWithoutOwnerInput[]
@@ -20893,6 +22872,20 @@ export namespace Prisma {
     connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
   }
 
+  export type StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentTemplateFeedbackSummaryCreateWithoutStudentInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput> | StudentTemplateFeedbackSummaryCreateWithoutStudentInput[] | StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput | StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentTemplateFeedbackSummaryCreateManyStudentInputEnvelope
+    connect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+  }
+
+  export type LlmUsageCreateNestedManyWithoutUserInput = {
+    create?: XOR<LlmUsageCreateWithoutUserInput, LlmUsageUncheckedCreateWithoutUserInput> | LlmUsageCreateWithoutUserInput[] | LlmUsageUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutUserInput | LlmUsageCreateOrConnectWithoutUserInput[]
+    createMany?: LlmUsageCreateManyUserInputEnvelope
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+  }
+
   export type QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput = {
     create?: XOR<QuestionRequestTemplateCreateWithoutOwnerInput, QuestionRequestTemplateUncheckedCreateWithoutOwnerInput> | QuestionRequestTemplateCreateWithoutOwnerInput[] | QuestionRequestTemplateUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutOwnerInput | QuestionRequestTemplateCreateOrConnectWithoutOwnerInput[]
@@ -20946,6 +22939,20 @@ export namespace Prisma {
     connectOrCreate?: ClassCollaboratorCreateOrConnectWithoutUserInput | ClassCollaboratorCreateOrConnectWithoutUserInput[]
     createMany?: ClassCollaboratorCreateManyUserInputEnvelope
     connect?: ClassCollaboratorWhereUniqueInput | ClassCollaboratorWhereUniqueInput[]
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentTemplateFeedbackSummaryCreateWithoutStudentInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput> | StudentTemplateFeedbackSummaryCreateWithoutStudentInput[] | StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput | StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentTemplateFeedbackSummaryCreateManyStudentInputEnvelope
+    connect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+  }
+
+  export type LlmUsageUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<LlmUsageCreateWithoutUserInput, LlmUsageUncheckedCreateWithoutUserInput> | LlmUsageCreateWithoutUserInput[] | LlmUsageUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutUserInput | LlmUsageCreateOrConnectWithoutUserInput[]
+    createMany?: LlmUsageCreateManyUserInputEnvelope
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
   }
 
   export type EnumRoleFieldUpdateOperationsInput = {
@@ -21075,6 +23082,34 @@ export namespace Prisma {
     deleteMany?: ClassCollaboratorScalarWhereInput | ClassCollaboratorScalarWhereInput[]
   }
 
+  export type StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentTemplateFeedbackSummaryCreateWithoutStudentInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput> | StudentTemplateFeedbackSummaryCreateWithoutStudentInput[] | StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput | StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutStudentInput | StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentTemplateFeedbackSummaryCreateManyStudentInputEnvelope
+    set?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    disconnect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    delete?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    connect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    update?: StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutStudentInput | StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutStudentInput | StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentTemplateFeedbackSummaryScalarWhereInput | StudentTemplateFeedbackSummaryScalarWhereInput[]
+  }
+
+  export type LlmUsageUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LlmUsageCreateWithoutUserInput, LlmUsageUncheckedCreateWithoutUserInput> | LlmUsageCreateWithoutUserInput[] | LlmUsageUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutUserInput | LlmUsageCreateOrConnectWithoutUserInput[]
+    upsert?: LlmUsageUpsertWithWhereUniqueWithoutUserInput | LlmUsageUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LlmUsageCreateManyUserInputEnvelope
+    set?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    disconnect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    delete?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    update?: LlmUsageUpdateWithWhereUniqueWithoutUserInput | LlmUsageUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LlmUsageUpdateManyWithWhereWithoutUserInput | LlmUsageUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LlmUsageScalarWhereInput | LlmUsageScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -21194,6 +23229,34 @@ export namespace Prisma {
     deleteMany?: ClassCollaboratorScalarWhereInput | ClassCollaboratorScalarWhereInput[]
   }
 
+  export type StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentTemplateFeedbackSummaryCreateWithoutStudentInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput> | StudentTemplateFeedbackSummaryCreateWithoutStudentInput[] | StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput | StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutStudentInput | StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentTemplateFeedbackSummaryCreateManyStudentInputEnvelope
+    set?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    disconnect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    delete?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    connect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    update?: StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutStudentInput | StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutStudentInput | StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentTemplateFeedbackSummaryScalarWhereInput | StudentTemplateFeedbackSummaryScalarWhereInput[]
+  }
+
+  export type LlmUsageUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LlmUsageCreateWithoutUserInput, LlmUsageUncheckedCreateWithoutUserInput> | LlmUsageCreateWithoutUserInput[] | LlmUsageUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutUserInput | LlmUsageCreateOrConnectWithoutUserInput[]
+    upsert?: LlmUsageUpsertWithWhereUniqueWithoutUserInput | LlmUsageUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LlmUsageCreateManyUserInputEnvelope
+    set?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    disconnect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    delete?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    update?: LlmUsageUpdateWithWhereUniqueWithoutUserInput | LlmUsageUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LlmUsageUpdateManyWithWhereWithoutUserInput | LlmUsageUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LlmUsageScalarWhereInput | LlmUsageScalarWhereInput[]
+  }
+
   export type QuestionRequestTemplateCreateparametersInput = {
     set: InputJsonValue[]
   }
@@ -21223,6 +23286,20 @@ export namespace Prisma {
     connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
   }
 
+  export type StudentTemplateFeedbackSummaryCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<StudentTemplateFeedbackSummaryCreateWithoutTemplateInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput> | StudentTemplateFeedbackSummaryCreateWithoutTemplateInput[] | StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput | StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput[]
+    createMany?: StudentTemplateFeedbackSummaryCreateManyTemplateInputEnvelope
+    connect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+  }
+
+  export type LlmUsageCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<LlmUsageCreateWithoutTemplateInput, LlmUsageUncheckedCreateWithoutTemplateInput> | LlmUsageCreateWithoutTemplateInput[] | LlmUsageUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutTemplateInput | LlmUsageCreateOrConnectWithoutTemplateInput[]
+    createMany?: LlmUsageCreateManyTemplateInputEnvelope
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+  }
+
   export type QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput = {
     create?: XOR<QuestionRequestCreateWithoutTemplateInput, QuestionRequestUncheckedCreateWithoutTemplateInput> | QuestionRequestCreateWithoutTemplateInput[] | QuestionRequestUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: QuestionRequestCreateOrConnectWithoutTemplateInput | QuestionRequestCreateOrConnectWithoutTemplateInput[]
@@ -21234,6 +23311,20 @@ export namespace Prisma {
     create?: XOR<ClassCreateWithoutQuestionTemplatesInput, ClassUncheckedCreateWithoutQuestionTemplatesInput> | ClassCreateWithoutQuestionTemplatesInput[] | ClassUncheckedCreateWithoutQuestionTemplatesInput[]
     connectOrCreate?: ClassCreateOrConnectWithoutQuestionTemplatesInput | ClassCreateOrConnectWithoutQuestionTemplatesInput[]
     connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<StudentTemplateFeedbackSummaryCreateWithoutTemplateInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput> | StudentTemplateFeedbackSummaryCreateWithoutTemplateInput[] | StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput | StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput[]
+    createMany?: StudentTemplateFeedbackSummaryCreateManyTemplateInputEnvelope
+    connect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+  }
+
+  export type LlmUsageUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<LlmUsageCreateWithoutTemplateInput, LlmUsageUncheckedCreateWithoutTemplateInput> | LlmUsageCreateWithoutTemplateInput[] | LlmUsageUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutTemplateInput | LlmUsageCreateOrConnectWithoutTemplateInput[]
+    createMany?: LlmUsageCreateManyTemplateInputEnvelope
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -21290,6 +23381,34 @@ export namespace Prisma {
     deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
   }
 
+  export type StudentTemplateFeedbackSummaryUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<StudentTemplateFeedbackSummaryCreateWithoutTemplateInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput> | StudentTemplateFeedbackSummaryCreateWithoutTemplateInput[] | StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput | StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput[]
+    upsert?: StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutTemplateInput | StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: StudentTemplateFeedbackSummaryCreateManyTemplateInputEnvelope
+    set?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    disconnect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    delete?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    connect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    update?: StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutTemplateInput | StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutTemplateInput | StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: StudentTemplateFeedbackSummaryScalarWhereInput | StudentTemplateFeedbackSummaryScalarWhereInput[]
+  }
+
+  export type LlmUsageUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<LlmUsageCreateWithoutTemplateInput, LlmUsageUncheckedCreateWithoutTemplateInput> | LlmUsageCreateWithoutTemplateInput[] | LlmUsageUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutTemplateInput | LlmUsageCreateOrConnectWithoutTemplateInput[]
+    upsert?: LlmUsageUpsertWithWhereUniqueWithoutTemplateInput | LlmUsageUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: LlmUsageCreateManyTemplateInputEnvelope
+    set?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    disconnect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    delete?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    update?: LlmUsageUpdateWithWhereUniqueWithoutTemplateInput | LlmUsageUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: LlmUsageUpdateManyWithWhereWithoutTemplateInput | LlmUsageUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: LlmUsageScalarWhereInput | LlmUsageScalarWhereInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -21323,6 +23442,34 @@ export namespace Prisma {
     update?: ClassUpdateWithWhereUniqueWithoutQuestionTemplatesInput | ClassUpdateWithWhereUniqueWithoutQuestionTemplatesInput[]
     updateMany?: ClassUpdateManyWithWhereWithoutQuestionTemplatesInput | ClassUpdateManyWithWhereWithoutQuestionTemplatesInput[]
     deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<StudentTemplateFeedbackSummaryCreateWithoutTemplateInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput> | StudentTemplateFeedbackSummaryCreateWithoutTemplateInput[] | StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput | StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput[]
+    upsert?: StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutTemplateInput | StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: StudentTemplateFeedbackSummaryCreateManyTemplateInputEnvelope
+    set?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    disconnect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    delete?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    connect?: StudentTemplateFeedbackSummaryWhereUniqueInput | StudentTemplateFeedbackSummaryWhereUniqueInput[]
+    update?: StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutTemplateInput | StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutTemplateInput | StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: StudentTemplateFeedbackSummaryScalarWhereInput | StudentTemplateFeedbackSummaryScalarWhereInput[]
+  }
+
+  export type LlmUsageUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<LlmUsageCreateWithoutTemplateInput, LlmUsageUncheckedCreateWithoutTemplateInput> | LlmUsageCreateWithoutTemplateInput[] | LlmUsageUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutTemplateInput | LlmUsageCreateOrConnectWithoutTemplateInput[]
+    upsert?: LlmUsageUpsertWithWhereUniqueWithoutTemplateInput | LlmUsageUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: LlmUsageCreateManyTemplateInputEnvelope
+    set?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    disconnect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    delete?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    update?: LlmUsageUpdateWithWhereUniqueWithoutTemplateInput | LlmUsageUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: LlmUsageUpdateManyWithWhereWithoutTemplateInput | LlmUsageUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: LlmUsageScalarWhereInput | LlmUsageScalarWhereInput[]
   }
 
   export type QuestionRequestCreateparameterValuesInput = {
@@ -21931,6 +24078,13 @@ export namespace Prisma {
     connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
   }
 
+  export type LlmUsageCreateNestedManyWithoutClassInput = {
+    create?: XOR<LlmUsageCreateWithoutClassInput, LlmUsageUncheckedCreateWithoutClassInput> | LlmUsageCreateWithoutClassInput[] | LlmUsageUncheckedCreateWithoutClassInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutClassInput | LlmUsageCreateOrConnectWithoutClassInput[]
+    createMany?: LlmUsageCreateManyClassInputEnvelope
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutStudentClassesInput = {
     create?: XOR<UserCreateWithoutStudentClassesInput, UserUncheckedCreateWithoutStudentClassesInput> | UserCreateWithoutStudentClassesInput[] | UserUncheckedCreateWithoutStudentClassesInput[]
     connectOrCreate?: UserCreateOrConnectWithoutStudentClassesInput | UserCreateOrConnectWithoutStudentClassesInput[]
@@ -21954,6 +24108,13 @@ export namespace Prisma {
     create?: XOR<EvaluationTemplateCreateWithoutClassesInput, EvaluationTemplateUncheckedCreateWithoutClassesInput> | EvaluationTemplateCreateWithoutClassesInput[] | EvaluationTemplateUncheckedCreateWithoutClassesInput[]
     connectOrCreate?: EvaluationTemplateCreateOrConnectWithoutClassesInput | EvaluationTemplateCreateOrConnectWithoutClassesInput[]
     connect?: EvaluationTemplateWhereUniqueInput | EvaluationTemplateWhereUniqueInput[]
+  }
+
+  export type LlmUsageUncheckedCreateNestedManyWithoutClassInput = {
+    create?: XOR<LlmUsageCreateWithoutClassInput, LlmUsageUncheckedCreateWithoutClassInput> | LlmUsageCreateWithoutClassInput[] | LlmUsageUncheckedCreateWithoutClassInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutClassInput | LlmUsageCreateOrConnectWithoutClassInput[]
+    createMany?: LlmUsageCreateManyClassInputEnvelope
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutOwnedClassesNestedInput = {
@@ -22017,6 +24178,20 @@ export namespace Prisma {
     deleteMany?: EvaluationTemplateScalarWhereInput | EvaluationTemplateScalarWhereInput[]
   }
 
+  export type LlmUsageUpdateManyWithoutClassNestedInput = {
+    create?: XOR<LlmUsageCreateWithoutClassInput, LlmUsageUncheckedCreateWithoutClassInput> | LlmUsageCreateWithoutClassInput[] | LlmUsageUncheckedCreateWithoutClassInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutClassInput | LlmUsageCreateOrConnectWithoutClassInput[]
+    upsert?: LlmUsageUpsertWithWhereUniqueWithoutClassInput | LlmUsageUpsertWithWhereUniqueWithoutClassInput[]
+    createMany?: LlmUsageCreateManyClassInputEnvelope
+    set?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    disconnect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    delete?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    update?: LlmUsageUpdateWithWhereUniqueWithoutClassInput | LlmUsageUpdateWithWhereUniqueWithoutClassInput[]
+    updateMany?: LlmUsageUpdateManyWithWhereWithoutClassInput | LlmUsageUpdateManyWithWhereWithoutClassInput[]
+    deleteMany?: LlmUsageScalarWhereInput | LlmUsageScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutStudentClassesNestedInput = {
     create?: XOR<UserCreateWithoutStudentClassesInput, UserUncheckedCreateWithoutStudentClassesInput> | UserCreateWithoutStudentClassesInput[] | UserUncheckedCreateWithoutStudentClassesInput[]
     connectOrCreate?: UserCreateOrConnectWithoutStudentClassesInput | UserCreateOrConnectWithoutStudentClassesInput[]
@@ -22070,6 +24245,20 @@ export namespace Prisma {
     deleteMany?: EvaluationTemplateScalarWhereInput | EvaluationTemplateScalarWhereInput[]
   }
 
+  export type LlmUsageUncheckedUpdateManyWithoutClassNestedInput = {
+    create?: XOR<LlmUsageCreateWithoutClassInput, LlmUsageUncheckedCreateWithoutClassInput> | LlmUsageCreateWithoutClassInput[] | LlmUsageUncheckedCreateWithoutClassInput[]
+    connectOrCreate?: LlmUsageCreateOrConnectWithoutClassInput | LlmUsageCreateOrConnectWithoutClassInput[]
+    upsert?: LlmUsageUpsertWithWhereUniqueWithoutClassInput | LlmUsageUpsertWithWhereUniqueWithoutClassInput[]
+    createMany?: LlmUsageCreateManyClassInputEnvelope
+    set?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    disconnect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    delete?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    connect?: LlmUsageWhereUniqueInput | LlmUsageWhereUniqueInput[]
+    update?: LlmUsageUpdateWithWhereUniqueWithoutClassInput | LlmUsageUpdateWithWhereUniqueWithoutClassInput[]
+    updateMany?: LlmUsageUpdateManyWithWhereWithoutClassInput | LlmUsageUpdateManyWithWhereWithoutClassInput[]
+    deleteMany?: LlmUsageScalarWhereInput | LlmUsageScalarWhereInput[]
+  }
+
   export type ClassCreateNestedOneWithoutCollaboratorsInput = {
     create?: XOR<ClassCreateWithoutCollaboratorsInput, ClassUncheckedCreateWithoutCollaboratorsInput>
     connectOrCreate?: ClassCreateOrConnectWithoutCollaboratorsInput
@@ -22096,6 +24285,86 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCollaboratedClassesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCollaboratedClassesInput, UserUpdateWithoutCollaboratedClassesInput>, UserUncheckedUpdateWithoutCollaboratedClassesInput>
+  }
+
+  export type UserCreateNestedOneWithoutLlmUsagesInput = {
+    create?: XOR<UserCreateWithoutLlmUsagesInput, UserUncheckedCreateWithoutLlmUsagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLlmUsagesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ClassCreateNestedOneWithoutLlmUsagesInput = {
+    create?: XOR<ClassCreateWithoutLlmUsagesInput, ClassUncheckedCreateWithoutLlmUsagesInput>
+    connectOrCreate?: ClassCreateOrConnectWithoutLlmUsagesInput
+    connect?: ClassWhereUniqueInput
+  }
+
+  export type QuestionRequestTemplateCreateNestedOneWithoutLlmUsagesInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutLlmUsagesInput, QuestionRequestTemplateUncheckedCreateWithoutLlmUsagesInput>
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutLlmUsagesInput
+    connect?: QuestionRequestTemplateWhereUniqueInput
+  }
+
+  export type EnumLlmUsageTypeFieldUpdateOperationsInput = {
+    set?: $Enums.LlmUsageType
+  }
+
+  export type UserUpdateOneWithoutLlmUsagesNestedInput = {
+    create?: XOR<UserCreateWithoutLlmUsagesInput, UserUncheckedCreateWithoutLlmUsagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLlmUsagesInput
+    upsert?: UserUpsertWithoutLlmUsagesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLlmUsagesInput, UserUpdateWithoutLlmUsagesInput>, UserUncheckedUpdateWithoutLlmUsagesInput>
+  }
+
+  export type ClassUpdateOneWithoutLlmUsagesNestedInput = {
+    create?: XOR<ClassCreateWithoutLlmUsagesInput, ClassUncheckedCreateWithoutLlmUsagesInput>
+    connectOrCreate?: ClassCreateOrConnectWithoutLlmUsagesInput
+    upsert?: ClassUpsertWithoutLlmUsagesInput
+    disconnect?: ClassWhereInput | boolean
+    delete?: ClassWhereInput | boolean
+    connect?: ClassWhereUniqueInput
+    update?: XOR<XOR<ClassUpdateToOneWithWhereWithoutLlmUsagesInput, ClassUpdateWithoutLlmUsagesInput>, ClassUncheckedUpdateWithoutLlmUsagesInput>
+  }
+
+  export type QuestionRequestTemplateUpdateOneWithoutLlmUsagesNestedInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutLlmUsagesInput, QuestionRequestTemplateUncheckedCreateWithoutLlmUsagesInput>
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutLlmUsagesInput
+    upsert?: QuestionRequestTemplateUpsertWithoutLlmUsagesInput
+    disconnect?: QuestionRequestTemplateWhereInput | boolean
+    delete?: QuestionRequestTemplateWhereInput | boolean
+    connect?: QuestionRequestTemplateWhereUniqueInput
+    update?: XOR<XOR<QuestionRequestTemplateUpdateToOneWithWhereWithoutLlmUsagesInput, QuestionRequestTemplateUpdateWithoutLlmUsagesInput>, QuestionRequestTemplateUncheckedUpdateWithoutLlmUsagesInput>
+  }
+
+  export type UserCreateNestedOneWithoutFeedbackSummariesInput = {
+    create?: XOR<UserCreateWithoutFeedbackSummariesInput, UserUncheckedCreateWithoutFeedbackSummariesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFeedbackSummariesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type QuestionRequestTemplateCreateNestedOneWithoutFeedbackSummariesInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutFeedbackSummariesInput, QuestionRequestTemplateUncheckedCreateWithoutFeedbackSummariesInput>
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutFeedbackSummariesInput
+    connect?: QuestionRequestTemplateWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutFeedbackSummariesNestedInput = {
+    create?: XOR<UserCreateWithoutFeedbackSummariesInput, UserUncheckedCreateWithoutFeedbackSummariesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFeedbackSummariesInput
+    upsert?: UserUpsertWithoutFeedbackSummariesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFeedbackSummariesInput, UserUpdateWithoutFeedbackSummariesInput>, UserUncheckedUpdateWithoutFeedbackSummariesInput>
+  }
+
+  export type QuestionRequestTemplateUpdateOneRequiredWithoutFeedbackSummariesNestedInput = {
+    create?: XOR<QuestionRequestTemplateCreateWithoutFeedbackSummariesInput, QuestionRequestTemplateUncheckedCreateWithoutFeedbackSummariesInput>
+    connectOrCreate?: QuestionRequestTemplateCreateOrConnectWithoutFeedbackSummariesInput
+    upsert?: QuestionRequestTemplateUpsertWithoutFeedbackSummariesInput
+    connect?: QuestionRequestTemplateWhereUniqueInput
+    update?: XOR<XOR<QuestionRequestTemplateUpdateToOneWithWhereWithoutFeedbackSummariesInput, QuestionRequestTemplateUpdateWithoutFeedbackSummariesInput>, QuestionRequestTemplateUncheckedUpdateWithoutFeedbackSummariesInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -22324,6 +24593,23 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedEnumLlmUsageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.LlmUsageType | EnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LlmUsageType[] | ListEnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LlmUsageType[] | ListEnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLlmUsageTypeFilter<$PrismaModel> | $Enums.LlmUsageType
+  }
+
+  export type NestedEnumLlmUsageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LlmUsageType | EnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LlmUsageType[] | ListEnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LlmUsageType[] | ListEnumLlmUsageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLlmUsageTypeWithAggregatesFilter<$PrismaModel> | $Enums.LlmUsageType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLlmUsageTypeFilter<$PrismaModel>
+    _max?: NestedEnumLlmUsageTypeFilter<$PrismaModel>
+  }
+
   export type QuestionRequestTemplateCreateWithoutOwnerInput = {
     name: string
     promptTemplate: string
@@ -22334,6 +24620,8 @@ export namespace Prisma {
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
     evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
     classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutOwnerInput = {
@@ -22347,6 +24635,8 @@ export namespace Prisma {
     evaluationTemplateId?: number | null
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
     classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateCreateOrConnectWithoutOwnerInput = {
@@ -22492,6 +24782,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
     questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutClassInput
   }
 
   export type ClassUncheckedCreateWithoutOwnerInput = {
@@ -22504,6 +24795,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
     questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutClassInput
   }
 
   export type ClassCreateOrConnectWithoutOwnerInput = {
@@ -22525,6 +24817,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
     questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutClassInput
   }
 
   export type ClassUncheckedCreateWithoutStudentsInput = {
@@ -22537,6 +24830,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
     questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutClassInput
   }
 
   export type ClassCreateOrConnectWithoutStudentsInput = {
@@ -22561,6 +24855,60 @@ export namespace Prisma {
 
   export type ClassCollaboratorCreateManyUserInputEnvelope = {
     data: ClassCollaboratorCreateManyUserInput | ClassCollaboratorCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateWithoutStudentInput = {
+    summary: string
+    updatedAt?: Date | string
+    template: QuestionRequestTemplateCreateNestedOneWithoutFeedbackSummariesInput
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput = {
+    id?: number
+    summary: string
+    updatedAt?: Date | string
+    templateId: number
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateOrConnectWithoutStudentInput = {
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+    create: XOR<StudentTemplateFeedbackSummaryCreateWithoutStudentInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateManyStudentInputEnvelope = {
+    data: StudentTemplateFeedbackSummaryCreateManyStudentInput | StudentTemplateFeedbackSummaryCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LlmUsageCreateWithoutUserInput = {
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    class?: ClassCreateNestedOneWithoutLlmUsagesInput
+    template?: QuestionRequestTemplateCreateNestedOneWithoutLlmUsagesInput
+  }
+
+  export type LlmUsageUncheckedCreateWithoutUserInput = {
+    id?: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    classId?: number | null
+    templateId?: number | null
+  }
+
+  export type LlmUsageCreateOrConnectWithoutUserInput = {
+    where: LlmUsageWhereUniqueInput
+    create: XOR<LlmUsageCreateWithoutUserInput, LlmUsageUncheckedCreateWithoutUserInput>
+  }
+
+  export type LlmUsageCreateManyUserInputEnvelope = {
+    data: LlmUsageCreateManyUserInput | LlmUsageCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -22782,6 +25130,64 @@ export namespace Prisma {
     addedAt?: DateTimeFilter<"ClassCollaborator"> | Date | string
   }
 
+  export type StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutStudentInput = {
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+    update: XOR<StudentTemplateFeedbackSummaryUpdateWithoutStudentInput, StudentTemplateFeedbackSummaryUncheckedUpdateWithoutStudentInput>
+    create: XOR<StudentTemplateFeedbackSummaryCreateWithoutStudentInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutStudentInput = {
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+    data: XOR<StudentTemplateFeedbackSummaryUpdateWithoutStudentInput, StudentTemplateFeedbackSummaryUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutStudentInput = {
+    where: StudentTemplateFeedbackSummaryScalarWhereInput
+    data: XOR<StudentTemplateFeedbackSummaryUpdateManyMutationInput, StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryScalarWhereInput = {
+    AND?: StudentTemplateFeedbackSummaryScalarWhereInput | StudentTemplateFeedbackSummaryScalarWhereInput[]
+    OR?: StudentTemplateFeedbackSummaryScalarWhereInput[]
+    NOT?: StudentTemplateFeedbackSummaryScalarWhereInput | StudentTemplateFeedbackSummaryScalarWhereInput[]
+    id?: IntFilter<"StudentTemplateFeedbackSummary"> | number
+    summary?: StringFilter<"StudentTemplateFeedbackSummary"> | string
+    updatedAt?: DateTimeFilter<"StudentTemplateFeedbackSummary"> | Date | string
+    studentId?: IntFilter<"StudentTemplateFeedbackSummary"> | number
+    templateId?: IntFilter<"StudentTemplateFeedbackSummary"> | number
+  }
+
+  export type LlmUsageUpsertWithWhereUniqueWithoutUserInput = {
+    where: LlmUsageWhereUniqueInput
+    update: XOR<LlmUsageUpdateWithoutUserInput, LlmUsageUncheckedUpdateWithoutUserInput>
+    create: XOR<LlmUsageCreateWithoutUserInput, LlmUsageUncheckedCreateWithoutUserInput>
+  }
+
+  export type LlmUsageUpdateWithWhereUniqueWithoutUserInput = {
+    where: LlmUsageWhereUniqueInput
+    data: XOR<LlmUsageUpdateWithoutUserInput, LlmUsageUncheckedUpdateWithoutUserInput>
+  }
+
+  export type LlmUsageUpdateManyWithWhereWithoutUserInput = {
+    where: LlmUsageScalarWhereInput
+    data: XOR<LlmUsageUpdateManyMutationInput, LlmUsageUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type LlmUsageScalarWhereInput = {
+    AND?: LlmUsageScalarWhereInput | LlmUsageScalarWhereInput[]
+    OR?: LlmUsageScalarWhereInput[]
+    NOT?: LlmUsageScalarWhereInput | LlmUsageScalarWhereInput[]
+    id?: IntFilter<"LlmUsage"> | number
+    type?: EnumLlmUsageTypeFilter<"LlmUsage"> | $Enums.LlmUsageType
+    promptTokens?: IntFilter<"LlmUsage"> | number
+    completionTokens?: IntFilter<"LlmUsage"> | number
+    model?: StringFilter<"LlmUsage"> | string
+    createdAt?: DateTimeFilter<"LlmUsage"> | Date | string
+    userId?: IntNullableFilter<"LlmUsage"> | number | null
+    classId?: IntNullableFilter<"LlmUsage"> | number | null
+    templateId?: IntNullableFilter<"LlmUsage"> | number | null
+  }
+
   export type UserCreateWithoutQuestionRequestTemplatesInput = {
     role?: $Enums.Role
     name?: string | null
@@ -22797,6 +25203,8 @@ export namespace Prisma {
     ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuestionRequestTemplatesInput = {
@@ -22815,6 +25223,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuestionRequestTemplatesInput = {
@@ -22886,6 +25296,7 @@ export namespace Prisma {
     students?: UserCreateNestedManyWithoutStudentClassesInput
     collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutClassInput
   }
 
   export type ClassUncheckedCreateWithoutQuestionTemplatesInput = {
@@ -22898,11 +25309,66 @@ export namespace Prisma {
     students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
     collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutClassInput
   }
 
   export type ClassCreateOrConnectWithoutQuestionTemplatesInput = {
     where: ClassWhereUniqueInput
     create: XOR<ClassCreateWithoutQuestionTemplatesInput, ClassUncheckedCreateWithoutQuestionTemplatesInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateWithoutTemplateInput = {
+    summary: string
+    updatedAt?: Date | string
+    student: UserCreateNestedOneWithoutFeedbackSummariesInput
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput = {
+    id?: number
+    summary: string
+    updatedAt?: Date | string
+    studentId: number
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateOrConnectWithoutTemplateInput = {
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+    create: XOR<StudentTemplateFeedbackSummaryCreateWithoutTemplateInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateManyTemplateInputEnvelope = {
+    data: StudentTemplateFeedbackSummaryCreateManyTemplateInput | StudentTemplateFeedbackSummaryCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LlmUsageCreateWithoutTemplateInput = {
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    user?: UserCreateNestedOneWithoutLlmUsagesInput
+    class?: ClassCreateNestedOneWithoutLlmUsagesInput
+  }
+
+  export type LlmUsageUncheckedCreateWithoutTemplateInput = {
+    id?: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    userId?: number | null
+    classId?: number | null
+  }
+
+  export type LlmUsageCreateOrConnectWithoutTemplateInput = {
+    where: LlmUsageWhereUniqueInput
+    create: XOR<LlmUsageCreateWithoutTemplateInput, LlmUsageUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type LlmUsageCreateManyTemplateInputEnvelope = {
+    data: LlmUsageCreateManyTemplateInput | LlmUsageCreateManyTemplateInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutQuestionRequestTemplatesInput = {
@@ -22931,6 +25397,8 @@ export namespace Prisma {
     ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuestionRequestTemplatesInput = {
@@ -22949,6 +25417,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuestionRequestUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -23017,6 +25487,38 @@ export namespace Prisma {
     data: XOR<ClassUpdateManyMutationInput, ClassUncheckedUpdateManyWithoutQuestionTemplatesInput>
   }
 
+  export type StudentTemplateFeedbackSummaryUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+    update: XOR<StudentTemplateFeedbackSummaryUpdateWithoutTemplateInput, StudentTemplateFeedbackSummaryUncheckedUpdateWithoutTemplateInput>
+    create: XOR<StudentTemplateFeedbackSummaryCreateWithoutTemplateInput, StudentTemplateFeedbackSummaryUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: StudentTemplateFeedbackSummaryWhereUniqueInput
+    data: XOR<StudentTemplateFeedbackSummaryUpdateWithoutTemplateInput, StudentTemplateFeedbackSummaryUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type StudentTemplateFeedbackSummaryUpdateManyWithWhereWithoutTemplateInput = {
+    where: StudentTemplateFeedbackSummaryScalarWhereInput
+    data: XOR<StudentTemplateFeedbackSummaryUpdateManyMutationInput, StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type LlmUsageUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: LlmUsageWhereUniqueInput
+    update: XOR<LlmUsageUpdateWithoutTemplateInput, LlmUsageUncheckedUpdateWithoutTemplateInput>
+    create: XOR<LlmUsageCreateWithoutTemplateInput, LlmUsageUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type LlmUsageUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: LlmUsageWhereUniqueInput
+    data: XOR<LlmUsageUpdateWithoutTemplateInput, LlmUsageUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type LlmUsageUpdateManyWithWhereWithoutTemplateInput = {
+    where: LlmUsageScalarWhereInput
+    data: XOR<LlmUsageUpdateManyMutationInput, LlmUsageUncheckedUpdateManyWithoutTemplateInput>
+  }
+
   export type UserCreateWithoutQuestionRequestsInput = {
     role?: $Enums.Role
     name?: string | null
@@ -23032,6 +25534,8 @@ export namespace Prisma {
     ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuestionRequestsInput = {
@@ -23050,6 +25554,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuestionRequestsInput = {
@@ -23067,6 +25573,8 @@ export namespace Prisma {
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
     evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
     classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutRequestsInput = {
@@ -23080,6 +25588,8 @@ export namespace Prisma {
     ownerId: number
     evaluationTemplateId?: number | null
     classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateCreateOrConnectWithoutRequestsInput = {
@@ -23142,6 +25652,8 @@ export namespace Prisma {
     ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuestionRequestsInput = {
@@ -23160,6 +25672,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuestionRequestTemplateUpsertWithoutRequestsInput = {
@@ -23183,6 +25697,8 @@ export namespace Prisma {
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
     evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
     classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutRequestsInput = {
@@ -23196,6 +25712,8 @@ export namespace Prisma {
     ownerId?: IntFieldUpdateOperationsInput | number
     evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
     classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionUpsertWithWhereUniqueWithoutRequestInput = {
@@ -23347,6 +25865,8 @@ export namespace Prisma {
     ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEvaluationTemplatesInput = {
@@ -23365,6 +25885,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEvaluationTemplatesInput = {
@@ -23407,6 +25929,8 @@ export namespace Prisma {
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
     classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutEvaluationTemplateInput = {
@@ -23420,6 +25944,8 @@ export namespace Prisma {
     ownerId: number
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
     classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateCreateOrConnectWithoutEvaluationTemplateInput = {
@@ -23441,6 +25967,7 @@ export namespace Prisma {
     students?: UserCreateNestedManyWithoutStudentClassesInput
     collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
     questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutClassInput
   }
 
   export type ClassUncheckedCreateWithoutEvaluationTemplatesInput = {
@@ -23453,6 +25980,7 @@ export namespace Prisma {
     students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
     collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
     questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutClassInput
   }
 
   export type ClassCreateOrConnectWithoutEvaluationTemplatesInput = {
@@ -23486,6 +26014,8 @@ export namespace Prisma {
     ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEvaluationTemplatesInput = {
@@ -23504,6 +26034,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -23741,6 +26273,8 @@ export namespace Prisma {
     ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEvaluationCriterionsInput = {
@@ -23759,6 +26293,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEvaluationCriterionsInput = {
@@ -23817,6 +26353,8 @@ export namespace Prisma {
     ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEvaluationCriterionsInput = {
@@ -23835,6 +26373,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EvaluationTemplateCriterionUpsertWithWhereUniqueWithoutCriterionInput = {
@@ -23892,6 +26432,8 @@ export namespace Prisma {
     ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAnswersInput = {
@@ -23910,6 +26452,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAnswersInput = {
@@ -23995,6 +26539,8 @@ export namespace Prisma {
     ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnswersInput = {
@@ -24013,6 +26559,8 @@ export namespace Prisma {
     ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AutoEvaluationUpsertWithoutAnswerInput = {
@@ -24269,6 +26817,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedClassesInput = {
@@ -24287,6 +26837,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
     collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedClassesInput = {
@@ -24309,6 +26861,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
     ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
     collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentClassesInput = {
@@ -24327,6 +26881,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
     ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
     collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentClassesInput = {
@@ -24364,6 +26920,8 @@ export namespace Prisma {
     owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
     requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
     evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateUncheckedCreateWithoutClassesInput = {
@@ -24377,6 +26935,8 @@ export namespace Prisma {
     ownerId: number
     evaluationTemplateId?: number | null
     requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutTemplateInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type QuestionRequestTemplateCreateOrConnectWithoutClassesInput = {
@@ -24412,6 +26972,37 @@ export namespace Prisma {
     create: XOR<EvaluationTemplateCreateWithoutClassesInput, EvaluationTemplateUncheckedCreateWithoutClassesInput>
   }
 
+  export type LlmUsageCreateWithoutClassInput = {
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    user?: UserCreateNestedOneWithoutLlmUsagesInput
+    template?: QuestionRequestTemplateCreateNestedOneWithoutLlmUsagesInput
+  }
+
+  export type LlmUsageUncheckedCreateWithoutClassInput = {
+    id?: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    userId?: number | null
+    templateId?: number | null
+  }
+
+  export type LlmUsageCreateOrConnectWithoutClassInput = {
+    where: LlmUsageWhereUniqueInput
+    create: XOR<LlmUsageCreateWithoutClassInput, LlmUsageUncheckedCreateWithoutClassInput>
+  }
+
+  export type LlmUsageCreateManyClassInputEnvelope = {
+    data: LlmUsageCreateManyClassInput | LlmUsageCreateManyClassInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutOwnedClassesInput = {
     update: XOR<UserUpdateWithoutOwnedClassesInput, UserUncheckedUpdateWithoutOwnedClassesInput>
     create: XOR<UserCreateWithoutOwnedClassesInput, UserUncheckedCreateWithoutOwnedClassesInput>
@@ -24438,6 +27029,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedClassesInput = {
@@ -24456,6 +27049,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
     collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutStudentClassesInput = {
@@ -24536,6 +27131,22 @@ export namespace Prisma {
     data: XOR<EvaluationTemplateUpdateManyMutationInput, EvaluationTemplateUncheckedUpdateManyWithoutClassesInput>
   }
 
+  export type LlmUsageUpsertWithWhereUniqueWithoutClassInput = {
+    where: LlmUsageWhereUniqueInput
+    update: XOR<LlmUsageUpdateWithoutClassInput, LlmUsageUncheckedUpdateWithoutClassInput>
+    create: XOR<LlmUsageCreateWithoutClassInput, LlmUsageUncheckedCreateWithoutClassInput>
+  }
+
+  export type LlmUsageUpdateWithWhereUniqueWithoutClassInput = {
+    where: LlmUsageWhereUniqueInput
+    data: XOR<LlmUsageUpdateWithoutClassInput, LlmUsageUncheckedUpdateWithoutClassInput>
+  }
+
+  export type LlmUsageUpdateManyWithWhereWithoutClassInput = {
+    where: LlmUsageScalarWhereInput
+    data: XOR<LlmUsageUpdateManyMutationInput, LlmUsageUncheckedUpdateManyWithoutClassInput>
+  }
+
   export type ClassCreateWithoutCollaboratorsInput = {
     name: string
     createdAt?: Date | string
@@ -24545,6 +27156,7 @@ export namespace Prisma {
     students?: UserCreateNestedManyWithoutStudentClassesInput
     questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
     evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutClassInput
   }
 
   export type ClassUncheckedCreateWithoutCollaboratorsInput = {
@@ -24557,6 +27169,7 @@ export namespace Prisma {
     students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
     questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
     evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutClassInput
   }
 
   export type ClassCreateOrConnectWithoutCollaboratorsInput = {
@@ -24579,6 +27192,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
     ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCollaboratedClassesInput = {
@@ -24597,6 +27212,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
     ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
     studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCollaboratedClassesInput = {
@@ -24624,6 +27241,7 @@ export namespace Prisma {
     students?: UserUpdateManyWithoutStudentClassesNestedInput
     questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateWithoutCollaboratorsInput = {
@@ -24636,6 +27254,7 @@ export namespace Prisma {
     students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
     questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutClassNestedInput
   }
 
   export type UserUpsertWithoutCollaboratedClassesInput = {
@@ -24664,6 +27283,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
     ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollaboratedClassesInput = {
@@ -24682,6 +27303,410 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
     ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
     studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutLlmUsagesInput = {
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutStudentInput
+  }
+
+  export type UserUncheckedCreateWithoutLlmUsagesInput = {
+    id?: number
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type UserCreateOrConnectWithoutLlmUsagesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLlmUsagesInput, UserUncheckedCreateWithoutLlmUsagesInput>
+  }
+
+  export type ClassCreateWithoutLlmUsagesInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link: string
+    owner: UserCreateNestedOneWithoutOwnedClassesInput
+    students?: UserCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassUncheckedCreateWithoutLlmUsagesInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId: number
+    link: string
+    students?: UserUncheckedCreateNestedManyWithoutStudentClassesInput
+    collaborators?: ClassCollaboratorUncheckedCreateNestedManyWithoutClassInput
+    questionTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutClassesInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutClassesInput
+  }
+
+  export type ClassCreateOrConnectWithoutLlmUsagesInput = {
+    where: ClassWhereUniqueInput
+    create: XOR<ClassCreateWithoutLlmUsagesInput, ClassUncheckedCreateWithoutLlmUsagesInput>
+  }
+
+  export type QuestionRequestTemplateCreateWithoutLlmUsagesInput = {
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
+    requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
+    evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
+    classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryCreateNestedManyWithoutTemplateInput
+  }
+
+  export type QuestionRequestTemplateUncheckedCreateWithoutLlmUsagesInput = {
+    id?: number
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    ownerId: number
+    evaluationTemplateId?: number | null
+    requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type QuestionRequestTemplateCreateOrConnectWithoutLlmUsagesInput = {
+    where: QuestionRequestTemplateWhereUniqueInput
+    create: XOR<QuestionRequestTemplateCreateWithoutLlmUsagesInput, QuestionRequestTemplateUncheckedCreateWithoutLlmUsagesInput>
+  }
+
+  export type UserUpsertWithoutLlmUsagesInput = {
+    update: XOR<UserUpdateWithoutLlmUsagesInput, UserUncheckedUpdateWithoutLlmUsagesInput>
+    create: XOR<UserCreateWithoutLlmUsagesInput, UserUncheckedCreateWithoutLlmUsagesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLlmUsagesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLlmUsagesInput, UserUncheckedUpdateWithoutLlmUsagesInput>
+  }
+
+  export type UserUpdateWithoutLlmUsagesInput = {
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLlmUsagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type ClassUpsertWithoutLlmUsagesInput = {
+    update: XOR<ClassUpdateWithoutLlmUsagesInput, ClassUncheckedUpdateWithoutLlmUsagesInput>
+    create: XOR<ClassCreateWithoutLlmUsagesInput, ClassUncheckedCreateWithoutLlmUsagesInput>
+    where?: ClassWhereInput
+  }
+
+  export type ClassUpdateToOneWithWhereWithoutLlmUsagesInput = {
+    where?: ClassWhereInput
+    data: XOR<ClassUpdateWithoutLlmUsagesInput, ClassUncheckedUpdateWithoutLlmUsagesInput>
+  }
+
+  export type ClassUpdateWithoutLlmUsagesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: StringFieldUpdateOperationsInput | string
+    owner?: UserUpdateOneRequiredWithoutOwnedClassesNestedInput
+    students?: UserUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+  }
+
+  export type ClassUncheckedUpdateWithoutLlmUsagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: IntFieldUpdateOperationsInput | number
+    link?: StringFieldUpdateOperationsInput | string
+    students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
+    collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
+    questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+  }
+
+  export type QuestionRequestTemplateUpsertWithoutLlmUsagesInput = {
+    update: XOR<QuestionRequestTemplateUpdateWithoutLlmUsagesInput, QuestionRequestTemplateUncheckedUpdateWithoutLlmUsagesInput>
+    create: XOR<QuestionRequestTemplateCreateWithoutLlmUsagesInput, QuestionRequestTemplateUncheckedCreateWithoutLlmUsagesInput>
+    where?: QuestionRequestTemplateWhereInput
+  }
+
+  export type QuestionRequestTemplateUpdateToOneWithWhereWithoutLlmUsagesInput = {
+    where?: QuestionRequestTemplateWhereInput
+    data: XOR<QuestionRequestTemplateUpdateWithoutLlmUsagesInput, QuestionRequestTemplateUncheckedUpdateWithoutLlmUsagesInput>
+  }
+
+  export type QuestionRequestTemplateUpdateWithoutLlmUsagesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
+    requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
+    evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
+    classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type QuestionRequestTemplateUncheckedUpdateWithoutLlmUsagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    ownerId?: IntFieldUpdateOperationsInput | number
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
+    requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type UserCreateWithoutFeedbackSummariesInput = {
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestCreateNestedManyWithoutUserInput
+    answers?: AnswerCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorCreateNestedManyWithoutUserInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutFeedbackSummariesInput = {
+    id?: number
+    role?: $Enums.Role
+    name?: string | null
+    email: string
+    passwordHash?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    questionRequests?: QuestionRequestUncheckedCreateNestedManyWithoutUserInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
+    evaluationTemplates?: EvaluationTemplateUncheckedCreateNestedManyWithoutOwnerInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutOwnerInput
+    ownedClasses?: ClassUncheckedCreateNestedManyWithoutOwnerInput
+    studentClasses?: ClassUncheckedCreateNestedManyWithoutStudentsInput
+    collaboratedClasses?: ClassCollaboratorUncheckedCreateNestedManyWithoutUserInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFeedbackSummariesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFeedbackSummariesInput, UserUncheckedCreateWithoutFeedbackSummariesInput>
+  }
+
+  export type QuestionRequestTemplateCreateWithoutFeedbackSummariesInput = {
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    owner: UserCreateNestedOneWithoutQuestionRequestTemplatesInput
+    requests?: QuestionRequestCreateNestedManyWithoutTemplateInput
+    evaluationTemplate?: EvaluationTemplateCreateNestedOneWithoutQuestionRequestTemplatesInput
+    classes?: ClassCreateNestedManyWithoutQuestionTemplatesInput
+    llmUsages?: LlmUsageCreateNestedManyWithoutTemplateInput
+  }
+
+  export type QuestionRequestTemplateUncheckedCreateWithoutFeedbackSummariesInput = {
+    id?: number
+    name: string
+    promptTemplate: string
+    visible?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: QuestionRequestTemplateCreateparametersInput | InputJsonValue[]
+    ownerId: number
+    evaluationTemplateId?: number | null
+    requests?: QuestionRequestUncheckedCreateNestedManyWithoutTemplateInput
+    classes?: ClassUncheckedCreateNestedManyWithoutQuestionTemplatesInput
+    llmUsages?: LlmUsageUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type QuestionRequestTemplateCreateOrConnectWithoutFeedbackSummariesInput = {
+    where: QuestionRequestTemplateWhereUniqueInput
+    create: XOR<QuestionRequestTemplateCreateWithoutFeedbackSummariesInput, QuestionRequestTemplateUncheckedCreateWithoutFeedbackSummariesInput>
+  }
+
+  export type UserUpsertWithoutFeedbackSummariesInput = {
+    update: XOR<UserUpdateWithoutFeedbackSummariesInput, UserUncheckedUpdateWithoutFeedbackSummariesInput>
+    create: XOR<UserCreateWithoutFeedbackSummariesInput, UserUncheckedCreateWithoutFeedbackSummariesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFeedbackSummariesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFeedbackSummariesInput, UserUncheckedUpdateWithoutFeedbackSummariesInput>
+  }
+
+  export type UserUpdateWithoutFeedbackSummariesInput = {
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUpdateManyWithoutUserNestedInput
+    answers?: AnswerUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFeedbackSummariesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionRequestTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    questionRequests?: QuestionRequestUncheckedUpdateManyWithoutUserNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
+    evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutOwnerNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
+    ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
+    studentClasses?: ClassUncheckedUpdateManyWithoutStudentsNestedInput
+    collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type QuestionRequestTemplateUpsertWithoutFeedbackSummariesInput = {
+    update: XOR<QuestionRequestTemplateUpdateWithoutFeedbackSummariesInput, QuestionRequestTemplateUncheckedUpdateWithoutFeedbackSummariesInput>
+    create: XOR<QuestionRequestTemplateCreateWithoutFeedbackSummariesInput, QuestionRequestTemplateUncheckedCreateWithoutFeedbackSummariesInput>
+    where?: QuestionRequestTemplateWhereInput
+  }
+
+  export type QuestionRequestTemplateUpdateToOneWithWhereWithoutFeedbackSummariesInput = {
+    where?: QuestionRequestTemplateWhereInput
+    data: XOR<QuestionRequestTemplateUpdateWithoutFeedbackSummariesInput, QuestionRequestTemplateUncheckedUpdateWithoutFeedbackSummariesInput>
+  }
+
+  export type QuestionRequestTemplateUpdateWithoutFeedbackSummariesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
+    requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
+    evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
+    classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type QuestionRequestTemplateUncheckedUpdateWithoutFeedbackSummariesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    promptTemplate?: StringFieldUpdateOperationsInput | string
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: QuestionRequestTemplateUpdateparametersInput | InputJsonValue[]
+    ownerId?: IntFieldUpdateOperationsInput | number
+    evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
+    requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateCreateManyOwnerInput = {
@@ -24746,6 +27771,24 @@ export namespace Prisma {
     addedAt?: Date | string
   }
 
+  export type StudentTemplateFeedbackSummaryCreateManyStudentInput = {
+    id?: number
+    summary: string
+    updatedAt?: Date | string
+    templateId: number
+  }
+
+  export type LlmUsageCreateManyUserInput = {
+    id?: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    classId?: number | null
+    templateId?: number | null
+  }
+
   export type QuestionRequestTemplateUpdateWithoutOwnerInput = {
     name?: StringFieldUpdateOperationsInput | string
     promptTemplate?: StringFieldUpdateOperationsInput | string
@@ -24756,6 +27799,8 @@ export namespace Prisma {
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
     evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
     classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutOwnerInput = {
@@ -24769,6 +27814,8 @@ export namespace Prisma {
     evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
     classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateManyWithoutOwnerInput = {
@@ -24913,6 +27960,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
     questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateWithoutOwnerInput = {
@@ -24925,6 +27973,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
     questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateManyWithoutOwnerInput = {
@@ -24944,6 +27993,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
     questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateWithoutStudentsInput = {
@@ -24956,6 +28006,7 @@ export namespace Prisma {
     collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
     questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateManyWithoutStudentsInput = {
@@ -24982,12 +28033,82 @@ export namespace Prisma {
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentTemplateFeedbackSummaryUpdateWithoutStudentInput = {
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: QuestionRequestTemplateUpdateOneRequiredWithoutFeedbackSummariesNestedInput
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedUpdateWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type LlmUsageUpdateWithoutUserInput = {
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    class?: ClassUpdateOneWithoutLlmUsagesNestedInput
+    template?: QuestionRequestTemplateUpdateOneWithoutLlmUsagesNestedInput
+  }
+
+  export type LlmUsageUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    classId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type LlmUsageUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    classId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
   export type QuestionRequestCreateManyTemplateInput = {
     id?: number
     status?: $Enums.QuestionRequestStatus
     parameterValues?: QuestionRequestCreateparameterValuesInput | InputJsonValue[]
     createdAt?: Date | string
     userId: number
+  }
+
+  export type StudentTemplateFeedbackSummaryCreateManyTemplateInput = {
+    id?: number
+    summary: string
+    updatedAt?: Date | string
+    studentId: number
+  }
+
+  export type LlmUsageCreateManyTemplateInput = {
+    id?: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    userId?: number | null
+    classId?: number | null
   }
 
   export type QuestionRequestUpdateWithoutTemplateInput = {
@@ -25024,6 +28145,7 @@ export namespace Prisma {
     students?: UserUpdateManyWithoutStudentClassesNestedInput
     collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
     evaluationTemplates?: EvaluationTemplateUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateWithoutQuestionTemplatesInput = {
@@ -25036,6 +28158,7 @@ export namespace Prisma {
     students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
     collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
     evaluationTemplates?: EvaluationTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateManyWithoutQuestionTemplatesInput = {
@@ -25045,6 +28168,58 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownerId?: IntFieldUpdateOperationsInput | number
     link?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudentTemplateFeedbackSummaryUpdateWithoutTemplateInput = {
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: UserUpdateOneRequiredWithoutFeedbackSummariesNestedInput
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedUpdateWithoutTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    summary?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type LlmUsageUpdateWithoutTemplateInput = {
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutLlmUsagesNestedInput
+    class?: ClassUpdateOneWithoutLlmUsagesNestedInput
+  }
+
+  export type LlmUsageUncheckedUpdateWithoutTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    classId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type LlmUsageUncheckedUpdateManyWithoutTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    classId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type QuestionCreateManyRequestInput = {
@@ -25191,6 +28366,8 @@ export namespace Prisma {
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
     classes?: ClassUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutEvaluationTemplateInput = {
@@ -25204,6 +28381,8 @@ export namespace Prisma {
     ownerId?: IntFieldUpdateOperationsInput | number
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
     classes?: ClassUncheckedUpdateManyWithoutQuestionTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateManyWithoutEvaluationTemplateInput = {
@@ -25226,6 +28405,7 @@ export namespace Prisma {
     students?: UserUpdateManyWithoutStudentClassesNestedInput
     collaborators?: ClassCollaboratorUpdateManyWithoutClassNestedInput
     questionTemplates?: QuestionRequestTemplateUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateWithoutEvaluationTemplatesInput = {
@@ -25238,6 +28418,7 @@ export namespace Prisma {
     students?: UserUncheckedUpdateManyWithoutStudentClassesNestedInput
     collaborators?: ClassCollaboratorUncheckedUpdateManyWithoutClassNestedInput
     questionTemplates?: QuestionRequestTemplateUncheckedUpdateManyWithoutClassesNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutClassNestedInput
   }
 
   export type ClassUncheckedUpdateManyWithoutEvaluationTemplatesInput = {
@@ -25345,6 +28526,17 @@ export namespace Prisma {
     addedAt?: Date | string
   }
 
+  export type LlmUsageCreateManyClassInput = {
+    id?: number
+    type: $Enums.LlmUsageType
+    promptTokens: number
+    completionTokens: number
+    model: string
+    createdAt?: Date | string
+    userId?: number | null
+    templateId?: number | null
+  }
+
   export type UserUpdateWithoutStudentClassesInput = {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25360,6 +28552,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUpdateManyWithoutOwnerNestedInput
     ownedClasses?: ClassUpdateManyWithoutOwnerNestedInput
     collaboratedClasses?: ClassCollaboratorUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentClassesInput = {
@@ -25378,6 +28572,8 @@ export namespace Prisma {
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutOwnerNestedInput
     ownedClasses?: ClassUncheckedUpdateManyWithoutOwnerNestedInput
     collaboratedClasses?: ClassCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutStudentNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutStudentClassesInput = {
@@ -25416,6 +28612,8 @@ export namespace Prisma {
     owner?: UserUpdateOneRequiredWithoutQuestionRequestTemplatesNestedInput
     requests?: QuestionRequestUpdateManyWithoutTemplateNestedInput
     evaluationTemplate?: EvaluationTemplateUpdateOneWithoutQuestionRequestTemplatesNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateWithoutClassesInput = {
@@ -25429,6 +28627,8 @@ export namespace Prisma {
     ownerId?: IntFieldUpdateOperationsInput | number
     evaluationTemplateId?: NullableIntFieldUpdateOperationsInput | number | null
     requests?: QuestionRequestUncheckedUpdateManyWithoutTemplateNestedInput
+    feedbackSummaries?: StudentTemplateFeedbackSummaryUncheckedUpdateManyWithoutTemplateNestedInput
+    llmUsages?: LlmUsageUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuestionRequestTemplateUncheckedUpdateManyWithoutClassesInput = {
@@ -25474,6 +28674,38 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownerId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type LlmUsageUpdateWithoutClassInput = {
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutLlmUsagesNestedInput
+    template?: QuestionRequestTemplateUpdateOneWithoutLlmUsagesNestedInput
+  }
+
+  export type LlmUsageUncheckedUpdateWithoutClassInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type LlmUsageUncheckedUpdateManyWithoutClassInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumLlmUsageTypeFieldUpdateOperationsInput | $Enums.LlmUsageType
+    promptTokens?: IntFieldUpdateOperationsInput | number
+    completionTokens?: IntFieldUpdateOperationsInput | number
+    model?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    templateId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 

@@ -11,7 +11,6 @@ async function getClassAndVerifyAccess(id: number, userId: number, isAdmin: bool
       collaborators: { include: { user: { select: { id: true, name: true, email: true } } } },
       questionTemplates: { select: { id: true, name: true } },
       evaluationTemplates: { select: { id: true, name: true } },
-      featuredTemplate: { select: { id: true, name: true } },
     },
   });
 
