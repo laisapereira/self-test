@@ -1,11 +1,19 @@
 "use client";
 
 import { signIn, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { QuestionRequestCreatePage } from "./questionRequests/create/_form";
 
 export default function Home() {
+  return (
+    <Suspense>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function HomeContent() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const classId = searchParams.get("classId");
