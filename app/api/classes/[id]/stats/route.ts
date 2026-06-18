@@ -4,6 +4,12 @@ import { NextResponse } from "next/server";
 
 const STUDENTS_PAGE_SIZE = 20;
 
+function buildTopicLabel(parameterValues: unknown[]): string {
+  const params = parameterValues as Array<{ name: string; values: string[] }>;
+  const label = params.flatMap((p) => p.values ?? []).filter(Boolean).join(" · ");
+  return label || "Geração";
+}
+
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser();
@@ -35,15 +41,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const templateIds = classData.questionTemplates.map((t) => t.id);
 
     if (studentIds.length === 0) {
-      return NextResponse.json({
-        totalStudents: 0,
-        totalRequests: 0,
-        students: [],
-        perTemplate: [],
-      });
+      return NextResponse.json({ totalStudents: 0, totalRequests: 0, students: [], perTemplate: [] });
     }
 
-    // Fetch requests com questões e respostas para calcular estatísticas corretas por template
     const requests = await prisma.questionRequest.findMany({
       where: {
         userId: { in: studentIds },
@@ -55,6 +55,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         userId: true,
         templateId: true,
         createdAt: true,
+        parameterValues: true,
         questions: {
           select: {
             type: true,
@@ -67,7 +68,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       },
     });
 
-    // Fetch summaries existentes (não-crítico — erro aqui não deve quebrar o endpoint)
     let summaryMap = new Map<string, { summary: string; updatedAt: Date }>();
     try {
       const summaries = await prisma.studentTemplateFeedbackSummary.findMany({
@@ -78,11 +78,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         select: { studentId: true, templateId: true, summary: true, updatedAt: true },
       });
       summaryMap = new Map(summaries.map((s) => [`${s.studentId}:${s.templateId}`, s]));
-    } catch (summaryErr) {
-      console.error("[stats] summaries query failed:", summaryErr);
+    } catch (err) {
+      console.error("[stats] summaries query failed:", err);
     }
 
-    // Estruturas de agregação por aluno (global)
     type StudentAgg = {
       id: number; name: string | null; email: string;
       totalRequests: number; totalAnswers: number; correctAnswers: number;
@@ -96,8 +95,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       }])
     );
 
-    // Estruturas de agregação por template
-    type TemplateStudentAgg = { totalRequests: number; scoreSum: number; scoredAnswers: number };
+    type GenerationItem = { label: string; score: number | null; questionCount: number };
+    type TemplateStudentAgg = { totalRequests: number; scoreSum: number; scoredAnswers: number; generations: GenerationItem[] };
     type TemplateAgg = {
       templateId: number; templateName: string;
       usageCount: number; scoreSum: number; scoredAnswers: number;
@@ -123,36 +122,61 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       if (ta) {
         ta.usageCount++;
         if (!ta.studentAgg.has(req.userId)) {
-          ta.studentAgg.set(req.userId, { totalRequests: 0, scoreSum: 0, scoredAnswers: 0 });
+          ta.studentAgg.set(req.userId, { totalRequests: 0, scoreSum: 0, scoredAnswers: 0, generations: [] });
         }
         ta.studentAgg.get(req.userId)!.totalRequests++;
       }
+
+      // Calcula score unificado por geração: MC → correct?10:0, discursiva → autoEvaluation.score
+      let reqScoreSum = 0;
+      let reqScoredCount = 0;
 
       for (const q of req.questions) {
         const answer = q.answers.find((a) => a.userId === req.userId);
         if (!answer) continue;
         sa.totalAnswers++;
         if (answer.correct) sa.correctAnswers++;
-        if (answer.autoEvaluation) {
-          sa.scoreSum += answer.autoEvaluation.score;
+
+        let questionScore: number | null = null;
+        if (q.type === "multiple-choice") {
+          questionScore = answer.correct ? 10 : 0;
+        } else if (answer.autoEvaluation) {
+          questionScore = answer.autoEvaluation.score;
+        }
+
+        if (questionScore !== null) {
+          reqScoreSum += questionScore;
+          reqScoredCount++;
+          sa.scoreSum += questionScore;
           sa.scoredAnswers++;
           if (ta) {
-            ta.scoreSum += answer.autoEvaluation.score;
+            ta.scoreSum += questionScore;
             ta.scoredAnswers++;
             const tsa = ta.studentAgg.get(req.userId);
-            if (tsa) { tsa.scoreSum += answer.autoEvaluation.score; tsa.scoredAnswers++; }
+            if (tsa) { tsa.scoreSum += questionScore; tsa.scoredAnswers++; }
           }
+        }
+      }
+
+      // Registra geração no template
+      if (ta) {
+        const tsa = ta.studentAgg.get(req.userId);
+        if (tsa) {
+          const genScore = reqScoredCount > 0
+            ? Math.round((reqScoreSum / reqScoredCount) * 10) / 10
+            : null;
+          tsa.generations.push({
+            label: buildTopicLabel(req.parameterValues as unknown[]),
+            score: genScore,
+            questionCount: req.questions.length,
+          });
         }
       }
     }
 
     const allStudents = Array.from(studentAgg.values()).map((s) => ({
-      id: s.id,
-      name: s.name,
-      email: s.email,
-      totalRequests: s.totalRequests,
-      totalAnswers: s.totalAnswers,
-      correctAnswers: s.correctAnswers,
+      id: s.id, name: s.name, email: s.email,
+      totalRequests: s.totalRequests, totalAnswers: s.totalAnswers, correctAnswers: s.correctAnswers,
       avgScore: s.scoredAnswers > 0 ? Math.round((s.scoreSum / s.scoredAnswers) * 10) / 10 : null,
       lastActivityAt: s.lastActivityAt,
     })).sort((a, b) => b.totalRequests - a.totalRequests);
@@ -167,19 +191,17 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
           const tsa = t.studentAgg.get(s.id)!;
           const summaryData = summaryMap.get(`${s.id}:${t.templateId}`);
           return {
-            id: s.id,
-            name: s.name,
-            email: s.email,
+            id: s.id, name: s.name, email: s.email,
             totalRequests: tsa.totalRequests,
             avgScore: tsa.scoredAnswers > 0 ? Math.round((tsa.scoreSum / tsa.scoredAnswers) * 10) / 10 : null,
+            generations: tsa.generations,
             summary: summaryData?.summary ?? null,
             summaryUpdatedAt: summaryData?.updatedAt ?? null,
           };
         });
 
       return {
-        templateId: t.templateId,
-        templateName: t.templateName,
+        templateId: t.templateId, templateName: t.templateName,
         usageCount: t.usageCount,
         avgScore: t.scoredAnswers > 0 ? Math.round((t.scoreSum / t.scoredAnswers) * 10) / 10 : null,
         students: templateStudents,
@@ -189,9 +211,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     return NextResponse.json({
       totalStudents: classData.students.length,
       totalRequests: requests.length,
-      students,
-      studentsPage: page,
-      studentsTotalPages: totalStudentsPages,
+      students, studentsPage: page, studentsTotalPages: totalStudentsPages,
       perTemplate,
     });
   } catch (error) {
