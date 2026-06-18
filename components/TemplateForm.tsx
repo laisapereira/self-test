@@ -30,7 +30,6 @@ type Template = {
   promptTemplate: string;
   parameters: PrismaJson.QuestionRequestTemplateParameter[];
   evaluationTemplateId?: number | null;
-  playground?: boolean;
 };
 
 type ParameterInput = {
@@ -99,7 +98,6 @@ export default function TemplateForm({
     promptTemplate: defaultValues?.promptTemplate || DEFAULT_PROMPT_TEMPLATE,
     parameters: defaultValues?.parameters || [],
     evaluationTemplateId: defaultValues?.evaluationTemplateId ?? null,
-    playground: defaultValues?.playground ?? false,
   });
   const [newParameter, setNewParameter] = useState<ParameterInput>({
     name: "",
@@ -235,25 +233,6 @@ export default function TemplateForm({
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="flex items-start gap-3 rounded-lg border border-amber-100 bg-amber-50 px-4 py-3">
-              <Checkbox
-                id="playground"
-                checked={newTemplate.playground ?? false}
-                onCheckedChange={(checked) =>
-                  setNewTemplate({ ...newTemplate, playground: !!checked })
-                }
-                className="mt-0.5"
-              />
-              <div>
-                <Label htmlFor="playground" className="font-medium text-amber-800 cursor-pointer">
-                  Disponível no playground
-                </Label>
-                <p className="text-xs text-amber-600 mt-0.5">
-                  Permite que alunos sem turma experimentem este template com limite de 5 respostas.
-                </p>
-              </div>
             </div>
 
             <div>

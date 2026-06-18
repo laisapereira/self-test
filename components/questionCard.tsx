@@ -77,7 +77,6 @@ export function QuestionCard(props: {
   );
   const [criteriaScores, setCriteriaScores] = useState<CriterionScore[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showPlaygroundModal, setShowPlaygroundModal] = useState(false);
 
   useEffect(() => {
     const searchParams = new URLSearchParams();
@@ -148,11 +147,6 @@ export function QuestionCard(props: {
         body: JSON.stringify({ answerIndex: alternative, confidenceLevel }),
       });
 
-      if (response.status === 429) {
-        setShowPlaygroundModal(true);
-        return;
-      }
-
       if (!response.ok) {
         const text = await response.text();
         console.error(
@@ -202,11 +196,6 @@ export function QuestionCard(props: {
           }),
         },
       );
-      if (response.status === 429) {
-        setShowPlaygroundModal(true);
-        return;
-      }
-
       if (!response.ok) {
         const text = await response.text();
         console.error(
@@ -498,24 +487,6 @@ export function QuestionCard(props: {
         {answer && <QuestionFeedback question={question} answer={answer} />}
       </CardContent>
 
-      <Dialog open={showPlaygroundModal} onOpenChange={setShowPlaygroundModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Quer continuar praticando?</DialogTitle>
-            <DialogDescription>
-              Você usou sua cota do modo playground. Para responder mais questões, entre em uma turma com o link do seu professor.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => setShowPlaygroundModal(false)}>
-              Agora não
-            </Button>
-            <Link href="/classes">
-              <Button variant="default">Tenho um código de turma</Button>
-            </Link>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </Card>
   );
 }

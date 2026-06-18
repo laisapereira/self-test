@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    const { name, promptTemplate, parameters, playground } = await req.json();
+    const { name, promptTemplate, parameters } = await req.json();
     if (!name || !promptTemplate) {
       return NextResponse.json(
         { error: "Name and promptTemplate are required" },
@@ -92,7 +92,6 @@ export async function POST(req: Request) {
         promptTemplate,
         parameters: parameters as PrismaJson.QuestionRequestTemplateParameter[],
         ownerId: currentUser.id,
-        playground: playground === true,
       },
     });
     return NextResponse.json(newTemplate, { status: 201 });
