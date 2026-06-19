@@ -83,11 +83,17 @@ export default function ClassDashboardPage() {
   const [templateStudentPage, setTemplateStudentPage] = useState<Map<number, number>>(new Map());
 
   const GENS_VISIBLE = 5;
-  const STUDENTS_PER_TPAGE = 10;
+  const STUDENTS_PER_TPAGE = 5;
+  const [templateStudentSearch, setTemplateStudentSearch] = useState<Map<number, string>>(new Map());
 
   function getTemplatePage(tid: number) { return templateStudentPage.get(tid) ?? 1; }
   function setTemplatePage(tid: number, page: number) {
     setTemplateStudentPage((prev) => new Map(prev).set(tid, page));
+  }
+  function getTemplateSearch(tid: number) { return templateStudentSearch.get(tid) ?? ""; }
+  function setTemplateSearch(tid: number, q: string) {
+    setTemplateStudentSearch((prev) => new Map(prev).set(tid, q));
+    setTemplatePage(tid, 1);
   }
   function toggleGens(key: string) {
     setExpandedGenerations((prev) => {
@@ -314,14 +320,29 @@ export default function ClassDashboardPage() {
                         Nenhum aluno usou este template.
                       </p>
                     ) : (() => {
+                        const tSearch = getTemplateSearch(t.templateId).toLowerCase();
+                        const filteredStudents = tSearch
+                          ? t.students.filter((s) =>
+                              (s.name ?? "").toLowerCase().includes(tSearch) ||
+                              s.email.toLowerCase().includes(tSearch)
+                            )
+                          : t.students;
                         const tPage = getTemplatePage(t.templateId);
-                        const totalTPages = Math.ceil(t.students.length / STUDENTS_PER_TPAGE);
-                        const visibleStudents = t.students.slice(
-                          (tPage - 1) * STUDENTS_PER_TPAGE,
-                          tPage * STUDENTS_PER_TPAGE
+                        const totalTPages = Math.ceil(filteredStudents.length / STUDENTS_PER_TPAGE);
+                        const safeTPage = Math.min(tPage, totalTPages || 1);
+                        const visibleStudents = filteredStudents.slice(
+                          (safeTPage - 1) * STUDENTS_PER_TPAGE,
+                          safeTPage * STUDENTS_PER_TPAGE
                         );
                         return (
                           <div className="overflow-x-auto mt-3">
+                            <input
+                              type="text"
+                              placeholder="Buscar aluno..."
+                              value={getTemplateSearch(t.templateId)}
+                              onChange={(e) => setTemplateSearch(t.templateId, e.target.value)}
+                              className="mb-3 w-full max-w-xs h-8 rounded-md border border-slate-200 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
                             <table className="w-full text-sm">
                               <thead>
                                 <tr className="border-b border-slate-100">
@@ -445,19 +466,19 @@ export default function ClassDashboardPage() {
                               <div className="flex items-center justify-center gap-2 mt-3 pt-3 border-t border-slate-100">
                                 <Button
                                   size="sm" variant="outline"
-                                  disabled={tPage <= 1}
-                                  onClick={() => setTemplatePage(t.templateId, tPage - 1)}
+                                  disabled={safeTPage <= 1}
+                                  onClick={() => setTemplatePage(t.templateId, safeTPage - 1)}
                                   className="text-xs h-7 px-2"
                                 >
                                   ← Anterior
                                 </Button>
                                 <span className="text-xs text-slate-400">
-                                  {tPage} / {totalTPages}
+                                  {safeTPage} / {totalTPages}
                                 </span>
                                 <Button
                                   size="sm" variant="outline"
-                                  disabled={tPage >= totalTPages}
-                                  onClick={() => setTemplatePage(t.templateId, tPage + 1)}
+                                  disabled={safeTPage >= totalTPages}
+                                  onClick={() => setTemplatePage(t.templateId, safeTPage + 1)}
                                   className="text-xs h-7 px-2"
                                 >
                                   Próxima →

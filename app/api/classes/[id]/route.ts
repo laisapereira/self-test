@@ -27,7 +27,7 @@ async function getClassAndVerifyAccess(id: number, userId: number, isAdmin: bool
   return classData;
 }
 
-export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const currentUser = await getCurrentUser();
     const { id } = await params;
@@ -40,6 +40,20 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const classData = await getClassAndVerifyAccess(numericId, currentUser.id, isUserAdmin(currentUser));
     if (!classData) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    const preview = new URL(req.url).searchParams.get("preview") === "true";
+    if (preview) {
+      const sorted = [...classData.students].sort((a, b) =>
+        (a.name ?? "").localeCompare(b.name ?? "", "pt-BR")
+      );
+      return NextResponse.json({
+        class: {
+          ...classData,
+          students: sorted.slice(0, 5),
+          totalStudents: classData.students.length,
+        },
+      });
     }
 
     return NextResponse.json({ class: classData });

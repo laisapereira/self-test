@@ -21,6 +21,7 @@ type ClassDetail = {
   name: string;
   link: string;
   ownerId: number;
+  totalStudents?: number;
   students: { id: number; name: string; email: string }[];
   collaborators: { user: { id: number; name: string; email: string } }[];
   questionTemplates: { id: number; name: string }[];
@@ -35,8 +36,6 @@ export default function ClassDetailPage() {
   const [copied, setCopied] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
   const [leaving, setLeaving] = useState(false);
-  const [studentsPage, setStudentsPage] = useState(1);
-  const STUDENTS_PER_PAGE = 10;
 
   const isStudent = session?.user?.typeRole === "STUDENT";
 
@@ -44,7 +43,7 @@ export default function ClassDetailPage() {
     session?.user?.typeRole === "ADMIN" || session?.user?.typeRole === "PROFESSOR";
 
   async function fetchClass() {
-    const res = await fetch(`/api/classes/${params.id}`);
+    const res = await fetch(`/api/classes/${params.id}?preview=true`);
     if (res.ok) {
       const data = await res.json();
       setClassData(data.class);
@@ -181,65 +180,42 @@ export default function ClassDetailPage() {
       </Card>
 
       {/* Alunos */}
-      <Card className="border-gray-200">
-        <CardHeader>
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Alunos ({classData.students.length})
-          </h2>
-        </CardHeader>
-        <CardContent>
-          {classData.students.length === 0 ? (
-            <p className="text-sm text-gray-500">Nenhum aluno na turma ainda.</p>
-          ) : (() => {
-            const totalPages = Math.ceil(classData.students.length / STUDENTS_PER_PAGE);
-            const visible = classData.students.slice(
-              (studentsPage - 1) * STUDENTS_PER_PAGE,
-              studentsPage * STUDENTS_PER_PAGE
-            );
-            return (
+      {isProfessorOrAdmin && (
+        <Card className="border-gray-200">
+          <CardHeader>
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Alunos ({classData.totalStudents ?? classData.students.length})
+            </h2>
+          </CardHeader>
+          <CardContent>
+            {classData.students.length === 0 ? (
+              <p className="text-sm text-gray-500">Nenhum aluno na turma ainda.</p>
+            ) : (
               <>
                 <ul className="space-y-2">
-                  {visible.map((s) => (
-                    <li
-                      key={s.id}
-                      className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
-                    >
-                      <div>
-                        <p className="text-sm font-medium text-gray-700">{s.name}</p>
-                        <p className="text-xs text-gray-500">{s.email}</p>
-                      </div>
+                  {classData.students.map((s) => (
+                    <li key={s.id} className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
+                      <p className="text-sm font-medium text-gray-700">{s.name}</p>
+                      <p className="text-xs text-gray-500">{s.email}</p>
                     </li>
                   ))}
                 </ul>
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-3 mt-4 pt-3 border-t border-gray-100">
-                    <Button
-                      size="sm" variant="outline"
-                      disabled={studentsPage <= 1}
-                      onClick={() => setStudentsPage((p) => p - 1)}
-                      className="text-xs h-7 px-3"
-                    >
-                      ← Anterior
-                    </Button>
-                    <span className="text-xs text-gray-400">
-                      {studentsPage} / {totalPages}
-                    </span>
-                    <Button
-                      size="sm" variant="outline"
-                      disabled={studentsPage >= totalPages}
-                      onClick={() => setStudentsPage((p) => p + 1)}
-                      className="text-xs h-7 px-3"
-                    >
-                      Próxima →
-                    </Button>
-                  </div>
+                {(classData.totalStudents ?? 0) > classData.students.length && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-3 w-full text-xs"
+                    onClick={() => router.push(`/classes/${classData.id}/edit`)}
+                  >
+                    Ver todos os {classData.totalStudents} alunos →
+                  </Button>
                 )}
               </>
-            );
-          })()}
-        </CardContent>
-      </Card>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Colaboradores — só visível para professor/admin */}
       {isProfessorOrAdmin && (

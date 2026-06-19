@@ -135,6 +135,9 @@ export default function ClassForm({ mode, owner, defaultValues, onSubmit }: Clas
   const [confirmRemove, setConfirmRemove] = useState<Student | null>(null);
   const [selectedQuestionTemplateId, setSelectedQuestionTemplateId] = useState("");
   const [selectedEvaluationTemplateId, setSelectedEvaluationTemplateId] = useState("");
+  const [studentSearch, setStudentSearch] = useState("");
+  const [studentPage, setStudentPage] = useState(1);
+  const STUDENTS_PER_PAGE = 10;
 
   useEffect(() => {
     fetch("/api/templates").then((r) => r.json()).then((data) => {
@@ -287,35 +290,71 @@ export default function ClassForm({ mode, owner, defaultValues, onSubmit }: Clas
       {/* Alunos */}
       <Card className="border-gray-200">
         <CardHeader>
-          <h2 className="text-lg font-semibold">Alunos</h2>
+          <h2 className="text-lg font-semibold">Alunos ({students.length})</h2>
           <p className="text-sm text-gray-500">
             Adicione alunos à turma pelo nome ou e-mail.
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
-          {students.length > 0 && (
-            <ul className="space-y-2">
-              {students.map((s) => (
-                <li
-                  key={s.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">{s.name}</p>
-                    <p className="text-xs text-gray-500">{s.email}</p>
+          {students.length > 0 && (() => {
+            const q = studentSearch.toLowerCase();
+            const filtered = q
+              ? students.filter((s) =>
+                  (s.name ?? "").toLowerCase().includes(q) || s.email.toLowerCase().includes(q)
+                )
+              : students;
+            const totalPages = Math.ceil(filtered.length / STUDENTS_PER_PAGE);
+            const safePage = Math.min(studentPage, totalPages || 1);
+            const visible = filtered.slice((safePage - 1) * STUDENTS_PER_PAGE, safePage * STUDENTS_PER_PAGE);
+            return (
+              <div className="space-y-3">
+                <Input
+                  placeholder="Filtrar alunos matriculados..."
+                  value={studentSearch}
+                  onChange={(e) => { setStudentSearch(e.target.value); setStudentPage(1); }}
+                  className="h-8 text-sm"
+                />
+                {visible.length === 0 ? (
+                  <p className="text-sm text-gray-400 text-center py-2">Nenhum aluno encontrado.</p>
+                ) : (
+                  <ul className="space-y-2">
+                    {visible.map((s) => (
+                      <li
+                        key={s.id}
+                        className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
+                      >
+                        <div>
+                          <p className="text-sm font-medium text-gray-700">{s.name}</p>
+                          <p className="text-xs text-gray-500">{s.email}</p>
+                        </div>
+                        <button
+                          onClick={() => setConfirmRemove(s)}
+                          title="Remover aluno"
+                          className="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-red-500 border border-red-200 hover:bg-red-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                          Remover
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-3 pt-2 border-t border-gray-100">
+                    <Button size="sm" variant="outline" disabled={safePage <= 1}
+                      onClick={() => setStudentPage((p) => p - 1)} className="text-xs h-7 px-3">
+                      ← Anterior
+                    </Button>
+                    <span className="text-xs text-gray-400">{safePage} / {totalPages}</span>
+                    <Button size="sm" variant="outline" disabled={safePage >= totalPages}
+                      onClick={() => setStudentPage((p) => p + 1)} className="text-xs h-7 px-3">
+                      Próxima →
+                    </Button>
                   </div>
-                  <button
-                    onClick={() => setConfirmRemove(s)}
-                    title="Remover aluno"
-                    className="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-red-500 border border-red-200 hover:bg-red-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                    Remover
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+                )}
+              </div>
+            );
+          })()}
 
           <Card className="border-dashed border-gray-300 bg-gray-50/50">
             <CardContent className="pt-4 space-y-3">
