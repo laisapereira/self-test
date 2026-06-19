@@ -31,6 +31,18 @@ const routes = [
   },
 
   {
+    title: "Dashboard por Template",
+    href: "/dashboard",
+    requireAdmin: true,
+  },
+
+    {
+    title: "Templates de Questões",
+    href: "/templates",
+    requireAdmin: true,
+  },
+
+  {
     title: "Templates de Avaliação",
     href: "/templates/evaluation",
     requireAdmin: true,
