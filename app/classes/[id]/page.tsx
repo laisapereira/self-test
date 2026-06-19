@@ -35,6 +35,8 @@ export default function ClassDetailPage() {
   const [copied, setCopied] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
   const [leaving, setLeaving] = useState(false);
+  const [studentsPage, setStudentsPage] = useState(1);
+  const STUDENTS_PER_PAGE = 20;
 
   const isStudent = session?.user?.typeRole === "STUDENT";
 
@@ -189,21 +191,53 @@ export default function ClassDetailPage() {
         <CardContent>
           {classData.students.length === 0 ? (
             <p className="text-sm text-gray-500">Nenhum aluno na turma ainda.</p>
-          ) : (
-            <ul className="space-y-2">
-              {classData.students.map((s) => (
-                <li
-                  key={s.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">{s.name}</p>
-                    <p className="text-xs text-gray-500">{s.email}</p>
+          ) : (() => {
+            const totalPages = Math.ceil(classData.students.length / STUDENTS_PER_PAGE);
+            const visible = classData.students.slice(
+              (studentsPage - 1) * STUDENTS_PER_PAGE,
+              studentsPage * STUDENTS_PER_PAGE
+            );
+            return (
+              <>
+                <ul className="space-y-2">
+                  {visible.map((s) => (
+                    <li
+                      key={s.id}
+                      className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
+                    >
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">{s.name}</p>
+                        <p className="text-xs text-gray-500">{s.email}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-3 mt-4 pt-3 border-t border-gray-100">
+                    <Button
+                      size="sm" variant="outline"
+                      disabled={studentsPage <= 1}
+                      onClick={() => setStudentsPage((p) => p - 1)}
+                      className="text-xs h-7 px-3"
+                    >
+                      ← Anterior
+                    </Button>
+                    <span className="text-xs text-gray-400">
+                      {studentsPage} / {totalPages}
+                    </span>
+                    <Button
+                      size="sm" variant="outline"
+                      disabled={studentsPage >= totalPages}
+                      onClick={() => setStudentsPage((p) => p + 1)}
+                      className="text-xs h-7 px-3"
+                    >
+                      Próxima →
+                    </Button>
                   </div>
-                </li>
-              ))}
-            </ul>
-          )}
+                )}
+              </>
+            );
+          })()}
         </CardContent>
       </Card>
 
