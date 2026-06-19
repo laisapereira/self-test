@@ -36,7 +36,7 @@ export default function ClassDetailPage() {
   const [confirmLeave, setConfirmLeave] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [studentsPage, setStudentsPage] = useState(1);
-  const STUDENTS_PER_PAGE = 20;
+  const STUDENTS_PER_PAGE = 10;
 
   const isStudent = session?.user?.typeRole === "STUDENT";
 
