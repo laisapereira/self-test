@@ -29,6 +29,12 @@ const routes = [
     href: "/templates",
     requireAdmin: true,
   },
+
+  {
+    title: "Dashboard",
+    href: "/dashboard",
+    requireAdmin: true,
+  },
   {
     title: "Templates de Avaliação",
     href: "/templates/evaluation",
@@ -186,7 +192,8 @@ function Navbar() {
           items={routes
             .filter((route) => {
               if (route.adminOnly) return session.user?.isAdmin;
-              if (route.requireAdmin) return session.user?.isAdmin || session.user?.isProfessor;
+              if (route.requireAdmin)
+                return session.user?.isAdmin || session.user?.isProfessor;
               return true;
             })
             .map((route) => ({ href: route.href, title: route.title }))}
@@ -210,7 +217,8 @@ function MenuItems(props: { onClick?: () => void }) {
       {routes
         .filter((route) => {
           if (route.adminOnly) return session.user?.isAdmin;
-          if (route.requireAdmin) return session.user?.isAdmin || session.user?.isProfessor;
+          if (route.requireAdmin)
+            return session.user?.isAdmin || session.user?.isProfessor;
           return true;
         })
         .map((route, index) => {

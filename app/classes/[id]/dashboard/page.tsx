@@ -79,6 +79,23 @@ export default function ClassDashboardPage() {
   const [studentsPage, setStudentsPage] = useState(1);
   const [generatingSummary, setGeneratingSummary] = useState<Set<string>>(new Set());
   const [summaries, setSummaries] = useState<Map<string, string>>(new Map());
+  const [expandedGenerations, setExpandedGenerations] = useState<Set<string>>(new Set());
+  const [templateStudentPage, setTemplateStudentPage] = useState<Map<number, number>>(new Map());
+
+  const GENS_VISIBLE = 5;
+  const STUDENTS_PER_TPAGE = 10;
+
+  function getTemplatePage(tid: number) { return templateStudentPage.get(tid) ?? 1; }
+  function setTemplatePage(tid: number, page: number) {
+    setTemplateStudentPage((prev) => new Map(prev).set(tid, page));
+  }
+  function toggleGens(key: string) {
+    setExpandedGenerations((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return next;
+    });
+  }
 
   const isProfessorOrAdmin =
     session?.user?.typeRole === "ADMIN" ||
@@ -296,121 +313,160 @@ export default function ClassDashboardPage() {
                       <p className="text-sm text-slate-400 py-4 text-center">
                         Nenhum aluno usou este template.
                       </p>
-                    ) : (
-                      <div className="overflow-x-auto mt-3">
-                        <table className="w-full text-sm">
-                          <thead>
-                            <tr className="border-b border-slate-100">
-                              <th className="text-left py-2 px-2 font-medium text-slate-400 w-40">
-                                Aluno
-                              </th>
-                              <th className="text-center py-2 px-2 font-medium text-slate-400 w-20">
-                                Gerações
-                              </th>
-                              <th className="text-center py-2 px-2 font-medium text-slate-400 w-16">
-                                Média
-                              </th>
-                              <th className="text-left py-2 px-2 font-medium text-slate-400">
-                                Análise de desempenho
-                              </th>
-                              <th className="py-2 px-2 w-32"></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {t.students.map((s) => {
-                              const key = `${s.id}:${t.templateId}`;
-                              const summary = summaries.get(key) ?? null;
-                              const isGenerating = generatingSummary.has(key);
-                              return (
-                                <Fragment key={s.id}>
-                                  <tr className="align-top border-t border-slate-100">
-                                    <td className="py-3 px-2">
-                                      <p className="font-medium text-slate-800">{s.name ?? "—"}</p>
-                                      <p className="text-xs text-slate-400">{s.email}</p>
-                                    </td>
-                                    <td className="py-3 px-2 text-center text-slate-700">{s.totalRequests}</td>
-                                    <td className="py-3 px-2 text-center">
-                                      {s.avgScore !== null ? (
-                                        <span className={`font-semibold ${scoreColor(s.avgScore)}`}>{s.avgScore.toFixed(1)}</span>
-                                      ) : <span className="text-slate-300">—</span>}
-                                    </td>
-                                    <td className="py-3 px-2">
-                                      {summary ? (() => {
-                                        const { main, tips } = parseSummary(summary);
-                                        return (
-                                          <div className="space-y-2">
-                                            {main.length > 0 && (
-                                              <ul className="space-y-0.5">
-                                                {main.map((line, i) => (
-                                                  <li key={i} className="text-sm text-slate-600 leading-relaxed flex gap-1.5">
-                                                    <span className="text-slate-300 shrink-0">–</span>
-                                                    <span>{line.replace(/^[-–]\s*/, "")}</span>
-                                                  </li>
-                                                ))}
-                                              </ul>
-                                            )}
-                                            {tips.length > 0 && (
-                                              <div className="border-t border-slate-100 pt-2 space-y-0.5">
-                                                <p className="text-[11px] font-semibold text-amber-600 uppercase tracking-widest flex items-center gap-1 mb-1">
-                                                  <Lightbulb className="h-3 w-3" /> Dicas
-                                                </p>
-                                                {tips.map((line, i) => (
-                                                  <div key={i} className="text-sm text-slate-500 leading-relaxed flex gap-1.5">
-                                                    <span className="text-amber-300 shrink-0">–</span>
-                                                    <span>{line.replace(/^[-–]\s*/, "")}</span>
+                    ) : (() => {
+                        const tPage = getTemplatePage(t.templateId);
+                        const totalTPages = Math.ceil(t.students.length / STUDENTS_PER_TPAGE);
+                        const visibleStudents = t.students.slice(
+                          (tPage - 1) * STUDENTS_PER_TPAGE,
+                          tPage * STUDENTS_PER_TPAGE
+                        );
+                        return (
+                          <div className="overflow-x-auto mt-3">
+                            <table className="w-full text-sm">
+                              <thead>
+                                <tr className="border-b border-slate-100">
+                                  <th className="text-left py-2 px-2 font-medium text-slate-400 w-40">Aluno</th>
+                                  <th className="text-center py-2 px-2 font-medium text-slate-400 w-20">Gerações</th>
+                                  <th className="text-center py-2 px-2 font-medium text-slate-400 w-16">Média</th>
+                                  <th className="text-left py-2 px-2 font-medium text-slate-400">Análise de desempenho</th>
+                                  <th className="py-2 px-2 w-32"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {visibleStudents.map((s) => {
+                                  const key = `${s.id}:${t.templateId}`;
+                                  const summary = summaries.get(key) ?? null;
+                                  const isGenerating = generatingSummary.has(key);
+                                  const isGenExpanded = expandedGenerations.has(key);
+                                  const visibleGens = isGenExpanded
+                                    ? s.generations
+                                    : s.generations.slice(0, GENS_VISIBLE);
+                                  const hiddenCount = s.generations.length - GENS_VISIBLE;
+                                  return (
+                                    <Fragment key={s.id}>
+                                      <tr className="align-top border-t border-slate-100">
+                                        <td className="py-3 px-2">
+                                          <p className="font-medium text-slate-800">{s.name ?? "—"}</p>
+                                          <p className="text-xs text-slate-400">{s.email}</p>
+                                        </td>
+                                        <td className="py-3 px-2 text-center text-slate-700">{s.totalRequests}</td>
+                                        <td className="py-3 px-2 text-center">
+                                          {s.avgScore !== null ? (
+                                            <span className={`font-semibold ${scoreColor(s.avgScore)}`}>{s.avgScore.toFixed(1)}</span>
+                                          ) : <span className="text-slate-300">—</span>}
+                                        </td>
+                                        <td className="py-3 px-2">
+                                          {summary ? (() => {
+                                            const { main, tips } = parseSummary(summary);
+                                            return (
+                                              <div className="space-y-2">
+                                                {main.length > 0 && (
+                                                  <ul className="space-y-0.5">
+                                                    {main.map((line, i) => (
+                                                      <li key={i} className="text-sm text-slate-600 leading-relaxed flex gap-1.5">
+                                                        <span className="text-slate-300 shrink-0">–</span>
+                                                        <span>{line.replace(/^[-–]\s*/, "")}</span>
+                                                      </li>
+                                                    ))}
+                                                  </ul>
+                                                )}
+                                                {tips.length > 0 && (
+                                                  <div className="border-t border-slate-100 pt-2 space-y-0.5">
+                                                    <p className="text-[11px] font-semibold text-amber-600 uppercase tracking-widest flex items-center gap-1 mb-1">
+                                                      <Lightbulb className="h-3 w-3" /> Dicas
+                                                    </p>
+                                                    {tips.map((line, i) => (
+                                                      <div key={i} className="text-sm text-slate-500 leading-relaxed flex gap-1.5">
+                                                        <span className="text-amber-300 shrink-0">–</span>
+                                                        <span>{line.replace(/^[-–]\s*/, "")}</span>
+                                                      </div>
+                                                    ))}
                                                   </div>
-                                                ))}
+                                                )}
                                               </div>
-                                            )}
-                                          </div>
-                                        );
-                                      })() : <span className="text-sm text-slate-300 italic">Sem análise gerada.</span>}
-                                    </td>
-                                    <td className="py-3 px-2">
-                                      <Button size="sm" variant="outline" disabled={isGenerating}
-                                        onClick={() => generateSummary(s.id, t.templateId)}
-                                        className="text-xs whitespace-nowrap">
-                                        {isGenerating ? "Gerando..." : summary ? "Atualizar" : "Gerar análise"}
-                                      </Button>
-                                    </td>
-                                  </tr>
+                                            );
+                                          })() : <span className="text-sm text-slate-300 italic">Sem análise gerada.</span>}
+                                        </td>
+                                        <td className="py-3 px-2">
+                                          <Button size="sm" variant="outline" disabled={isGenerating}
+                                            onClick={() => generateSummary(s.id, t.templateId)}
+                                            className="text-xs whitespace-nowrap">
+                                            {isGenerating ? "Gerando..." : summary ? "Atualizar" : "Gerar análise"}
+                                          </Button>
+                                        </td>
+                                      </tr>
 
-                                  {s.generations.length > 0 && (
-                                    <tr className="bg-slate-50/50">
-                                      <td colSpan={5} className="px-6 pb-4 pt-1">
-                                        <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Resumo por parâmetro</p>
-                                        <table className="w-full text-xs border-separate border-spacing-0">
-                                          <thead>
-                                            <tr>
-                                              <th className="text-left py-1.5 pr-4 font-medium text-slate-400 border-b border-slate-100">Parâmetro</th>
-                                              <th className="text-center py-1.5 w-20 font-medium text-slate-400 border-b border-slate-100">Questões</th>
-                                              <th className="text-center py-1.5 w-16 font-medium text-slate-400 border-b border-slate-100">Nota</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            {s.generations.map((g, i) => (
-                                              <tr key={i} className="border-b border-slate-100 last:border-0">
-                                                <td className="py-1.5 pr-4 text-slate-600">{g.label}</td>
-                                                <td className="py-1.5 text-center text-slate-400">{g.questionCount}</td>
-                                                <td className="py-1.5 text-center">
-                                                  {g.score !== null
-                                                    ? <span className={`font-semibold ${scoreColor(g.score)}`}>{g.score.toFixed(1)}</span>
-                                                    : <span className="text-slate-300">—</span>}
-                                                </td>
-                                              </tr>
-                                            ))}
-                                          </tbody>
-                                        </table>
-                                      </td>
-                                    </tr>
-                                  )}
-                                </Fragment>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
+                                      {s.generations.length > 0 && (
+                                        <tr className="bg-slate-50/50">
+                                          <td colSpan={5} className="px-6 pb-4 pt-1">
+                                            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Resumo por parâmetro</p>
+                                            <table className="w-full text-xs border-separate border-spacing-0">
+                                              <thead>
+                                                <tr>
+                                                  <th className="text-left py-1.5 pr-4 font-medium text-slate-400 border-b border-slate-100">Parâmetro</th>
+                                                  <th className="text-center py-1.5 w-20 font-medium text-slate-400 border-b border-slate-100">Questões</th>
+                                                  <th className="text-center py-1.5 w-16 font-medium text-slate-400 border-b border-slate-100">Nota</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {visibleGens.map((g, i) => (
+                                                  <tr key={i} className="border-b border-slate-100 last:border-0">
+                                                    <td className="py-1.5 pr-4 text-slate-600">{g.label}</td>
+                                                    <td className="py-1.5 text-center text-slate-400">{g.questionCount}</td>
+                                                    <td className="py-1.5 text-center">
+                                                      {g.score !== null
+                                                        ? <span className={`font-semibold ${scoreColor(g.score)}`}>{g.score.toFixed(1)}</span>
+                                                        : <span className="text-slate-300">—</span>}
+                                                    </td>
+                                                  </tr>
+                                                ))}
+                                              </tbody>
+                                            </table>
+                                            {hiddenCount > 0 && (
+                                              <button
+                                                onClick={() => toggleGens(key)}
+                                                className="mt-2 text-xs text-blue-500 hover:text-blue-700"
+                                              >
+                                                {isGenExpanded
+                                                  ? "Ver menos"
+                                                  : `Ver mais ${hiddenCount} geraç${hiddenCount !== 1 ? "ões" : "ão"}`}
+                                              </button>
+                                            )}
+                                          </td>
+                                        </tr>
+                                      )}
+                                    </Fragment>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+
+                            {totalTPages > 1 && (
+                              <div className="flex items-center justify-center gap-2 mt-3 pt-3 border-t border-slate-100">
+                                <Button
+                                  size="sm" variant="outline"
+                                  disabled={tPage <= 1}
+                                  onClick={() => setTemplatePage(t.templateId, tPage - 1)}
+                                  className="text-xs h-7 px-2"
+                                >
+                                  ← Anterior
+                                </Button>
+                                <span className="text-xs text-slate-400">
+                                  {tPage} / {totalTPages}
+                                </span>
+                                <Button
+                                  size="sm" variant="outline"
+                                  disabled={tPage >= totalTPages}
+                                  onClick={() => setTemplatePage(t.templateId, tPage + 1)}
+                                  className="text-xs h-7 px-2"
+                                >
+                                  Próxima →
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
                   </CardContent>
                 )}
               </Card>
