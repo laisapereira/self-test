@@ -17,7 +17,9 @@
       "Bash(git -C \"e:/studies/tcc 2025.2/self-test\" log --oneline -5)",
       "Bash(git -C \"e:/studies/tcc 2025.2/self-test\" add app/classes/[id]/dashboard/page.tsx)",
       "Bash(git -C 'e:/studies/tcc 2025.2/self-test' commit -m ' *)",
-      "Bash(git -C \"e:/studies/tcc 2025.2/self-test\" push origin main)"
+      "Bash(git -C \"e:/studies/tcc 2025.2/self-test\" push origin main)",
+      "Bash(git -C \"e:/studies/tcc 2025.2/self-test\" add \"app/classes/[id]/page.tsx\")",
+      "Bash(git -C \"e:/studies/tcc 2025.2/self-test\" commit -m \"fix: reduce student list page size to 10\")"
     ]
   }
 }

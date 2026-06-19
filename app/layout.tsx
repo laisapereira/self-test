@@ -31,11 +31,6 @@ const routes = [
   },
 
   {
-    title: "Dashboard",
-    href: "/dashboard",
-    requireAdmin: true,
-  },
-  {
     title: "Templates de Avaliação",
     href: "/templates/evaluation",
     requireAdmin: true,
